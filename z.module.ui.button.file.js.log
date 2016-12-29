@@ -1,0 +1,22 @@
+12/06/2015
+		+ set option "autoupload" with default value is "ajax"
+		+ set option "multiple" with default value is "TRUE"
+		+ add option "uploadingText"
+		+ add option "dropText"
+		+ support drag and drop file to auto upload
+		+ fix response data (remove HTML Entities) when used form-uploader
+
+15/06/2015
+		+ fix send custom data to server when uploading
+		+ add option "uploadMultipleFilesAtOneTime" with default true
+			-> now support upload multiple files separate
+			
+16/06/2015
+		+ fix change css class when drag file enter or leave
+
+21/10/2016
+		+ add option "getFileContent"
+		+ add event "ui.button.file.getcontent"
+
+27/10/2016
+		+ add option "readEXIF"

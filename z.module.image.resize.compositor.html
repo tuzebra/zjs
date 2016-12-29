@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs - Image resize - compositor</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="./z.js"></script>
+	<script>
+		zjs.require('ui.button, ui.button.file, ui.popup, image.resize', function(){
+			
+			// enable zjs hook
+			zjs.enablehook(true);
+			
+			
+			// BUTTON UPLOAD BACKGROUND IMAGE
+			// --
+			zjs('#uploadbtn')
+				.on('ui.button.file.upload.begin', function(event, el){
+					
+					// show ra popup uploading
+					zjs('#uploading').popupShow();
+				})
+				.on('ui.button.file.upload.complete', function(event, el){
+					
+					// hide popup uploading
+					zjs('#uploading').popupHide();
+					
+					if(!event.data.response.success)return;
+					
+					// lay ra 1 file thoi
+					var file = event.data.response.files[0];
+					
+					// remove di cai background hien tai
+					zjs('img.background').remove();
+					
+					// append background vao <div id="frame">
+					// va khong cho background duoc thay doi zindex
+					zjs('#frame').append('<img class="zimageresize background" src="'+file.url+'" data-option="changeZindex:false" data-imageid="'+file.id+'" />');
+				});
+
+			// BUTTON INSERT ELEMENT
+			// --
+			zjs('.insertelementbtn')
+				.click(function(){
+				
+					// get ra image id
+					var imageid = this.getAttr('data-imageid', 0).toInt();
+					
+					// day la insert 1 element nho nho
+					// hay la insert 1 cai border ?
+					var insertBorder = this.hasClass('insertborderbtn');
+					
+					zjs.ajax({
+						url: '//app.april.com.vn/zmvc/imagecompositor/getimagebyid/'+imageid, 
+						type: 'json',
+						onComplete: function(data){
+						
+							// neu nhu khong thanh cong hoac
+							// khong get duoc cai hinh thi bo qua
+							if(!data.success || !data.image)return;
+						
+							// append cai hinh nay vao <div id="frame">
+							// tuy nhien neu nhu chi insert cac element nho nho
+							// thi width, height se theo nhu dung kich thuoc cua file image
+							// nen se khong can thiep vao
+							// con neu nhu insert vao la 1 cai border
+							// thi border phai co size (width, height) nhu quy dinh cho dep
+							// nen chi can add them 1 class vao <img/>
+							zjs('#frame').append('<img class="zimageresize'+(insertBorder?' border':'')+'" src="'+data.image.url+'" data-imageid="'+data.image.id+'" />');
+						}
+					});
+				
+				});
+			
+			
+			
+			// DOUBLE CLICK IMAGE
+			// --
+			zjs('img')
+				.live('dblclick', function(){
+					
+					// khi nhap dup chuot vao image thi se remove di image
+					this.remove();
+					
+				});
+			
+			
+			
+			// BUTTON MERGE
+			// --
+			zjs('#finishbtn')
+				.click(function(){
+					
+					// show ra cai popup loading
+					zjs('#loading').popupShow();
+					
+					// get ra thong tin cua nhung hinh anh trong frame
+					var info = zjs('#frame img').getResizedImagesInfo();
+					
+					// post thong tin nay len server
+					zjs.ajax({
+						url: '//app.april.com.vn/zmvc/imagecompositor/merge', method:'post',
+						type: 'json',
+						data: {info:zjs.jsonEncode(info)},
+						onComplete: function(data){
+						
+							// hide popup uploading
+							zjs('#loading').popupHide();
+					
+							// neu nhu khong thanh cong hoac
+							// khong get duoc cai hinh thi bo qua
+							if(!data.success || !data.image)return;
+													
+							// show popup result
+							zjs('#result').popupShow();
+						
+							// append cai hinh nay vao trong popup thoi
+							zjs('#result .imageviewer').html('<img src="'+data.image.url+'" />');
+							
+							// set lai cai imageid de submit len server
+							zjs('#result input[name=imageid]').setValue(data.image.id);
+							
+							// refresh popup
+							(function(){zjs('#result').popupRefresh();}).delay(1000);
+						}
+					});
+					
+				});
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;font-weight:300;margin:0;color:#444;background:#D3C5C5;}
+	.wrapper{width:600px;margin:30px auto;}
+	.buttons{position:absolute;left:10px;top:15px;width:200px;text-align:center;z-index:10000;}
+	.buttons a{margin:5px 0;}
+	.tips{position:absolute;right:10px;top:20px;width:120px;text-align:center;color:#fff;}
+	
+	
+	#frame{position:relative;width:600px;height:720px;margin:20px auto;background:#fff url(images/z.module.canvasscratch.bg.png);box-shadow:0 2px 9px -2px #000;}
+	
+	#frame div.frameborder{position:absolute;width:2px;height:2px;background:#000;z-index:10000;pointer-events:none;-webkit-user-select:none;}
+	#frame div.frameborder.top{width:100%;}
+	#frame div.frameborder.right{height:100%;right:0;}
+	#frame div.frameborder.bottom{width:100%;bottom:0;}
+	#frame div.frameborder.left{height:100%;}
+	
+	#frame img{position:absolute;}
+	#frame img.background{height:720px;z-index:0;}
+	#frame img.border{width:600px;height:720px;}
+	
+	#result img{height:500px;}
+	#result textarea{width:100%;}
+	</style>
+	
+</head>
+<body>
+	
+	<div class="buttons">
+		
+		<h3>Step 1</h3>
+	
+		<a id="uploadbtn" class="zbuttonfile blue" data-option="multiple:false, autoupload:'ajax', autouploadUrl:'//app.april.com.vn/zmvc/imagecompositor/uploadbackgroundimage'">Upload your photo</a>
+		
+		<div style="height:20px"></div>
+		
+		<h3>Step 2 - Insert elements</h3>
+		
+		<a class="insertelementbtn zbutton" data-imageid="122">Gift</a>
+		<a class="insertelementbtn zbutton" data-imageid="123">Ball</a>
+		<a class="insertelementbtn zbutton" data-imageid="124">Tree</a>
+		<a class="insertelementbtn zbutton" data-imageid="125">Boot</a>
+	
+		<div style="height:20px"></div>
+		
+		<h3>Step 3 - Insert borders</h3>
+		
+		<a class="insertelementbtn insertborderbtn zbutton" data-imageid="175">Heart</a>
+		<a class="insertelementbtn insertborderbtn zbutton" data-imageid="176">Fruit</a>
+		<a class="insertelementbtn insertborderbtn zbutton" data-imageid="185">Clipart</a>
+	
+		<div style="height:20px"></div>
+		
+		<h3>Step 4 - finish</h3>
+	
+		<a id="finishbtn" class="zbutton blue">Crop photo</a>
+	</div>
+	
+	
+	<div class="tips">
+		<p>You can insert one element multiple times.</p>
+		<p>Press Shift during resize to keep current aspect ratio.</p>
+		<p>Click on each element to bring it to front.</p>
+		<p>Double click on each element to remove it.</p>
+	</div>
+
+
+	<div id="frame">		
+		<div class="frameborder top"></div>
+		<div class="frameborder right"></div>
+		<div class="frameborder bottom"></div>
+		<div class="frameborder left"></div>
+	</div>
+	
+	
+	<div id="uploading" class="zpopup" data-option="center:true,closebutton:false">Uploading...</div>
+	<div id="loading" class="zpopup" data-option="center:true,closebutton:false">Loading...</div>
+	
+	
+	<div id="result" class="zpopup" data-option="center:true">
+		<h3>Preview your photo</h3>
+		<div class="imageviewer"></div>
+		<form>
+			<p>Write a description for this photo</p>
+			<textarea name="description"></textarea>
+			<p><input type="hidden" name="imageid" value="" /></p>
+			<button class="zbutton blue">Submit your photo</button>
+		</form>
+	</div>
+		
+</body>
+</html>

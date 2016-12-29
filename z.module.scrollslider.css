@@ -1,0 +1,13 @@
+.zscrollslider .contents{width:500px;margin:0 auto;overflow:hidden;position:relative;}
+.zscrollslider .contents ul{margin:0;padding:0;zoom:1;}
+.zscrollslider .contents ul:before,.zscrollslider .contents ul:after{content:"\0020";display:block;height:0;overflow:hidden}
+.zscrollslider .contents ul:after{clear:both}
+.zscrollslider .contents li{float:left;width:500px;list-style:none;margin:0;padding:0;}
+.zscrollslider .dots ul{margin:0;padding:0;text-align:center;}
+.zscrollslider .dots li{margin:0;padding:0 5px;display:inline;width:auto;float:none;}
+.zscrollslider .dots a{text-decoration:none;}
+.zscrollslider .dots a:hover,
+.zscrollslider .dots a.active{color:#f00;}
+
+body.is_touch_device .zscrollslider .contents{width:100%;}
+body.is_touch_device .zscrollslider .contents li{width:100%;}

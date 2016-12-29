@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="vi">
+<head>
+	<title>Demo module input date</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="z.js"></script>
+	<script>zjs.require('input.date')</script>
+	<style>
+		.wrapper{width:400px;margin:50px auto;}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<label for="inputdate-1">Default: </label>
+		<input type="date" id="inputdate-1" value="2013-04-15" />
+		<br /><br />
+		<label for="inputdate-2">Min value: </label>
+		<input type="date" id="inputdate-2" min="2013-03-04" />
+		<br /><br />
+		<label for="inputdate-3">Max value: </label>
+		<input type="date" id="inputdate-3" value="2013-02-05" max="2013-07-08" />
+		<br /><br />
+		<input type="text" />
+	</div>
+</body>
+</html>

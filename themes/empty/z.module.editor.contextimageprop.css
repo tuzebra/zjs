@@ -1,0 +1,27 @@
+.zeditor-contextimageprop-popup{width:280px;}
+.zeditor-contextimageprop-popup form{margin:0;}
+.zeditor-contextimageprop-popup form.prop{}
+.zeditor-contextimageprop-popup form.action{border-top:1px dashed #F1EDED;}
+.zeditor-contextimageprop-popup h3{margin-bottom:0px;}
+.zeditor-contextimageprop-popup .field{margin:10px 0;}
+.zeditor-contextimageprop-popup .field label{}
+.zeditor-contextimageprop-popup .field label > span{display:block;margin-bottom:2px;}
+.zeditor-contextimageprop-popup .field textarea{width: 100%;}
+.zeditor-contextimageprop-popup .field input{}
+.zeditor-contextimageprop-popup .field input[name=width],
+.zeditor-contextimageprop-popup .field input[name=height]{width:150px;}
+.zeditor-contextimageprop-popup .field.field-alt{}
+.zeditor-contextimageprop-popup .field.field-width{}
+.zeditor-contextimageprop-popup .field.field-height{margin-bottom:20px;}
+.zeditor-contextimageprop-popup .buttons-wrapper{}
+.zeditor-contextimageprop-popup .buttons-wrapper.update{float:right;margin-top:-42px;}
+.zeditor-contextimageprop-popup .buttons-wrapper.float .zui-button,
+.zeditor-contextimageprop-popup .buttons-wrapper.display .zui-button{margin-right:10px;}
+.zeditor-contextimageprop-popup .buttons-wrapper.delete{float:right;margin-top:-30px;}
+.zeditor-contextimageprop-popup .buttons-wrapper .btnupdate{}
+.zeditor-contextimageprop-popup .buttons-wrapper .btnfloatnone{}
+.zeditor-contextimageprop-popup .buttons-wrapper .btnfloatleft{}
+.zeditor-contextimageprop-popup .buttons-wrapper .btnfloatright{}
+.zeditor-contextimageprop-popup .buttons-wrapper .btndisplayinline{}
+.zeditor-contextimageprop-popup .buttons-wrapper .btndisplayblock{}
+.zeditor-contextimageprop-popup .buttons-wrapper .btndelete{}

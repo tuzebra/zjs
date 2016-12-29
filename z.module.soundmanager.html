@@ -1,0 +1,96 @@
+<!DOCTYPE>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Sound manager</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="z.min.js"></script>
+	<script>
+		zjs.onready('soundmanager', function(){
+			
+			var sound1 = false,
+				sound2 = false;
+			
+			soundManager.setup({
+				url: zjs.requireOption.root+'/sm2swf/',
+				useHTML5Audio: true,
+				preferFlash: false,
+				debugMode: false,
+				onready: function(){
+					
+					// create sound
+					sound1 = soundManager.createSound({
+						url: 'http://app.april.com.vn/zjs/vers/1.1/sounds/sleighride.mp3',
+						autoLoad: true,
+						loops: 9999,
+						multiShot: false,
+						volume: 100,
+						autoPlay: true,
+						whileloading: function(){},
+						whileplaying: function(){},
+						onload: function(){},
+						onfinish: function(){}
+					});
+					
+					// create sound
+					sound2 = soundManager.createSound({
+						url: 'http://app.april.com.vn/zjs/vers/1.1/sounds/santaclaus.mp3',
+						autoLoad: true,
+						loops: 9999,
+						multiShot: false,
+						volume: 100,
+						autoPlay: false,
+						whileloading: function(){},
+						whileplaying: function(){},
+						onload: function(){},
+						onfinish: function(){}
+					});
+				}
+			});
+			
+			
+			// bind event
+			zjs('.btn_1play').on('click', function(){sound1.play()});
+			zjs('.btn_1pause').on('click', function(){sound1.pause()});
+			zjs('.btn_1stop').on('click', function(){sound1.stop()});
+			
+			
+			zjs('.btn_2play').on('click', function(){sound2.play()});
+			zjs('.btn_2pause').on('click', function(){sound2.pause()});
+			zjs('.btn_2stop').on('click', function(){sound2.stop()});
+			
+			
+			zjs('.btn_mute').on('click', function(){soundManager.mute()});
+			zjs('.btn_unmute').on('click', function(){soundManager.unmute()});
+			
+		});
+	</script>
+	
+	<style>
+		a{
+			color: blue;
+			cursor: pointer;
+		}
+		a:hover{
+			text-decoration: underline;
+		}
+	</style>
+</head>
+<body>
+	
+	<h1>sound1 (autoplay)</h1>
+	<p><a class="btn_1play">sound1.play()</a></p>
+	<p><a class="btn_1pause">sound1.pause()</a></p>
+	<p><a class="btn_1stop">sound1.stop()</a></p>
+	
+	<h1>sound2</h1>
+	<p><a class="btn_2play">sound2.play()</a></p>
+	<p><a class="btn_2pause">sound2.pause()</a></p>
+	<p><a class="btn_2stop">sound2.stop()</a></p>
+	
+	<h1>all</h1>
+	<p><a class="btn_mute">soundManager.mute()</a></p>
+	<p><a class="btn_unmute">soundManager.unmute()</a></p>
+	
+</body>
+</html>

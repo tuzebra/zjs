@@ -1,0 +1,4 @@
+.imageslider-simpleswipe{position:relative;height:120px;width:440px;}
+.imageslider-simpleswipe .images-wrap{}
+.imageslider-simpleswipe .images-wrap ul.tray{position:relative;margin:0;padding:0;}
+.imageslider-simpleswipe .images-wrap ul.tray li{float:left;display:block;}

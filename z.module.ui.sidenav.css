@@ -1,0 +1,11 @@
+.zui-sidenav{}
+.zui-sidenav li ul{display:none;}
+.zui-sidenav li.active>ul,
+.zui-sidenav li.pre-active>ul{display:block;}
+.zui-sidenav li.active>a,
+.zui-sidenav li.pre-active>.zui-sidenav-link{font-weight:bold;}
+.zui-sidenav li.zui-sidenav-level-1{}
+.zui-sidenav li.zui-sidenav-level-2{}
+.zui-sidenav li.zui-sidenav-level-3{}
+.zui-sidenav li.zui-sidenav-level-4{}
+.zui-sidenav a.zui-sidenav-link{}

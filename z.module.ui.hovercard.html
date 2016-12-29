@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs UI - hovercard</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="./z.js" data-debug="true"></script>
+	<script>
+		zjs.onready('ui.hovercard', function(){
+		
+			zjs('.hovercard').on('ui.hovercard.load', function(event){
+				console.log('ui.hovercard.load:', event.data);
+			});
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	.wrapper{width:900px;margin:0 auto;padding:50px 0;position:relative;}
+	label{color:red;cursor: pointer;}
+	label:hover{text-decoration: underline;}
+	.willshow{display: none;position:absolute;width:80%;padding:20px;background:white;box-shadow:0 1px 15px -2px #000;border-radius: 4px;border:1px solid #999;}
+	.willshow.active{display: block;}
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+	
+		<p>Lorem ipsum sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt <label class="zhovercard" title="Aenean ipsum purus, tristique in bibendum sed." data-option="appendToBody:true,dev:true">dolor</label>. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce ut ante ipsum. Praesent dui nulla, posuere sed pulvinar ac, porttitor vitae justo. Morbi sed hendrerit nisi. Aliquam ut arcu felis, in tristique lorem. Vestibulum pharetra fermentum risus, at interdum felis faucibus at. Suspendisse eleifend ultricies tortor, at pulvinar ipsum pulvinar varius. Fusce accumsan, ligula scelerisque eleifend bibendum, velit erat pellentesque arcu, eu scelerisque eros dui id erat. Etiam convallis accumsan mi at facilisis. Duis venenatis dapibus justo in mollis. Morbi at tortor urna, non porta ante. Integer convallis ligula tristique orci malesuada vitae dignissim enim porttitor. Phasellus at commodo libero. Aenean tempor pellentesque nisl, a eleifend risus hendrerit quis.</p>
+		<p>Cras placerat ipsum non nunc ornare mattis. Praesent ornare fermentum nisl ac varius. Aliquam erat volutpat. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla eros mauris, ultrices sed venenatis quis, dictum non tellus. Aliquam pellentesque eros mi, eu blandit dolor. Duis quis tellus nunc. Nullam nisi tellus, dignissim a ultricies vitae, egestas ut purus. Sed massa neque, molestie vitae consequat at, vehicula eu justo.</p>
+		<p>Maecenas eget risus erat, at rhoncus nibh. Aenean <label class="zhovercardcenter" title="Nulla vestibulum gravida eleifend. Pellentesque nulla turpis, porttitor vitae gravida et, tempor nec leo. Maecenas non felis tortor." data-option="appendToBody:false,vertical:'top'">ipsum</label> purus, tristique in bibendum sed, mollis sit amet dolor. Etiam sed tristique odio. Vivamus vel est sapien, sit amet dignissim risus. Curabitur a tellus dui, eu sodales sem. Sed in tortor eget metus rutrum fermentum. Donec mattis, erat id mollis feugiat, est mi posuere urna, ut porttitor libero sapien nec arcu.</p>
+		<p>Nullam sed augue nunc, facilisis dignissim neque. Nulla vestibulum gravida eleifend. Pellentesque luctus facilisis neque id molestie. Pellentesque nulla turpis, porttitor vitae gravida et, tempor nec leo. Maecenas non felis tortor. Curabitur sodales egestas nisl, et posuere nisl dapibus quis. Nunc eget est arcu, eu commodo urna. Quisque nec nisl quis dui dapibus dignissim ut ac risus. Proin non dignissim nisl. Vivamus vitae luctus magna. Duis accumsan purus ac est convallis condimentum a in diam.</p>
+		
+		<h3>Custom card element</h3>
+		<p>Maecenas eget risus erat, at rhoncus nibh. Aenean <label class="zhovercard" data-option="customContentElement:'#willshow1'">hover here</label></p>
+
+		<div id="willshow1" class="willshow">
+			<h4>This is a custom card element</h4>
+			<p>You can also <label class="zhovercard" data-option="customContentElement:'#willshow2'">hover here</label> to show another "card" element</p>
+		</div> 
+
+		<div id="willshow2" class="willshow" style="margin-top:40px;margin-left:40px;">
+			<h4>This is a second card element</h4>
+			<p>Vivamus vel est sapien, sit amet dignissim risus. Curabitur a tellus dui, eu sodales sem.</p>
+			<p>You can also <label class="zhovercard" data-option="customContentElement:'#willshow3'">hover here</label> to show another "card" element</p>
+		</div> 
+
+		<div id="willshow3" class="willshow" style="margin-top:220px;margin-left:80px;">
+			<h4>This is a third card element</h4>
+			<p>Vivamus vel est sapien, sit amet dignissim risus. Curabitur a tellus dui, eu sodales sem. <label class="zhovercard" title="Nulla vestibulum gravida eleifend. Pellentesque nulla turpis.">hover here</label></p>
+		</div> 
+		
+		<p>purus, tristique in bibendum sed, mollis sit amet dolor. Etiam sed tristique odio. Vivamus vel est sapien, sit amet dignissim risus. Curabitur a tellus dui, eu sodales sem. Sed in tortor eget metus rutrum fermentum. Donec mattis, erat id mollis feugiat, est mi posuere urna, ut porttitor libero sapien nec arcu.</p>
+
+		<p>Tristique in bibendum sed, mollis sit amet dolor. Etiam sed tristique odio. Vivamus vel est sapien, sit amet dignissim risus. Curabitur a tellus dui, eu sodales sem. Sed in tortor eget metus rutrum fermentum. Donec mattis, erat id mollis feugiat, est mi posuere urna, ut porttitor libero sapien nec arcu.</p>
+
+		<p>Tristique in bibendum sed, mollis sit amet dolor. Etiam sed tristique odio. Vivamus vel est sapien, sit amet dignissim risus. Curabitur a tellus dui, eu sodales sem. Sed in tortor eget metus rutrum fermentum. Donec mattis, erat id mollis feugiat, est mi posuere urna, ut porttitor libero sapien nec arcu.</p>
+
+		<p>Tristique in bibendum sed, mollis sit amet dolor. Etiam sed tristique odio. Vivamus vel est sapien, sit amet dignissim risus. Curabitur a tellus dui, eu sodales sem. Sed in tortor eget metus rutrum fermentum. Donec mattis, erat id mollis feugiat, est mi posuere urna, ut porttitor libero sapien nec arcu.</p>
+
+		<p>Tristique in bibendum sed, mollis sit amet dolor. Etiam sed tristique odio. Vivamus vel est sapien, sit amet dignissim risus. Curabitur a tellus dui, eu sodales sem. Sed in tortor eget metus rutrum fermentum. Donec mattis, erat id mollis feugiat, est mi posuere urna, ut porttitor libero sapien nec arcu.</p>
+
+		
+
+	</div>
+</body>
+</html>

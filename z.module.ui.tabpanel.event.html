@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs UI - tabpanel</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+	<script>
+		zjs.onready('ui.tabpanel', function(){
+			
+			// log event when tabpanel has change the selected (focused) tab
+			zjs('.ztabpanel').on('ui.tabpanel.change', function(event){
+				console.log('ui.tabpanel.change', this.attr('id'), event.data.index);
+			});
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	.wrapper{width:400px;margin:0 auto;padding:100px 0;}
+	.zscroll{width:398px;height:200px;}
+	.ztabpaneltabs{height: 24px;padding: 5px;}
+	.ztabpaneltabs ul.zui-tabpanel-nav-wrapper{float: right;background: none;border: 0;}
+	.ztabpaneltabs ul.zui-tabpanel-nav-wrapper li{margin: 0;padding: 0;width: 22px;text-align: center;margin-left: 5px;line-height: 22px;border: 1px solid #D8D0D0;color:#666;background: #F3EBEB;}
+	.ztabpaneltabs ul.zui-tabpanel-nav-wrapper li.zui-active{font-weight:bold;color:#111;}
+	
+	/*.padding .zui-tabpanel-content-wrapper{padding:10px;}*/
+	.padding .zui-tabpanel{margin:15px;}
+	.padding > .zui-tabpanel{margin:0;}
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+		
+		<p>(view console log, source code,... to more infomation)</p>
+		
+		<br/><br/>
+		
+		
+		
+		<h3>tab with default option</h3>
+		<div class="ztabpanel" id="tabpanel_1">
+			<ul>
+				<li>Tab 1</li>
+				<li>Tab 2</li>
+				<li>Tab 3</li>
+			</ul>
+			<div>
+				<p>Tab 1:</p>
+				<p>zaasdas dsa d</p>
+				<p>zaasdas dsa d sds ad sd ad</p>
+			</div>
+			<div>
+				<p>Tab 2:</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+				<p>ad as e  w  qeq s</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+			</div>
+			<div>
+				<p>Tab 3:</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+			</div>
+		</div>
+		
+		
+		
+		
+		<!-- -->
+		<br/><br/>
+		
+		
+		
+		
+		<h3>tab with first active is second tab</h3>
+		<pre>activetab: 1</pre>
+		<div class="ztabpanel" id="tabpanel_2" data-option="activetab:1">
+			<ul>
+				<li>Tab 1</li>
+				<li>Tab 2</li>
+				<li>Tab 3</li>
+			</ul>
+			<div>
+				<p>Tab 1:</p>
+				<p>zaasdas dsa d</p>
+				<p>zaasdas dsa d sds ad sd ad</p>
+			</div>
+			<div>
+				<p>Tab 2:</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+				<p>ad as e  w  qeq s</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+			</div>
+			<div>
+				<p>Tab 3:</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+			</div>
+		</div>
+		
+		
+		
+		
+		<!-- -->
+		<br/><br/>
+		
+		
+		
+		
+		<h3>tab use url hash to auto active the first tab</h3>
+		<pre>useurlhash: true</pre>
+		<div class="ztabpanel" id="tabpanel_3" data-option="useurlhash:true">
+			<ul>
+				<li data-name="tab-mot">Tab 1 #tab-mot</li>
+				<li data-name="tab-hai">Tab 2 #tab-hai</li>
+				<li data-name="tab-ba">Tab 3 #tab-ba</li>
+			</ul>
+			<div>
+				<p>Tab 1:</p>
+				<p>zaasdas dsa d</p>
+				<p>zaasdas dsa d sds ad sd ad</p>
+			</div>
+			<div>
+				<p>Tab 2:</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+				<p>ad as e  w  qeq s</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+			</div>
+			<div>
+				<p>Tab 3:</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+			</div>
+		</div>
+		
+		<br/>
+		<p>click to change hash => then tab auto change</p>
+		<p><a href="#tab-mot">#tab-mot</a></p>
+		<p><a href="#tab-hai">#tab-hai</a></p>
+		<p><a href="#tab-ba">#tab-ba</a></p>
+		
+		
+		
+	</div>
+</body>
+</html>

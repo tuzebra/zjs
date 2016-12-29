@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Demo module transition</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+		<style>
+			body{margin:0;padding:0;min-width:600px;}
+		</style>
+		
+		<script type="text/javascript" src="z.js"></script>
+		<script>zjs.require('transition')</script>
+		
+	</head>
+	
+	<body>
+		
+		<div style="position:relative;width:500px;height:200px;">
+			
+			<div id="leftbox" style="position:absolute;top:0;left:0;height:200px;width:250px;background:red;" class="ztransition" data-option="from:{width:250},to:{width:450},autoplay:false"></div>
+			<div id="rightbox" style="position:absolute;top:0;left:250px;height:200px;width:250px;background:yellow;" class="ztransition" data-option="from:{width:250,left:250},to:{width:450,left:50},autoplay:false"></div>
+			
+		</div>
+		
+		<script>
+			zjs('#leftbox').hover(
+				function(){zjs('#leftbox').setStyle('z-index',1).playTransition()},
+				function(){zjs('#leftbox').setStyle('z-index',0).reverseTransition()}
+			);
+			
+			zjs('#rightbox').hover(
+				function(){zjs('#rightbox').setStyle('z-index',1).playTransition()},
+				function(){zjs('#rightbox').setStyle('z-index',0).reverseTransition()}
+			);
+		</script>
+		
+	</body>
+</html>

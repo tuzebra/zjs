@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Demo z.module.scroll non UI - zjs</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+	<script>
+		zjs.require('scrollbar', function(){
+			//if(zjs.isTouchDevice())alert('touch device');
+			zjs.onready(function(){
+				zjs('.zscroll').on('scrollbar.scroll', function(event, element){
+					zjs('.zscroll').html('scrolltop: ' + event.data.scrollTop);
+				});
+			});
+		})
+	</script>
+</head>
+<body style="padding:0;margin:0;">
+	
+	<div style="height:500px;background:#aaa;"></div>
+	
+	<div class="zscroll" style="height:300px;text-align:center;line-height:300px;background:yellow;" data-option="scrollline:100,snapPositions:[0,1500],skipSnapWhenUseTouchpad:false,nonui:true,nonuiMaxScroll:400,debug:true">
+		scrolltop 0
+	</div>
+	
+	<div style="height:500px;background:#aaa;"></div>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+.zui-accordion{}
+.zui-accordion-title{cursor:pointer;margin:0;}
+.zui-accordion-title.active{}
+.zui-accordion-session{}
+.zui-accordion-session.active{}
+.zui-accordion-content{padding: 5px 0;}
+.zui-accordion-session.active .zui-accordion-content{}

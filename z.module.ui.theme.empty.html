@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Empty theme - zjs UI</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		
+		<script type="text/javascript" src="z.js"></script>
+		<script>
+			zjs.requireOption.cssFolder = 'themes/empty/';
+			zjs.require('ui*');
+		</script>
+		<style>
+		.border{
+			border:1px solid #999;
+			padding:20px;
+			margin:20px;
+			border-radius:2px;
+		}
+		.demo{
+			margin:10px 0 30px;
+		}
+		pre{
+			margin:30px 0 10px;
+		}
+		</style>
+	</head>
+	
+	<body>
+		
+		<h1>Empty theme</h1>
+		
+		
+		<h2>Browser Input</h2>
+		<div class="border">
+			
+			<pre>&lt;input value="" /&gt;</pre>
+			<div class="demo">
+				<input value="" />
+			</div>
+			
+			<pre>&lt;input type="text" value="" placeholder="placeholder..." /&gt;</pre>
+			<div class="demo">
+				<input type="text" value="" placeholder="placeholder..." />
+			</div>
+			
+			<pre>&lt;input type="email" value="" /&gt;</pre>
+			<div class="demo">
+				<input type="email" value="" />
+			</div>
+			
+			<pre>&lt;input type="password" value="" /&gt;</pre>
+			<div class="demo">
+				<input type="password" value="" />
+			</div>
+			
+			<pre>&lt;input type="text" class="error" /&gt;</pre>
+			<div class="demo">
+				<input type="text" class="error" />
+			</div>
+			
+			<pre>&lt;textarea&gt;&lt;/textarea&gt;</pre>
+			<div class="demo">
+				<textarea></textarea>
+			</div>
+		</div>
+		
+		
+		<h2>Browser Button</h2>
+		<div class="border">
+			
+			<pre>&lt;button&gt;click &lt;b&gt;here&lt;/b&gt;&lt;/button&gt;</pre>
+			<div class="demo">
+				<button>click <b>here</b></button>
+			</div>
+			
+			<pre>&lt;input type="submit" value="Click submit" /&gt;</pre>
+			<div class="demo">
+				<input type="submit" value="Click submit" />
+			</div>
+			
+		</div>
+		
+		
+		<h2>ZJS UI Button</h2>
+		More demo: <a href="z.module.ui.button.html">z.module.ui.button.html</a>
+		<div class="border">
+			
+			
+			<pre>&lt;a class="zbutton" href="#"&gt;click &lt;b&gt;here&lt;/b&gt;&lt;/a&gt;</pre>
+			<div class="demo">
+				<a class="zbutton" href="#">click <b>here</b></a>
+			</div>
+			
+			<pre>&lt;a class="zbutton disabled" href="#"&gt;disabled&lt;/a&gt;</pre>
+			<div class="demo">
+				<a class="zbutton disabled" href="#">disabled</a>
+			</div>
+			
+			<pre>&lt;div class="zgroupbutton"&gt;
+	&lt;a class="zbutton" href="#"&gt;button 1&lt;/a&gt;
+	&lt;a class="zbutton disabled" href="#"&gt;button 2&lt;/a&gt;
+&lt;/div&gt;</pre>
+			<div class="demo">
+				<div class="zgroupbutton">
+					<a class="zbutton" href="#">button 1</a>
+					<a class="zbutton disabled" href="#">button 2</a>
+				</div>
+			</div>
+			
+			<pre>&lt;a class="zbutton blue"&gt;blue&lt;/a&gt;</pre>
+			<div class="demo">
+				<a class="zbutton blue">blue</a>
+			</div>
+			
+			<pre>&lt;a class="zbutton red"&gt;red&lt;/a&gt;</pre>
+			<div class="demo">
+				<a class="zbutton red">red</a>
+			</div>
+			
+			<pre>&lt;a class="zbutton transparent"&gt;transparent&lt;/a&gt;</pre>
+			<div class="demo">
+				<a class="zbutton transparent">transparent</a>
+			</div>
+			
+			
+			<pre>&lt;button class="zbutton"&gt;click &lt;b&gt;here&lt;/b&gt;&lt;/button&gt;</pre>
+			<div class="demo">
+				<button class="zbutton">click <b>here</b></button>
+			</div>
+			
+			<pre>&lt;input class="zbutton" type="submit" value="Click submit" /&gt;</pre>
+			<div class="demo">
+				<input class="zbutton" type="submit" value="Click submit" />
+			</div>
+			
+			
+		</div>
+		
+		
+		
+		<h2>Browser Check box</h2>
+		<div class="border">
+			
+			<pre>&lt;input type="checkbox" /&gt; check box</pre>
+			<div class="demo">
+				<input type="checkbox" name=""/> check box
+			</div>
+			
+		</div>
+		
+		
+		<h2>ZJS UI Check box</h2>
+		More demo: <a href="z.module.ui.checkbox.html">z.module.ui.checkbox.html</a>
+		<div class="border">
+			
+			<pre>&lt;input type="checkbox" class="zcheckbox" name="anyname" value="2" data-option="text:'check box'" /&gt;</pre>
+			<div class="demo">
+				<input type="checkbox" class="zcheckbox" name="anyname" value="2" data-option="text:'check box'" />
+			</div>
+			
+		</div>
+		
+		
+		<h2>Browser Radio</h2>
+		<div class="border">
+			
+			<pre>&lt;input type="radio" name="anyname" /&gt; radio 1 &lt;br/&gt;
+&lt;input type="radio" name="anyname" /&gt; radio 2</pre>
+			<div class="demo">
+				<input type="radio" name="anyname" /> radio 1 <br/>
+				<input type="radio" name="anyname" /> radio 2
+			</div>
+			
+		</div>
+		
+		
+		<h2>ZJS UI Radio</h2>
+		More demo: <a href="z.module.ui.radio.html">z.module.ui.radio.html</a>
+		<div class="border">
+			
+			<pre>&lt;input type="radio" class="zradio" name="anyname" value="1" data-option="text:'radio 1'" /&gt; &lt;br/&gt;
+&lt;input type="radio" class="zradio" name="anyname" value="2" data-option="text:'radio 2'" /&gt;</pre>
+			<div class="demo">
+				<input type="radio" class="zradio" name="anyname" value="1" data-option="text:'radio 1'" /> <br/>
+				<input type="radio" class="zradio" name="anyname" value="2" data-option="text:'radio 2'" />
+			</div>
+			
+		</div>
+			
+			
+		
+	</body>
+</html>

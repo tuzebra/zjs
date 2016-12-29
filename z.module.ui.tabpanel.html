@@ -1,0 +1,832 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs UI - tabpanel</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+	<script>
+		zjs.onready('ui.tabpanel, scrollbar, image.slider.theme.linear, codeeditor', function(){
+		
+			// make tabpanel when user click
+			zjs('.ztabpanel_byclick').click(function(){
+				this.makeTabpanel();
+			});
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	.wrapper{width:40%;margin:0 auto;padding:100px 0;margin-left:80px;}
+	.wrapper section{position:relative;min-height:300px;}
+	.wrapper section .source-wrap{position:absolute;top:0;left:110%;width:100%;}
+	.zscroll{width:398px;height:200px;}
+
+	#demo5 .ztabpaneltabs{height: 24px;padding: 5px;}
+	#demo5 .ztabpaneltabs ul.zui-tabpanel-nav-wrapper{float: right;background: none;border: 0;}
+	#demo5 .ztabpaneltabs ul.zui-tabpanel-nav-wrapper li{margin: 0;padding: 0;width: 22px;text-align: center;margin-left: 5px;line-height: 22px;border: 1px solid #D8D0D0;color:#666;background: #F3EBEB;}
+	#demo5 .ztabpaneltabs ul.zui-tabpanel-nav-wrapper li.zui-active{font-weight:bold;color:#111;}
+
+	#demo6 .zui-tabpanel{border:0;}
+	#demo6 .zui-tabpanel-content-wrapper{float:left;width:80%;border:1px solid #c4cde0;box-sizing:border-box;padding: 0 20px;}
+	#demo6 .ztabpaneltabs{float:left;width:20%;}
+	#demo6 .ztabpaneltabs ul.zui-tabpanel-nav-wrapper{background:none;border:0;}
+	#demo6 .ztabpaneltabs ul.zui-tabpanel-nav-wrapper li{display:block;border:0;padding:0;}
+	#demo6 .ztabpaneltabs ul.zui-tabpanel-nav-wrapper li.zui-active{font-weight:bold;}
+	
+	/*.padding .zui-tabpanel-content-wrapper{padding:10px;}*/
+	.padding .zui-tabpanel{margin:15px;}
+	.padding > .zui-tabpanel{margin:0;}
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+		
+		
+		<h3>tab with default option</h3>
+		<section>
+			
+			<div class="ztabpanel">
+				<ul>
+					<li>Tab 1</li>
+					<li>Tab 2</li>
+				</ul>
+				<div>
+					<p>Tab 1:</p>
+					<p>zaasdas dsa d</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+				</div>
+				<div>
+					<p>Tab 2:</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>ad as e  w  qeq s</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+				</div>
+			</div>
+		
+		
+		
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="ztabpanel">
+	<ul>
+		<li>Tab 1</li>
+		<li>Tab 2</li>
+	</ul>
+	<div>
+		<p>Tab 1:</p>
+	</div>
+	<div>
+		<p>Tab 2:</p>
+	</div>
+</div>
+				</textarea>
+			</div>
+		
+		</section>
+		
+		
+		
+		<!-- -->
+		<br/><br/>
+		
+		
+		
+		
+		<h3>hover to active tab</h3>
+		<section>
+			
+			<div class="ztabpanel" data-option="hover:true">
+				<ul>
+					<li>Tab 1</li>
+					<li>Tab 2</li>
+				</ul>
+				<div>
+					<p>Tab 1:</p>
+					<p>zaasdas dsa d</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+				</div>
+				<div>
+					<p>Tab 2:</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>ad as e  w  qeq s</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+				</div>
+			</div>
+		
+		
+		
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="ztabpanel" data-option="hover:true">
+	<ul>
+		<li>Tab 1</li>
+		<li>Tab 2</li>
+	</ul>
+	<div>
+		<p>Tab 1:</p>
+	</div>
+	<div>
+		<p>Tab 2:</p>
+	</div>
+</div>
+				</textarea>
+			</div>
+		
+		</section>
+		
+		
+		
+		<!-- -->
+		<br/><br/>
+
+
+
+
+		<h3>tab with first active is second tab</h3>
+		<section>
+			<div class="ztabpanel" data-option="activetab:1">
+				<ul>
+					<li>Tab 1</li>
+					<li>Tab 2</li>
+				</ul>
+				<div>
+					<p>Tab 1:</p>
+					<p>zaasdas dsa d</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+				</div>
+				<div>
+					<p>Tab 2:</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>ad as e  w  qeq s</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+				</div>
+			</div>
+			
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="ztabpanel" data-option="activetab:1">
+	<ul>
+		<li>...
+</div>
+				</textarea>
+			</div>
+		</section>
+		
+		
+		
+		
+		<!-- -->
+		<br/><br/>
+		
+		
+		
+		
+		
+		
+		<h3>tab with auto height option</h3>
+		<p>(each tab have different height, and parent's height will be the current active tab's height)
+		<section>
+			<div class="ztabpanel" data-option="autoheight:true">
+				<ul>
+					<li>Tab 1</li>
+					<li>Tab 2</li>
+				</ul>
+				<div>
+					<p>Tab 1:</p>
+					<p>zaasdas dsa d</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+				</div>
+				<div>
+					<p>Tab 2:</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>ad as e  w  qeq s</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+				</div>
+			</div>
+			
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="ztabpanel" data-option="autoheight:true">
+	<ul>
+		<li>...
+</div>
+				</textarea>
+			</div>
+		</section>			
+		
+		<!-- -->
+		<br/><br/>
+		
+		
+		
+		<h3>tab with navigation in bottom</h3>
+		<p>all you need to do is move the &lt;ul&gt; to the bottom</p>
+		<section>
+			<div class="ztabpanel">
+				<div>
+					<p>Tab 1:</p>
+					<p>zaasdas dsa d</p>
+				</div>
+				<div>
+					<p>Tab 2:</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>ad as e  w  qeq s</p>
+				</div>
+				<ul>
+					<li>Tab 1</li>
+					<li>Tab 2</li>
+				</ul>
+			</div>
+			
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="ztabpanel">
+	<div>
+		<p>Tab 1:</p>
+	</div>
+	<div>
+		<p>Tab 2:</p>
+	</div>
+	<ul>
+		<li>Tab 1</li>
+		<li>Tab 2</li>
+	</ul>
+</div>
+				</textarea>
+			</div>
+		</section>
+		
+		<!-- -->
+		<br/><br/>
+		
+		
+		<h3>tab with custom navigation</h3>
+		<p>if you need to move the navigation to other position (not top or bottom), just add a class "<code>ztabpaneltabs</code>" to the element that will become to a navigation.</p>
+		<section id="demo5">
+			<div class="ztabpanel">
+				<div>
+					<p>Tab 1:</p>
+					<p>zaasdas dsa d</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+				</div>
+				<div>
+					<p>Tab 2:</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>ad as e  w  qeq s</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+				</div>
+				<div class="ztabpaneltabs">			
+					<ul>
+						<li>1</li>
+						<li>2</li>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="ztabpanel">
+	<div>
+		<p>Tab 1:</p>
+	</div>
+	<div>
+		<p>Tab 2:</p>
+	</div>
+	<div class="ztabpaneltabs">			
+		<ul>
+			<li>1</li>
+			<li>2</li>
+		</ul>
+	</div>
+</div>
+<style>
+.ztabpaneltabs{
+	height: 24px;
+	padding: 5px;
+}
+.ztabpaneltabs ul.zui-tabpanel-nav-wrapper{
+	float: right;
+	background: none;
+	border: 0;
+}
+.ztabpaneltabs ul.zui-tabpanel-nav-wrapper li{
+	margin: 0;
+	padding: 0;
+	width: 22px;
+	text-align: center;
+	margin-left: 5px;
+	line-height: 22px;
+	border: 1px solid #D8D0D0;
+	color:#666;
+	background: #F3EBEB;
+}
+.ztabpaneltabs ul.zui-tabpanel-nav-wrapper li.zui-active{
+	font-weight:bold;
+	color:#111;
+}
+</style>
+				</textarea>
+			</div>
+			
+		</section>
+		
+		<!-- -->
+		<br/><br/>
+		
+		
+		<h3>tab with navigation in the leff & autoheight content</h3>
+		<p>if you need to move the navigation to other position (not top or bottom), just add a class "<code>ztabpaneltabs</code>" to the element that will become to a navigation.</p>
+		<section id="demo6">
+			<div class="ztabpanel" data-option="autoheight:true">
+				<div class="ztabpaneltabs">			
+					<ul>
+						<li>Tab 1</li>
+						<li>Tab 2</li>
+					</ul>
+				</div>
+				<div>
+					<p>Tab 1:</p>
+					<p>zaasdas dsa d</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+				</div>
+				<div>
+					<p>Tab 2:</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>ad as e  w  qeq s</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+				</div>
+			</div>
+			
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="ztabpanel" data-option="autoheight:true">
+	<div class="ztabpaneltabs">			
+		<ul>
+			<li>Tab 1</li>
+			<li>Tab 2</li>
+		</ul>
+	</div>
+	<div>
+		<p>Tab 1:</p>
+	</div>
+	<div>
+		<p>Tab 2:</p>
+	</div>
+</div>
+<style>
+.zui-tabpanel{
+	border:0;
+}
+.zui-tabpanel-content-wrapper{
+	float:left;
+	width:80%;
+	border:1px solid #c4cde0;
+	box-sizing:border-box;
+	padding: 0 20px;
+}
+.ztabpaneltabs{
+	float:left;
+	width:20%;
+}
+.ztabpaneltabs ul.zui-tabpanel-nav-wrapper{
+	background:none;
+	border:0;
+}
+.ztabpaneltabs ul.zui-tabpanel-nav-wrapper li{
+	display:block;
+	border:0;
+	padding:0;
+}
+.ztabpaneltabs ul.zui-tabpanel-nav-wrapper li.zui-active{
+	font-weight:bold;
+}
+</style>
+				</textarea>
+			</div>
+			
+		</section>
+		
+		
+		<!-- -->
+		<br/><br/>
+		
+		<h3>tab work with scrollbar module</h3>
+		<p>just push scrollbar module inside tab panel</p>
+		<section>
+			<div class="ztabpanel">
+				<ul>
+					<li>Tab 1</li>
+					<li>Tab 2</li>
+				</ul>
+				<div class="zscroll">
+					<p>Tab 1:</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>zaasdas dsa d</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>zaasdas dsa d</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>zaasdas dsa d</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>zaasdas dsa d</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+				</div>
+				<div class="zscroll">
+					<p>Tab 2:</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+				</div>
+			</div>
+				
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="ztabpanel">
+	<ul>
+		<li>Tab 1</li>
+		<li>Tab 2</li>
+	</ul>
+	<div class="zscroll">
+		<p>Tab 1:</p>
+	</div>
+	<div class="zscroll">
+		<p>Tab 2:</p>
+	</div>
+</div>					
+				</textarea>
+			</div>
+		</section>	
+
+
+		
+		
+		<!-- -->
+		<br/><br/>
+		
+		<h3>tab work with image slider</h3>
+		<p>just push image slider module inside tab panel</p>
+		<section>
+			<div class="ztabpanel" data-option="autoheight:true">
+				<ul>
+					<li><b>Scroll</b></li>
+					<li><b>Image Slider</b></li>
+				</ul>
+
+				<div class="zscroll">
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>zaasdas dsa d</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>zaasdas dsa d</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>zaasdas dsa d</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>zaasdas dsa d</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+					<p>zaasdas dsa d sds ad sd ad</p>
+				</div>
+
+				<div class="zslider" data-option="theme:'linear',
+					slideitem: '.slideitem',
+					transition:'horizontal-stack',
+					transitionTime:2400,
+					autoplay: false,
+					autoplayTime: 3000,
+					navButton: true,
+					navThumb: false,
+					navDot: false,
+					contentSlide: true,
+					usePercentWidth: true,
+					autoHeight: true">
+
+					<div class="slideitem">
+						<div class="content">
+							<h3>1</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+						</div>
+					</div>
+
+					<div class="slideitem">
+						<div class="content">
+							<h3>2</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+						</div>
+					</div>
+
+					<div class="slideitem">
+						<div class="content">
+							<h3>3</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+						</div>
+					</div>
+
+					<div class="slideitem">
+						<div class="content">
+							<h3>4</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+						</div>
+					</div>
+
+					<div class="slideitem">
+						<div class="content">
+							<h3>5</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+						</div>
+					</div>
+
+					<div class="slideitem">
+						<div class="content">
+							<h3>6</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+						</div>
+					</div>
+
+					<div class="slideitem">
+						<div class="content">
+							<h3>7</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+						</div>
+					</div>
+
+					<div class="slideitem">
+						<div class="content">
+							<h3>8</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+						</div>
+					</div>
+				</div>
+
+			</div>
+				
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="ztabpanel" data-option="autoheight:true">
+	<ul>
+		<li><b>Scroll</b></li>
+		<li><b>Image Slider</b></li>
+	</ul>
+
+	<div class="zscroll">
+		<p>zaasdas dsa d sds ad sd ad</p>
+		...
+	</div>
+
+	<div class="zslider" data-option="theme:'linear',
+		slideitem: '.slideitem',
+		transition:'horizontal-stack',
+		transitionTime:2400,
+		autoplay: false,
+		autoplayTime: 3000,
+		navButton: true,
+		navThumb: false,
+		navDot: false,
+		contentSlide: true,
+		usePercentWidth: true,
+		autoHeight: true">
+
+		<div class="slideitem">
+			<div class="content">
+				<h3>1</h3>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+			</div>
+		</div>
+
+		...
+
+	</div>
+
+</div>					
+				</textarea>
+			</div>
+		</section>	
+
+
+		
+		<!-- -->
+		<br/><br/>
+		
+		<h3>tab make by click</h3>
+		<div class="ztabpanel_byclick">
+			<ul>
+				<li>Tab 1</li>
+				<li>Tab 2</li>
+			</ul>
+			<div class="zscroll">
+				<p>Tab 1:</p>
+				<p>zaasdas dsa d sds ad sd ad</p>
+				<p>zaasdas dsa d</p>
+				<p>zaasdas dsa d sds ad sd ad</p>
+				<p>zaasdas dsa d sds ad sd ad</p>
+				<p>zaasdas dsa d</p>
+				<p>zaasdas dsa d sds ad sd ad</p>
+				<p>zaasdas dsa d sds ad sd ad</p>
+				<p>zaasdas dsa d</p>
+				<p>zaasdas dsa d sds ad sd ad</p>
+				<p>zaasdas dsa d sds ad sd ad</p>
+				<p>zaasdas dsa d</p>
+				<p>zaasdas dsa d sds ad sd ad</p>
+				<p>zaasdas dsa d sds ad sd ad</p>
+			</div>
+			<div class="zscroll">
+				<p>Tab 2:</p>
+				<p>zaasdas dsa d sds ad sd ad</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+				<p>zaasdas dsa d sds ad sd ad</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+				<p>zaasdas dsa d sds ad sd ad</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+				<p>zaasdas dsa d sds ad sd ad</p>
+			</div>
+		</div>
+		
+		
+		
+		
+		<!-- -->
+		<br/><br/>
+		<div class="padding">
+		
+		
+		
+		
+		<h3>tab in tab (default)</h3>
+		<div class="ztabpanel">
+			<ul>
+				<li>Tab 1</li>
+				<li>Tab 2</li>
+			</ul>
+			
+			<!-- tab 1 content -->
+			<div>
+				<h4>tab 1's children</h4>
+				<div class="ztabpanel">
+					<ul>
+						<li>Tab 1 a</li>
+						<li>Tab 1 b</li>
+					</ul>
+					<div>
+						<p>Tab 1 a:</p>
+						<p>zaasdas dsa d</p>
+						<p>zaasdas dsa d sds ad sd ad</p>
+					</div>
+					<div>
+						<h5>tab 1 b's children</h5>
+						<div class="ztabpanel">
+							<ul>
+								<li>Tab 1 b i</li>
+								<li>Tab 1 b ii</li>
+							</ul>
+							<div>
+								<p>Tab 1 b i:</p>
+								<p>zaasdas dsa d</p>
+								<p>zaasdas dsa d sds ad sd ad</p>
+							</div>
+							<div>
+								<p>Tab 1 b ii:</p>
+								<p>asdasd ad sdas d sdas dad dasds da</p>
+								<p>asdasd ad sdas d sdas dad dasds da</p>
+								<p>ad as e  w  qeq s</p>
+								<p>asdasd ad sdas d sdas dad dasds da</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- tab 2 content -->
+			<div>
+				<h4>tab 2's children</h4>
+				<div class="ztabpanel">
+					<ul>
+						<li>Tab 2 a</li>
+						<li>Tab 2 b</li>
+					</ul>
+					<div>
+						<p>Tab 2 a:</p>
+						<p>zaasdas dsa d</p>
+						<p>zaasdas dsa d sds ad sd ad</p>
+					</div>
+					<div>
+						<p>Tab 2 b:</p>
+						<p>asdasd ad sdas d sdas dad dasds da</p>
+						<p>asdasd ad sdas d sdas dad dasds da</p>
+						<p>ad as e  w  qeq s</p>
+						<p>asdasd ad sdas d sdas dad dasds da</p>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+		
+		
+		
+		
+		</div>
+		<!-- -->
+		<br/><br/>
+		<div class="padding">
+		
+		
+		
+		
+		
+		<h3>tab in tab</h3>
+		<div class="ztabpanel">
+			<ul>
+				<li>Tab 1</li>
+				<li>Tab 2</li>
+			</ul>
+			
+			<!-- tab 1 content -->
+			<div>
+				<h3>tab with navigation in bottom</h3>
+				<div class="ztabpanel">
+					<div>
+						<p>Tab 1:</p>
+						<p>zaasdas dsa d</p>
+					</div>
+					<div>
+						<p>Tab 2:</p>
+						<p>asdasd ad sdas d sdas dad dasds da</p>
+						<p>asdasd ad sdas d sdas dad dasds da</p>
+						<p>ad as e  w  qeq s</p>
+					</div>
+					<ul>
+						<li>Tab 1</li>
+						<li>Tab 2</li>
+					</ul>
+				</div>
+			</div>
+			
+			<!-- tab 2 content -->
+			<div>
+				<h3>tab with custom navigation</h3>
+				<div class="ztabpanel">
+					<div>
+						<p>Tab 1:</p>
+						<p>zaasdas dsa d</p>
+						<p>zaasdas dsa d sds ad sd ad</p>
+					</div>
+					<div>
+						<h4>tab with navigation in bottom</h4>
+						<div class="ztabpanel">
+							<div>
+								<p>Tab 1:</p>
+								<p>zaasdas dsa d</p>
+							</div>
+							<div>
+								<p>Tab 2:</p>
+								<p>asdasd ad sdas d sdas dad dasds da</p>
+								<p>asdasd ad sdas d sdas dad dasds da</p>
+								<p>ad as e  w  qeq s</p>
+							</div>
+							<ul>
+								<li>Tab 1</li>
+								<li>Tab 2</li>
+							</ul>
+						</div>
+					</div>
+					<div class="ztabpaneltabs">			
+						<ul>
+							<li>1</li>
+							<li>2</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+		
+		
+		
+		
+		
+		</div>
+		
+	</div>
+</body>
+</html>

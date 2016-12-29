@@ -1,0 +1,27 @@
+.zui-hovercard{}
+.zui-hovercard.zui-hovercard-fix{position:relative !important;}
+.zui-hovercard-panel-wrap{position:absolute;}
+.zui-hovercard-panel-wrap.zui-fixed{position:fixed !important;}
+.zui-hovercard-panel-arrow{position:absolute;}
+.zui-hovercard-panel{}
+.zui-hovercard-panel-inner{}
+
+/* position */
+.zui-hovercard-panel-wrap.zui-left{right:auto !important;}
+.zui-hovercard-panel-wrap.zui-right{left:auto !important;}
+.zui-hovercard-panel-wrap.zui-top{top:auto !important;}
+.zui-hovercard-panel-wrap.zui-bottom{bottom:auto !important;}
+
+.zui-hovercard-panel-wrap.zui-top{padding-bottom:5px;}
+.zui-hovercard-panel-wrap.zui-bottom{padding-top:5px;}
+
+/* tooltip */
+.zui-hovercard-panel-wrap.zui-tooltip{max-width:300px;}
+.zui-hovercard-panel-wrap.zui-tooltip .zui-hovercard-panel-arrow{width:0;height:0;border-style:solid;border-width:5px;border-color:transparent;box-sizing:content-box;}
+.zui-hovercard-panel-wrap.zui-tooltip.zui-left .zui-hovercard-panel-arrow{left:15px;right:auto !important;margin-left:-5px;}
+.zui-hovercard-panel-wrap.zui-tooltip.zui-right .zui-hovercard-panel-arrow{left:auto !important;right:15px;margin-right:-5px;}
+.zui-hovercard-panel-wrap.zui-tooltip.zui-top .zui-hovercard-panel-arrow{border-bottom-width:0;border-top-color:#333;bottom:0;}
+.zui-hovercard-panel-wrap.zui-tooltip.zui-bottom .zui-hovercard-panel-arrow{border-top-width:0;border-bottom-color:#333;top:0;}
+.zui-hovercard-panel-wrap.zui-tooltip .zui-hovercard-panel{background:#333;color: #FFF;padding:5px 10px;border-radius:2px;}
+.zui-hovercard-panel-wrap.zui-tooltip .zui-hovercard-panel-inner{}
+.zui-hovercard-panel-wrap.zui-tooltip .zui-hovercard-panel-inner:first-letter{text-transform:uppercase;}

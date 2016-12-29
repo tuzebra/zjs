@@ -1,0 +1,4 @@
+02/06/2014
+		+ add method zDictionary::setDataSourceUrl(url)
+		+ add method zDictionary::asyncGetItemById(id, callback)
+		+ add method zDictionary::asyncSearch(rawquery, callback)

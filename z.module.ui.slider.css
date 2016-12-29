@@ -1,0 +1,49 @@
+.zui-slider{position: relative;height:20px;}
+.zui-slider-touch{height:30px;}
+.zui-slider-tray-wrapper{position:absolute;width:100%;height: 5px;top:8px;
+	background:#fff;background:rgba(0,0,0,0.05);
+	box-shadow:inset 0px 0px 1px 0px rgba(51,51,51,0.3);
+	-webkit-box-shadow:inset 0px 0px 1px 0px rgba(51,51,51,0.3);
+	-moz-box-shadow:inset 0px 0px 1px 0px rgba(51,51,51,0.3);}
+.zui-slider-touch .zui-slider-tray-wrapper{top:12px;height:8px;}
+.zui-slider-tray{height:5px;padding-right:1px;
+	background:#ddd;
+	box-shadow:inset 0px 0px 1px 0px rgba(51,51,51,0.3);
+	-webkit-box-shadow:inset 0px 0px 1px 0px rgba(51,51,51,0.3);
+	-moz-box-shadow:inset 0px 0px 1px 0px rgba(51,51,51,0.3);}
+.zui-slider-touch .zui-slider-tray{height:8px;}
+.zui-slider-button{position:absolute;height: 20px;width:20px;
+border-radius: 100%;
+box-sizing:border-box;
+-moz-box-sizing:border-box;
+background:#f5f5f5;
+background-image:-webkit-linear-gradient(top,#f5f5f5,#f1f1f1);
+background-image:-moz-linear-gradient(top,#f5f5f5,#f1f1f1);
+background-image:-o-linear-gradient(top,#f5f5f5,#f1f1f1);
+background-image:linear-gradient(top,#f5f5f5,#f1f1f1);
+cursor:pointer;
+border:1px solid #bbb;
+box-shadow:0 1px 1px 0px rgba(0,0,0,0.05);
+}
+.zui-slider-button:hover{background:#fff;background-image:-webkit-linear-gradient(top,#fff,#f1f1f1);background-image:-moz-linear-gradient(top,#fff,#f1f1f1);background-image:-o-linear-gradient(top,#fff,#f1f1f1);background-image:linear-gradient(top,#fff,#f1f1f1);border-color:#aaa;text-decoration:none;box-shadow:0 1px 1px 0px rgba(0,0,0,0.1);}
+.zui-slider-button:active{background:#e0e0e0;box-shadow:inset 0 1px 1px 0px rgba(0, 0, 0, 0.1);}
+.zui-slider-touch .zui-slider-button{height:30px;width:30px;}
+
+
+.zui-slider,
+.zui-slider-tray-wrapper,
+.zui-slider-tray,
+.zui-slider-button,
+.zui-slider-button *{
+-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;
+}
+.zui-slider::selection,
+.zui-slider-tray-wrapper::selection,
+.zui-slider-tray::selection,
+.zui-slider-button::selection,
+.zui-slider-button *::selection{background: transparent;}
+.zui-slider::-moz-selection,
+.zui-slider-tray-wrapper::-moz-selection,
+.zui-slider-tray::-moz-selection,
+.zui-slider-button::-moz-selection,
+.zui-slider-button *::-moz-selection{background: transparent;}

@@ -1,0 +1,42 @@
+19/08/2014
+		+ add trigger "form.validation.success", "form.validation.failed"
+		+ add callback function for "form.validation.success" event
+		
+24/10/2014
+		+ add support to check "re-password" field
+		+ add trigger "form.validation.checking"
+		
+28/10/2014
+		+ fix checking "re-password" field
+		
+03/11/2014
+		+ fix issue when use "minlenght" check mix with other type
+		
+10/04/2015
+		+ add option customInputClass: 'zvalidation-custom-input'
+			-> support any dom element can being a "required" input
+
+25/04/2015
+		+ fix issue when multi checkbox/radio is required on form
+		+ support ui.imagepicker
+		
+26/06/2015
+		+ add new option "preventPressEnterToSubmit" with default value is FALSE
+
+17/07/2015
+		+ support when add new input field to a already-validation-form => the new input field will be ready
+		
+21/07/2015
+		+ add new option "autoCheckWhenBlur" with default value is TRUE
+		
+19/08/2015
+		+ better support for "autosuggestion" module
+		+ better support for "editor" module
+		
+30/11/2015
+		+ add support for email type
+		+ add new option "onlyone" with default value is FALSE
+		  -> Only show error on the first error-field
+		  
+06/04/2016
+		+ fix option "checkboxClass", "radiogroupClass"

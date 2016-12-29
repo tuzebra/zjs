@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Demo module image slider theme linear - coverlink</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+		<script type="text/javascript" src="z.js" data-debug="true"></script>
+		<script>
+			zjs.onready('image.slider.theme.linear', function(){
+				//zjs('.zslider').on('slider.change', function(e, el){console.log(e.data)});
+			});
+		</script>
+		<style>
+		body{padding:0;margin:0;}
+		html,
+		body,
+		.screen{
+			width:100%;height:100%;
+		}
+		</style>
+		
+	</head>
+	
+	<body>
+		
+		<div style="position:absolute;left:600px;top:0;height:100%;width:1px;border-right:1px dashed blue;">600px</div>
+		
+		<div class="screen">
+			
+			<div class="zslider" data-option="theme:'linear',
+				transition:'horizontal',
+				preload: false,
+				autoplay: true,
+				navButton: true,
+				navThumb: false,
+				navDot: true,
+				fullHeight: true,
+				navButtonParentIsRoot:true">
+				<ul>
+					<li>
+						<h3><a href="http://www.google.com/search?q=IU 1">IU</a></h3>
+						<img src="sliderimages/1thumb.jpg" largesrc="sliderimages/1.jpg" />
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu eleifend purus. Nulla in diam quam, sed aliquam ligula. Aenean volutpat euismod leo, non malesuada est euismod in.</p>
+						<div class="elements">Lorem ipsum dolor sit amet</div>
+					</li>
+					<li>
+						<h3><a href="http://www.google.com/search?q=IU 2">IU</a></h3>
+						<img class="thumb" src="sliderimages/2thumb.jpg" />
+						<img class="large" src="sliderimages/2.jpg" />
+						<p>Quisque id lorem ultricies erat venenatis aliquam in in nunc. Nunc rutrum sapien vitae augue rutrum vel pulvinar est ullamcorper.</p>
+						<div class="elements" style="float:right">Lorem ipsum dolor sit amet</div>
+					</li>
+					<li>
+						<h3><a href="http://www.google.com/search?q=IU 3">IU</a></h3>
+						<img src="sliderimages/3thumb.jpg" />
+						<img class="large" src="sliderimages/3.jpg" />
+						<p>Quisque orci metus, congue laoreet dapibus eu, vehicula fringilla arcu. Curabitur pulvinar mattis euismod.</p>
+						<div class="elements" style="float:right">Lorem ipsum dolor sit amet</div>
+					</li>
+					<li>
+						<img src="sliderimages/4thumb.jpg" data-src="sliderimages/4.jpg" title="Jessica" alt="Aliquam eu tortor tempus eros tempor pharetra vitae laoreet dolor. Fusce id pretium erat. Phasellus et est a ante blandit semper quis eu turpis." />
+						<div class="elements">Lorem ipsum dolor sit amet</div>
+						<a href="http://www.google.com/search?q=Jessica 1"></a>
+					</li>
+					<li>
+						<img src="sliderimages/5thumb.jpg" data-src="sliderimages/5.jpg" title="Jessica" />
+						<p>Phasellus fermentum orci consequat enim laoreet vel sodales leo consectetur. Pellentesque luctus est at neque dictum sit amet suscipit magna eleifend.</p>
+						<div class="elements" style="float:right">Lorem ipsum dolor sit amet</div>
+						<a href="http://www.google.com/search?q=Jessica 2"></a>
+					</li>
+					<li>
+						<img src="sliderimages/6thumb.jpg" />
+						<img class="large" src="sliderimages/6.jpg" />
+						<p class="title"><a href="http://www.google.com/search?q=Jessica 3">Jessica</a></p>
+						<p class="description">Cras adipiscing semper erat, quis consectetur lacus eleifend cursus. Donec ac nisl quis nibh elementum molestie ut vitae mi.</p>
+						<div class="elements">Lorem ipsum dolor sit amet</div>
+					</li>
+				</ul>
+			</div>
+			
+		</div>
+		
+		
+		<div class="screen">
+			<h3>Full height</h3>
+			<p>slider will resize to fix parent's height</p>
+			<pre>theme:'linear',
+fullHeight: true
+</pre>
+		</div>
+		
+		
+		
+		
+		
+		
+	</body>
+</html>

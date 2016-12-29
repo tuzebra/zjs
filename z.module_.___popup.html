@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Demo module popup</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="z.js"></script>
+	<script>zjs.require('popup, scrollbar')</script>
+	<style>
+		.wrapper{width:600px;margin:50px auto;}
+	</style>
+</head>
+<body>
+	
+	<div class="wrapper">
+		
+		cú pháp:
+		<pre>
+			var a = zjs.popup({
+				classname:'',
+				closeButton:true,
+				content:defaultContent,
+				destroyWhenClose:true,
+				parentElement: document.body,
+				onShow: function(element){},
+				onHide: function(element){}
+			});
+		</pre>
+		
+		demo: copy, paste vào console đoạn code sau:
+		<pre>
+			var a = zjs.popup({content:'hahaha'});
+		</pre>
+		
+		demo, nâng cao
+		<pre>
+			var a = zjs.popup({content:'hahaha', onShow: function(element){ console.log(element) }  });
+		</pre>
+		
+		demo kết hợp scrollbar
+		<pre>
+			var a = zjs.popup({
+				content:'&lt;div class="zscroll"&gt;dasdasd&lt;/div&gt;', 
+				onShow: function(element){ 
+					zjs(element).find('.zscroll').makeScrollbar();
+				}  
+			});
+		</pre>
+		
+		method:
+		<pre>
+			a.show();
+			a.hide();
+			a.close();
+			a.setContent('html...');
+		</pre>
+	</div>
+	
+	<script>
+	zjs(function(){
+		var a = zjs.popup({content:'hahaha'});
+	});
+	</script>
+	
+</body>
+</html>

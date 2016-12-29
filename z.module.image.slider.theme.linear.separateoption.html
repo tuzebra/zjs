@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Demo module image slider theme linear</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		
+		<style>
+			body{font-family:arial;}
+		</style>
+		
+		<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+		<script>
+			zjs.require('image.slider.theme.linear');
+			zjs.onready(function(){
+			//	zjs('.zslider').on('slider.change', function(event){console.log(event.data)});
+			});
+		</script>
+		
+	</head>
+	
+	<body>
+		
+		<div style="position:fixed;right:0;margin:20px 60px;font-family:consolas;z-index:10;">
+			<p><a href="javascript:;" onclick="zjs('.zslider').slideTo(3);">zjs('.zslider').slideTo(3)</a></p>
+			<p><a href="javascript:;" onclick="zjs('.zslider').slidePrev();">zjs('.zslider').slidePrev()</a></p>
+			<p><a href="javascript:;" onclick="zjs('.zslider').slideNext();">zjs('.zslider').slideNext()</a></p>
+			<p><a href="javascript:;" onclick="zjs('.zslider').slidePause();">zjs('.zslider').slidePause()</a></p>
+			<p><a href="javascript:;" onclick="zjs('.zslider').slidePlay();">zjs('.zslider').slidePlay()</a></p>
+		</div>
+		
+		
+		<h3>horizontal</h3>
+		<p>slider with horizontal transition, navigation dot, link in title and custom text on each page</p>
+		<pre>theme:'linear',
+transition: 'horizontal', 
+border: false, 
+preload: false, 
+autoplay: true,
+playButton: true, 
+navButton: false, 
+navThumb: false, 
+fullscreenWidth: false</pre>
+		<div class="zslider" data-option="theme:'linear',
+			transition:'horizontal',
+			transitionTime:1400,
+			border: false,
+			preload: false,
+			autoplay: true,
+			autoplayTime: 3000,
+			playButton: true,
+			navButton: false,
+			navThumb: false,
+			navDot: true,
+			link: true,
+			fullscreenWidth: false">
+
+			<ul>
+				<li data-option="transitionTime:1400, autoplayTime: 5000">
+					<img src="sliderimages/1.jpg" />
+				</li>
+				<li data-option="transitionTime:400, autoplayTime: 1000">
+					<img src="sliderimages/2.jpg" />
+				</li>
+				<li data-option="transitionTime:1000, autoplayTime: 2000">
+					<img src="sliderimages/3.jpg" />
+				</li>
+				<li data-option="transitionTime:400, autoplayTime: 5000">
+					<img src="sliderimages/4.jpg" />
+				</li>
+				<li data-option="transitionTime:4000, autoplayTime: 10000">
+					<img src="sliderimages/5.jpg" />
+				</li>
+				<li data-option="transitionTime:100, autoplayTime: 1000">
+					<img src="sliderimages/6.jpg" />
+				</li>
+			</ul>
+
+		</div>
+			
+		
+	</body>
+</html>

@@ -1,0 +1,10 @@
+.zeditor-inserttable-popup{width:280px;}
+.zeditor-inserttable-popup form{margin:0;}
+.zeditor-inserttable-popup h3{margin-bottom:0px;}
+.zeditor-inserttable-popup .field{margin:10px 0;}
+.zeditor-inserttable-popup .field label{}
+.zeditor-inserttable-popup .field label > span{display:block;margin-bottom:2px;}
+.zeditor-inserttable-popup .field input{width:150px;}
+.zeditor-inserttable-popup .field.field-row{}
+.zeditor-inserttable-popup .field.field-column{}
+.zeditor-inserttable-popup .buttons-wrapper{float:right;margin-top:-32px;}

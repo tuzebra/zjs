@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs test hide show method</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="z.js"></script>
+	<script>
+		zjs.onready(function(){
+			
+			zjs('#btn_show').on('click', function(){	zjs('.wrapper').show();	});
+			zjs('#btn_hide').on('click', function(){	zjs('.wrapper').hide();	});
+			
+			zjs('#btn_fadein').on('click', function(){	zjs('.wrapper').fadeIn();	});
+			zjs('#btn_fadeout').on('click', function(){	zjs('.wrapper').fadeOut();	});
+
+			zjs('#btn_show_height').on('click', function(){	zjs('.wrapper').showScale();	});
+			zjs('#btn_hide_height').on('click', function(){	zjs('.wrapper').hideScale();	});
+			
+			
+			zjs('#btn_show_width').on('click', function(){	zjs('.wrapper').showScale({vertical:false,horizontal:true});	});
+			zjs('#btn_hide_width').on('click', function(){	zjs('.wrapper').hideScale({vertical:false,horizontal:true});	});
+			
+			
+			
+			zjs('#btn_show_scale').on('click', function(){	zjs('.wrapper').showScale({vertical:true,horizontal:true});	});
+			zjs('#btn_hide_scale').on('click', function(){	zjs('.wrapper').hideScale({vertical:true,horizontal:true});	});
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	.wrapper{width:70%;margin:60px auto;position:relative;background:#aaa;}
+	.content{padding:5px 20px;}
+	label{color:red;}
+	</style>
+	
+</head>
+<body>
+	
+	<button id="btn_show">show</button> 
+	<button id="btn_hide">hide</button> | 
+	<button id="btn_fadein">fade in</button> 
+	<button id="btn_fadeout">fade out</button> | 
+	<button id="btn_show_height">show scale height</button> 
+	<button id="btn_hide_height">hide scale height</button> | 
+	<button id="btn_show_width">show scale width</button> 
+	<button id="btn_hide_width">hide scale width</button> | 
+	<button id="btn_show_scale">show scale</button> 
+	<button id="btn_hide_scale">hide scale</button>
+
+	<div class="wrapper">
+		<div class="content">
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce ut ante ipsum. Praesent dui nulla, posuere sed pulvinar ac, porttitor vitae justo. Morbi sed hendrerit nisi. Aliquam ut arcu felis, in tristique lorem. Vestibulum pharetra fermentum risus, at interdum felis faucibus at. Suspendisse eleifend ultricies tortor, at pulvinar ipsum pulvinar varius. Fusce accumsan, ligula scelerisque eleifend bibendum, velit erat pellentesque arcu, eu scelerisque eros dui id erat. Etiam convallis accumsan mi at facilisis. Duis venenatis dapibus justo in mollis. Morbi at tortor urna, non porta ante. Integer convallis ligula tristique orci malesuada vitae dignissim enim porttitor. Phasellus at commodo libero. Aenean tempor pellentesque nisl, a eleifend risus hendrerit quis.</p>
+			<p>Cras placerat ipsum non nunc ornare mattis. Praesent ornare fermentum nisl ac varius. Aliquam erat volutpat. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla eros mauris, ultrices sed venenatis quis, dictum non tellus. Aliquam pellentesque eros mi, eu blandit dolor. Duis quis tellus nunc. Nullam nisi tellus, dignissim a ultricies vitae, egestas ut purus. Sed massa neque, molestie vitae consequat at, vehicula eu justo.</p>
+		</div>
+	</div>
+	
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs UI - accordion</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="z.js" data-debug="false"></script>
+	<script>
+		zjs.onready('ui.accordion', function(){
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	body .wrapper{width:50%;margin:0 auto;padding:100px 0;}
+	body .zui-accordion{background:#ccc;}
+	body .zui-accordion-title{background:#aaa;color:#fff;padding:10px;}
+	body .zui-accordion-title.active{background:#777;}
+	body .zui-accordion-content{padding:10px;}
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+		
+		
+		<h1>accordion default option</h1>
+		
+		<div class="zaccordion">
+			<h3>Session 1</h3>
+			<p>ad as e  w  qeq s</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
+			<p>Fusce ut ante ipsum. Praesent dui nulla, posuere sed pulvinar ac, porttitor vitae justo. Morbi sed hendrerit nisi. Aliquam ut arcu felis, in tristique lorem. Vestibulum pharetra fermentum risus, at interdum felis faucibus at. Suspendisse eleifend ultricies tortor</p>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<h3>Session 2</h3>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<p>Fusce accumsan, ligula scelerisque eleifend bibendum, velit erat pellentesque arcu, eu scelerisque eros dui id erat. Etiam convallis accumsan mi at facilisis. Duis venenatis dapibus justo in mollis</p>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<h3>Session 3</h3>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+		</div>
+		
+		
+		<br/>
+		<br/>
+		<br/>
+		
+		
+		<h1>accordion allow toggle open/close</h1>
+		
+		<div class="zaccordion" data-option="titleclass: 'h3', allowclose: true">
+			<h3>Session 1</h3>
+			<p>ad as e  w  qeq s</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
+			<p>Fusce ut ante ipsum. Praesent dui nulla, posuere sed pulvinar ac, porttitor vitae justo. Morbi sed hendrerit nisi. Aliquam ut arcu felis, in tristique lorem. Vestibulum pharetra fermentum risus, at interdum felis faucibus at. Suspendisse eleifend ultricies tortor</p>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<h3>Session 2</h3>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<p>Fusce accumsan, ligula scelerisque eleifend bibendum, velit erat pellentesque arcu, eu scelerisque eros dui id erat. Etiam convallis accumsan mi at facilisis. Duis venenatis dapibus justo in mollis</p>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<h3>Session 3</h3>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+		</div>
+		
+		
+		<br/>
+		<br/>
+		<br/>
+		
+		
+		<h1>accordion allow toggle open/close and separate each section</h1>
+		
+		<div class="zaccordion" data-option="titleclass: 'h3', allowclose: true, separate: true">
+			<h3>Session 1</h3>
+			<p>ad as e  w  qeq s</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
+			<p>Fusce ut ante ipsum. Praesent dui nulla, posuere sed pulvinar ac, porttitor vitae justo. Morbi sed hendrerit nisi. Aliquam ut arcu felis, in tristique lorem. Vestibulum pharetra fermentum risus, at interdum felis faucibus at. Suspendisse eleifend ultricies tortor</p>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<h3>Session 2</h3>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<p>Fusce accumsan, ligula scelerisque eleifend bibendum, velit erat pellentesque arcu, eu scelerisque eros dui id erat. Etiam convallis accumsan mi at facilisis. Duis venenatis dapibus justo in mollis</p>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<h3>Session 3</h3>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+		</div>
+		
+		
+		<br/>
+		<br/>
+		<br/>
+		
+		
+		<h1>accordion in accordion</h1>
+		
+		<div class="zaccordion">
+			<h3>Session 1</h3>
+			<div class="zaccordion">
+				<h3>Session 1 a</h3>
+				<p>ad as e  w  qeq s</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+				<p>ad as e  w  qeq s</p>
+				<h3>Session 1 b</h3>
+				<div class="zaccordion">
+					<h3>Session 1 b i</h3>
+					<p>ad as e  w  qeq s</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>ad as e  w  qeq s</p>
+					<h3>Session 1 b ii</h3>
+					<p>ad as e  w  qeq s</p>
+					<p>ad as e  w  qeq s</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<h3>Session 1 b iii</h3>
+					<p>ad as e  w  qeq s</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+					<p>asdasd ad sdas d sdas dad dasds da</p>
+				</div>
+				<h3>Session 1 c</h3>
+				<p>ad as e  w  qeq s</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+			</div>
+			<h3>Session 2</h3>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<h3>Session 3</h3>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+			<p>ad as e  w  qeq s</p>
+			<p>asdasd ad sdas d sdas dad dasds da</p>
+		</div>
+		
+	</div>
+</body>
+</html>

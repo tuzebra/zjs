@@ -1,0 +1,101 @@
+.imageslider-aprilwork2{
+	position:relative;
+	width:1030px;height:520px;
+	width:100%;height:100%;
+	font-family:arial,tahoma;
+	font-size: 12px;
+	background:#e3e6eb;
+	overflow:hidden;
+}
+.imageslider-aprilwork2 .images-wrap{
+	position:absolute;
+	z-index:0;
+}
+.imageslider-aprilwork2 .image-wrap{
+	position:absolute;
+	border:1px solid #999;
+	border-top-color: #bbb;
+	border-radius: 4px;
+	box-shadow:0 1px 15px -1px rgba(0,0,0,0.8);
+}
+.imageslider-aprilwork2 .image-wrap img{
+	cursor: pointer;
+}
+.imageslider-aprilwork2 .nav-wrap{
+	position: absolute;
+	width: 110px;
+	z-index: 0;
+	bottom: 20px;
+	right: 30px;
+}
+.imageslider-aprilwork2 .nav{
+	width: 100%;
+	margin:0 auto;
+}
+.imageslider-aprilwork2 .nav a{
+	color:#fff;
+	font-size:14px;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+.imageslider-aprilwork2 .nav a:hover{
+	text-decoration: underline;
+}
+.imageslider-aprilwork2 .nav a.nav-back{
+	float:left;
+	display:none;
+}
+.imageslider-aprilwork2 .nav a.nav-next{
+	float: right;
+}
+.imageslider-aprilwork2 .full-wrap{
+	position: absolute;
+	right: 10px;
+	top: 10px;
+}
+.imageslider-aprilwork2 .full-wrap a{
+	display:block;
+	width:15px;
+	height:15px;
+	opacity:0.2;
+}
+.imageslider-aprilwork2 .full-wrap a:hover{
+	opacity:1;
+}
+.imageslider-aprilwork2 .full-wrap a.full{
+	background:url(full.png) no-repeat;
+}
+.imageslider-aprilwork2 .full-wrap a.exit{
+	background:url(exit.png) no-repeat;
+}
+.imageslider-aprilwork2 .description-wrap{
+	position: absolute;
+	bottom: 0px;
+	height: 65px;
+	width: 100%;
+	color: white;
+	border-top: 1px solid #fff;
+	border-color: #fff;
+	border-color: rgba(255,255,255,0.3);
+	background: #38393a;
+	background: rgba(0, 0, 0, 0.75);
+	padding-top: 10px;
+	z-index: 0;
+}
+.imageslider-aprilwork2 .description-wrap-title{
+	float: left;
+	margin: 0 10px;
+	border-right: 1px dotted #fff;
+	border-color: #fff;
+	border-color: rgba(255,255,255,0.2);
+	padding: 15px 10px;
+	font-size: 16px;
+}
+.imageslider-aprilwork2 .description-wrap-title h3{
+	margin: 0;
+}
+.imageslider-aprilwork2 .description-wrap-text{
+	max-width:720px;
+}
+.imageslider-aprilwork2 .description-wrap-text p{}

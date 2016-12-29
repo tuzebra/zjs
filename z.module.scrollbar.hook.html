@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Demo z.module.scroll - zjs</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="z.js"></script>
+	<script>zjs.require('scrollbar, encoder')</script>
+	<style>textarea{width:430px;height:100px;}button{font-size:13px;padding:5px 10px;}</style>
+</head>
+<body>
+	
+	<textarea><div class="zscroll" style="width:500px;height:150px;">
+	<div>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	</div>
+</div></textarea>
+	
+	<div>
+		<button onclick="zjs('body').append(zjs.htmlDecode(zjs('textarea').getValue()))">zjs('body').append( zjs('textarea').getValue() )</button>
+		<button onclick="zjs('body').prepend(zjs.htmlDecode(zjs('textarea').getValue()))">zjs('body').prepend( zjs('textarea').getValue() )</button> <br/>
+		<button onclick="zjs(zjs.htmlDecode(zjs('textarea').getValue())).appendTo('body')">zjs( zjs('textarea').getValue() ).appendTo('body')</button>
+		<button onclick="zjs(zjs.htmlDecode(zjs('textarea').getValue())).prependTo('body')">zjs( zjs('textarea').getValue() ).prependTo('body')</button> <br/>
+		<button onclick="zjs('body').html(zjs.htmlDecode(zjs('textarea').getValue()))">zjs('body').html( zjs('textarea').getValue() )</button> <br/>
+		<button onclick="zjs('.zscroll').remove()">zjs('<b>.zscroll</b>').remove()</button> <br/>
+		<button onclick="zjs.enablehook(true)">zjs.enablehook(true)</button>
+		<button onclick="zjs.enablehook(false)">zjs.enablehook(false)</button> <br/>
+		<button onclick="zjs('.zscroll').append(zjs.htmlDecode(zjs('textarea').getValue()))">zjs('.zscroll').append( zjs('textarea').getValue() )</button>
+	</div>
+
+</body>
+</html>

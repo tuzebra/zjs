@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Demo module image slider theme linear</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		
+		<style>
+			body{font-family:arial;}
+		</style>
+		
+		<script type="text/javascript" src="z.js" data-debug="true"></script>
+		<script>
+			zjs.require('image.slider.theme.linear');
+			zjs.onready(function(){
+			//	zjs('.zslider').on('slider.change', function(event){console.log(event.data)});
+			});
+		</script>
+		
+	</head>
+	
+	<body>
+		
+		<div style="position:fixed;right:0;margin:20px 60px;font-family:consolas;">
+			<p><a href="javascript:;" onclick="zjs('.zslider').slideTo(3);">zjs('.zslider').slideTo(3)</a></p>
+			<p><a href="javascript:;" onclick="zjs('.zslider').slidePrev();">zjs('.zslider').slidePrev()</a></p>
+			<p><a href="javascript:;" onclick="zjs('.zslider').slideNext();">zjs('.zslider').slideNext()</a></p>
+			<p><a href="javascript:;" onclick="zjs('.zslider').slidePause();">zjs('.zslider').slidePause()</a></p>
+			<p><a href="javascript:;" onclick="zjs('.zslider').slidePlay();">zjs('.zslider').slidePlay()</a></p>
+		</div>
+		
+		
+		<h3>horizontal</h3>
+		<p>slider with horizontal transition, navigation dot, link in title and custom text on each page</p>
+		<pre>transition: 'horizontal', 
+border: false, 
+preload: false, 
+autoplay: true,
+playButton: true, 
+navButton: false, 
+navThumb: false, 
+fullscreenWidth: false</pre>
+		<div class="zslider" data-option="theme:'linear',
+			transition:'horizontal',
+			transitionTime:1400,
+			border: false,
+			preload: false,
+			autoplay: true,
+			autoplayTime: 3000,
+			playButton: true,
+			navButton: false,
+			navThumb: false,
+			navDot: true,
+			link: true,
+			fullscreenWidth: false,
+			navThumbTemplate: '<a></a>',
+			navDotTemplate: '<a>${index}</a>'">
+
+			<ul>
+				<li>
+					<h3><a href="http://www.google.com/search?q=IU">IU</a></h3>
+					<img src="sliderimages/1thumb.jpg" largesrc="sliderimages/1.jpg" />
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu eleifend purus. Nulla in diam quam, sed aliquam ligula. Aenean volutpat euismod leo, non malesuada est euismod in.</p>
+					<div class="elements">Lorem ipsum dolor sit amet</div>
+				</li>
+			</ul>
+
+		</div>
+		
+		<!-- -->
+		<br/>
+		
+		<h3>vertical</h3>
+		<p>slider with vertical transition, border and without navigation dot</p>
+		<pre>transition: 'vertical',
+preload: false,
+autoplay: true,
+navButton: false,
+navThumb: false,
+navDot: false</pre>
+		<div class="zslider" data-option="theme:'linear',
+			transition:'vertical',
+			transitionTime:1000,
+			preload: false,
+			autoplay: true,
+			autoplayTime: 3000,
+			navButton: false,
+			navThumb: false,
+			navDot: false">
+			<ul>
+				<li>
+					<h3>IU</h3>
+					<img src="sliderimages/1thumb.jpg" largesrc="sliderimages/1.jpg" />
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu eleifend purus. Nulla in diam quam, sed aliquam ligula. Aenean volutpat euismod leo, non malesuada est euismod in.</p>
+					<div class="elements">Lorem ipsum dolor sit amet</div>
+				</li>
+			</ul>
+		</div>
+		
+		<!-- -->
+		<br/>
+		
+		<h3>fade</h3>
+		<p>slider with fade transition, border and without navigation dot</p>
+		<pre>transition: 1,
+preload: false,
+autoplay: true,
+navButton: false,
+navThumb: false,
+navDot: false</pre>
+		<div class="zslider" data-option="theme:'linear',
+				transition: 1,
+				transitionTime: 1400,
+				border: false,
+				preload: false,
+				autoplay: 0,
+				autoplayTime: 3000,
+				playButton: false,
+				navButton: false,
+				navThumb: false,
+				navDot: false,
+				fullscreenWidth: false,
+				navThumbTemplate: '<a></a>',
+				customElementsClass: 'elements',
+				navDotTemplate: '<a>${index}</a>'">
+			<ul>
+				<li>
+					<h3>IU</h3>
+					<img src="sliderimages/1thumb.jpg" largesrc="sliderimages/1.jpg" />
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu eleifend purus. Nulla in diam quam, sed aliquam ligula. Aenean volutpat euismod leo, non malesuada est euismod in.</p>
+					<div class="elements">Lorem ipsum dolor sit amet</div>
+				</li>
+				<!--li>
+					<h3>IU</h3>
+					<img class="thumb" src="sliderimages/2thumb.jpg" />
+					<img class="large" src="sliderimages/2.jpg" />
+					<p>Quisque id lorem ultricies erat venenatis aliquam in in nunc. Nunc rutrum sapien vitae augue rutrum vel pulvinar est ullamcorper.</p>
+					<div class="elements">Lorem ipsum dolor sit amet</div>
+				</li-->
+			</ul>
+		</div>
+		
+		<!-- -->
+		<br/>
+		
+		<h3>simple</h3>
+		<p>default slider with navigation dot, preload, thumbnail and none transition</p>
+		<pre>transition: 0,
+preload: true,
+autoplay: true,
+navButton: true,
+navThumb: true,
+navDot: true,
+hoverToSlide: true</pre>
+		<div class="zslider" data-option="theme:'linear',
+			transition:0,
+			transitionTime:1200,
+			preload: true,
+			autoplay: true,
+			autoplayTime: 3000,
+			navButton: true,
+			navThumb: true,
+			navDot: true,
+			hoverToSlide: true,
+			navThumbTemplate: '<a class=\'nav-image\'><span>${title}</span></a>'
+			">
+			<ul>
+				<li>
+					<h3>IU</h3>
+					<img src="sliderimages/1thumb.jpg" largesrc="sliderimages/1.jpg" />
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu eleifend purus. Nulla in diam quam, sed aliquam ligula. Aenean volutpat euismod leo, non malesuada est euismod in.</p>
+					<div class="elements">Lorem ipsum dolor sit amet</div>
+				</li>
+			</ul>
+		</div>
+		
+		
+		
+		
+		<!-- -->
+		<br/>
+		<div style="margin:200px 0"></div>
+		
+		
+		
+		
+		
+		<h3>content horizontal </h3>
+		<p>used slider only for content</p>
+		<pre>transition: 'horizontal',
+transitionTime:1600,
+border: false,
+autoplay: true,
+autoplayTime: 6000,
+fullWidth: true,
+contentSlide: true,
+navButtonParentIsRoot: true</pre>
+		<div class="zslider" data-option="theme:'linear',
+			transition: 'horizontal',
+			transitionTime:1600,
+			border: false,
+			autoplay: true,
+			autoplayTime: 6000,
+			fullWidth: true,
+			contentSlide: true,
+			navButtonParentIsRoot: true">
+
+			<ul>
+				<li>
+					<div class="elements">
+						<h3>1 Aliquam quis nibh ac nunc malesuada 1</h3>
+						<p>Mauris mollis velit non arcu gravida ut convallis lectus pellentesque? Nullam ultricies accumsan neque a luctus. In hac habitasse platea dictumst. Nulla augue lorem; fringilla et vestibulum vitae, ornare a sapien. Fusce volutpat; justo id cursus ultrices</p>
+					</div>
+				</li>
+			</ul>
+
+		</div>
+		
+		
+	</body>
+</html>

@@ -1,0 +1,23 @@
+.zeditor-parent{background:#fff;}
+.zeditor-iframecontainer{}
+.zeditor-buttons-wrapper{margin-bottom:5px;}
+.zeditor-buttons-wrapper .zui-group-button{margin-right:10px;}
+.zui-editor-icon .zui-button-label{color:transparent;text-shadow:none;width:18px;margin:0 6px;opacity:0.6;background:url(images/z.module.editor.icons.png) no-repeat;}
+.zui-editor-icon:hover .zui-button-label{opacity:0.8;}
+.zui-editor-icon.bold .zui-button-label{background-position: -36px center;}
+.zui-editor-icon.italic .zui-button-label{background-position: -108px center;}
+.zui-editor-icon.underline .zui-button-label{background-position: -324px center;}
+.zui-editor-icon.alignleft .zui-button-label{background-position: -144px center;}
+.zui-editor-icon.aligncenter .zui-button-label{background-position: -54px center;}
+.zui-editor-icon.alignright .zui-button-label{background-position: -216px center;}
+.zui-editor-icon.alignfull .zui-button-label{background-position: -126px center;}
+.zui-editor-icon.bullist .zui-button-label{background-position: -306px center;}
+.zui-editor-icon.numlist .zui-button-label{background-position: -162px center;}
+.zui-editor-icon.indent .zui-button-label{background-position: -90px center;}
+.zui-editor-icon.outdent .zui-button-label{background-position: -180px center;}
+.zui-editor-icon.link .zui-button-label{background-position: -360px center;}
+.zui-editor-icon.image .zui-button-label{background-position: -342px center;}
+.zui-editor-icon.source .zui-button-label{background-position: -378px center;}
+.zui-editor-icon.table .zui-button-label{background-position: -396px center;}
+.zui-editor-icon.blockquote .zui-button-label{background-position: -270px center;}
+.zui-editor-icon.removeformat .zui-button-label{background-position: -288px center;}

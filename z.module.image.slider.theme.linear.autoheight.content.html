@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Demo module image slider theme linear</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		
+		<style>
+			body{font-family:arial;padding:40px;margin:0;}
+
+			.content{padding:1px 0;}
+			.content img{max-width: 100%;}
+			.content h3{font-size: 30px; line-height: 1.4em;text-align: center;}
+			.content p{font-size: 16px; line-height: 1.2em;}
+			
+			body .imageslider-linear .image-view .image-view-wrap .image-hold, 
+			body .imageslider-linear .image-view .image-view-wrap .image-hold-temp{
+				padding:0 2px;
+				background: none !important;
+			}
+
+			body .imageslider-linear.horizontal-stack.use-percent .image-view{
+				width: 20%;
+			}
+
+		</style>
+		
+		<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+		<script>
+			zjs.onready('image.slider.theme.linear', function(){
+
+			});
+		</script>
+		
+	</head>
+	
+	<body>
+		
+		
+
+		<h3>Horizontal content slider with auto height</h3>
+		
+		<pre>theme:'linear',
+transition:'horizontal',
+contentSlide: true,
+autoHeight: true,
+navButtonParentIsRoot: true
+</pre>
+		<div class="zslider" data-option="theme:'linear',
+			slideitem: '.slideitem',
+			transition:'horizontal',
+			transitionTime:2400,
+			autoplay: false,
+			autoplayTime: 3000,
+			navButton: true,
+			navThumb: false,
+			navDot: false,
+			contentSlide: true,
+			autoHeight: true,
+			navButtonParentIsRoot: true">
+
+			<div class="slideitem">
+				<div class="content">
+					<h3>1</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				</div>
+			</div>
+
+			<div class="slideitem">
+				<div class="content">
+					<h3>2</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				</div>
+			</div>
+
+			<div class="slideitem">
+				<div class="content">
+					<h3>3</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				</div>
+			</div>
+
+			<div class="slideitem">
+				<div class="content">
+					<h3>4</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat.</p>
+				</div>
+			</div>
+
+			<div class="slideitem">
+				<div class="content">
+					<h3>5</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat.</p>
+				</div>
+			</div>
+
+			<div class="slideitem">
+				<div class="content">
+					<h3>6</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					consequat.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				</div>
+			</div>
+
+		</div>
+
+
+
+		<!-- -->
+
+
+		<br/>
+		<br/>
+
+
+		
+		<h3>Horizontal Stack with custom item width (item width use percent) &amp; auto height</h3>
+		
+		<pre>theme:'linear',
+transition:'horizontal-stack',
+contentSlide: true,
+usePercentWidth: true,
+autoHeight: true
+</pre>
+		<div class="zslider" data-option="theme:'linear',
+			slideitem: '.slideitem',
+			transition:'horizontal-stack',
+			transitionTime:2400,
+			autoplay: false,
+			autoplayTime: 3000,
+			navButton: true,
+			navThumb: false,
+			navDot: false,
+			contentSlide: true,
+			usePercentWidth: true,
+			autoHeight: true">
+
+			<div class="slideitem">
+				<div class="content">
+					<img src="sliderimages/1.jpg" />
+					<h3>1</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat.</p>
+				</div>
+			</div>
+
+			<div class="slideitem">
+				<div class="content">
+					<img src="sliderimages/1.jpg" />
+					<h3>2</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat.</p>
+				</div>
+			</div>
+
+			<div class="slideitem">
+				<div class="content">
+					<img src="sliderimages/1.jpg" />
+					<h3>3</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat.</p>
+				</div>
+			</div>
+
+			<div class="slideitem">
+				<div class="content">
+					<img src="sliderimages/1.jpg" />
+					<h3>4</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat.</p>
+				</div>
+			</div>
+
+			<div class="slideitem">
+				<div class="content">
+					<img src="sliderimages/1.jpg" />
+					<h3>5</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat.</p>
+				</div>
+			</div>
+
+			<div class="slideitem">
+				<div class="content">
+					<img src="sliderimages/1.jpg" />
+					<h3>6</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat.</p>
+				</div>
+			</div>
+
+			<div class="slideitem">
+				<div class="content">
+					<img src="sliderimages/1.jpg" />
+					<h3>7</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat.</p>
+				</div>
+			</div>
+
+			<div class="slideitem">
+				<div class="content">
+					<img src="sliderimages/1.jpg" />
+					<h3>8</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat.</p>
+				</div>
+			</div>
+
+			<div class="slideitem">
+				<div class="content">
+					<img src="sliderimages/1.jpg" />
+					<h3>9</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat.</p>
+				</div>
+			</div>
+
+			<div class="slideitem">
+				<div class="content">
+					<img src="sliderimages/1.jpg" />
+					<h3>10</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat.</p>
+				</div>
+			</div>
+
+			<div class="slideitem">
+				<div class="content">
+					<img src="sliderimages/1.jpg" />
+					<h3>11</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat.</p>
+				</div>
+			</div>
+
+			<div class="slideitem">
+				<div class="content">
+					<img src="sliderimages/1.jpg" />
+					<h3>12</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat.</p>
+				</div>
+			</div>
+
+		</div>
+
+
+		<br/>
+		<br/>
+
+		<p>This is another content</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+
+
+
+	</body>
+</html>

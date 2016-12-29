@@ -1,0 +1,29 @@
+.zbutton {
+	color: #333;
+	background-color: #fff;
+	border: 1px;
+	display: inline-block;
+	margin-bottom: 0;
+	font-weight: 400;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	background-image: none;
+	border: 1px solid #ccc;
+	white-space: nowrap;
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 1.42857143;
+	border-radius: 4px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	margin: 5px 0px;
+}
+
+.zbutton:hover {
+	color: #333;
+	background-color: #ebebeb;
+	border-color: #adadad;
+}

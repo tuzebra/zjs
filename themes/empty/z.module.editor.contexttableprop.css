@@ -1,0 +1,15 @@
+.zeditor-contexttableprop-popup{width:240px;}
+.zeditor-contexttableprop-popup form{margin-bottom: 20px;}
+.zeditor-contexttableprop-popup form.cell{}
+.zeditor-contexttableprop-popup form.row,
+.zeditor-contexttableprop-popup form.column,
+.zeditor-contexttableprop-popup form.table{border-top:1px dashed #F1EDED;}
+.zeditor-contexttableprop-popup h3{margin-bottom:0px;}
+.zeditor-contexttableprop-popup .field{margin:10px 0;}
+.zeditor-contexttableprop-popup .field label{}
+.zeditor-contexttableprop-popup .field label > span{display:block;margin-bottom:2px;}
+.zeditor-contexttableprop-popup .buttons-wrapper{min-height:22px;}
+.zeditor-contexttableprop-popup .buttons-wrapper .zui-button{width:60px;margin-right:10px;}
+.zeditor-contexttableprop-popup .buttons-wrapper .btndeleterow,
+.zeditor-contexttableprop-popup .buttons-wrapper .btndeletecolumn,
+.zeditor-contexttableprop-popup .buttons-wrapper .btndeletetable{float:right;margin-right:0;}

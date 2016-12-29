@@ -1,0 +1,19 @@
+.zui-autosuggestion-wrap{position:relative;font-size:14px;font-family:arial,tahoma;}
+
+/** input **/
+.zui-autosuggestion-inputwrap{position:relative;height:16px;width:200px;cursor:text;border:1px solid #bbb;padding:3px;background:#fff;box-shadow: inset 0 2px 5px -3px rgba(0,0,0,0.5);}
+.zui-autosuggestion-placeholder{font-size:14px;line-height:18px;font-weight:normal;font-family:arial,tahoma;padding:0;color:#bbb;}
+.zui-autosuggestion-input{position:absolute;top:3px;width:200px;font-size:14px;line-height: 18px;font-weight:normal;font-family:arial,tahoma;padding:0;color:#000;}
+
+/** suggestion **/
+.zui-autosuggestion-panel-wrap{position: absolute;top: 23px;border: 1px solid #bbb;width: 206px;background:#fff;box-shadow: 0 1px 6px -2px rgba(0,0,0,0.6);}
+.zui-autosuggestion-panel-scroll{height: 100%;overflow: scroll;overflow-x:hidden;}
+.zui-autosuggestion-panel-content{}
+
+/** item **/
+.zui-autosuggestion-item{}
+.zui-autosuggestion-item .item{padding:3px;}
+.zui-autosuggestion-item.highlight{background:#ddd;}
+.zui-autosuggestion-item.highlight .item{}
+
+.zui-autosuggestion-panel-wrap .zui-scrollbar{border-radius:0;}

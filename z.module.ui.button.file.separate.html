@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs UI - button file</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+	<script>
+		zjs.onready('ui.button.file', function(){
+		
+			// handler on file change
+			zjs('#main-upload-button').on('ui.button.file.change', function(event){
+				console.log('buttonfile.change', event.data);
+			});
+			
+			// handerl on select file with wrong file-extension
+			zjs('#main-upload-button').on('ui.button.file.wrongfileext', function(event){
+				console.log('buttonfile.wrongfileext', event.data);
+				alert('Your file extension is wrong');
+			});
+			
+			// handler on select file out of maximum number of file
+			zjs('#main-upload-button').on('ui.button.file.maxnumberoffile', function(event){
+				console.log('buttonfile.maxnumberoffile', event.data);
+				alert('Out of maximum number of file (10 files)');
+			});
+			
+			// handler on select file out of maximum file size
+			zjs('#main-upload-button').on('ui.button.file.maxfilesize', function(event){
+				console.log('buttonfile.maxfilesize', event.data);
+				alert('Out of maximum file size (10MB)');
+			});
+			
+			// handler on file when begin
+			zjs('#main-upload-button').on('ui.button.file.upload.begin', function(event){
+				console.log('ui.button.file.upload.begin', event.data);
+				// create new element to tracking what's going on.
+				zjs('.files-wrap').append('<p data-uploadid="'+event.data.id+'">'+event.data.file.name+' <b class="percent"></b>%  <button class="abort">abort</button></p>');
+			});
+			
+			// handler on file when uploading
+			zjs('#main-upload-button').on('ui.button.file.upload.loading', function(event){
+				console.log('buttonfile.upload.loading', event.data);
+				// update the tracking
+				zjs('[data-uploadid="'+event.data.id+'"] .percent').html(event.data.percent);
+			});
+			
+			// handler on file upload complete
+			zjs('#main-upload-button').on('ui.button.file.upload.complete', function(event){
+				console.log('buttonfile.upload.complete', event.data);
+				
+				// remove the abort button
+				zjs('[data-uploadid="'+event.data.id+'"] .abort').remove();
+				
+				// show the response message from server
+				if(event.data.response.message)
+					zjs('.log-wrap').append('<div>upload.complete: response: message: '+event.data.response.message+'</div>');
+			});
+			
+			// handler on file upload abort
+			zjs('#main-upload-button').on('ui.button.file.upload.abort', function(event){
+				console.log('ui.button.file.upload.abort', event.data);
+				zjs('.log-wrap').append('<div>upload.abort: '+event.data.id+'</div>');
+			});
+			
+			
+			// bind event when click "abort" button
+			zjs(document.body).on('click', '.abort', function(){
+				// find the upload id
+				var uploadId = this.findUp('[data-uploadid]').getAttr('data-uploadid');
+				// abort the upload process
+				zjs('#main-upload-button').buttonFileAbortUpload(uploadId);
+			});
+			
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	.wrapper{width:80%;margin:0 auto;padding:50px 0;}
+	.log-wrap{background:#000;color:#FFF;padding:20px;border-radius:5px;}
+	a{color:#FFF;}
+	
+	/* css to help the button expand more bigger */
+	body.zui-body-ready-to-drop .zui-button-file.zui-support-drag-drop:not(.disabled){
+	    position: fixed !important;
+	    top: 5%;
+	    left: 5%;
+	    width: 90%;
+	    height: 90%;
+		opacity:0.95;
+		border-width:5px;
+	}
+	body.zui-body-ready-to-drop .zui-button-file.zui-support-drag-drop.zui-ready-to-drop{
+		opacity:1;
+	}
+	body .zui-button-file .zui-button-drop-text{
+	    font-size: 36px;
+	    line-height: 350px;
+	}
+	
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+	
+		<div>
+			
+			<h3>Demo uploading multi files at the same time, and can view each file process.</h3>
+			<p>Just set the param uploadMultipleFilesAtOneTime to <code>false</code>
+			</p>
+			<pre>maxFileSize: 100 * 1024 * 1024,
+dropText: 'Drop file here to start upload !!!!',
+autouploadUrl:'http://app.april.com.vn/zmvc/test/uploadfile',
+<b>uploadMultipleFilesAtOneTime</b>: <b>false</b></pre>
+
+			<div>
+				<a id="main-upload-button" class="zbuttonfile" data-option="
+					maxFileSize: 100 * 1024 * 1024,
+					dropText: 'Drop file here to start upload !!!!',
+					autouploadUrl:'http://app.april.com.vn/zmvc/test/uploadfile',
+					uploadMultipleFilesAtOneTime: false,
+					data:{message:'custom message include with file upload'}
+				">Drag file here....</a>
+			</div>
+			<div class="files-wrap">
+			</div>
+			
+
+			
+			<!-- -->
+			
+			</br>
+			</br>
+			
+			<div class="log-wrap"></div>
+			
+		</div>
+		
+		
+		
+	</div>
+</body>
+</html>

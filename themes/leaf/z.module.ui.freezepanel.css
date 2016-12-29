@@ -1,0 +1,2 @@
+.zui-freezepanel{padding:0;margin:0;box-sizing:border-box;-moz-box-sizing:border-box;-o-box-sizing:border-box;}
+.zui-freezepanel.zui-freezing{position:fixed;top:0px;z-index:1;box-shadow:0 10px 10px -10px rgba(0, 0, 0, 0.5);}

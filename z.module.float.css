@@ -1,0 +1,6 @@
+.zfloat-parent{
+	position:relative;
+}
+.zfloat-parent .zfloatitem{
+	position:absolute;
+}

@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" class="flat">
+<head>
+	<title>zjs UI - Popup with animated</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<link rel="stylesheet" type="text/css" href="./3th/animate.min.css">
+
+	<script type="text/javascript" src="./z.js" data-debug="true"></script>
+	<script>
+		zjs.onready('ui.popup, codeeditor', function(){
+			
+			console.log('popup api is ready to use...');
+
+			var createHtml = function(){
+				var classname = '',
+					dataoption = '';
+
+				var showeffect = zjs('#showeffect').on('change', createHtml).getValue(),
+					hideeffect = zjs('#hideeffect').on('change', createHtml).getValue();
+
+				var html = '<div class="zpopup${classname}" data-option="autoshow:true${dataoption}">\n\t ' +
+								'<h1>Popup title</h1>\n\t ' +
+								'<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>\n\t ' +
+								'<p>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>\n\t ' +
+								'<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>\n\t ' +
+								'<p>nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in</p>\n\t ' +
+								'<p>reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>\n '+
+							'</div>';
+
+				
+				if(showeffect == 'none'){
+					dataoption = ',fade:false';
+				}
+				else if(showeffect == 'jsfade'){
+					// do nothing
+				}else{
+					dataoption = ',animate:true,animateTime:1000';
+					classname = ' '+showeffect+' '+hideeffect;
+				};
+
+				html = html.format({
+					classname: classname,
+					dataoption: dataoption
+				});
+
+				zjs('#code').codeEditorSetValue(html);
+			};
+
+			// first call
+			createHtml.delay(100);
+
+			// bind event for button "Run"
+			zjs('#run').on('click', function(){
+				var html = zjs('#code').codeEditorGetValue();
+				var popup = zjs(html);
+				popup.appendTo(document.body);
+			});
+
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;}
+	.wrapper{width:960px;margin:0 auto;padding:100px 0;}
+	label{color:red;}
+	.zpopup{width:60%;}
+	a.zbutton{margin:10px 0;}
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+		
+
+		<h1>Popup module can work with Animate.css for better experience</h1>
+
+
+		<textarea id="code" class="zcodeeditor"></textarea>
+		
+		show effect 
+		<select id="showeffect">
+			<option>none</option>
+			<option value="jsfade">javascript fade in</option>
+
+			<optgroup label="fade">
+				<option>fadeIn</option>
+				<option>fadeInDown</option>
+				<option>fadeInDownBig</option>
+				<option>fadeInLeft</option>
+				<option>fadeInLeftBig</option>
+				<option>fadeInRight</option>
+				<option>fadeInRightBig</option>
+				<option>fadeInUp</option>
+				<option>fadeInUpBig</option>
+			</optgroup>
+
+			<optgroup label="zoom">
+				<option>zoomIn</option>
+				<option>zoomInDown</option>
+				<option>zoomInLeft</option>
+				<option>zoomInRight</option>
+				<option>zoomInUp</option>
+			</optgroup>
+
+			<optgroup label="bounce">
+				<option>bounce</option>
+				<option>bounceIn</option>
+				<option>bounceInDown</option>
+				<option>bounceInUp</option>
+				<option>bounceInLeft</option>
+				<option>bounceInRight</option>
+			</optgroup>
+
+			<optgroup label="flip">
+				<option>flip</option>
+				<option>flipInX</option>
+				<option>flipInY</option>
+			</optgroup>
+
+			<optgroup label="speed">
+				<option>lightSpeedIn</option>
+			</optgroup>
+
+			<optgroup label="rotate">
+				<option>rotateIn</option>
+				<option>rotateInDownLeft</option>
+				<option>rotateInDownRight</option>
+				<option>rotateInUpLeft</option>
+				<option>rotateInUpRight</option>
+			</optgroup>
+
+			<optgroup label="slide">
+				<option>slideInDown</option>
+				<option>slideInLeft</option>
+				<option>slideInRight</option>
+				<option>slideInUp</option>
+			</optgroup>
+
+			<optgroup label="roll">
+				<option>rollIn</option>
+			</optgroup>
+
+			<optgroup label="special">
+				<option>flash</option>
+				<option>headShake</option>
+				<option>jello</option>
+				<option>pulse</option>
+				<option>rubber</option>
+				<option>shake</option>
+				<option>swing</option>
+				<option>tada</option>
+				<option>wobble</option>
+			</optgroup>
+		</select>
+
+		hide effect 
+		<select id="hideeffect">
+			<optgroup label="fade">
+				<option>fadeOut</option>
+				<option>fadeOutDown</option>
+				<option>fadeOutDownBig</option>
+				<option>fadeOutLeft</option>
+				<option>fadeOutLeftBig</option>
+				<option>fadeOutRight</option>
+				<option>fadeOutRightBig</option>
+				<option>fadeOutUp</option>
+				<option>fadeOutUpBig</option>
+			</optgroup>
+
+			<optgroup label="zoom">
+				<option>zoomOut</option>
+				<option>zoomOutDown</option>
+				<option>zoomOutLeft</option>
+				<option>zoomOutRight</option>
+				<option>zoomOutUp</option>
+			</optgroup>
+
+			<optgroup label="bounce">
+				<option>bounceOut</option>
+				<option>bounceOutDown</option>
+				<option>bounceOutUp</option>
+				<option>bounceOutLeft</option>
+				<option>bounceOutRight</option>
+			</optgroup>
+
+			<optgroup label="flip">
+				<option>flipOutX</option>
+				<option>flipOutY</option>
+			</optgroup>
+
+			<optgroup label="light speed">
+				<option>lightSpeedOut</option>
+			</optgroup>
+
+			<optgroup label="rotate">
+				<option>rotateOut</option>
+				<option>rotateOutDownLeft</option>
+				<option>rotateOutDownRight</option>
+				<option>rotateOutUpLeft</option>
+				<option>rotateOutUpRight</option>
+			</optgroup>
+
+			<optgroup label="slide">
+				<option>slideOutDown</option>
+				<option>slideOutLeft</option>
+				<option>slideOutRight</option>
+				<option>slideOutUp</option>
+			</optgroup>
+
+			<optgroup label="roll">
+				<option>rollOut</option>
+			</optgroup>
+
+			<optgroup label="special">
+				<option>hinge</option>
+			</optgroup>
+		</select>		
+
+		<button id="run">Run</button>
+
+
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		Thanks Daniel Eden for amazing css library 
+		<a href="https://daneden.github.io/animate.css" target="_blank">https://daneden.github.io/animate.css</a>
+		
+</body>
+</html>

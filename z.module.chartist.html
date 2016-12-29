@@ -1,0 +1,781 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs Chartist integration</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="z.min.js" data-debug="false"></script>
+	<script>
+		zjs.onready('chartist, codeeditor', function(){
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	.wrapper{width:40%;margin:0 auto;padding:100px 0;margin-left:80px;}
+	.wrapper section{position:relative;min-height:300px;}
+	.wrapper section .source-wrap{position:absolute;top:0;left:110%;width:100%;}
+	code{border: 1px solid #C5C5C5;border-radius: 3px;padding: 0px 2px;}
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+		
+		<p>This module is just a wrapper for the original Chartist.js library <br/>
+			Please find the original documentation here <br/> 
+			<a href="https://gionkunz.github.io/chartist-js/examples.html" target="_blank">https://gionkunz.github.io/chartist-js/examples.html</a></p>
+		
+		<br/><br/>
+		
+		
+		
+		
+		<h1>LINE CHART EXAMPLES</h1>
+		
+		<br/>
+		
+		
+		
+		<h3>Simple line chart</h3>
+		<p>An example of a simple line chart with three series.</p>
+		<section>
+			
+			<div class="zchartist" data-option="type:'line',chartPadding:{right:50}">
+				{
+				  labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+				  series: [
+				    [12, 9, 7, 8, 5],
+				    [2, 1, 3.5, 7, 3],
+				    [1, 3, 4, 5, 6]
+				  ]
+				}
+			</div>
+		
+		
+		
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="zchartist" data-option="type:'line',chartPadding:{right:50}">
+	{
+	  labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+	  series: [
+	    [12, 9, 7, 8, 5],
+	    [2, 1, 3.5, 7, 3],
+	    [1, 3, 4, 5, 6]
+	  ]
+	}
+</div>
+				</textarea>
+			</div>
+		
+		</section>
+		
+		
+		
+		<!-- -->
+		<br/><br/>
+
+
+
+
+
+
+		<h3>Label placement</h3>
+		<p>You can change the position of the labels on line and bar charts easily by using the position option inside of the axis configuration.</p>
+		<section>
+	
+			<div class="zchartist" data-option="
+				type:'line',
+				axisX: {
+					position: 'start'
+				},
+				axisY: {
+					position: 'end'
+				}
+			">
+				{
+				  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+				  series: [
+				    [5, 4, 3, 7, 5, 10, 3],
+				    [3, 2, 9, 5, 4, 6, 4]
+				  ]
+				}
+			</div>
+
+
+
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="zchartist" data-option="
+	type:'line',
+	axisX: {
+		position: 'start'
+	},
+	axisY: {
+		position: 'end'
+	}
+">
+	{
+	  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+	  series: [
+	    [5, 4, 3, 7, 5, 10, 3],
+	    [3, 2, 9, 5, 4, 6, 4]
+	  ]
+	}
+</div>
+				</textarea>
+			</div>
+
+		</section>
+		
+		
+		
+		
+
+		<!-- -->
+		<br/><br/>
+		
+		
+		
+		
+		
+		
+
+		<h3>Line chart with area</h3>
+		<p>This chart uses the showArea option to draw line, dots but also an area shape. Use the low option to specify a fixed lower bound that will make the area expand. You can also use the areaBase property to specify a data value that will be used to determine the area shape base position (this is 0 by default).</p>
+		<section>
+	
+			<div class="zchartist" data-option="type:'line',low:0,showArea:true">
+				{
+				  labels: [1, 2, 3, 4, 5, 6, 7, 8],
+				  series: [
+				    [5, 9, 7, 8, 5, 3, 5, 4]
+				  ]
+				}
+			</div>
+
+
+
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="zchartist" data-option="type:'line',low:0,showArea:true">
+	{
+	  labels: [1, 2, 3, 4, 5, 6, 7, 8],
+	  series: [
+	    [5, 9, 7, 8, 5, 3, 5, 4]
+	  ]
+	}
+</div>
+				</textarea>
+			</div>
+
+		</section>
+
+
+
+		<!-- -->
+		<br/><br/>
+		
+		
+		
+		
+		
+		
+
+		<h3>Bi-polar line chart with area only</h3>
+		<p>You can also only draw the area shapes of the line chart. Area shapes will always be constructed around their areaBase (that can be configured in the options) which also allows you to draw nice bi-polar areas.</p>
+		<section>
+	
+			<div class="zchartist" data-option="
+				type: 'line',
+				high: 3,
+				low: -3,
+				showArea:true,
+				showLine: false,
+				showPoint: false,
+				axisX: {
+					showLabel: false,
+					showGrid: false
+				}
+			">
+				{
+				  labels: [1, 2, 3, 4, 5, 6, 7, 8],
+				  series: [
+				    [1, 2, 3, 1, -2, 0, 1, 0],
+				    [-2, -1, -2, -1, -2.5, -1, -2, -1],
+				    [0, 0, 0, 1, 2, 2.5, 2, 1],
+				    [2.5, 2, 1, 0.5, 1, 0.5, -1, -2.5]
+				  ]
+				}
+			</div>
+
+
+
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="zchartist" data-option="
+	type: 'line',
+	high: 3,
+	low: -3,
+	showArea:true,
+	showLine: false,
+	showPoint: false,
+	axisX: {
+		showLabel: false,
+		showGrid: false
+	}
+">
+	{
+	  labels: [1, 2, 3, 4, 5, 6, 7, 8],
+	  series: [
+	    [1, 2, 3, 1, -2, 0, 1, 0],
+	    [-2, -1, -2, -1, -2.5, -1, -2, -1],
+	    [0, 0, 0, 1, 2, 2.5, 2, 1],
+	    [2.5, 2, 1, 0.5, 1, 0.5, -1, -2.5]
+	  ]
+	}
+</div>
+				</textarea>
+			</div>
+
+		</section>
+
+
+
+		<!-- -->
+		<br/><br/>
+		
+		
+		
+		
+		
+		
+
+		<h3>Line interpolation / Smoothing</h3>
+		<p>By default Chartist uses a cardinal spline algorithm to smooth the lines. However, like all other things in Chartist, this can be customized easily!</p>
+		<section>
+	
+			<div class="zchartist" data-option="
+				type: 'line',
+				lineSmooth: Chartist.Interpolation.simple({
+					divisor: 2
+				})
+			">
+				{
+				  labels: [1, 2, 3, 4, 5],
+				  series: [
+				    [1, 5, 10, 0, 1],
+				    [10, 15, 0, 1, 2]
+				  ]
+				}
+			</div>
+
+
+
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="zchartist" data-option="
+	type: 'line',
+	lineSmooth: Chartist.Interpolation.simple({
+		divisor: 2
+	})
+">
+	{
+	  labels: [1, 2, 3, 4, 5],
+	  series: [
+	    [1, 5, 10, 0, 1],
+	    [10, 15, 0, 1, 2]
+	  ]
+	}
+</div>
+				</textarea>
+			</div>
+
+		</section>
+
+
+
+		<!-- -->
+		<br/><br/>
+		
+		
+		
+		
+		
+		
+
+		<h3>Series overrides</h3>
+		<p>By naming your series using the series object notation with a name property, you can enable the individual configuration of series specific settings. <code>showLine</code>, <code>showPoint</code>, <code>showArea</code> and even the smoothing function can be overriden per series! And guess what? You can even override those series settings in the responsive configuration! Check the example code for more details.</p>
+		<section>
+	
+			<div class="zchartist" data-option="
+				type: 'line',
+				series: {
+					'series-1': {
+						lineSmooth: Chartist.Interpolation.step()
+					},
+					'series-2': {
+						lineSmooth: Chartist.Interpolation.simple(),
+						showArea: true
+					},
+					'series-3': {
+						showPoint: false
+					}
+				}
+			">
+				{
+					labels: ['1', '2', '3', '4', '5', '6', '7', '8'],
+					series: [
+					  	{
+							name: 'series-1',
+							data: [5, 2, -4, 2, 0, -2, 5, -3]
+						}, 
+						{
+							name: 'series-2',
+							data: [4, 3, 5, 3, 1, 3, 6, 4]
+						}, 
+						{
+							name: 'series-3',
+							data: [2, 4, 3, 1, 4, 5, 3, 2]
+					  	}
+					]
+				}
+			</div>
+
+
+
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="zchartist" data-option="
+	type: 'line',
+	series: {
+		'series-1': {
+			lineSmooth: Chartist.Interpolation.step()
+		},
+		'series-2': {
+			lineSmooth: Chartist.Interpolation.simple(),
+		showArea: true
+		},
+		'series-3': {
+			showPoint: false
+		}
+	}
+">
+	{
+		labels: ['1', '2', '3', '4', '5', '6', '7', '8'],
+		series: [
+		  	{
+				name: 'series-1',
+				data: [5, 2, -4, 2, 0, -2, 5, -3]
+			}, 
+			{
+				name: 'series-2',
+				data: [4, 3, 5, 3, 1, 3, 6, 4]
+			}, 
+			{
+				name: 'series-3',
+				data: [2, 4, 3, 1, 4, 5, 3, 2]
+		  	}
+		]
+	}
+</div>
+				</textarea>
+			</div>
+
+		</section>
+
+
+
+		<!-- -->
+		<br/><br/>
+		
+		
+		
+		
+		
+		<h1>BAR CHART EXAMPLES</h1>
+		
+		<br/>
+		
+		
+		
+		<h3>Simple bar chart</h3>
+		<section>
+	
+			<div class="zchartist" data-option="type:'bar',seriesBarDistance:10">
+				{
+				  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+				  series: [
+				    [5, 4, 3, 7, 5, 10, 3, 4, 8, 10, 6, 8],
+				    [3, 2, 9, 5, 4, 6, 4, 6, 7, 8, 7, 4]
+				  ]
+				}
+			</div>
+
+
+
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="zchartist" data-option="type:'bar',seriesBarDistance:10">
+	{
+	  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+	  series: [
+	    [5, 4, 3, 7, 5, 10, 3, 4, 8, 10, 6, 8],
+	    [3, 2, 9, 5, 4, 6, 4, 6, 7, 8, 7, 4]
+	  ]
+	}
+</div>
+				</textarea>
+			</div>
+
+		</section>
+
+
+
+
+
+		<!-- -->
+		<br/><br/>
+		
+		
+		
+		
+		
+		<h3>Bi-polar bar chart</h3>
+		<p>A bi-polar bar chart with a range limit set with low and high. There is also an interpolation function used to skip every odd grid line / label.</p>
+		<section>
+			
+			<div class="zchartist" data-option="
+				type:'bar',
+				high: 10,
+				low: -10,
+				axisX: {
+					labelInterpolationFnc: function(value, index) {
+						return index % 2 === 0 ? value : null;
+					}
+				}
+			">
+				{
+				  labels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10'],
+				  series: [
+				    [1, 2, 4, 8, 6, -2, -1, -4, -6, -2]
+				  ]
+				}
+			</div>
+		
+		
+		
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="zchartist" data-option="
+	type:'bar',
+	high: 10,
+	low: -10,
+	axisX: {
+		labelInterpolationFnc: function(value, index) {
+			return index % 2 === 0 ? value : null;
+		}
+	}
+">
+	{
+	  labels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10'],
+	  series: [
+	    [1, 2, 4, 8, 6, -2, -1, -4, -6, -2]
+	  ]
+	}
+</div>
+				</textarea>
+			</div>
+		
+		</section>
+		
+		
+		
+		
+		
+		<!-- -->
+		<br/><br/>
+		
+		
+		
+		
+		
+		
+		<h3>Stacked bar chart</h3>
+		<p>You can also set your bar chart to stack the series bars on top of each other easily by using the <code>stackBars</code> property in your configuration.</p>
+		<section>
+			
+			<div class="zchartist" data-option="
+				type:'bar',
+				stackBars: true,
+				axisY: {
+					labelInterpolationFnc: function(value) {
+						return (value / 1000) + 'k';
+					}
+				}
+			">
+				{
+				  labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+				  series: [
+				    [800000, 1200000, 1400000, 1300000],
+				    [200000, 400000, 500000, 300000],
+				    [100000, 200000, 400000, 600000]
+				  ]
+				}
+			</div>
+		
+		
+		
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="zchartist" data-option="
+	type:'bar',
+	stackBars: true,
+	axisY: {
+		labelInterpolationFnc: function(value) {
+			return (value / 1000) + 'k';
+		}
+	}
+">
+	{
+	  labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+	  series: [
+	    [800000, 1200000, 1400000, 1300000],
+	    [200000, 400000, 500000, 300000],
+	    [100000, 200000, 400000, 600000]
+	  ]
+	}
+</div>
+				</textarea>
+			</div>
+		
+		</section>
+		
+		
+		
+		
+		
+		<!-- -->
+		<br/><br/>
+		
+		
+		
+		
+		
+		
+		<h3>Horizontal bar chart</h3>
+		<p>Guess what! Creating horizontal bar charts is as simple as it can get. There's no new chart type you need to learn, just passing an additional option is enough.</p>
+		<section>
+			
+			<div class="zchartist" data-option="
+				type:'bar',
+				seriesBarDistance: 10,
+				reverseData: true,
+				horizontalBars: true,
+				axisY: {
+					offset: 70
+				}
+			">
+				{
+				  labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+				  series: [
+				    [5, 4, 3, 7, 5, 10, 3],
+				    [3, 2, 9, 5, 4, 6, 4]
+				  ]
+				}
+			</div>
+		
+		
+		
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="zchartist" data-option="
+	type:'bar',
+	seriesBarDistance: 10,
+	reverseData: true,
+	horizontalBars: true,
+	axisY: {
+		offset: 70
+	}
+">
+	{
+	  labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+	  series: [
+	    [5, 4, 3, 7, 5, 10, 3],
+	    [3, 2, 9, 5, 4, 6, 4]
+	  ]
+	}
+</div>
+				</textarea>
+			</div>
+		
+		</section>
+		
+		
+		
+		
+		
+
+		<!-- -->
+		<br/><br/>
+		
+		
+		
+		
+		
+		<h1>PIE CHART EXAMPLES</h1>
+		
+		<br/>
+		
+
+		
+
+
+		<h3>Simple pie chart</h3>
+		<p>A very simple pie chart with label interpolation to show percentage instead of the actual data series value.</p>
+		<section>
+	
+			<div class="zchartist" data-option="
+				type:'pie',
+				labelInterpolationFnc: function(value) {
+					return value + '%';
+				}
+			">
+				{
+				  series: [42, 25, 33]
+				}
+			</div>
+
+
+
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="zchartist" data-option="
+	type:'pie',
+	labelInterpolationFnc: function(value) {
+		return value + '%';
+	}
+">
+	{
+	  series: [42, 25, 33]
+	}
+</div>
+				</textarea>
+			</div>
+
+		</section>
+
+
+
+
+
+
+		<!-- -->
+		<br/><br/>
+		
+		
+		
+		
+		
+
+		<h3>Pie chart with custom labels</h3>
+		<p>This pie chart is configured with custom labels specified in the data object. On desktop we use the labelOffset property to offset the labels from the center. Also labelDirection can be used to control the direction in which the labels are expanding.</p>
+		<section>
+	
+			<div class="zchartist" data-option="
+				type: 'pie',
+				labelOffset: 50,
+				chartPadding: 10
+			">
+				{
+				  labels: ['Bananas', 'Apples', 'Grapes'],
+				  series: [20, 15, 40]
+				}
+			</div>
+
+
+
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="zchartist" data-option="
+	type: 'pie',
+	labelOffset: 50,
+	chartPadding: 10
+">
+	{
+	  labels: ['Bananas', 'Apples', 'Grapes'],
+	  series: [20, 15, 40]
+	}
+</div>
+				</textarea>
+			</div>
+
+		</section>
+
+
+
+
+
+
+		<!-- -->
+		<br/><br/>		
+		
+		
+		
+		
+		
+
+		<h3>Donut chart</h3>
+		<p>This pie chart uses donut, startAngle and total to draw a gauge chart.</p>
+		<section>
+	
+			<div class="zchartist" data-option="
+				type: 'pie',
+				donut: true,
+				donutWidth: 40,
+				startAngle: 270,
+				total: 200,
+				showLabel: false
+			">
+				{
+				  series: [20, 10, 30, 40]
+				}
+			</div>
+
+
+
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="zchartist" data-option="
+	type: 'pie',
+	donut: true,
+	donutWidth: 40,
+	startAngle: 270,
+	total: 200,
+	showLabel: false
+">
+	{
+	  series: [20, 10, 30, 40]
+	}
+</div>
+				</textarea>
+			</div>
+
+		</section>
+
+
+
+
+
+
+		<!-- -->
+		<br/><br/>		
+		
+		
+		
+	</div>
+</body>
+</html>

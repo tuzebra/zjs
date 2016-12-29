@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>test zjs</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		
+		<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+		
+		<script>
+		zjs.onready(function(){
+			zjs('form').on('submit', function(event){
+				event.preventDefault();
+				console.log(this.getFormData());
+				
+				zjs.ajax({
+					url:'z.js.test.form.php',
+					method:'post',
+					type:'json',
+					data:this.getFormData(),
+					onComplete:function(response){
+						console.log(response);
+					}
+				})
+				
+			});
+		});	
+		</script>
+		
+	</head>
+	
+	<body>
+		
+		<form method="post">
+			
+			<p>text</p>
+			<input type="text" name="text" value="text" />
+			
+			<p>password</p>
+			<input type="password" name="password" value="password" />
+			
+			<p>textarea</p>
+			<textarea name="textarea">textarea</textarea>
+			
+			<p>radio 1</p>
+			<input type="radio" name="radio1" value="a" />
+			<input type="radio" name="radio1" value="b" />
+			<input type="radio" name="radio1" value="c" />
+			
+			<p>radio 2</p>
+			<input type="radio" name="radio2" value="d" />
+			<input type="radio" name="radio2" value="e" />
+			<input type="radio" name="radio2" value="f" />
+			
+			<p>checkbox different name</p>
+			<input type="checkbox" name="checkbox1" value="checkbox1" />
+			<input type="checkbox" name="checkbox2" value="checkbox2" />
+			<input type="checkbox" name="checkbox3" value="checkbox3" />
+			
+			<p>checkbox same name</p>
+			<input type="checkbox" name="checkboxN" value="checkbox1" />
+			<input type="checkbox" name="checkboxN" value="checkbox2" />
+			<input type="checkbox" name="checkboxN" value="checkbox3" />
+			
+			<p>multi value</p>
+			<input type="text" name="multi[]" value="a" />
+			<input type="text" name="multi[]" value="b" />
+			<input type="text" name="multi[]" value="c" />
+			
+			<input type="hidden" name="array[]" value="d" />
+			<input type="hidden" name="array[]" value="e" />
+			<input type="hidden" name="array[]" value="f" />
+			
+			
+			<p></p>
+			<button name="doaction" value="action1">submit to see log 1</button>
+			<button name="doaction" value="action2">submit to see log 2</button>
+			<button name="doaction" value="action3">submit to see log 3</button>
+			<button name="doaction" value="action4">submit to see log 4</button>
+			
+		</form>
+		
+	</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs UI - checkbox</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="./z.js"></script>
+	<script>
+		zjs.require('ui.checkbox');
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	.wrapper{width:900px;margin:50px auto;}
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+	
+		<div>
+			<form>
+				<p>
+					<input type="checkbox" class="zcheckbox" name="anyname" value="1" data-option="text:'check 1 (sử dụng custom-image cho trạng thái check/uncheck)', image:'images/zjsmodulebuttonuncheck.jpg', imagechecked:'images/zjsmodulebuttoncheck.jpg'" checked />
+				</p>
+				<p>
+					<input type="checkbox" class="zcheckbox" name="anyname" value="2" data-option="text:'check 2 (label nằm trong option của zcheckbox)'" /> 
+				</p>
+				<p>
+					<input type="checkbox" class="zcheckbox" name="anyname" value="3" /> 
+					<span>check 3 (label ko liên quan gì đến zcheckbox)</span>
+				</p>
+				
+			</form>
+		</div>
+		
+	</div>
+	
+	
+</body>
+</html>

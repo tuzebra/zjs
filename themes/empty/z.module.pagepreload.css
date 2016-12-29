@@ -1,0 +1,31 @@
+body.zpagepreload{visibility:hidden;}
+
+#zui-pagepreload-overlay{
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	z-index:9999;
+	background:#2ecc71;
+}
+#zui-pagepreload-overlay .loading-container{
+	position:absolute;
+	width:340px;height:100px;top:66%;left:50%;
+	margin-left:-155px;
+	
+	font-weight: bold;
+	text-align:center;
+	font-size:40px;
+	color: #FFF;
+	
+	text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.3);
+}
+#zui-pagepreload-overlay .loading-text-percent{
+	font-size:144px;
+}
+#zui-pagepreload-overlay .loading-percent{
+	position: absolute;
+	top: 90px;
+	right: 16px;
+}

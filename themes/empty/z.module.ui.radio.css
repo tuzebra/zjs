@@ -1,0 +1,6 @@
+.zui-radio-wrap{}
+.zui-radio-image{position:absolute;width:24px;height:24px;background:#eee;border: 1px solid #E4D2D2;border-radius: 4px;}
+.zui-radio-label{}
+
+.checked .zui-radio-image{background-color: #CBCBCC;border-color: #B4A8A8;}
+.uncheck .zui-radio-image{}

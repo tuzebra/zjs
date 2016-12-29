@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Demo z.module.scroll - zjs</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	
+	<script type="text/javascript" src="z.js" data-debug="true"></script>
+	<script>
+		zjs.onready('scrollbar', function(){
+			zjs(document.body).on('scrollbar.scroll', function(event){
+				console.log('scrollbar.scroll', event.data);
+			});
+			
+			// test event for touch screen
+			zjs('#div2')
+			.on('tap', function(event){ console.log('tap: ', this.attr('id')) })
+			.on('singletap', function(event){ console.log('singletap: ', this.attr('id')) })
+			.on('doubletap', function(event){ console.log('doubletap: ', this.attr('id')) })
+			.on('longtap', function(event){ console.log('longtap: ', this.attr('id')) })
+			
+			.on('swipe', function(event){ console.log('swipe: ', this.attr('id')) })
+			.on('swipeleft', function(event){ console.log('swipeleft: ', this.attr('id')) })
+			.on('swiperight', function(event){ console.log('swiperight: ', this.attr('id')) })
+			.on('swipeup', function(event){ console.log('swipeup: ', this.attr('id')) })
+			.on('swipedown', function(event){ console.log('swipedown: ', this.attr('id')) })
+			
+		})
+	</script>
+</head>
+<body style="margin:0;padding:0;" class="zscroll" data-option="debug:true,bounce:false">
+	
+	<div style="padding:10px;">
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce ut ante ipsum. Praesent dui nulla, posuere sed pulvinar ac, porttitor vitae justo. Morbi sed hendrerit nisi. Aliquam ut arcu felis, in tristique lorem. Vestibulum pharetra fermentum risus, at interdum felis faucibus at. Suspendisse eleifend ultricies tortor, at pulvinar ipsum pulvinar varius. Fusce accumsan, ligula scelerisque eleifend bibendum, velit erat pellentesque arcu, eu scelerisque eros dui id erat. Etiam convallis accumsan mi at facilisis. Duis venenatis dapibus justo in mollis. Morbi at tortor urna, non porta ante. Integer convallis ligula tristique orci malesuada vitae dignissim enim porttitor. Phasellus at commodo libero. Aenean tempor pellentesque nisl, a eleifend risus hendrerit quis.</p>
+		<p>Cras placerat ipsum non nunc ornare mattis. Praesent ornare fermentum nisl ac varius. Aliquam erat volutpat. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla eros mauris, ultrices sed venenatis quis, dictum non tellus. Aliquam pellentesque eros mi, eu blandit dolor. Duis quis tellus nunc. Nullam nisi tellus, dignissim a ultricies vitae, egestas ut purus. Sed massa neque, molestie vitae consequat at, vehicula eu justo.</p>
+		
+		<div id="div2" style="background:yellow;padding:10px;">div</div>
+		
+		<p>Maecenas eget risus erat, at rhoncus nibh. Aenean ipsum purus, tristique in bibendum sed, mollis sit amet dolor. Etiam sed tristique odio. Vivamus vel est sapien, sit amet dignissim risus. Curabitur a tellus dui, eu sodales sem. Sed in tortor eget metus rutrum fermentum. Donec mattis, erat id mollis feugiat, est mi posuere urna, ut porttitor libero sapien nec arcu.</p>
+		<p>Nullam sed augue nunc, facilisis dignissim neque. Nulla vestibulum gravida eleifend. Pellentesque luctus facilisis neque id molestie. Pellentesque nulla turpis, porttitor vitae gravida et, tempor nec leo. Maecenas non felis tortor. Curabitur sodales egestas nisl, et posuere nisl dapibus quis. Nunc eget est arcu, eu commodo urna. Quisque nec nisl quis dui dapibus dignissim ut ac risus. Proin non dignissim nisl. Vivamus vitae luctus magna. Duis accumsan purus ac est convallis condimentum a in diam.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce ut ante ipsum. Praesent dui nulla, posuere sed pulvinar ac, porttitor vitae justo. Morbi sed hendrerit nisi. Aliquam ut arcu felis, in tristique lorem. Vestibulum pharetra fermentum risus, at interdum felis faucibus at. Suspendisse eleifend ultricies tortor, at pulvinar ipsum pulvinar varius. Fusce accumsan, ligula scelerisque eleifend bibendum, velit erat pellentesque arcu, eu scelerisque eros dui id erat. Etiam convallis accumsan mi at facilisis. Duis venenatis dapibus justo in mollis. Morbi at tortor urna, non porta ante. Integer convallis ligula tristique orci malesuada vitae dignissim enim porttitor. Phasellus at commodo libero. Aenean tempor pellentesque nisl, a eleifend risus hendrerit quis.</p>
+		<p>Cras placerat ipsum non nunc ornare mattis. Praesent ornare fermentum nisl ac varius. Aliquam erat volutpat. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla eros mauris, ultrices sed venenatis quis, dictum non tellus. Aliquam pellentesque eros mi, eu blandit dolor. Duis quis tellus nunc. Nullam nisi tellus, dignissim a ultricies vitae, egestas ut purus. Sed massa neque, molestie vitae consequat at, vehicula eu justo.</p>
+		<p>Maecenas eget risus erat, at rhoncus nibh. Aenean ipsum purus, tristique in bibendum sed, mollis sit amet dolor. Etiam sed tristique odio. Vivamus vel est sapien, sit amet dignissim risus. Curabitur a tellus dui, eu sodales sem. Sed in tortor eget metus rutrum fermentum. Donec mattis, erat id mollis feugiat, est mi posuere urna, ut porttitor libero sapien nec arcu.</p>
+		<p>Nullam sed augue nunc, facilisis dignissim neque. Nulla vestibulum gravida eleifend. Pellentesque luctus facilisis neque id molestie. Pellentesque nulla turpis, porttitor vitae gravida et, tempor nec leo. Maecenas non felis tortor. Curabitur sodales egestas nisl, et posuere nisl dapibus quis. Nunc eget est arcu, eu commodo urna. Quisque nec nisl quis dui dapibus dignissim ut ac risus. Proin non dignissim nisl. Vivamus vitae luctus magna. Duis accumsan purus ac est convallis condimentum a in diam.</p>
+	</div>
+
+</body>
+</html>

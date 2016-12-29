@@ -1,0 +1,17 @@
+.zui-button.zui-button-file input[type="file"]{}
+.zui-button.zui-button-file.disabled{overflow:hidden !important;}
+.zui-button.zui-button-file.disabled input[type="file"]{top: 101% !important;}
+.zui-button-file.zui-loading-icon{}
+.zui-button-file.zui-loading-icon .zui-button-label{color: transparent;text-shadow: none;background:url(images/z.module.ui.button.file.loading2.gif) center center no-repeat;}
+.zui-button-file.zui-loading-icon-with-text{}
+.zui-button-file.zui-loading-icon-with-text .zui-button-label{background-position:left center;text-indent:25px;}
+.zui-button-file.zui-loading-icon-with-text.disabled .zui-button-label{color:#777;}
+.zui-button-file .zui-button-drop-text{margin:0px 10px;display:none;}
+.zui-button-file.zui-support-drag-drop.zui-ready-to-drop{}
+.zui-body-ready-to-drop{}
+.zui-body-ready-to-drop .zui-button-file{}
+.zui-body-ready-to-drop .zui-button-file.disabled{}
+.zui-body-ready-to-drop .zui-button-file.zui-support-drag-drop:not(.disabled){padding:30px;height:auto;border:2px dashed;}
+.zui-body-ready-to-drop .zui-button-file.zui-support-drag-drop.zui-ready-to-drop{border-style:solid;}
+.zui-body-ready-to-drop	.zui-button-file.zui-support-drag-drop:not(.disabled) .zui-button-label{display:none;}
+.zui-body-ready-to-drop	.zui-button-file.zui-support-drag-drop:not(.disabled) .zui-button-drop-text{display:block;}

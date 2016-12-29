@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>test zjs event for touch device</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+		
+		<script type="text/javascript" src="z.js" data-debug="true"></script>
+		
+		<script>
+			
+			zjs(function(){
+				/*zjs('body').click(function(event, element){
+					
+					event.stop();
+					
+					console.log('click ', element);
+					console.log('x',event.x(), 'y',event.y());
+					console.log('clientX',event.clientX(),'clientY',event.clientY());
+					console.log('target',event.target());
+					console.log('fromTarget',event.fromTarget());
+					console.log('toTarget',event.toTarget());
+					
+				});*/
+			
+				
+				zjs('#div1')
+					
+					// event for touch screen
+					
+					.on('tap', function(event){ console.log('tap: ') })
+					.on('singletap', function(event){ console.log('singletap: ') })
+					.on('doubletap', function(event){ console.log('doubletap: ') })
+					.on('longtap', function(event){ console.log('longtap: ') });
+					
+                
+			});
+			
+		</script>
+		
+	</head>
+	
+	<body id="body" style="padding:0;margin:0;background:gray;">
+		body
+		<div id="div1" style="height:200px;width:200px;background:red;position:absolute;top:20px;left:20px;">
+			div1
+		</div>
+	</body>
+</html>

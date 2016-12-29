@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Demo module form validation</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+	<script>
+		zjs.onready('form.validation, ui.datepicker', function(){
+			
+			zjs('form').on('form.validation.success', function(event){
+				
+				// neu muon ngan khong cho submit luon thi lam nhu the nay:
+				event.preventDefault();
+				
+				alert('form.validation.success');
+				
+			});
+			
+		});
+	</script>
+	
+	<style>
+		body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#FAFAFA;}
+		.wrapper{width:85%;margin:50px auto;}
+		p{margin:10px 0 2px;}
+		h2{margin:20px 0 5px;}
+		a[onclick]{color:blue;text-decoration:underline;cursor:pointer;}
+		form{width:300px;}
+		input,textarea{margin: 0;width: 100%;resize:none;text-indent:0 !important;padding:0 4px;box-sizing:border-box;}
+		.zvalidation-custom-input.error{border:1px solid red;padding:10px;}
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+		
+		<form class="zvalidation" method="POST" data-option="tips:{email:'Email email email please!'}">
+			
+			<div>
+				<h2>date picker</h2>
+				
+				<h3>placeholder, no value</h3>
+				<input type="text" name="birthday"  placeholder="birthday" class="zdatepicker required" /> 
+				
+				<br/><br/>
+				
+				<h3>placeholder, no value</h3>
+				<input type="text" name="birthday2" class="zdatepicker required" placeholder="birthday" data-option="button:false,format:'DD/MM/YYYY'" />
+				
+				<br/><br/>
+				
+				<h3>placeholder, default value</h3>
+				<input type="text" name="birthday3" class="zdatepicker required" placeholder="birthday" value="1990-08-29" data-option="button:false,format:'DD/MM/YYYY'" />
+				
+				<br/><br/>
+				
+				<h3>no placeholder, default value</h3>
+				<input type="text" name="birthday4" class="zdatepicker required" value="1990-08-29" data-option="button:false,format:'DD/MM/YYYY'" />				
+				<br/><br/>
+				
+				<h3>no placeholder, no value</h3>
+				<input type="text" name="birthday5" class="zdatepicker required" data-option="button:false,format:'DD/MM/YYYY'" />
+
+			</div>
+			
+
+			<br/>
+			<br/>
+			<br/>
+			
+			<button class="zbutton blue">submit</button>
+			
+		</form>
+		
+	</div>
+</body>
+</html>

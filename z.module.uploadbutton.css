@@ -1,0 +1,6 @@
+.zui-upload-button{display: -moz-inline-stack;display: inline-block;vertical-align:bottom;zoom: 1;font-weight:bold;text-align:center;color:#fff;background:#afafaf;border-radius:5px;padding:5px 0;cursor:pointer;}
+.zui-upload-button span{margin:0 10px;color:#fff;}
+.zui-upload-button-hover{background:#444;}
+.zui-upload-button-hover span{}
+.zui-upload-button-active{background:#111;}
+.zui-upload-button-active span{}

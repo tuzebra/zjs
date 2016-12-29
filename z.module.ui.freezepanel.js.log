@@ -1,0 +1,11 @@
+03/06/2015
+		+ support body is zscrollbar (also when scrollbar auto switch to use default)
+
+03/06/2015
+		+ add new option "pendingScrollTime" 
+
+26/11/2016
+		+ fix problem when handler window resize
+
+15/12/2016
+		+ add new option "handlerFreezingElement", "handlerFreezingMethod"

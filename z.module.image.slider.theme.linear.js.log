@@ -1,0 +1,114 @@
+22/06/2014
+		+ add option "contentSlide"
+
+21/08/2014
+		+ add format ${src} ${title} ${description}
+
+23/09/2014
+		+ add slideRefresh() method, auto fix when resize window
+
+17/10/2014
+		+ fix issue when use only one image on slide fullwidth
+
+20/10/2014
+		+ add option "scaleHeightWhenWidthLessThan"
+		+ change option "fullWidth" to default TRUE
+
+04/11/2014
+		+ add class "total-image-n" to easy to style slider
+
+11/11/2014
+		+ add option slideitem:'li' -> support custom html mockup
+
+12/11/2014
+		+ add option autoDisableWhenWidthLessThan:0,
+					autoDisableWhenWidthLargerThan:0
+		+ add method zjs::slideEnable(),
+					zjs::slideDisable()
+		+ add option showInfo:true
+		+ add option transition:'horizontal-stack' / 'horizontal-page' / 'horizontal-center'
+
+23/12/2014
+		+ add class "active-next", "active-next2", "active-back", "active-back2"
+
+25/12/2014
+		+ fix option "startIndex"
+		+ fix auto start position display correct with "sequent" option set to "false"
+
+25/03/2015
+		+ add option "popupTransition", "popupTransitionTime", "popupTransitionTimingfunction"
+		+ fix: when drag slider, the trigger click made right after that will donot open the popup
+
+09/06/2015
+		+ add new event name "slider.click"
+		+ add new option "navThumbSlider" -> support use a horizontal-slider as navigation thumbnails
+		+ fix click index of active child popup-slider when use horizontal slider
+
+10/06/2015
+		+ support attribute "srcpopup" on img tag
+		+ add option "popupAllowKeyboard" default is TRUE
+
+18/06/2015
+		+ add new option: "fullHeight" with default value is FALSE
+
+08/07/2015
+		+ navDot auto fix to horizontal-page
+		+ fix bug prevent default when click to a link because "handlerClickToShowPopup" handler
+
+23/09/2015
+		+ add 2 new event: "slider.popup.show", "slider.popup.hide"
+
+02/11/2015
+		+ fix bad-prevent-default event when click on a slide that container a link
+
+07/12/2015
+		+ support separate option for each slide
+
+25/02/2016
+		+ fix issue: when click on radio fields into contentslide
+
+29/03/2016
+		+ add option "navButtonTemplate" default is '<a class="nav-button"></a>'
+			=> more and more easily to custom Navigation buttons,
+			   support formatting: ${index} ${src} ${title} ${description} ${link}
+
+05/06/2016
+		+ fix issue with "navButtonTemplate"
+
+12/06/2016
+		+ fix issue with click event when use on horizontal slide
+
+10/07/2016
+		+ support 2 new transitions: horizontal-stack-center, horizontal-page-center
+		+ new option: autoHeight
+		+ new way to handle contentSlide
+
+14/07/2016
+		+ new option: popupContainerClass, popupPageCoverClass
+
+15/07/2016		
+		+ new option: navThumbSliderUsePercentWidth
+
+22/07/2016
+		+ support navThumbSlider with content slider
+		+ new option: navThumbSliderAutoHeight
+		+ remove set height in slider root element 
+
+23/08/2016
+		+ add disable class to navigation button when reach latest slide
+
+07/09/2016
+		+ fix method slideRefresh()
+
+25/09/2016 
+		+ fix estimation "item per page" => fix disabling next button correct
+		+ fix default slide state
+08/10/2016 
+		+ support pass "cubic bezier function" to option transitionTimingfunction
+
+15/10/2016 
+		+ new option: cleanHtml
+
+19/11/2016 
+		+ new option: autoDisableWhenWindowWidthLessThan 
+		+ new option: autoDisableWhenWindowWidthLargerThan

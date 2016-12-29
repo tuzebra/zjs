@@ -1,0 +1,18 @@
+.zui-tabpanel{position:relative;border:1px solid #c4cde0;}
+.zui-tabpanel-nav-wrapper{padding: 0;margin: 0;line-height: 30px;background:#f2f4f8;border-bottom:1px solid #e0e0e0;}
+.zui-tabpanel-nav-wrapper li{display:-moz-inline-stack;display:inline-block;vertical-align:bottom;zoom: 1;padding: 0 20px;border: 1px solid #e0e0e0;border-width:0 0 1px 1px;margin-bottom:-1px;cursor:pointer;}
+.zui-tabpanel-nav-wrapper li:hover{background:#fafafa;}
+.zui-tabpanel-nav-wrapper li.zui-active{background:#fff;border-bottom-color:#fff;}
+.zui-tabpanel-nav-wrapper li:first-child{border-left-width:0;}
+.zui-tabpanel-nav-wrapper li:last-child{border-right-width:1px;}
+.zui-tabpanel-nav-wrapper-bottom{border-bottom:0;border-top:1px solid #e0e0e0;}
+.zui-tabpanel-nav-wrapper-bottom li{vertical-align:top;border-width:1px 0 0 1px;margin-bottom: initial;margin-top: -1px;}
+.zui-tabpanel-nav-wrapper-bottom li.zui-active{border-top-color:#fff;}
+.zui-tabpanel-content-wrapper{position:relative;}
+.zui-tabpanel-content{position:absolute;visibility:hidden;opacity:0;width:100%;}
+.zui-tabpanel-content.zui-active{visibility:visible;opacity:1;}
+
+.zui-tabpanel-autoheight{}
+.zui-tabpanel-autoheight .zui-tabpanel-content-wrapper{height:auto;}
+.zui-tabpanel-autoheight .zui-tabpanel-content{position:relative;display:none;}
+.zui-tabpanel-autoheight .zui-tabpanel-content.zui-active{display:block;}

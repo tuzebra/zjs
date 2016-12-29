@@ -1,0 +1,7 @@
+.zeditor-source-popup{width:800px;}
+.zeditor-source-popup form{margin:0;}
+.zeditor-source-popup .field{margin:10px 0;}
+.zeditor-source-popup textarea{width:100%;min-height:600px;resize:both;}
+.zeditor-source-popup .buttons-wrapper.update{margin-top:10px;text-align:right;}
+/* for code editor */
+.zeditor-source-popup .CodeMirror{height:480px;}

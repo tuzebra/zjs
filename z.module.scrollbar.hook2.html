@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Demo z.module.scroll - zjs</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="z.js"></script>
+	<script>zjs.require('scrollbar, encoder')</script>
+	<style>textarea{width:430px;height:100px;}button{font-size:13px;padding:5px 10px;}</style>
+</head>
+<body>
+	
+	<textarea><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></textarea>
+	
+	<div>
+		<button onclick="zjs.enablehook(true)">zjs.enablehook(true)</button>
+		<button onclick="zjs.enablehook(false)">zjs.enablehook(false)</button> <br/>
+		<button onclick="zjs('.zscroll').append(zjs.htmlDecode(zjs('textarea').getValue()))">zjs('.zscroll').append( zjs('textarea').getValue() )</button>
+		<button onclick="zjs('.zscroll').html(zjs.htmlDecode(zjs('textarea').getValue()))">zjs('.zscroll').html( zjs('textarea').getValue() )</button>
+	</div>
+	
+	<div class="zscroll" style="width:200px;height:100px;" data-option="autohide:false"></div>
+
+</body>
+</html>

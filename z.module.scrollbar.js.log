@@ -1,0 +1,60 @@
+14/03/2014
+		+ add option skipSnapWhenUseTouchpad:false
+		
+17/03/2014
+		+ add option looseSnap:false
+		+ add option nonui:false
+		+ add option nonuiMaxScroll:400
+		
+23/05/2014
+		+ add option customUsedefaultCssClass: ''
+		+ add option autoUseDefaultWhenWidthLessThan: 0
+		+ auto doc hash hien tai, va scroll toi dung vi tri luon ^^
+
+24/05/2014
+		+ van co the dung method scrollTo() de move khi dang su dung default 
+		  tuc la se fallback lai su dung window.scroll khi nao can
+
+05/06/2014
+		+ thay the onload -> onready
+		
+31/07/2014
+		+ add method zjs::scrollbarSetWrapperSizeElement(linkedSizeElement)
+		+ support tot hon cho responsive khi ma khong can set width neu la vertical scroll
+		
+01/08/2014
+		+ add option autoUseDefaultWithMobile:false
+
+22/09/2014
+		+ fix get scrollPosition() work not correct when is using default scroll
+
+29/10/2014
+		+ fix snapElements to support scroll horizontal
+
+20/11/2014
+		+ fix css: -> bug when use body scroll (viewport not show full width)
+		
+27/11/2014
+		+ fix css: -> bug when use body scroll on default scroll mode (use with zpreezepanel module)
+
+25/12/2014
+		+ fix auto reload snap position
+		
+03/06/2015
+		+ fix snap position to support when use body scroll
+		+ add data option to element "data-snap-modify-px"
+		
+07/07/2015
+		+ fix bug when use snap scroll to bottom then be stucked there.
+		
+09/12/2015
+		+ add option useDefault:false
+		
+06/01/2015
+		+ add option snapScrollUp:true, snapScrollDown:true 
+		
+19/02/2016
+		+ fix a bug can force stop the scrollbar work, the bug is founded at doMomentum() method
+		
+24/03/2016
+		+ support ui.popup option "longPopup"

@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>test zjs require</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		
+		<script type="text/javascript" src="./z.js" data-debug="true" data-auto-load-js="false" data-load-css="false"></script>
+
+		<!-- <script>zjs.requireOption.autoLoadJs = false;</script> -->
+		<script type="text/javascript" src="./z.module.ui.js" data-debug="true"></script>
+		<script type="text/javascript" src="./z.module.ui.button.js" data-debug="true"></script>
+		<script type="text/javascript" src="./z.module.ui.button.file.js" data-debug="true"></script>
+
+		<script>zjs.onready('ui.button.file', function(){
+			
+			zjs(document.body).setStyle('background', 'blue');
+			
+		});</script>
+		
+	</head>
+	
+	<body>
+		<a class="zbutton">zbutton</a>
+	</body>
+</html>

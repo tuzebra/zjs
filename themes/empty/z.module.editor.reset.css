@@ -1,0 +1,120 @@
+/**
+ * html5doctor.com Reset Stylesheet v1.6.1 (http://html5doctor.com/html-5-reset-stylesheet/)
+ * Richard Clark (http://richclarkdesign.com)
+ * http://cssreset.com
+ */
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+html{
+	font-family:"Lucida Grande",tahoma,verdana,arial,sans-serif;
+	color: #444;
+    font-size:13px;
+	line-height:18px;
+}
+body {
+	padding:5px;
+}
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section {
+    display:block;
+}
+nav ul {
+    list-style:none;
+}
+blockquote, q {
+    quotes:none;
+}
+blockquote{
+	color: #9C9C9C;
+	border-left: 4px solid #E4E1E1;
+	padding-left: 10px;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content:'';
+    content:none;
+}
+a {
+    margin:0;
+    padding:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+/* change colours to suit your needs */
+ins {
+    background-color:#ff9;
+    color:#000;
+    text-decoration:none;
+}
+/* change colours to suit your needs */
+mark {
+    background-color:#ff9;
+    color:#000;
+    font-style:italic;
+    font-weight:bold;
+}
+del {
+    text-decoration: line-through;
+}
+abbr[title], dfn[title] {
+    border-bottom:1px dotted;
+    cursor:help;
+}
+table {
+    border-collapse:collapse;
+    border-spacing:0;
+}
+table, table td, table th, table caption{
+	border: 1px dashed #C5DBFF;
+}
+table td{
+	min-width: 15px;
+}
+table td.mceSelected, table th.mceSelected {
+	background-color:#C7E1FA !important;
+}
+/* change border colour to suit your needs */
+hr {
+    display:block;
+    height:1px;
+    border:0;
+    border-top:1px solid #cccccc;
+    margin:1em 0;
+    padding:0;
+}
+input, select {
+    vertical-align:middle;
+}
+ul,ol{
+	margin:0.8em 20px;
+}
+p,li{
+	margin:0.8em 0;
+}
+
+/**
+ * EDITOR TOOL
+ **/
+img{max-width:100%;}
+img[data-mce-selected]{outline:1px dashed #C5DBFF;}
+.mceResizeHandle{position: absolute;border: 1px solid #4d90fe;background: #fff;width: 5px;height: 5px;z-index: 10000;border-radius: 50%;}
+.mceResizeHandle:hover{background: #4d90fe;border-color:#4d90fe;}

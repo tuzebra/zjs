@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Demo z.module.scroll - zjs</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="z.js" data-debug="true"></script>
+	<script>
+		zjs.require('scrollbar', function(){
+			if(zjs.isTouchDevice())alert('touch device');
+			zjs.onready(function(){
+				zjs('.zscroll').on('scrollbar.scroll', function(event, element){
+					//console.log('scrolltop: ' + event.data.scrollTop);
+				});
+			});
+		})
+	</script>
+	
+	<style>
+		body{margin:0;padding:0;}
+	</style>
+</head>
+<body class="zscroll" data-option="debug:true">
+	
+	<div>
+	
+		<div class="zscroll" style="width:500px;height:400px;" data-option="width:500,height:400,debug:true">
+			<div>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce ut ante ipsum. Praesent dui nulla, posuere sed pulvinar ac, porttitor vitae justo. Morbi sed hendrerit nisi. Aliquam ut arcu felis, in tristique lorem. Vestibulum pharetra fermentum risus, at interdum felis faucibus at. Suspendisse eleifend ultricies tortor, at pulvinar ipsum pulvinar varius. Fusce accumsan, ligula scelerisque eleifend bibendum, velit erat pellentesque arcu, eu scelerisque eros dui id erat. Etiam convallis accumsan mi at facilisis. Duis venenatis dapibus justo in mollis. Morbi at tortor urna, non porta ante. Integer convallis ligula tristique orci malesuada vitae dignissim enim porttitor. Phasellus at commodo libero. Aenean tempor pellentesque nisl, a eleifend risus hendrerit quis.</p>
+				<p>Cras placerat ipsum non nunc ornare mattis. Praesent ornare fermentum nisl ac varius. Aliquam erat volutpat. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla eros mauris, ultrices sed venenatis quis, dictum non tellus. Aliquam pellentesque eros mi, eu blandit dolor. Duis quis tellus nunc. Nullam nisi tellus, dignissim a ultricies vitae, egestas ut purus. Sed massa neque, molestie vitae consequat at, vehicula eu justo.</p>
+				<p>Maecenas eget risus erat, at rhoncus nibh. Aenean ipsum purus, tristique in bibendum sed, mollis sit amet dolor. Etiam sed tristique odio. Vivamus vel est sapien, sit amet dignissim risus. Curabitur a tellus dui, eu sodales sem. Sed in tortor eget metus rutrum fermentum. Donec mattis, erat id mollis feugiat, est mi posuere urna, ut porttitor libero sapien nec arcu.</p>
+				<p>Nullam sed augue nunc, facilisis dignissim neque. Nulla vestibulum gravida eleifend. Pellentesque luctus facilisis neque id molestie. Pellentesque nulla turpis, porttitor vitae gravida et, tempor nec leo. Maecenas non felis tortor. Curabitur sodales egestas nisl, et posuere nisl dapibus quis. Nunc eget est arcu, eu commodo urna. Quisque nec nisl quis dui dapibus dignissim ut ac risus. Proin non dignissim nisl. Vivamus vitae luctus magna. Duis accumsan purus ac est convallis condimentum a in diam.</p>
+			</div>
+		</div>
+		
+	</div>
+	
+	<div>
+		<h3>param</H3>
+		<pre>
+			// neu khong co' width, height 
+			// thi` se~ lay' kich' thuoc' hien. tai.
+			width: 0,
+			height: 0,
+			innerWidth: 0,
+			innerHeight: 0,
+			horizontal: false,
+			scrollline: 200, // so' px trong 1 lan` di chuyen?
+			scrolllinetouchpad: 40, // so' px trong 1 lan` di chuyen? neu move = touchpad
+			scrolltime: 800, // thoi` gian thuc. hien. hieu. ung' scroll-smooth
+			smooth: true, // allow scroll smooth ?
+			bounce: true, // bounce scrollbar ?
+			usekey: true, // use Up & Down key to move scrollbar ?
+			usemouse: true, // use mouse to move scrollbar ?
+			shadow: true, // show top-shadow ?
+			autohide: true, // auto hide scrollbar ?
+			alwayshide: false, // never show scrollbar?
+			autorefresh: false, // auto refresh to fix scrollbar size?
+			autorefreshtime: 1000,
+			customCssClass: '', // css
+			customStyleContainer: '',
+			onResize: function(scrollTop, width, height){},
+			onScroll: function(scrollTop, width, height){}
+		</pre>
+	</div>
+	
+	<div>
+		<h3>API</H3>
+		<p><u>zjs</u> zjs::<b>makeScrollbar</b>(<i>object</i> option)</p>
+		<p><u>zjs</u> zjs::<b>pauseScrollEvent</b>()</p>
+		<p><u>zjs</u> zjs::<b>continueScrollEvent</b>()</p>
+		<p><u>zjs</u> zjs::<b>refreshScroll</b>()</p>
+		<p><u>zjs</u> zjs::<b>scrollLineUp</b>()</p>
+		<p><u>zjs</u> zjs::<b>scrollLineDown</b>()</p>
+		<p><u>zjs</u> zjs::<b>scrollPageUp</b>()</p>
+		<p><u>zjs</u> zjs::<b>scrollPageDown</b>()</p>
+		<p><u>zjs</u> zjs::<b>scrollToTop</b>()</p>
+		<p><u>zjs</u> zjs::<b>scrollToEnd</b>()</p>
+		<p><u>zjs</u> zjs::<b>scrollTo</b>(<i>int</i> pixel = 0 [, <i>bool</i> notSmooth = false])</p>
+		<p><u>zjs</u> zjs::<b>scrollToElement</b>(<i>string</i> query = "" [, <i>int</i> pixel = 0])</p>
+		<p><u>zjs</u> zjs::<b>scrollToElement</b>(<i>dom</i> element [, <i>int</i> pixel = 0])</p>
+		<p><u>zjs</u> zjs::<b>scrollToElement</b>(<i>zjs</i> zjsinstance [, <i>int</i> pixel = 0])</p>
+		<p><u>int</u> zjs::<b>scrollPosition</b>()</p>
+		<p><u>int</u> zjs::<b>scrollHeight</b>()</p>
+		<p><u>zjs</u> zjs::<b>scrollHeight</b>(<i>int</i> height)</p>
+	</div>
+	
+
+</body>
+</html>

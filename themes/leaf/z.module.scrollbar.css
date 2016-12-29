@@ -1,0 +1,69 @@
+.zui-scrollbar-wrap{position:absolute;background:#fff;background:rgba(0,0,0,0.05);
+	box-shadow:inset 0px 0px 1px 0px rgba(51,51,51,0.3);
+	-webkit-box-shadow:inset 0px 0px 1px 0px rgba(51,51,51,0.3);
+	-moz-box-shadow:inset 0px 0px 1px 0px rgba(51,51,51,0.3);
+	z-index:1;}
+.zui-scrollbar-vertical .zui-scrollbar-wrap{top:0;right:0;width:8px;}
+.zui-scrollbar-horizontal .zui-scrollbar-wrap{bottom:0;left:0;height:8px;}
+.zui-scrollbar{position:absolute;background:#979797;background:rgba(51,51,51,0.2);
+	box-shadow:inset 1px 0px 1px 0px rgba(51,51,51,0.3);
+	-webkit-box-shadow:inset 1px 0px 1px 0px rgba(51,51,51,0.3);
+	-moz-box-shadow:inset 1px 0px 1px 0px rgba(51,51,51,0.3);}
+.zui-scrollbar-vertical .zui-scrollbar{top:0;width:8px;}
+.zui-scrollbar-horizontal .zui-scrollbar{left:0;height:8px;}
+.zui-scrollbar:hover,
+.zui-scrollbar:active{background:#949494;background:rgba(51,51,51,0.4);}
+.zui-scrollbar-shadow{
+	box-shadow:0 -1px 4px 2px rgba(0,0,0,0.1);
+	-webkit-box-shadow:0 -1px 4px 2px rgba(0,0,0,0.1);
+	-moz-box-shadow:0 -1px 4px 2px rgba(0,0,0,0.1);
+	pointer-events:none;
+}
+.zui-scrollbar-content{}
+
+/** vertical scroll **/
+.zui-scrollbar-vertical .zui-scrollbar-content{width:auto !important;}
+
+/** body scroll **/
+.zui-scrollbar-vertical.body-scroll{position:fixed;z-index:1;}
+.zui-scrollbar-vertical.not-body-scroll{width: auto !important;}
+.zui-scrollbar-vertical.body-scroll .zui-scrollbar-content{width:100% !important;}
+
+
+/** body & default scroll **/
+body.zui-scrollbar-usedefault{
+	overflow:auto !important;
+}
+body.zui-scrollbar-usedefault > .zui-scrollbar-vertical{
+	position: static !important;
+	height:auto !important;
+	width:auto !important;
+}
+body.zui-scrollbar-usedefault > .zui-scrollbar-vertical > .zui-scrollbar-content,
+body.zui-scrollbar-usedefault > .zui-scrollbar-horizontal > .zui-scrollbar-content{
+	position: static !important;
+	width:auto !important;
+	-webkit-transform: none !important;
+	transform: none !important;
+}
+body.zui-scrollbar-usedefault > .zui-scrollbar-vertical > .zui-scrollbar-wrap,
+body.zui-scrollbar-usedefault > .zui-scrollbar-vertical > .zui-scrollbar-shadow,
+body.zui-scrollbar-usedefault > .zui-scrollbar-horizontal > .zui-scrollbar-wrap,
+body.zui-scrollbar-usedefault > .zui-scrollbar-horizontal > .zui-scrollbar-shadow{
+	display:none !important;
+}
+
+/** normal scroll **/
+.zui-scrollbar-usedefault.zui-scrollbar-vertical > .zui-scrollbar-content{
+	position: static !important;
+	top: 0 !important;
+	height:100% !important;
+	overflow:auto !important;
+	-webkit-transform: translate3d(0px, 0px, 0px) !important;
+	-moz-transform: translate3d(0px, 0px, 0px) !important;
+	transform: translate3d(0px, 0px, 0px) !important;
+}
+.zui-scrollbar-usedefault > .zui-scrollbar-wrap,
+.zui-scrollbar-usedefault > .zui-scrollbar-shadow{
+	display:none !important;
+}

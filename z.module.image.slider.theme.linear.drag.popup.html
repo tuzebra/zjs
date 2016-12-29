@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Demo module image slider theme linear</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+		<link rel="stylesheet" type="text/css" href="z.module.image.slider.theme.linear.css" />
+		<style>
+			#customstyle .imageslider-linear{margin:0 auto;}
+			#customstyle .imageslider-linear .image-view{overflow:visible !important;}
+			#customstyle .imageslider-linear .image-view .image-view-wrap{height:350px;}
+			#customstyle .imageslider-linear .image-view .image-view-wrap .image-hold{background-color:#000;}
+			#customstyle .imageslider-linear .image-info-wrap{top:10px;bottom:initial;}
+			#customstyle .imageslider-linear .image-info-container .image-title h4{color:#fff;font-size:13px;}
+			#customstyle .imageslider-linear .image-info-container .image-description{display:none;}
+			#customstyle .imageslider-linear .nav-container .nav-dots-wrap .nav-dots .nav-dot{width:6px;height:6px;margin:0 4px;background:#777;}
+			#customstyle .imageslider-linear .nav-container .nav-dots-wrap .nav-dots .nav-dot.active{background:#fff;}
+		</style>
+		
+		<script type="text/javascript" src="z.js" data-debug="true"></script>
+		<script>
+			zjs.require('image.slider.theme.linear');
+			//zjs.onready(function(){
+			//	zjs('.zslider').on('slider.change', function(e, el){console.log('change:', e.data)});
+			//});
+		</script>
+		<style>
+			body .imageslider-linear.fullwidth .image-view .image-view-wrap .image-hold, 
+			body .imageslider-linear.fullwidth .image-view .image-view-wrap .image-hold-temp {
+				background-size: contain;
+			}
+		</style>
+	</head>
+	
+	<body id="customstyle" style="margin:0;padding:0;background:#000;">
+		
+		<div style="width:100%;overflow:hidden">
+		
+			<div class="zslider" style="width:400px;" data-option="theme:'linear',
+				transition:2,
+				//transition:3,
+				transitionTime:1200,
+				transitionTimingfunction:2,
+				border: false,
+				preload: false,
+				autoplay: true,
+				autoplayTime: 2000,
+				navButton: false,
+				navThumb: false,
+				navDot: true,
+				sequent: false,
+				navThumbTemplate: '<a></a>',
+				navDotTemplate: '<a>.</a>',
+				dragSlide:true,
+				
+				usecss: true,
+				
+				popup: true,
+				popupShowOnClick: true,
+				popupHideOnClickOut: true,
+				popupNavButton: true,
+				popupNavButtonParentIsRoot: true,
+				popupNavThumb: false,
+				popupNavDot: true,
+				popupSequent: true,
+				popupFullscreenWidth: false">
+				<ul>
+					<li>
+						<h3>IU 1</h3>
+						<img src="sliderimages/1thumb.jpg" largesrc="sliderimages/1.jpg" >
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu eleifend purus. Nulla in diam quam, sed aliquam ligula. Aenean volutpat euismod leo, non malesuada est euismod in.</p>
+					</li>
+					<li>
+						<h3>IU 2</h3>
+						<img class="thumb" src="sliderimages/2thumb.jpg" />
+						<img class="large" src="sliderimages/2.jpg" />
+						<p>Quisque id lorem ultricies erat venenatis aliquam in in nunc. Nunc rutrum sapien vitae augue rutrum vel pulvinar est ullamcorper.</p>
+					</li>
+					<li>
+						<h3>IU 3</h3>
+						<img src="sliderimages/3thumb.jpg" />
+						<img class="large" src="sliderimages/3.jpg" />
+						<p>Quisque orci metus, congue laoreet dapibus eu, vehicula fringilla arcu. Curabitur pulvinar mattis euismod.</p>
+					</li>
+					<li>
+						<img src="sliderimages/4thumb.jpg" data-src="sliderimages/4.jpg" title="Jessica 1" alt="Aliquam eu tortor tempus eros tempor pharetra vitae laoreet dolor. Fusce id pretium erat. Phasellus et est a ante blandit semper quis eu turpis." />
+					</li>
+					<li>
+						<img src="sliderimages/5thumb.jpg" data-src="sliderimages/5.jpg" title="Jessica 2" />
+						<p>Phasellus fermentum orci consequat enim laoreet vel sodales leo consectetur. Pellentesque luctus est at neque dictum sit amet suscipit magna eleifend.</p>
+					</li>
+					<li>
+						<img src="sliderimages/6thumb.jpg" />
+						<img class="large" src="sliderimages/6.jpg" />
+						<p class="title">Jessica 3</p>
+						<p class="description">Cras adipiscing semper erat, quis consectetur lacus eleifend cursus. Donec ac nisl quis nibh elementum molestie ut vitae mi.</p>
+					</li>
+				</ul>
+			</div>
+		
+		</div>
+		
+	</body>
+</html>

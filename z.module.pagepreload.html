@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs page preload demo</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0" />
+	
+	<script type="text/javascript" src="z.min.js" data-debug="false"></script>
+	
+	<script>
+		zjs.onready('pagepreload', function(){
+		
+			// JUST LOAD NECESSARY MODULE 
+			// and done!
+	
+			// ----
+			
+			// Just for fun
+			// logging something
+			// you can delete this
+			// 
+			// the event module will call when pagepreload starting...
+			zjs(document.body).on('pagepreload.start', function(event){
+				console.log('pagepreload.start: ', event.data.percent);
+			});
+			// 
+			// the event module will call when pagepreload is loading... (call multi times)
+			zjs(document.body).on('pagepreload.load', function(event){
+				console.log('pagepreload.load: ', event.data.percent);
+			});
+			//
+			// the event module will call when pagepreload is done!
+			zjs(document.body).on('pagepreload.done', function(event){
+				console.log('pagepreload.done');
+			});
+			
+			
+			// start write your code here
+			// ...
+	
+		});
+	</script>
+		
+	<style>
+		/* COMMON STYLE */
+		body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;}
+		.mainwidth{margin: 0 auto;width:600px;}
+	</style>
+	
+	<!-- important: make body invisible before pagepreload module is loaded -->
+	<!-- just keep this like alway be here when you implement pagepreload module on your website -->
+	<style>body.zpagepreload{visibility:hidden;}</style>
+</head>
+<body class="zpagepreload" 
+		
+	data-preload-domready-method="ready"
+	data-preload-custom-loading-container=""
+	
+	>
+	
+	
+	<!-- PRELOAD IMAGES -->
+	<ul id="zpagepreloadimages" style="display:none;">
+		<li data-src="sliderimages/1.jpg"></li>
+		<li data-src="sliderimages/2.jpg"></li>
+		<li data-src="sliderimages/3.jpg"></li>
+		<li data-src="sliderimages/4.jpg"></li>
+		<li data-src="sliderimages/5.jpg"></li>
+		<li data-src="sliderimages/6.jpg"></li>
+	</ul>
+	
+	
+	<!-- MAIN CONTENT -->
+	<div class="mainwidth">
+		<br/>
+		<br/>
+		<br/>
+		If you see this message,
+		<br/>
+		<h1>Welcome!!!</h1>
+		<br/>
+		<h2>This page if fully loaded</h2>
+	</div>
+		
+</body>
+</html>

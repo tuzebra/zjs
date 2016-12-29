@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs parallax</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="./z.min.js"></script>
+	<script>
+		zjs.onready('scrollbar, parallax', function(){
+		
+			zjs('.section2 .element1').on('parallax.scroll', function(event){
+				//console.log(event.data);
+			});
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	
+	.zparallax-section{
+		padding:10px;
+		background:url(images/z.module.parallax.back.jpg) center center;
+		background-size:cover;
+	}
+	.zparallax-section.section1{}
+	.zparallax-section.section2{}
+	.zparallax-section.section3{}
+	.zparallax-section.section4{}
+	
+	.zparallax-element.element1{
+		width:204px;
+		height:183px;
+		left:45%;
+		top:45%;
+		margin-left:-100px;
+		margin-top:-90px;
+		background:url(images/z.module.parallax.smallmoon.png);
+	}
+	.zparallax-element.element2{
+		width:356px;
+		height:344px;
+		left:60%;
+		top:60%;
+		margin-left:-160px;
+		margin-top:-160px;
+		background:url(images/z.module.parallax.bigmoon.png);
+	}
+	
+	body .zui-scrollbar {
+		background: #fff;
+	}
+	</style>
+	
+</head>
+<body class="zscroll zparallax" data-option="property:'margin',horizontal:false,autoscaleusecss:false,snapElements:'.zparallax-section',log:true">
+
+	<div class="zparallax-section section1" data-autoscale="true" data-name="section1">
+		<div class="zparallax-element element1" data-ratio-vertical="0" data-keyframes="0:{opacity:0},100:{opacity:1,marginLeft:0},200:{marginLeft:-100},300:{opacity:0}"></div>
+		<div class="zparallax-element element2" data-ratio-vertical="1" data-ratio-horizontal="-0.5"></div>
+		
+	</div>
+	
+	<div class="zparallax-section section2" data-autoscale="true" data-name="section2">	
+		<div class="zparallax-element element1" data-ratio-vertical="1"></div>
+		<div class="zparallax-element element2" data-ratio-vertical="2" data-ratio-horizontal="0.5"></div>
+	</div>
+	
+	<div class="zparallax-section section3" data-autoscale="true" data-name="section3">	
+		<div class="zparallax-element element1" data-ratio-vertical="0.5"></div>
+		<div class="zparallax-element element2" data-ratio-vertical="1"></div>
+	</div>
+		
+	<div class="zparallax-section section4" data-autoscale="true" data-name="section4">
+		<div class="zparallax-element element1" data-ratio-vertical="0.5"></div>
+		<div class="zparallax-element element2" data-ratio-vertical="1"></div>
+	</div>
+	
+</body>
+</html>

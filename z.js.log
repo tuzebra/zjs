@@ -1,0 +1,526 @@
+19/07/2012
+	14:05 
+		+ convert all timing property to used milisecond unit (timer, fadeIn, fadeOut,... )
+	
+23/07/2012
+	12:00 
+		+ add zjs.browser.isWebkit property
+	
+31/07/2012
+	11:00 
+		+ edit method zjs::html()
+	16:40
+		+ edit function zjs.extend()
+	19:20
+		+ edit method zjs::insertBefore()
+		
+03/08/2012
+	11:30
+		+ edit method zjs::getStyle(): allow get css-style
+
+04/08/2012
+	12:00
+		+ add method zjs::height(): allow get document, window height
+		
+09/08/2012
+	14:30
+		+ add method String::isEmail()
+
+10/08/2012
+	15:30
+		+ add method String::jsonDecode()
+		
+11/08/2012
+	16:30
+		+ edit zjs.browser
+		
+16/08/2012
+	14:10
+		+ edit zjs::html() | add try{}catch() fix error on IE sucks
+		
+06/09/2012
+	17:15
+		+ add method Array::charCodeToString();
+	17:40
+		+ fix method zjs::append() | allow append multy element
+		
+07/09/2012
+	00:50
+		+ fix method zjs::domReady()
+
+11/09/2012
+	20:00
+		+ add method zjs::isTouchDevice()
+		+ add method Event::touchX(), Event::touchY()
+		
+09/10/2012
+	17:30
+		+ fix event Timer::onStop() (very important)
+		
+10/10/2012
+	11:40
+		+ fix error when get style on IE: use parseInt(val) instead val.toInt()
+		
+11/10/2012
+	16:40
+		+ add function zjs.isFunction();
+		+ add method zjs::clone();
+	17:50
+		+ add method zjs::attr(name [, value]);
+		
+25/12/2012
+	15:30
+		+ used zjs.extendMethod() instead zjs.extendFn()
+	16:20
+		+ add method zjs::getData(), zjs::setData(), zjs::unsetData()
+	16:45
+		+ add method Timer::unset();
+
+26/12/2012
+	12:00
+		+ change method zjs::getData(), zjs::setData()
+		
+11/01/2013
+	16:00
+		+ upgrade method zjs::hasClass(), zjs::addClass(), zjs::removeClass(), zjs::toggleClass() 
+		-> add native way to test, add, remove class...
+		
+15/01/2013
+	14:20
+		+ add "use strict" mode
+	18:45
+		+ add method String::removeVietnameseCharacter()
+		+ add methos Object::clone()
+		
+16/01/2013
+	12:00
+		+ add method zjs.clone(source)
+	16:15
+		+ add method zjs::insertTo(element)
+		+ add method zjs::getCss()
+	17:20
+		+ add method zjs::copyStyleFrom(element)
+		
+24/01/2013
+	16:10
+		+ add method Number::secondsToTime()
+		
+30/01/2013
+	14:25
+		+ upgrade method zjs.ajax() 
+		-> support {type:'jsonp'}
+		
+01/02/2013
+	09:00
+		+ add property zjs.browser.cssprefix
+	19:00
+		+ add method zjs.cookie.get(name [, default])
+		+ add method zjs.cookie.set(name, value)
+		+ add method zjs.cookie.del(name)
+		
+01/03/2013
+	14:00
+		+ fix method zjs::getStyle()
+		-> tach zjs(window) va zjs(document), nhu luc truoc la gop lai se khong chinh xac
+	16:20
+		+ add property zjs.supportTransform
+		+ add property zjs.supportTransition
+		+ add property zjs.supportTranslate3d
+		+ add property zjs.supportClassList
+		+ add property stylePropertyNames
+		+ fix method zjs::setStyle() 
+		-> ho tro tot hon css3
+		-> tu dong replace translate3d thanh translate neu nhu khong support
+	19:50
+		+ fix method zjs::on()
+		-> support MSPointer event
+		
+11/03/2013
+	12:00
+		+ add property isIPhone for zjs.browser.isIPhone
+	18:20
+		+ add method zjs.rand(min, max)
+		-> return random number between min -> max (include)
+
+12/03/2013
+	12:50
+		+ add method zjs::delData(name)
+	13:10
+		+ fix bug method zjs.module.transition::unsetTransition()
+
+13/03/2013
+	11:00
+		+ rewrite method domReady()
+	11:30
+		+ fix method zjs.timer()
+		-> option transition now support pass a function(t){}
+	20:00
+		+ fix 1 bug trong zjs.timer
+	20:50
+		+ fix method zjs.module.transition::setTransition()
+		->	fully support option timingfunction with cubic-bezier
+			now we can set like this: timingfunction:'cubic-bezier(0.42,0,0.58,1)'
+			work pretty nice in both javascript and css3 transition
+			
+14/03/2013
+	04:20
+		+ fix method String::times()
+		
+19/03/2013
+	16:00
+		+ add method Function::repeat(milisecond, agrument)
+		+ add new option for zjs.ajax { repeat:-1 }
+		
+20/03/2013
+	20:40
+		+ add new option for zjs.ajax { header:{} }
+		-> help to send custom header via ajax
+		
+22/03/2013
+	16:55
+		+ fix when create new zjs('<td>') or <tr>. error DOM Exception 8
+		
+26/03/2013
+	11:10
+		+ fix method zjs::fadeIn(), zjs::fadeOut(), zjs::remove()
+		-> can remove element when element is fading
+	11:40
+		+ fix method zjs::setAttr
+		-> can set attribute col/row span for IE
+		+ fix method zjs::getAttr
+		-> can get attribute col/row span for IE
+	12:00
+		+ add property zjs.supportOpacity
+	16:10
+		+ add method zjs::clickout(), on('clickout')
+		+ add method zjs::tagName(), zjs::is(tagname)
+
+28/03/2013
+	18:50
+		+ fix zjs contruction method
+	17:30
+		+ add method zjs::style()
+		-> do both work zjs::getStyle() & zjs::setStyle()
+
+29/03/2013
+	11:30
+		+ add method zjs.hook() & zjs.enablehook()
+		-> allow to extend framework without hack code
+	20:00
+		+ fix method zjs::setData(), zjs::getData(), zjs::delData()
+		+ add method zjs::removeData() uses instead of zjs::unsetData()
+
+30/03/2013
+	18:00
+		+ rebuild method zjs::on() -> support custom event
+		+ add method zjs::trigger() -> trigger any event (build-in and custom) that binded to element
+
+01/04/2013
+	11:00
+		+ add method zjs::live()
+		+ add method zjs.onready() & zjs.onload()
+	12:00
+		+ fix method zjs::remove()
+
+04/04/2013
+	06:00
+		+ add method zjs.require() & zjs.required()
+		-> build require system for zjs
+		-> up zjs version from 1.0 -> 1.1
+	
+	23:30
+		+ fix method zjs::on() 
+		-> fix run callback double times issue
+		
+11/04/2013
+	10:40
+		+ fix method zjs::is() 
+		-> Uses native matchesSelector if available.
+
+12/04/2013
+	23:20
+		+ add method zjs.trigger()
+
+13/04/2013
+	20:30
+		+ add method Object::each()
+		+ fix method zjs::getFormData() -> support <radio>, <checkbox>
+		
+15/04/2013
+	12:40
+		+ remove method Object::each() ~~ many bug with this method
+		+ add method zjs.each(), zjs.foreach()
+
+17/04/2013
+	17:30
+		+ fix method zjs::on() -> fix event "scroll"
+		
+02/05/2013
+	13:40
+		+ add hook: after_setValue(el)
+	
+04/05/2013
+	08:30
+		+ fix method zjs::getFormData() -> now support <select>
+	12:00
+		+ add method zjs::selected(bool)
+		
+09/05/2013
+	14:20
+		+ add property zjs.supportHistory
+
+12/05/2013
+	23:00
+		+ add method zjs::bottom()
+		
+23/05/2013
+	10:00
+		+ add method zjs::removeAttr(attributename)
+	19:20
+		+ add method zjs::getRelativeTop()
+
+25/05/2013
+	11:00
+		+ add method zjs::getRelativeLeft()
+		
+27/05/2013
+	11:30
+		+ rename methods: 
+			+ zjs::getRelativeTop() -> zjs::getAbsoluteTop()
+			+ zjs::getRelativeLeft() -> zjs::getAbsoluteLeft()
+	12:40
+		+ add methods:
+			+ zjs::getAbsoluteRight()
+			+ zjs::getAbsoluteBottom()
+			
+31/05/2013
+	16:00
+		+ fix method: zjs:parent() ~ issue when go up meet a <table> tag
+	17:00
+		+ add method: zjs:findUp()
+
+07/06/2013
+	16:00
+		+ add method: event:metaKey()
+		
+13/06/2013
+	09:40
+		+ fix method: zjs::scrollTop(), zjs::scrollLeft()
+	11:10
+		+ add method: event::isLeftMouse(), event::isCenterMouse(), event::isRightMouse()
+		
+19/06/2013
+	09:25
+		+ add property zjs.supportFlexbox
+		
+13/07/2013
+	10:20
+		+ fix method zjs::on() -> support multi eventtype
+		
+18/07/2013
+	20:15
+		+ fix method zjs::drag() -> support iOS touch event
+		
+05/08/2013
+	11:30
+		+ add method zjs::lastChild() -> return last child element
+		
+06/08/2013
+	15:40
+		+ fix method supportFlexbox() error in IE8
+		
+14/08/2013
+	15:10
+		+ fix method zjs::on() -> fix when used "hover" -> "mouseover"
+		
+30/08/2013
+	17:50
+		+ fix method zjs::trigger() -> fix error when used IE8
+		
+31/08/2013
+	10:40
+		+ fix method zjs::trigger() -> fix error when used IE8
+		
+17/09/2013
+	16:00
+		+ fix method zjs::check()
+
+27/09/2013
+	12:40
+		+ fix method zjs::removeVietnameseCharacter() -> support Composite Unicode (Unicode To hop): [\u0301\u0300\u0323\u0309\u0303] ('`.?~)
+	15:15
+		+ add method zjs.objectKeys(), zjs.objectIndexOf()
+		
+30/10/2013
+	00:30
+		+ add method zjs::fadeStop() -> stop fadeIn() fadeOut() animation
+	13:20
+		+ add method zjs.jsonEncode()
+		+ add method zjs.jsonDecode()
+		
+31/10/2013
+	13:00
+		+ add method zjs::childReverse() -> get ra cac thang con theo thu tu dao nguoc
+		
+12/11/2013
+	15:20
+		+ enable hook in zjs by default
+		
+15/11/2013
+	10:00
+		+ fix method zjs::drag() bug when drag a image element on firefox
+	18:45
+		+ fix file object type in module ui.button.file
+		
+18/11/2013
+	14:20
+		+ fix method zjs::drag() bug on IE < 10
+		
+	15:00
+		+ add method zjs::distractEventTo()
+		+ add method zjs::removeDistractEvent()
+		
+10/12/2013
+	10:50
+		+ fix method zjs::trigger() bug on IE 9
+		
+30/12/2013
+	13:30
+		+ fix method zjs::jsonDecode()
+		
+31/12/2013
+	16:30
+		+ fix method zjs::getStyle() to support getStyle('marginTop')
+		
+04/01/2014
+	14:40
+		+ add method zjs::getAllData()
+		
+07/01/2014
+	15:00
+		+ fix method zjs::drag()
+		
+08/01/2014
+	19:00
+		+ fix method zjs::setStyle(), zjs::getStyle() to support css3 "rotate"
+		+ add method zjs::rotate()
+		
+	20:00
+		+ fix method zjs::setStyle(), zjs::getStyle() to support zjs-integer, zjs-string, content 
+		
+14/01/2014
+	18:20
+		+ fix method string::format() -> support object in format ${obj.key}
+		
+25/01/2014
+	11:40
+		+ add method array::map()
+		
+18/02/2014
+		+ add method zjs.matchMedia()
+		
+14/03/2014
+		+ add option data-debug to zjs require system
+		
+25/04/2014
+		+ add static method isMobileDevice
+		
+07/05/2014
+		+ add method zjs::filter()
+		
+31/05/2014
+		+ add method zjs.isElement(), zjs.isNodeList()
+		+ add method zjs.requestAnimationFrame()
+
+08/06/2014
+		+ add method zjs.isRegExp(), zjs.isWindow(), zjs.isFile(), zjs.isDate()
+
+22/06/2014
+		+ add more touchevent support
+		tap, singletap, doubletap, longtap, swipe, swipeleft, swiperight, swipeup, swipedown
+
+29/06/2014
+		+ fix method zjs::append(), zjs::prepend()
+		
+24/07/2014
+		+ fix trigger event tap -> issue: when tap child element, parent element (who acctualy bind event) do nothing
+		
+20/08/2014
+		+ add trigger for method zjs::trigger(name, data, callback);
+		
+24/10/2014
+		+ fix method zjs::isTheSame()
+		
+28/10/2014
+		+ add method zjs::showScale(), zjs::hideScale()
+		
+29/10/2014
+		+ fix event.preventDefault() when submit form on IE8
+		
+25/12/2014
+		+ add method hashCode() to String prototype
+		
+13/01/2014
+		+ fix response code on ajax request (status equal zero to support file:// schema)
+		  (https://github.com/jquery/jquery-mobile/issues/991)
+		+ add method zjs.loadJs(), zjs.loadCss()
+		
+11/02/2015
+		+ fix method zjs::insertAfter(), zjs::insertAfter() -> fix when pass first param is a string
+		+ fix method zjs::on() -> fix event for mobile (tap, singletap,...) -> allow to bind event on multi level (see z.js.test.event.mobile.html)
+		+ fix method zjs::on() -> fix event tap fire multitimes
+		
+17/03/2015
+		+ add method String::parseUri()
+		
+25/03/2015
+		+ add option zjs.requireOption.cssFolder
+		
+25/04/2015
+		+ fix method zjs::getFormData()
+		
+03/06/2015
+		+ fix method zjs::getAbsoluteTop() -> now support bester scrollbar module
+		
+04/06/2015
+		+ fix method zjs::focus() -> support to call trigger "focus"
+		+ fix method zjs::show() -> support to call trigger "show"
+		+ fix method zjs::hide() -> support to call trigger "hide"
+		
+09/06/2015
+		+ fix method zjs::getFormData() -> support input name like "name[]"
+		+ also fix zjs.ajax to support post a array to server
+		
+12/06/2015
+		+ add method String::decodeEntities()
+		
+19/06/2015
+		+ fix method zjs::getFormData() -> now support to get value in which submit button
+		
+28/06/2015
+		+ add method zjs::nextSibling() zjs::previousSibling()
+	
+16/07/2015
+		+ fix method zjs::submit() -> trigger event submit with accept prevent default
+		
+03/08/2015
+		+ add method Array::isInclude() -> don't use Array::include() any more because may be confilt with Mootools
+		
+14/01/2016
+		+ fix touch event on Android
+		
+30/03/2016
+		+ fix String::format() method, support when minifize to z.min.js
+
+28/08/2016
+		+ fix method zjs::hover()
+
+06/10/2016
+		+ add zjs.requireOption.autoLoadJs, zjs.requireOption.loadCss => now zjs support to be bundled with another library/custom code (need to manually load zjs module)
+
+15/10/2016
+		+ zjs::getStyle() && zjs::setStyle() now support "scrollLeft" & "scrollTop"
+
+12/11/2016
+		+ zjs.ajax() support new option "withCredentials" (with default value is false)
+		+ fix zjs::hidescale() zjs::showscale()

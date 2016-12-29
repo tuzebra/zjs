@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Demo module image slider theme linear</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		
+		<style>
+			body{font-family:arial;padding:40px;margin:0;}
+			.elements{font-size: 110px;text-align: center;line-height: 180px;color: rgba(137, 137, 137, 0.34);}
+		</style>
+		
+		<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+		<script>
+			zjs.onready('image.slider.theme.linear', function(){
+				
+				//zjs('.zslider').on('slider.change', function(event){console.log(event.data)});
+				//zjs('.zslider').on('slider.click', function(event){console.log('slider.click', event);event.preventDefault();});
+				
+			});
+		</script>
+		
+	</head>
+	
+	<body>
+		
+		
+		
+		<h3>Horizontal Stack, and popup use the same transition (Horizontal Stack) by default</h3>
+		<pre>theme:'linear',
+transition: 'horizontal-stack',
+sequent: true,
+border: false,
+
+// config for show popup
+popup: true
+</pre>
+		<div class="zslider" data-option="theme:'linear',
+			transition:'horizontal-stack',
+			transitionTime:1400,
+			preload: false,
+			autoplay: true,
+			autoplayTime: 3000,
+			border: false,
+			navButton: true,
+			navThumb: false,
+			navDot: false,
+			showInfo: false,
+			sequent: true,
+			
+			popup: true
+		">
+
+			<ul>
+				<li><img src="sliderimages/1.jpg" /><div class="elements">1</div></li>
+				<li><img src="sliderimages/2.jpg" /><div class="elements">2</div></li>
+				<li><img src="sliderimages/3.jpg" /><div class="elements">3</div></li>
+				<li><img src="sliderimages/4.jpg" /><div class="elements">4</div></li>
+				<li><img src="sliderimages/5.jpg" /><div class="elements">5</div></li>
+				<li><img src="sliderimages/6.jpg" /><div class="elements">6</div></li>
+				<li><img src="sliderimages/1.jpg" /><div class="elements">7</div></li>
+				<li><img src="sliderimages/2.jpg" /><div class="elements">8</div></li>
+				<li><img src="sliderimages/3.jpg" /><div class="elements">9</div></li>
+				<li><img src="sliderimages/4.jpg" /><div class="elements">10</div></li>
+				<li><img src="sliderimages/5.jpg" /><div class="elements">11</div></li>
+				<li><img src="sliderimages/6.jpg" /><div class="elements">12</div></li>
+			</ul>
+
+		</div>
+		
+		<!-- -->
+		<br/>
+		<br/>
+		
+		<h3>Horizontal Stack, and popup use different transition (Fade in)</h3>
+		<pre>theme:'linear',
+transition: 'horizontal-stack',
+sequent: true,
+border: false,
+
+// config for show popup
+popup: true,
+popupTransition: 'fade'
+</pre>
+		<div class="zslider" data-option="theme:'linear',
+			transition:'horizontal-stack',
+			transitionTime:1400,
+			preload: false,
+			autoplay: true,
+			autoplayTime: 3000,
+			border: false,
+			navButton: true,
+			navThumb: false,
+			navDot: false,
+			showInfo: false,
+			sequent: true,
+	
+			popup: true,
+			popupTransition: 'fade'">
+
+			<ul>
+				<li><img src="sliderimages/1.jpg" /><div class="elements">1</div></li>
+				<li><img src="sliderimages/2.jpg" /><div class="elements">2</div></li>
+				<li><img src="sliderimages/3.jpg" /><div class="elements">3</div></li>
+				<li><img src="sliderimages/4.jpg" /><div class="elements">4</div></li>
+				<li><img src="sliderimages/5.jpg" /><div class="elements">5</div></li>
+				<li><img src="sliderimages/6.jpg" /><div class="elements">6</div></li>
+				<li><img src="sliderimages/1.jpg" /><div class="elements">7</div></li>
+				<li><img src="sliderimages/2.jpg" /><div class="elements">8</div></li>
+				<li><img src="sliderimages/3.jpg" /><div class="elements">9</div></li>
+				<li><img src="sliderimages/4.jpg" /><div class="elements">10</div></li>
+				<li><img src="sliderimages/5.jpg" /><div class="elements">11</div></li>
+				<li><img src="sliderimages/6.jpg" /><div class="elements">12</div></li>
+			</ul>
+
+		</div>
+		
+		<!-- -->
+		<br/>
+		<br/>
+		
+		<h3>Horizontal Stack, and popup use different transition (Horizontal slide left-right)</h3>
+		<p>Image in horizontal slideshow will use a lower-quality image, but the image in popup will use a high-quality image resolution</p>
+		<pre>&lt;img src="sliderimages/thumb1.jpg" popupsrc="sliderimages/1.jpg" /&gt;</pre>
+		<p>Options:</p>
+		<pre>theme:'linear',
+transition: 'horizontal-stack',
+transitionTime: 1400,
+autoplayTime: 3000,
+sequent: true,
+border: false,
+
+// config for show popup
+popup: true,
+popupTransition: 'horizontal',
+popupTransitionTime: 500,
+popupTransitionTimingfunction: 4,
+popupAutoplayTime: 1000,
+popupNavButton: true,
+popupNavButtonParentIsRoot: true,
+popupNavThumb: false,
+popupNavDot: true,
+
+popupAnimate: true,
+popupAnimateName: 'tada hinge'
+</pre>
+<p>view more popup animation here <a href="http://app.april.com.vn/zjs/vers/1.1/z.module.ui.popup.animate.html" target="_blank">z.module.ui.popup.animate.html</a>
+		<div class="zslider" data-option="theme:'linear',
+			transition:'horizontal-stack',
+			transitionTime:1400,
+			preload: false,
+			autoplay: false,
+			autoplayTime: 3000,
+			border: false,
+			navButton: true,
+			navThumb: false,
+			navDot: false,
+			showInfo: false,
+			sequent: true,
+	
+			popup: true,
+			popupTransition: 'horizontal',
+			popupTransitionTime: 500,
+			popupTransitionTimingfunction: 4,
+			popupAutoplayTime: 1000,
+			popupNavButton: true,
+			popupNavButtonParentIsRoot: true,
+			popupNavThumb: false,
+			popupNavDot: true,
+			
+			popupAnimate: true,
+			popupAnimateName: 'tada hinge'
+		">
+
+			<ul>
+				<li><img src="sliderimages/1thumb.jpg" popupsrc="sliderimages/1.jpg" /><div class="elements">1</div></li>
+				<li><img src="sliderimages/2thumb.jpg" popupsrc="sliderimages/2.jpg" /><div class="elements">2</div></li>
+				<li><img src="sliderimages/3thumb.jpg" popupsrc="sliderimages/3.jpg" /><div class="elements">3</div></li>
+				<li><img src="sliderimages/4thumb.jpg" popupsrc="sliderimages/4.jpg" /><div class="elements">4</div></li>
+				<li><img src="sliderimages/5thumb.jpg" popupsrc="sliderimages/5.jpg" /><div class="elements">5</div></li>
+				<li><img src="sliderimages/6thumb.jpg" popupsrc="sliderimages/6.jpg" /><div class="elements">6</div></li>
+				<li><img src="sliderimages/1thumb.jpg" popupsrc="sliderimages/1.jpg" /><div class="elements">7</div></li>
+				<li><img src="sliderimages/2thumb.jpg" popupsrc="sliderimages/2.jpg" /><div class="elements">8</div></li>
+				<li><img src="sliderimages/3thumb.jpg" popupsrc="sliderimages/3.jpg" /><div class="elements">9</div></li>
+				<li><img src="sliderimages/4thumb.jpg" popupsrc="sliderimages/4.jpg" /><div class="elements">10</div></li>
+				<li><img src="sliderimages/5thumb.jpg" popupsrc="sliderimages/5.jpg" />
+					<div class="elements">
+						<a href="http://google.com">11 Google</a> 
+					</div>
+				</li>
+				<li><img src="sliderimages/6thumb.jpg" popupsrc="sliderimages/6.jpg" />
+					<div class="elements">
+						<a href="http://google.com"><div>12 Google</div></a> 
+					</div>
+				</li>
+			</ul>
+
+		</div>
+
+		<!-- -->
+		<br/>
+		<br/>
+		
+		
+	</body>
+</html>

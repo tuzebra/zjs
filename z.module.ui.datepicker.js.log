@@ -1,0 +1,12 @@
+01/06/2015
+		+ support use input-field to input to date
+02/06/2015
+		+ add new event "ui.datepicker.ready"
+		+ add option "inputClass"
+21/06/2015
+		+ add new option "disabledDate" with support value is: "< > << before after to"
+22/06/2015
+		+ support "today", "tomorrow", "yesterday" value for option "disabledDate"
+30/06/2015
+		+ add option "calendarChangeMonthYear" with default value is "true"
+		+ fix some bug

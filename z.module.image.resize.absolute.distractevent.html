@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs - Image resize - allow change position when resize</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="./z.js"></script>
+	<script>
+		zjs.require('image.resize', function(){
+			
+			zjs('.img2').distractAllEventTo('.img1');
+		
+		});
+	</script>
+	
+	<style>
+	body{padding:0;margin:0;color:#444;background:#fff;}
+	.wrapper{position:relative;width:900px;margin:50px auto;}
+	img{position:absolute;}
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+		
+		<h3>Absolute image</h3>
+		
+		<img class="zimageresize img1" src="sliderimages/1.jpg" />
+		
+		<img class="zimageresize img2" src="sliderimages/2.jpg" data-option="aspectRatio:true"/>
+		
+	</div>
+</body>
+</html>

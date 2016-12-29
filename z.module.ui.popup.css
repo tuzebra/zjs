@@ -1,0 +1,111 @@
+.zui-popup-page-cover{position:fixed;left:0;top:0;background:rgba(255,255,255,.75);width:100%;height:100%;}
+.zui-popup{position:absolute;background:#fff;border:1px solid #c4cde0;box-shadow:0 1px 3px -1px rgba(0,0,0,0.5);}
+.zui-popup.zui-popup-center{position:fixed;top:50%;left:50%;}
+.zui-popup-wrapper{margin:20px;}
+.zui-popup-close{position: absolute;right:15px;top:10px;font-family:arial;font-size:14px;font-weight:bold;color: #aaa;cursor: pointer;text-decoration: none;}
+.zui-popup-close:hover{color:#333;text-decoration: none;}
+.zui-long-popup{position:relative;}
+.zui-long-popup.zui-popup-center{position:relative;top:auto;left:auto;margin:40px auto;}
+.zui-popup.zui-popup-hide,.zui-long-popup.zui-popup-hide{position:fixed;top:-10000px;left:-10000px;visibility:hidden;pointer-events: none;}
+.zpopupuninithide{visibility:hidden;overflow:hidden;opacity:0;height:0;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";filter: alpha(opacity=0);}
+body.zui-long-popup-is-open{overflow:auto;}
+
+/* animate */
+body .zui-popup,.zui-popup.zanimate.zanimate-end{-webkit-animation-name:none;-moz-animation-name:none;animation-name:none;}
+.zui-popup.zanimate,.zui-popup-page-cover.zanimate{-webkit-animation-duration:1000ms;-webkit-animation-fill-mode:both;-moz-animation-duration:1000ms;-moz-animation-fill-mode:both;animation-duration:1000ms;animation-fill-mode:both;}
+
+/* animate entrances */
+.zui-popup.zanimate.zanimate-start.showing.fadeIn{-webkit-animation-name:fadeIn;-moz-animation-name:fadeIn;animation-name:fadeIn;}
+.zui-popup.zanimate.zanimate-start.showing.fadeInDown{-webkit-animation-name:fadeInDown;-moz-animation-name:fadeInDown;animation-name:fadeInDown;}
+.zui-popup.zanimate.zanimate-start.showing.fadeInDownBig{-webkit-animation-name:fadeInDownBig;-moz-animation-name:fadeInDownBig;animation-name:fadeInDownBig;}
+.zui-popup.zanimate.zanimate-start.showing.fadeInLeft{-webkit-animation-name:fadeInLeft;-moz-animation-name:fadeInLeft;animation-name:fadeInLeft;}
+.zui-popup.zanimate.zanimate-start.showing.fadeInLeftBig{-webkit-animation-name:fadeInLeftBig;-moz-animation-name:fadeInLeftBig;animation-name:fadeInLeftBig;}
+.zui-popup.zanimate.zanimate-start.showing.fadeInRight{-webkit-animation-name:fadeInRight;-moz-animation-name:fadeInRight;animation-name:fadeInRight;}
+.zui-popup.zanimate.zanimate-start.showing.fadeInRightBig{-webkit-animation-name:fadeInRightBig;-moz-animation-name:fadeInRightBig;animation-name:fadeInRightBig;}
+.zui-popup.zanimate.zanimate-start.showing.fadeInUp{-webkit-animation-name:fadeInUp;-moz-animation-name:fadeInUp;animation-name:fadeInUp;}
+.zui-popup.zanimate.zanimate-start.showing.fadeInUpBig{-webkit-animation-name:fadeInUpBig;-moz-animation-name:fadeInUpBig;animation-name:fadeInUpBig;}
+
+.zui-popup.zanimate.zanimate-start.showing.zoomIn{-webkit-animation-name:zoomIn;-moz-animation-name:zoomIn;animation-name:zoomIn;}
+.zui-popup.zanimate.zanimate-start.showing.zoomInDown{-webkit-animation-name:zoomInDown;-moz-animation-name:zoomInDown;animation-name:zoomInDown;}
+.zui-popup.zanimate.zanimate-start.showing.zoomInLeft{-webkit-animation-name:zoomInLeft;-moz-animation-name:zoomInLeft;animation-name:zoomInLeft;}
+.zui-popup.zanimate.zanimate-start.showing.zoomInRight{-webkit-animation-name:zoomInRight;-moz-animation-name:zoomInRight;animation-name:zoomInRight;}
+.zui-popup.zanimate.zanimate-start.showing.zoomInUp{-webkit-animation-name:zoomInUp;-moz-animation-name:zoomInUp;animation-name:zoomInUp;}
+
+.zui-popup.zanimate.zanimate-start.showing.bounce{-webkit-animation-name:bounce;-moz-animation-name:bounce;animation-name:bounce;}
+.zui-popup.zanimate.zanimate-start.showing.bounceIn{-webkit-animation-name:bounceIn;-moz-animation-name:bounceIn;animation-name:bounceIn;}
+.zui-popup.zanimate.zanimate-start.showing.bounceInDown{-webkit-animation-name:bounceInDown;-moz-animation-name:bounceInDown;animation-name:bounceInDown;}
+.zui-popup.zanimate.zanimate-start.showing.bounceInUp{-webkit-animation-name:bounceInUp;-moz-animation-name:bounceInUp;animation-name:bounceInUp;}
+.zui-popup.zanimate.zanimate-start.showing.bounceInLeft{-webkit-animation-name:bounceInLeft;-moz-animation-name:bounceInLeft;animation-name:bounceInLeft;}
+.zui-popup.zanimate.zanimate-start.showing.bounceInRight{-webkit-animation-name:bounceInRight;-moz-animation-name:bounceInRight;animation-name:bounceInRight;}
+
+.zui-popup.zanimate.zanimate-start.showing.flip{-webkit-animation-name:flip;-moz-animation-name:flip;animation-name:flip;}
+.zui-popup.zanimate.zanimate-start.showing.flipInX{-webkit-animation-name:flipInX;-moz-animation-name:flipInX;animation-name:flipInX;}
+.zui-popup.zanimate.zanimate-start.showing.flipInY{-webkit-animation-name:flipInY;-moz-animation-name:flipInY;animation-name:flipInY;}
+
+.zui-popup.zanimate.zanimate-start.showing.lightSpeedIn{-webkit-animation-name:lightSpeedIn;-moz-animation-name:lightSpeedIn;animation-name:lightSpeedIn;}
+
+.zui-popup.zanimate.zanimate-start.showing.rotateIn{-webkit-animation-name:rotateIn;-moz-animation-name:rotateIn;animation-name:rotateIn;}
+.zui-popup.zanimate.zanimate-start.showing.rotateInDownLeft{-webkit-animation-name:rotateInDownLeft;-moz-animation-name:rotateInDownLeft;animation-name:rotateInDownLeft;}
+.zui-popup.zanimate.zanimate-start.showing.rotateInDownRight{-webkit-animation-name:rotateInDownRight;-moz-animation-name:rotateInDownRight;animation-name:rotateInDownRight;}
+.zui-popup.zanimate.zanimate-start.showing.rotateInUpLeft{-webkit-animation-name:rotateInUpLeft;-moz-animation-name:rotateInUpLeft;animation-name:rotateInUpLeft;}
+.zui-popup.zanimate.zanimate-start.showing.rotateInUpRight{-webkit-animation-name:rotateInUpRight;-moz-animation-name:rotateInUpRight;animation-name:rotateInUpRight;}
+
+.zui-popup.zanimate.zanimate-start.showing.slideInDown{-webkit-animation-name:slideInDown;-moz-animation-name:slideInDown;animation-name:slideInDown;}
+.zui-popup.zanimate.zanimate-start.showing.slideInLeft{-webkit-animation-name:slideInLeft;-moz-animation-name:slideInLeft;animation-name:slideInLeft;}
+.zui-popup.zanimate.zanimate-start.showing.slideInRight{-webkit-animation-name:slideInRight;-moz-animation-name:slideInRight;animation-name:slideInRight;}
+.zui-popup.zanimate.zanimate-start.showing.slideInUp{-webkit-animation-name:slideInUp;-moz-animation-name:slideInUp;animation-name:slideInUp;}
+
+.zui-popup.zanimate.zanimate-start.showing.rollIn{-webkit-animation-name:rollIn;-moz-animation-name:rollIn;animation-name:rollIn;}
+
+.zui-popup.zanimate.zanimate-start.showing.flash{-webkit-animation-name:flash;-moz-animation-name:flash;animation-name:flash;}
+.zui-popup.zanimate.zanimate-start.showing.headShake{-webkit-animation-name:headShake;-moz-animation-name:headShake;animation-name:headShake;}
+.zui-popup.zanimate.zanimate-start.showing.jello{-webkit-animation-name:jello;-moz-animation-name:jello;animation-name:jello;}
+.zui-popup.zanimate.zanimate-start.showing.pulse{-webkit-animation-name:pulse;-moz-animation-name:pulse;animation-name:pulse;}
+.zui-popup.zanimate.zanimate-start.showing.rubberBand{-webkit-animation-name:rubberBand;-moz-animation-name:rubberBand;animation-name:rubberBand;}
+.zui-popup.zanimate.zanimate-start.showing.shake{-webkit-animation-name:shake;-moz-animation-name:shake;animation-name:shake;}
+.zui-popup.zanimate.zanimate-start.showing.swing{-webkit-animation-name:swing;-moz-animation-name:swing;animation-name:swing;}
+.zui-popup.zanimate.zanimate-start.showing.tada{-webkit-animation-name:tada;-moz-animation-name:tada;animation-name:tada;}
+.zui-popup.zanimate.zanimate-start.showing.wobble{-webkit-animation-name:wobble;-moz-animation-name:wobble;animation-name:wobble;}
+
+/* animate exits */
+.zui-popup.zanimate.zanimate-start.hiding.fadeOut{-webkit-animation-name:fadeOut;-moz-animation-name:fadeOut;animation-name:fadeOut;}
+.zui-popup.zanimate.zanimate-start.hiding.fadeOutDown{-webkit-animation-name:fadeOutDown;-moz-animation-name:fadeOutDown;animation-name:fadeOutDown;}
+.zui-popup.zanimate.zanimate-start.hiding.fadeOutDownBig{-webkit-animation-name:fadeOutDownBig;-moz-animation-name:fadeOutDownBig;animation-name:fadeOutDownBig;}
+.zui-popup.zanimate.zanimate-start.hiding.fadeOutLeft{-webkit-animation-name:fadeOutLeft;-moz-animation-name:fadeOutLeft;animation-name:fadeOutLeft;}
+.zui-popup.zanimate.zanimate-start.hiding.fadeOutLeftBig{-webkit-animation-name:fadeOutLeftBig;-moz-animation-name:fadeOutLeftBig;animation-name:fadeOutLeftBig;}
+.zui-popup.zanimate.zanimate-start.hiding.fadeOutRight{-webkit-animation-name:fadeOutRight;-moz-animation-name:fadeOutRight;animation-name:fadeOutRight;}
+.zui-popup.zanimate.zanimate-start.hiding.fadeOutRightBig{-webkit-animation-name:fadeOutRightBig;-moz-animation-name:fadeOutRightBig;animation-name:fadeOutRightBig;}
+.zui-popup.zanimate.zanimate-start.hiding.fadeOutUp{-webkit-animation-name:fadeOutUp;-moz-animation-name:fadeOutUp;animation-name:fadeOutUp;}
+.zui-popup.zanimate.zanimate-start.hiding.fadeOutUpBig{-webkit-animation-name:fadeOutUpBig;-moz-animation-name:fadeOutUpBig;animation-name:fadeOutUpBig;}
+
+.zui-popup.zanimate.zanimate-start.hiding.zoomOut{-webkit-animation-name:zoomOut;-moz-animation-name:zoomOut;animation-name:zoomOut;}
+.zui-popup.zanimate.zanimate-start.hiding.zoomOutDown{-webkit-animation-name:zoomOutDown;-moz-animation-name:zoomOutDown;animation-name:zoomOutDown;}
+.zui-popup.zanimate.zanimate-start.hiding.zoomOutLeft{-webkit-animation-name:zoomOutLeft;-moz-animation-name:zoomOutLeft;animation-name:zoomOutLeft;}
+.zui-popup.zanimate.zanimate-start.hiding.zoomOutRight{-webkit-animation-name:zoomOutRight;-moz-animation-name:zoomOutRight;animation-name:zoomOutRight;}
+.zui-popup.zanimate.zanimate-start.hiding.zoomOutUp{-webkit-animation-name:zoomOutUp;-moz-animation-name:zoomOutUp;animation-name:zoomOutUp;}
+
+.zui-popup.zanimate.zanimate-start.hiding.bounceOut{-webkit-animation-name:bounceOut;-moz-animation-name:bounceOut;animation-name:bounceOut;}
+.zui-popup.zanimate.zanimate-start.hiding.bounceOutUp{-webkit-animation-name:bounceOutUp;-moz-animation-name:bounceOutUp;animation-name:bounceOutUp;}
+.zui-popup.zanimate.zanimate-start.hiding.bounceOutDown{-webkit-animation-name:bounceOutDown;-moz-animation-name:bounceOutDown;animation-name:bounceOutDown;}
+.zui-popup.zanimate.zanimate-start.hiding.bounceOutLeft{-webkit-animation-name:bounceOutLeft;-moz-animation-name:bounceOutLeft;animation-name:bounceOutLeft;}
+.zui-popup.zanimate.zanimate-start.hiding.bounceOutRight{-webkit-animation-name:bounceOutRight;-moz-animation-name:bounceOutRight;animation-name:bounceOutRight;}
+
+.zui-popup.zanimate.zanimate-start.hiding.flipOutX{-webkit-animation-name:flipOutX;-moz-animation-name:flipOutX;animation-name:flipOutX;}
+.zui-popup.zanimate.zanimate-start.hiding.flipOutY{-webkit-animation-name:flipOutY;-moz-animation-name:flipOutY;animation-name:flipOutY;}
+
+.zui-popup.zanimate.zanimate-start.hiding.lightSpeedOut{-webkit-animation-name:lightSpeedOut;-moz-animation-name:lightSpeedOut;animation-name:lightSpeedOut;}
+
+.zui-popup.zanimate.zanimate-start.hiding.rotateOut{-webkit-animation-name:rotateOut;-moz-animation-name:rotateOut;animation-name:rotateOut;}
+.zui-popup.zanimate.zanimate-start.hiding.rotateOutDownLeft{-webkit-animation-name:rotateOutDownLeft;-moz-animation-name:rotateOutDownLeft;animation-name:rotateOutDownLeft;}
+.zui-popup.zanimate.zanimate-start.hiding.rotateOutDownRight{-webkit-animation-name:rotateOutDownRight;-moz-animation-name:rotateOutDownRight;animation-name:rotateOutDownRight;}
+.zui-popup.zanimate.zanimate-start.hiding.rotateOutUpLeft{-webkit-animation-name:rotateOutUpLeft;-moz-animation-name:rotateOutUpLeft;animation-name:rotateOutUpLeft;}
+.zui-popup.zanimate.zanimate-start.hiding.rotateOutUpRight{-webkit-animation-name:rotateOutUpRight;-moz-animation-name:rotateOutUpRight;animation-name:rotateOutUpRight;}
+
+.zui-popup.zanimate.zanimate-start.hiding.slideOutDown{-webkit-animation-name:slideOutDown;-moz-animation-name:slideOutDown;animation-name:slideOutDown;}
+.zui-popup.zanimate.zanimate-start.hiding.slideOutLeft{-webkit-animation-name:slideOutLeft;-moz-animation-name:slideOutLeft;animation-name:slideOutLeft;}
+.zui-popup.zanimate.zanimate-start.hiding.slideOutRight{-webkit-animation-name:slideOutRight;-moz-animation-name:slideOutRight;animation-name:slideOutRight;}
+.zui-popup.zanimate.zanimate-start.hiding.slideOutUp{-webkit-animation-name:slideOutUp;-moz-animation-name:slideOutUp;animation-name:slideOutUp;}
+
+.zui-popup.zanimate.zanimate-start.hiding.rollOut{-webkit-animation-name:rollOut;-moz-animation-name:rollOut;animation-name:rollOut;}
+
+.zui-popup.zanimate.zanimate-start.hiding.hinge{-webkit-animation-name:hinge;-moz-animation-name:hinge;animation-name:hinge;}

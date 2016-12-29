@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Demo module image slider theme linear</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+		<style>
+			body{margin:0;padding:0;min-width:600px;}
+			.image-content{width:200px;padding:10px;font-size:13px;margin:10px;color:white;background:rgba(0, 0, 0, 0.4);}
+		</style>
+		
+		<script type="text/javascript" src="z.js" data-debug="true"></script>
+		<script>zjs.require('image.slider.theme.linear')</script>
+		
+	</head>
+	
+	<body>
+		<div style="width:70%">
+		
+			<div class="zslider" data-option="theme:'linear',
+				transition:'fade',
+				transitionTime:1600,
+				preload: false,
+				autoplay: true,
+				autoplayTime: 6000,
+				navButton: false,
+				navThumb: false,
+				navDot: true,
+				fullWidth: true,
+				navThumbTemplate: '<a></a>',
+				navDotTemplate: '<a>.</a>'">
+				<ul>
+					<li>
+						<h3>IU</h3>
+						<img src="sliderimages/1thumb.jpg" largesrc="sliderimages/1.jpg" />
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu eleifend purus. Nulla in diam quam, sed aliquam ligula. Aenean volutpat euismod leo, non malesuada est euismod in.</p>
+						<div class="elements">
+							<div class="transition image-content" data-option="from:{left:0},to:{left:300},time:2000,timingfunction:1">IU</div>
+						</div>
+					</li>
+					<li>
+						<h3>IU</h3>
+						<img class="thumb" src="sliderimages/2thumb.jpg" />
+						<img class="large" src="sliderimages/2.jpg" />
+						<p>Quisque id lorem ultricies erat venenatis aliquam in in nunc. Nunc rutrum sapien vitae augue rutrum vel pulvinar est ullamcorper.</p>
+						<div class="elements">
+							<div class="transition image-content" data-option="from:{top:0},to:{top:50},time:2000,timingfunction:2">IU</div>
+						</div>
+					</li>
+					<li>
+						<h3>IU</h3>
+						<img src="sliderimages/3thumb.jpg" />
+						<img class="large" src="sliderimages/3.jpg" />
+						<p>Quisque orci metus, congue laoreet dapibus eu, vehicula fringilla arcu. Curabitur pulvinar mattis euismod.</p>
+						<div class="elements">
+							<div class="transition image-content" data-option="from:{left:0,top:0},to:{left:300,top:300},time:2000,timingfunction:3">IU</div>
+						</div>
+					</li>
+					<li>
+						<img src="sliderimages/4thumb.jpg" data-src="sliderimages/4.jpg" title="Jessica" alt="Aliquam eu tortor tempus eros tempor pharetra vitae laoreet dolor. Fusce id pretium erat. Phasellus et est a ante blandit semper quis eu turpis." />
+						<div class="elements">
+							<div class="transition image-content" data-option="from:{left:0,top:300},to:{left:300,top:0},time:2000,timingfunction:2">Jessica</div>
+						</div>
+					</li>
+					<li>
+						<img src="sliderimages/5thumb.jpg" data-src="sliderimages/5.jpg" title="Jessica" />
+						<p>Phasellus fermentum orci consequat enim laoreet vel sodales leo consectetur. Pellentesque luctus est at neque dictum sit amet suscipit magna eleifend.</p>
+						<div class="elements">
+							<div class="transition image-content" data-option="from:{left:0,top:150},to:{left:300,top:150},time:2000,timingfunction:4">Jessica</div>
+						</div>
+					</li>
+					<li>
+						<img src="sliderimages/6thumb.jpg" />
+						<img class="large" src="sliderimages/6.jpg" />
+						<p class="title">Jessica</p>
+						<p class="description">Cras adipiscing semper erat, quis consectetur lacus eleifend cursus. Donec ac nisl quis nibh elementum molestie ut vitae mi.</p>
+						<div class="elements">
+							<div class="transition image-content" data-option="from:{left:0,top:0},to:{left:600,top:150},time:2000,timingfunction:3">Jessica</div>
+							<div class="transition image-content" data-option="from:{left:0},to:{left:300},time:2000,timingfunction:1">IU</div>
+							<div class="transition image-content" data-option="from:{top:0},to:{top:50},time:2000,timingfunction:2">IU</div>
+							<div class="transition image-content" data-option="from:{left:0,top:300},to:{left:300,top:0},time:2000,timingfunction:2">Jessica</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		
+		</div>
+	</body>
+</html>

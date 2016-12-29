@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs UI - selectbox</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+	<script>
+		zjs.onready('ui.selectbox', function(){
+			
+			window.handlerEvent = function(event){
+				console.log('ui.selectbox.clickchange:', event.data);
+				console.log('ui.selectbox.change:', event.data);
+				console.log('original value:', this.getValue(''));
+				
+				alert('change: '+this.getValue());
+			};
+			
+			zjs('select[name=selectevent1]').on('ui.selectbox.change', handlerEvent);
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	.wrapper{width:900px;margin:0 auto;padding:50px 0;}
+	</style>
+	
+</head>
+<body>
+	<form class="wrapper">
+	
+		<h3>normal selectbox with group</h3>
+		
+		<select name="collation" class="zselectbox">
+	
+			<option value="">(collation)</option>
+		
+			<optgroup label="armscii8">
+				<option>armscii8_bin</option>
+				<option>armscii8_general_ci</option>
+			</optgroup>
+		
+			<optgroup label="ascii">
+				<option selected>ascii_bin</option>
+				<option>ascii_general_ci</option>
+			</optgroup>
+		
+			<optgroup>
+				<option>utf8_bin</option>
+				<option>utf8_croatian_ci</option>
+				<option>utf8_czech_cs</option>
+				<option>utf8_general_ci</option>
+				<option>utf8_polish_ci</option>
+			</optgroup>
+		
+		</select>
+	
+		<select name="collation2" class="zselectbox-">
+	
+			<option value="">(collation)</option>
+		
+			<optgroup label="armscii8">
+				<option>armscii8_bin</option>
+				<option>armscii8_general_ci</option>
+			</optgroup>
+		
+		</select>
+	
+		<br/>
+		<br/>
+		
+		<select name="collation3" class="zselectbox">
+	
+			<option value="">(collation)</option>
+		
+			<optgroup label="armscii8">
+				<option>armscii8_bin</option>
+				<option>armscii8_general_ci</option>
+			</optgroup>
+		
+		</select>
+		
+		
+		<h3>selectbox with link</h3>
+		
+		<select name="collation4" class="zselectbox">
+	
+			<option data-href="#google">Google</option>
+			<option data-href="#april">April</option>
+			<option data-href="#yahoo">Yahoo</option>
+		
+		</select>
+		
+		
+		<h3>selectbox with disabled item</h3>
+		
+		<select name="collation5" class="zselectbox">
+	
+			<option disabled>draff</option>
+	
+			<optgroup label="armscii8">
+				<option>armscii8_bin</option>
+				<option>armscii8_general_ci</option>
+			</optgroup>
+			
+			<option disabled>armscii8_bin</option>
+			
+			<option>armscii8_bin</option>
+		
+		</select>
+		
+		
+		<h2>Events</h2>
+		
+		<h3>ui.selectbox.change</h3>
+		
+		<select name="selectevent1" class="zselectbox">
+			<option>option 1</option>
+			<option>option 2</option>
+			<option>option 3</option>
+			<option>option 4</option>
+		</select>
+		
+		
+		<h3>inline html attribute "onchange"</h3>
+		
+		<select class="zselectbox" onchange="handlerEvent">
+			<option>option 5</option>
+			<option>option 6</option>
+			<option>option 7</option>
+			<option>option 8</option>
+		</select>
+		
+		
+
+	</form>
+</body>
+</html>

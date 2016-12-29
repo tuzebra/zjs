@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Demo module form validation</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+	<script>
+		zjs.onready('ui.button, ui.datepicker, ui.autosuggestion, ui.imagepicker, form.validation', function(){
+			
+			zjs('form').on('form.validation.success', function(event){
+				
+				// neu muon ngan khong cho submit luon thi lam nhu the nay:
+				event.preventDefault();
+				
+				alert('form.validation.success');
+				
+			});
+			
+		});
+	</script>
+	
+	<style>
+		body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#FAFAFA;}
+		.wrapper{width:85%;margin:50px auto;}
+		p{margin:10px 0 2px;}
+		h2{margin:20px 0 5px;}
+		a[onclick]{color:blue;text-decoration:underline;cursor:pointer;}
+		form{width:300px;}
+		input,textarea{margin: 0;width: 100%;resize:none;text-indent:0 !important;padding:0 4px;box-sizing:border-box;}
+		.zvalidation-custom-input.error{border:1px solid red;padding:10px;}
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+		
+		<form class="zvalidation" method="POST" data-option="tips:{email:'Email email email please!'}">
+			
+			<h2>name</h2>
+			<input type="text" name="name" />
+			
+			<h2>birthday (test datepicker)</h2>
+			<input type="text" name="birthday"  placeholder="birthday" class="zdatepicker required" /> <br/>
+			<input type="text" name="birthday2" placeholder="birthday" class="zdatepicker required" data-option="button:false,format:'DD/MM/YYYY'" />
+			<input type="text" name="birthday3" class="zdatepicker required" data-option="button:false,format:'DD/MM/YYYY'" />
+			
+			<h2>email</h2>
+			<input type="email" name="email" class="required" />
+			
+			<h2>number</h2>
+			<input type="text" name="number" class="required" />
+			
+			<h2>phonenumber</h2>
+			<input type="text" name="phonenumber" class="required" />
+			
+			<h2>phone</h2>
+			<input type="text" name="phone" />
+			
+			<h2>minlength</h2>
+			<input type="text" name="minlength" class="required" data-minlength="10" data-tip-minlength="Length as least 10 character" />
+			
+			<h2>year (minlength:4, number)</h2>
+			<input type="text" name="year" class="number minlength required" data-minlength="4" data-tip-number="Please input a year" data-tip-minlength="Please input a year" />
+			
+			<h2>address</h2>
+			<input type="text" name="address" />
+			
+			<h2>old password</h2>
+			<input type="password" name="oldpassword" class="required" />
+			
+			<h2>password</h2>
+			<input type="password" name="password" class="required" />
+			
+			<h2>re enter password</h2>
+			<input type="password" name="repassword" />
+			
+			<h2>content</h2>
+			<textarea name="content"></textarea>
+			
+			<h2>search (test autosuggestion)</h2>
+			<input type="text" class="zautosuggestion required" name="search" placeholder="type something to search..." data-option="focusshowsuggestion:true, source:['aaaa','bbbb','cccc','dddd','eeee']"/>
+			
+			<h2>radio</h2>
+			<div class="radiogroup required">
+				group 1
+				<label><input type="radio" name="opt" value="opt1" /> opt1</label>
+				<label><input type="radio" name="opt" value="opt2" /> opt2</label>
+			</div>
+			<div class="radiogroup required">
+				group 2
+				<label><input type="radio" name="opta" value="opt1" /> opt1</label>
+				<label><input type="radio" name="opta" value="opt2" /> opt2</label>
+			</div>
+			
+			<h2>checkbox</h2>
+			<div class="checkbox required">
+				checkbox 1 
+				<label><input type="checkbox" name="check" value="check" /> check</label>
+			</div>
+			<div class="checkbox required">
+				checkbox 2 
+				<label><input type="checkbox" name="checka" value="check" /> check</label>
+			</div>
+			
+			
+			
+			<h2>image picker</h2>
+			<input class="zimagepicker required" type="hidden" name="imageid" data-option="autouploadUrl:'http://app.april.com.vn/zmvc/test/uploadimage'" />
+			
+			
+			<h2>custom (any dom element)</h2>
+			<div class="zvalidation-custom-input required" id="div1">
+				This is just a custom input! <a onclick="zjs('#div1').setAttr('data-value', 'lorem isolu derm...');zjs('form').formValidationCheck();return false;">click here to set data, and prevent error</a>
+			</div>
+			
+			
+			<h2>require and prevent</h2>
+			<input type="text" name="prevent" class="required prevent" />
+			
+			<p>
+				<button class="zbutton blue">submit</button>
+			</p>
+			
+		</form>
+		
+	</div>
+</body>
+</html>

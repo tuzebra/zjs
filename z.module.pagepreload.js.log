@@ -1,0 +1,24 @@
+25/12/2014
+	13:00
+		+ body tag now support 3 param
+		| <body  data-preload-domready-method="ready"
+		|        data-preload-custom-loading-container=""
+		|        data-preload-cache-second="0"
+		| >
+
+22/01/2015
+	16:00
+		+ cache now alway cache image
+
+10/03/2015
+	14:50
+		+ fig bug on IE10
+
+29/12/2015
+	16:00
+		+ fix bug when use cache && custom loading container
+
+12/01/2016
+	14:50
+		+ add param "data-preload-cache-baseurl"
+

@@ -1,0 +1,12 @@
+02/06/2014
+		+ fix method zjs::autosuggestionAddindex() -> ko add duoc
+		+ them option 'sourceUrl' -> support search via ajax
+
+06/02/2015
+		+ fix token default value for input when use ajax to load datasource
+		
+14/07/2015
+		+ fix several bugs for suggesting & placeholder text
+
+17/07/2015
+		+ add new option: multiline with default is "TRUE"

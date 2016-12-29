@@ -1,0 +1,17 @@
+.zui-selectbox{position:relative;display: -moz-inline-stack;display: inline-block;vertical-align:bottom;zoom: 1;-webkit-user-select:none;}
+.zui-selectbox-button-wrap{}
+.zui-selectbox-button{width:100%;}
+.zui-selectbox-button-wrap .zui-button{text-align:left;}
+.zui-selectbox-button-wrap .zui-button-label{background:url(images/z.module.ui.arrowdown.png) right center no-repeat;margin: 0 6px 0 10px;}
+.zui-selectbox-panel-wrap{position:absolute;width:100%;z-index:1;}
+.zui-selectbox-panel-wrap.zui-initing{visibility:hidden;}
+.zui-selectbox-panel-wrap.zui-hide{position:fixed;top:-1000px !important;left:-1000px !important;visibility:hidden !important;}
+.zui-selectbox-panel-inner{border:1px solid #bbb;border-radius:2px;box-shadow:0 1px 5px 0px rgba(0,0,0,0.2);background:#FFF;z-index:1;}
+.zui-selectbox-panel-inner:hover{border-color:#4D90FE;}
+.zui-selectbox-panel{padding:5px 0;}
+.zui-selectbox-item{display: block;padding:0 10px;cursor:pointer;line-height: 22px;height: 22px;font-size:12px;white-space:nowrap;}
+.zui-selectbox-item.zui-selected{background:#C3DAFF;}
+.zui-selectbox-item:hover,.zui-selectbox-item.zui-selected:hover{color:#fff;background:#4D90FE;}
+.zui-selectbox-item.zui-disabled,.zui-selectbox-item.zui-disabled:hover{background:transparent;cursor:default;color:#A2A2A2;}
+.zui-selectbox-item-header{display: block;cursor:default;text-transform: uppercase;color: #999;font-size:10px;font-weight: bold;margin: 10px 0 5px;padding: 0 10px;}
+.zui-selectbox-item-header-line{border-top: 1px solid #F7F0F0;border-bottom: 1px solid #fff;padding:0;margin:8px 10px;}

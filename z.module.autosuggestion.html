@@ -1,0 +1,637 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Demo module autosuggestion</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<script type="text/javascript" src="z.js"></script>
+	<script>zjs.require('autosuggestion');</script>
+	
+	<style>
+		body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#f0f0f0;}
+		.wrapper{width:900px;margin:0 auto;padding-bottom:50px;}
+		table{border-collapse: collapse;width:100%;}
+		table tr{vertical-align: top;}
+		table td{border:1px solid #ccc;padding:5px;}
+		pre{margin:0;padding:3px;background:#fff;color:#111;}
+		code{font-weight:bold;}
+		
+		.textinput{font-family:arial;padding:5px;border:1px solid #777;font-size:16px;width:300px;background:#eee;border-radius:3px;color:#333;box-shadow:inset 0px 1px 4px -1px rgba(0,0,0,0.6);}
+		
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+	
+		<div style="position:fixed;width:900px;padding:40px 0;border-bottom:2px solid #ddd;background:#f0f0f0;">
+	
+			<input class="autosuggestion" type="text" value="" placeholder="type something to search..." />
+			
+		</div>
+		
+		<div style="padding-top:120px;">
+			
+			<h1>API</h3>
+			
+			<h2>makeAutosuggestion</h2>
+			<p>Khởi tạo một input có chức năng auto suggest</p>
+			<i>cú pháp:</i>
+			<p><code>zjs::makeAutosuggestion(<i>object</i> option)</code></p>
+			<b>option:</b>
+			<table>
+				<tr>
+					<td>minlength</td>
+					<td>int</td>
+					<td>Độ dài tối thiểu của chuỗi nhập vào để bắt đầu tìm kiếm.</br>
+						<i>mặc định:</i>
+						<pre>minlength: 1</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>customcss</td>
+					<td>bool</td>
+					<td>Set là <code>true</code> nếu muốn sử dụng file css để chỉnh style cho inputbox </br> nếu là <code>false</code> thì style của inputbox sẽ được tự động điều chỉnh.</br>
+						<i>mặc định:</i>
+						<pre>customcss: false</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>panelmaxheight</td>
+					<td>int</td>
+					<td>Chiều cao tối đa của panel chứa các suggest.</br>
+						<i>mặc định:</i>
+						<pre>panelmaxheight: 200</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>source</td>
+					<td>array object string</td>
+					<td>Chứa các giá trị suggest.</br>
+						<i>vd:</i></br>
+						<pre>source:'string 1'</pre>
+						<pre>source:['string 1', 'string 2']</pre>
+						<pre>source:{text:'string 1'}</pre>
+						<pre>source:{text:'string 1', custom:'any', custom2:'any'}</pre>
+						<pre>source:[{text:'string 1'}, {text:'string 2'}]</pre>
+						<pre>source:[text:'string 1', custom:'any'}, {text:'string 2', custom:'any'}]</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>itemtemplate</td>
+					<td>string function</td>
+					<td>Quy định template cho một mục chọn trong panel suggest.</br>
+						<i>mặc định:</i>
+						<pre>itemtemplate: '&lt;div class="item"&gt;${text}&lt;/div&gt;'</pre>
+						trong đó <code>${text}</code> sẽ được replace bằng giá trị <code>text</code> như trên <code>source</code> truyền vào.</br></br>
+						cũng có thể dùng function thay cho string:
+						<pre>itemtemplate: function(data){
+    return '&lt;div class="item"&gt;name:'+data.text+' id:'+data.custom+'&lt;/div&gt;'
+}</pre>
+						trong đó <code>data</code> là một object như trên <code>source</code> truyền vào.
+					</td>
+				</tr>
+				
+				<tr>
+					<td>itemhighlightclass</td>
+					<td>string</td>
+					<td>Class của một item trong panel suggest khi được highlight.</br>
+						<i>mặc định:</i>
+						<pre>itemhighlightclass: 'highlight'</pre>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>onHighlight</td>
+					<td>function</td>
+					<td>Sự kiện được gọi khi một item trong panel suggest được highlight lên.</br>
+						<i>mặc định:</i>
+						<pre>onHighlight: function(data){}</pre>
+						trong đó <code>data</code> là một object chứa các thông tin ứng với giá trị đang được highlight
+					</td>
+				</tr>
+				
+				<tr>
+					<td>onEnter</td>
+					<td>function</td>
+					<td>Sự kiện được gọi khi ấn <b>enter</b> hoặc <b>tab</b>.</br>
+						<i>mặc định:</i>
+						<pre>onEnter: function(data){}</pre>
+						trong đó <code>data</code> là một object chứa các thông tin ứng với giá trị đang được chọn
+					</td>
+				</tr>
+			
+			</table>
+			
+			
+			<h2>autosuggestionAddindex</h2>
+			<p>thêm vào các giá trị tìm kiếm</p>
+			<i>cú pháp:</i>
+			<p><code>zjs::autosuggestionAddindex(<i>string</i>)</code></p>
+			<p><code>zjs::autosuggestionAddindex(<i>object</i>)</code></p>
+			<p><code>zjs::autosuggestionAddindex(<i>array</i>)</code></p>
+			
+			<i>vd:</i>
+			<pre>zjs('#id').autosuggestionAddindex('string 1')</pre>
+			<pre>zjs('#id').autosuggestionAddindex(['string 1', 'string 2'])</pre>
+			<pre>zjs('#id').autosuggestionAddindex({text:'string 1'})</pre>
+			<pre>zjs('#id').autosuggestionAddindex({text:'string 1', custom:'any', custom2:'any'})</pre>
+			<pre>zjs('#id').autosuggestionAddindex([{text:'string 1'}, {text:'string 2'}])</pre>
+			<pre>zjs('#id').autosuggestionAddindex([text:'string 1', custom:'any'}, {text:'string 2', custom:'any'}])</pre>
+			
+			<h2>autosuggestionRemoveindex</h2>
+			<p>loại bỏ các giá trị tìm kiếm</p>
+			<i>cú pháp:</i>
+			<p><code>zjs::autosuggestionRemoveindex(<i>string</i> query, <i>function</i> confirm)</code></p>
+			
+			<i>giải thích:</i>
+			<p>function <code>confirm</code> phải return về <code>true</code> thì mới thực hiện gỡ bỏ các giá trị tìm được trong câu <code>query</code>, và nếu như không được truyền vào thì mặc định sẽ được hiểu là:</p>
+			<pre>confirm = function(data){return true}</pre>
+			
+			<p><i>vd:</i></p>
+			<p>loại bỏ tất cả các giá trị có chứa cụm từ <code>'huy'</code></p>
+			<pre>zjs('#id').autosuggestionRemoveindex('huy')</pre>
+			
+			<p>loại bỏ tất cả các giá trị có chứa cụm từ <code>'phan dang huy'</code> và có <code>id = 10</code></p>
+			<pre>zjs('#id').autosuggestionRemoveindex('phan dang huy', function(data){return data.id==10})</pre>
+			
+			<p>loại bỏ tất cả các giá trị có chứa cụm từ <code>'phan dang huy'</code> và không có <code>id</code></p>
+			<pre>zjs('#id').autosuggestionRemoveindex('phan dang huy', function(data){return typeof data.id=='undefined'})</pre>
+			</br>
+			
+			<!-- - - -->
+			
+			<h1>DEMO</h1>
+			
+			<h2>Nhúng</h2>
+			<pre>
+&lt;link rel="stylesheet" type="text/css" href="//static.april.com.vn/css/z.module.autosuggestion.css" /&gt;
+&lt;script type="text/javascript" src="//static.april.com.vn/js/z.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="//static.april.com.vn/js/z.module.autosuggestion.js"&gt;&lt;/script&gt;</pre>
+			
+			<h2>Khởi tạo nhanh với default option</h2>
+			<p>chỉ cần đặt class <b>zautosuggestion</b> là xong, không cần viết bất kỳ code javascript nào</p>
+			<pre>
+&lt;input type="text" class="<b>zautosuggestion</b>" value="" 
+       data-option="source:['Tuan Luong Hoang', 'Khanh Nguyen', 'Khoa Luong', ...]" /&gt;</pre>
+		
+			<!-- - - -->
+		
+			<h2>Khởi tạo kết hợp giữa html và javascript</h2>
+			<p>khai báo các option trong html và sau đó gọi hàm khởi tạo cùng với khai báo các sự kiện trong code javascript</p>
+			<pre>
+&lt;input type="text" value="" data-option="minlength:1, customcss:true, panelmaxheight:200, 
+                                         source:['Tuan Luong Hoang', 'Khanh Nguyen', 'Khoa Luong', ...]" /&gt;
+
+&lt;script&gt;
+zjs('input')
+    .makeAutosuggestion({
+        onHighlight: function(data){console.log('highlight:', data);},
+        onEnter: function(data){console.log('enter: ', data);}
+    });
+&lt;/script&gt;</pre>
+			<!-- - - -->
+			
+			<h2>Khởi tạo giống như thanh search trên cùng</h2>
+			<p>đặt tất cả mọi thứ bên trong code javascript</p>
+			<pre>
+&lt;input type="text" value="" placeholder="type something to search..." /&gt;
+
+&lt;script&gt;
+
+var source = [
+    {id:8371633, text:'Tuan Luong Hoang'},
+    {id:19101998, text:'Khanh Nguyen'},
+    ...
+];		
+			
+zjs('input')
+    // init
+    .makeAutosuggestion({
+        minlength: 1,
+        customcss: true,
+        panelmaxheight: 200,
+        source: source,
+        itemtemplate: '&lt;div class="item"&gt;${text} (&lt;i&gt;${id}&lt;/i&gt;)&lt;/div&gt;',
+        itemhighlightclass: 'highlight',
+        onHighlight: function(data){console.log('highlight:', data);},
+        onEnter: function(data){console.log('enter: ', data);}
+    })
+    // add more data
+    .autosuggestionAddindex('phan dang huy')
+    .autosuggestionAddindex({text:'phan dang huy', name:'huy', link:'keke'})
+    .autosuggestionAddindex(['phan dang huy', 'tuzebra'])
+    .autosuggestionAddindex([{text:'phan dang huy', id:1}, {text:'tuzebra', id:2}])
+    // remove data
+    .autosuggestionRemoveindex('phan dang huy', function(data){return typeof data.id == 'undefined'});
+&lt;/script&gt;</pre>
+			
+		</div>
+		
+	</div>
+</body>
+</html>
+
+<script>
+zjs(function(){
+	// init auto suggestion
+	zjs('.autosuggestion').makeAutosuggestion({
+		minlength: 1,
+		customcss: true,
+		panelmaxheight: 200,
+		source: source,
+		itemtemplate: '<div class="item">${text} (<i>${id}</i>)</div>',
+		itemhighlightclass: 'highlight'
+	});
+	
+	// add more data
+	zjs('.autosuggestion').autosuggestionAddindex('phan dang huy');
+	zjs('.autosuggestion').autosuggestionAddindex({text:'phan dang huy', name:'huy', link:'keke'});
+	zjs('.autosuggestion').autosuggestionAddindex(['phan dang huy', 'tuzebra']);
+	zjs('.autosuggestion').autosuggestionAddindex([{text:'phan dang huy', id:1}, {text:'tuzebra', id:2}]);
+	
+	// remove data
+	zjs('.autosuggestion').autosuggestionRemoveindex('phan dang huy', function(data){return typeof data.id == 'undefined'});
+	
+	// bind event
+	zjs('.autosuggestion')
+		.on('autosuggestion.highlight', function(event, element){console.log('highlight:', event.data)})
+		.on('autosuggestion.choice', function(event, element){console.log('choice:', event.data)});
+	
+});
+
+var source1 = [
+	'Tuan Luong Hoang', 
+	'Khanh Nguyen', 
+	'Lac Su', 
+	'Mint Ice', 
+	'Nguyen Giap', 
+	'Khoa Luong', 
+	'Hao Chanh', 
+	'Khoa Ma', 
+	'Ninh Le', 
+	'Sirius Son Tran', 
+	'Ngoc Hiep', 
+	'Chichi Chanchan', 
+	'Absolut Jeremy'
+];
+
+var source2 = [
+	{text:'Tuan Luong Hoang'}, 
+	{text:'Khanh Nguyen'}, 
+	{text:'Lac Su'}, 
+	{text:'Mint Ice'}, 
+	{text:'Nguyen Giap'}, 
+	{text:'Khoa Luong'}, 
+	{text:'Hao Chanh'}, 
+	{text:'Khoa Ma'}, 
+	{text:'Ninh Le'}, 
+	{text:'Sirius Son Tran'}, 
+	{text:'Ngoc Hiep'}, 
+	{text:'Chichi Chanchan'}, 
+	{text:'Absolut Jeremy'}
+];
+
+var source = [
+	{id:8371633, text:'Tuan Luong Hoang'},
+	{id:19101998, text:'Khanh Nguyen'},
+	{id:507121153, text:'Lac Su'},
+	{id:509941729, text:'Ailien Tran'},
+	{id:517032019, text:'Mint Ice'},
+	{id:518817256, text:'Mai Thuc Quyen'},
+	{id:519675318, text:'Tran Truong'},
+	{id:521291635, text:'Nguyen Giap'},
+	{id:521826769, text:'Khoa Luong'},
+	{id:529969656, text:'Hao Chanh'},
+	{id:548332403, text:'Khoa Ma'},
+	{id:548627652, text:'Ninh Le'},
+	{id:549058060, text:'Sirius Son Tran'},
+	{id:562017554, text:'Ngoc Hiep'},
+	{id:563072599, text:'Chichi Chanchan'},
+	{id:563347161, text:'Absolut Jeremy'},
+	{id:576426412, text:'Doc Bernie Duff'},
+	{id:581660545, text:'Xuan Khanh Nguyen'},
+	{id:581686279, text:'Vinh Thái Nguyen'},
+	{id:585664791, text:'Vu Louis Dang'},
+	{id:588548112, text:'Thai Mup'},
+	{id:590837774, text:'HongAn Tran'},
+	{id:598512877, text:'Tuan Hue Thi'},
+	{id:601608835, text:'Huong Diem Le'},
+	{id:601802543, text:'Tam Vu Nguyen'},
+	{id:621431526, text:'Phạm Đăng Duy'},
+	{id:634696253, text:'Natalie Nguyen'},
+	{id:648087822, text:'Tai Huynh'},
+	{id:648176431, text:'Alex Nguyen'},
+	{id:648310033, text:'Tiendat Dinh'},
+	{id:666949240, text:'Trieu Huynh'},
+	{id:676689721, text:'Hang Nguyen'},
+	{id:684376230, text:'Hoang Ngoc -Ruby'},
+	{id:689345283, text:'Khanh-An Nguyen'},
+	{id:689759796, text:'Phu Do'},
+	{id:694862301, text:'Xuan Hoa'},
+	{id:696982244, text:'Hau Ly'},
+	{id:702474810, text:'Ripina Pham'},
+	{id:728387522, text:'Ty Bui'},
+	{id:738200697, text:'Đồng Thủy Tiên'},
+	{id:746864170, text:'Trang Tran'},
+	{id:755873539, text:'Thi Kim Tran Nguyen'},
+	{id:759660395, text:'Nhung Le'},
+	{id:762974635, text:'Dũng Hoàng'},
+	{id:786564457, text:'Van Tran'},
+	{id:793823873, text:'Gà Bụ Bẫm'},
+	{id:813973878, text:'Dang Tran Dinh'},
+	{id:830257862, text:'Thai Nguyet Minh'},
+	{id:846328539, text:'Trần Thị Thu Thảo'},
+	{id:1004696011, text:'Trịnh Ngọc Dũng'},
+	{id:1016635376, text:'Nguyễn Lộc'},
+	{id:1025238802, text:'LayHeong Ho'},
+	{id:1031031397, text:'Jacky Huynh'},
+	{id:1042525510, text:'Andrew Nguyen'},
+	{id:1042677148, text:'Man Nguyen'},
+	{id:1049090627, text:'Duong Quynh Anh'},
+	{id:1068994784, text:'Lê Đào Nguyên'},
+	{id:1078031287, text:'Huynh Phuong'},
+	{id:1095828786, text:'Minh Le'},
+	{id:1096959418, text:'Nguyễn Hoàng Dũng'},
+	{id:1099867668, text:'Lê Giản Đơn'},
+	{id:1101405309, text:'Trí Quyền'},
+	{id:1108431786, text:'Uenx Cre'},
+	{id:1120746019, text:'Nguyen Phong'},
+	{id:1142651331, text:'Lilly Dee-Dee Nguyen'},
+	{id:1146617481, text:'Lê Nguyễn Bảo Ngọc'},
+	{id:1197520688, text:'Gấu Mèo Đại Hiệp'},
+	{id:1200584541, text:'Trâm Đinh'},
+	{id:1219592090, text:'Duykhanh Tran'},
+	{id:1226111163, text:'Jos Long'},
+	{id:1236944373, text:'Nguyễn Duy Nhật Tín'},
+	{id:1279493075, text:'Ngo Hoang Truc'},
+	{id:1289815314, text:'Ly Va'},
+	{id:1312944561, text:'A Zaney-zaney Pham'},
+	{id:1315102742, text:'Lam Tran'},
+	{id:1334362162, text:'Tuan Anh Nguyen'},
+	{id:1340782199, text:'Khả Hân'},
+	{id:1380025552, text:'Vu Duy Khanh'},
+	{id:1432765827, text:'Thang Than'},
+	{id:1465023326, text:'Nguyen Ba Tu Nam'},
+	{id:1471771066, text:'Chuong Nguyen'},
+	{id:1477598533, text:'Nhật Sinh'},
+	{id:1488184148, text:'Le Huynh Nhut Hai'},
+	{id:1493738557, text:'Nguyen Duc Tuan'},
+	{id:1504284693, text:'Jil Poepperling'},
+	{id:1506882529, text:'Max Ngô'},
+	{id:1533794393, text:'Kelvin Hung Ly'},
+	{id:1544537667, text:'Thông Phạm'},
+	{id:1589927421, text:'Hien Thuong Do'},
+	{id:1598506567, text:'Aitch TeaTee'},
+	{id:1629916619, text:'Nate River'},
+	{id:1638461851, text:'Nguyễn Hữu Tuân'},
+	{id:1642572704, text:'Zika RM'},
+	{id:1656715440, text:'Hoàng Trương'},
+	{id:1672104732, text:'Thịnh Quang'},
+	{id:1672764727, text:'An Lam'},
+	{id:1673514731, text:'Lệ Huyền'},
+	{id:1676754706, text:'Hoài Anh'},
+	{id:1677894982, text:'Huy Thai'},
+	{id:1678910996, text:'Tô Hiền Sỹ'},
+	{id:1681944766, text:'Nguyễn Đình Chính'},
+	{id:1683324797, text:'NT Nghia'},
+	{id:1687014577, text:'Thanh Hằng'},
+	{id:1697139476, text:'Neiht Neyugn'},
+	{id:1715137134, text:'Tran Dieu Thuy'},
+	{id:1721296141, text:'Tpk Duc Trong'},
+	{id:1725384217, text:'Po Ki'},
+	{id:1760600365, text:'Isabella My My'},
+	{id:1763832072, text:'Vu Khanh'},
+	{id:1771156208, text:'Lê Hoài Vũ'},
+	{id:1780178650, text:'Thơm Lê'},
+	{id:1782888545, text:'GA Con'},
+	{id:1789223610, text:'Nguyễn Vũ Khánh Minh'},
+	{id:1795654485, text:'Rin Lê'},
+	{id:1796162172, text:'Trang Kofi'},
+	{id:1797621405, text:'Teresa Nguyen Phuoc'},
+	{id:1805315211, text:'Ngoc Long'},
+	{id:1805326215, text:'Nguyễn Trương Thành Tâm'},
+	{id:1808395747, text:'Long Nguyen Vu'},
+	{id:1812350281, text:'Huỳnh Lê'},
+	{id:1833810788, text:'Thanh Thao'},
+	{id:1834271379, text:'Quoc Khanh'},
+	{id:1839360357, text:'Nguyen Thi Xuan Huyen'},
+	{id:100000011454734, text:'Trần Quang Ngọc Khoa'},
+	{id:100000029871264, text:'Nguyễn Vương Linh'},
+	{id:100000041576534, text:'Nguyen Vy'},
+	{id:100000051031870, text:'Hanh Lam'},
+	{id:100000051134637, text:'Lee Han'},
+	{id:100000061929179, text:'Bùi Quang Công'},
+	{id:100000082803959, text:'Nguyen Minh Nhut'},
+	{id:100000083028267, text:'Nely Mỹ Liên'},
+	{id:100000101657300, text:'Tina Tran'},
+	{id:100000106046480, text:'Heo Way'},
+	{id:100000106629231, text:'Ksor Taeo'},
+	{id:100000111845672, text:'Ty Grass'},
+	{id:100000114196785, text:'Lê Tình'},
+	{id:100000119822589, text:'Nguyễn Hữu Bình'},
+	{id:100000122774199, text:'Lưu Nghĩa Hòa'},
+	{id:100000125645966, text:'Penny Phan'},
+	{id:100000132523901, text:'QuynhNhung Nguyen'},
+	{id:100000132800345, text:'Hiền Lê'},
+	{id:100000134029927, text:'Hoangquan Luunguyen'},
+	{id:100000147018837, text:'Yang Lê'},
+	{id:100000147634604, text:'Van Lam'},
+	{id:100000158912719, text:'Ngọc Thương'},
+	{id:100000164095516, text:'Quynh Le'},
+	{id:100000168896983, text:'Duy Chung'},
+	{id:100000183634571, text:'Phung Quoc Trieu Trieu'},
+	{id:100000188308903, text:'Ngoc Le'},
+	{id:100000190200553, text:'Mike Du'},
+	{id:100000195076491, text:'Hoàng Liên'},
+	{id:100000198977084, text:'Vũ Nguyễn'},
+	{id:100000203530752, text:'Lương Trung'},
+	{id:100000210414852, text:'Thúy Thúy Hoàng Lê'},
+	{id:100000213338920, text:'Thao Pham'},
+	{id:100000217005258, text:'Duy Hải Đặng'},
+	{id:100000222952885, text:'Asari Phạm'},
+	{id:100000231521481, text:'Đậu Thu Hà'},
+	{id:100000235306939, text:'Thái Hòa'},
+	{id:100000253193878, text:'Dan Nguyentruong'},
+	{id:100000259570389, text:'Pis Do'},
+	{id:100000272853436, text:'Thư Phạm'},
+	{id:100000273077321, text:'Trung Hau Luong'},
+	{id:100000275842615, text:'Minh Hương'},
+	{id:100000276248422, text:'Sữa Bắp'},
+	{id:100000296860129, text:'Thuyen Dinh Nhat Le'},
+	{id:100000300558669, text:'Walias Phong'},
+	{id:100000306781191, text:'Pham Phi Long'},
+	{id:100000333652555, text:'Minh Kat'},
+	{id:100000334008981, text:'Vũ Thanh Lai'},
+	{id:100000336562975, text:'Su Shi'},
+	{id:100000337243641, text:'Ngoc Linh Nguyen'},
+	{id:100000379151225, text:'Phan Tú'},
+	{id:100000386916549, text:'Pé Trang'},
+	{id:100000403291054, text:'Hoang Phuc'},
+	{id:100000413042973, text:'Hỏ Choẹt'},
+	{id:100000415372691, text:'Ngoc Lan'},
+	{id:100000431155253, text:'Nguyễn Bảo Tâm'},
+	{id:100000446092594, text:'Mì Tôm'},
+	{id:100000447010285, text:'Lê Quang Duy'},
+	{id:100000451685031, text:'Trần Phi Yến'},
+	{id:100000456105535, text:'Lê Đức Dũng'},
+	{id:100000456461741, text:'Phm Tong'},
+	{id:100000463684256, text:'Rosella Nguyen'},
+	{id:100000463691021, text:'Saimy Jim'},
+	{id:100000482135818, text:'Vu Tran'},
+	{id:100000483462257, text:'Tram Nguyen'},
+	{id:100000485982132, text:'Hong Ngoc Nguyen'},
+	{id:100000514423706, text:'Trang An Nhữ'},
+	{id:100000526038949, text:'Vinh Pham Xuan'},
+	{id:100000561774152, text:'Huỳnh Đình Lân'},
+	{id:100000603237294, text:'Fuc Art'},
+	{id:100000607172367, text:'Phuong Ngoan'},
+	{id:100000615999001, text:'Jang Khìn'},
+	{id:100000621863778, text:'Ares Nguyen'},
+	{id:100000660805831, text:'Dương Công Đức'},
+	{id:100000664990720, text:'Ông Lê Quân'},
+	{id:100000700170433, text:'Neros Hoàng'},
+	{id:100000721322757, text:'Dũng Nguyễn'},
+	{id:100000725344226, text:'Bé Lê'},
+	{id:100000767656147, text:'Bạch Tiểu Miu'},
+	{id:100000775547225, text:'Jimmy Quan'},
+	{id:100000813262137, text:'Trân Lê'},
+	{id:100000851240650, text:'Cường Nguyễn'},
+	{id:100000865768434, text:'Vo Hang'},
+	{id:100000935932747, text:'Mụ Mông Mỏng'},
+	{id:100000960616515, text:'TraMy Pham'},
+	{id:100000965164752, text:'Cường Nguyễn'},
+	{id:100000982263099, text:'Cộng Đồng Đức Trọng'},
+	{id:100000996072820, text:'Chinsu Su'},
+	{id:100001012594151, text:'Lê Trần Hải Yến'},
+	{id:100001024017698, text:'Nhóc Aji'},
+	{id:100001041051453, text:'Ún Aholic'},
+	{id:100001041321192, text:'Thu Le'},
+	{id:100001054516706, text:'Trần Thị Minh Nga'},
+	{id:100001057581632, text:'Hau Duong'},
+	{id:100001058173760, text:'Noctis Lucius Caelum'},
+	{id:100001064522061, text:'Gà Thuần Khiết'},
+	{id:100001096837942, text:'Haiyen Dang'},
+	{id:100001101163760, text:'Trương Tiến Thành'},
+	{id:100001106538457, text:'Nguyen Sanh'},
+	{id:100001107504910, text:'Beta Ateb'},
+	{id:100001124490920, text:'Tinh Tế'},
+	{id:100001150835354, text:'Ken Qng'},
+	{id:100001151787875, text:'Bùi Đức'},
+	{id:100001156522232, text:'Le Na Nguyen Tran'},
+	{id:100001193818293, text:'Thang Pham'},
+	{id:100001197186814, text:'Ngọc Ánh'},
+	{id:100001227211442, text:'Sơn Nguyễn'},
+	{id:100001245030393, text:'Thao Thu'},
+	{id:100001258450919, text:'Nhân Trí'},
+	{id:100001274922379, text:'Field Nguyen'},
+	{id:100001322027464, text:'Hero Cảnh'},
+	{id:100001344108546, text:'Thanh Nguyen'},
+	{id:100001345515218, text:'Thiện Thuật Nguyễn'},
+	{id:100001372383903, text:'Ông Chồng Nhỏ'},
+	{id:100001397313262, text:'Keep Ngoan Hiền'},
+	{id:100001399522907, text:'Quangcanh Nguyen'},
+	{id:100001416105688, text:'Lê Thanh Kiều'},
+	{id:100001430183421, text:'Anh Tân'},
+	{id:100001432286161, text:'Cuong Trinh Quoc'},
+	{id:100001432526207, text:'Anh Thư'},
+	{id:100001433300036, text:'Phan Hữu Huy'},
+	{id:100001437469017, text:'Chris Chau'},
+	{id:100001448397007, text:'Đá Thủy Tinh'},
+	{id:100001454455660, text:'Lap Nguyen'},
+	{id:100001503960580, text:'Thịnh Trần'},
+	{id:100001512905618, text:'Bi Bướng Bỉnh'},
+	{id:100001552545555, text:'Envy Phung'},
+	{id:100001556072741, text:'Minh Tam'},
+	{id:100001578133768, text:'Nguyễn Ngọc Tuyết Anh'},
+	{id:100001600227287, text:'Cao Thị Thái'},
+	{id:100001624644098, text:'Hương Trần'},
+	{id:100001627464664, text:'Khoa Tôn'},
+	{id:100001646190068, text:'Ngọc Giang Nguyễn'},
+	{id:100001653848992, text:'Tam Hảo'},
+	{id:100001672248326, text:'Khoa Nguyễn'},
+	{id:100001680750508, text:'Nhã Đoàn'},
+	{id:100001700843055, text:'Phạm Lê Thúy Hằng'},
+	{id:100001703160602, text:'Thế Phan'},
+	{id:100001720646152, text:'Vy Nguyễn'},
+	{id:100001742364789, text:'Toan Pham'},
+	{id:100001749140338, text:'Thi Ngây Thơ'},
+	{id:100001752211852, text:'Bao Tram Nguyen'},
+	{id:100001757096175, text:'Meme Nguyễn'},
+	{id:100001778921727, text:'Kenji Nguyen'},
+	{id:100001792389637, text:'Nhóc Ch'},
+	{id:100001797685076, text:'Nguyễn Nữ Đô Thành'},
+	{id:100001804546235, text:'Út Quyên'},
+	{id:100001805740866, text:'Anniboy Lee'},
+	{id:100001807056110, text:'Le Thanh Binh'},
+	{id:100001811450840, text:'Mai Surie-pé Su'},
+	{id:100001824741921, text:'Hien Phan Thi Thu'},
+	{id:100001833876716, text:'Hđh Hiệp Thạnh'},
+	{id:100001835756620, text:'Đình Ngọc'},
+	{id:100001861920432, text:'Bùi Thị Xuân Nguyên'},
+	{id:100001868097518, text:'Hanhhieu Phanthi'},
+	{id:100001878309960, text:'Đàm Vān Hiệp'},
+	{id:100001892861579, text:'Khoa Anh'},
+	{id:100001901889758, text:'Kiao Jung'},
+	{id:100001953693621, text:'Kin Do'},
+	{id:100002088008796, text:'Hồ Ly Tiên Sinh'},
+	{id:100002096419954, text:'Phạm Thủy'},
+	{id:100002133718646, text:'Pé Mon'},
+	{id:100002209346104, text:'Nguyễn Thị Kim Ngân'},
+	{id:100002335661120, text:'Nguyen Lan'},
+	{id:100002442987182, text:'Duong Hoang'},
+	{id:100002516322232, text:'Dang Nguyen'},
+	{id:100002637201869, text:'Glass Rainbow'},
+	{id:100002702836531, text:'Đặng Đăng Khoa'},
+	{id:100002759986291, text:'Ry Phan'},
+	{id:100002810082278, text:'Huy Tôn'},
+	{id:100002869757467, text:'Huệ Trương'},
+	{id:100002870080684, text:'Huong Luu My Bui'},
+	{id:100002910071086, text:'Nina Thao Tran'},
+	{id:100002917766642, text:'Tâm Bảo Nguyễn'},
+	{id:100002930917673, text:'Quyen Nguyen'},
+	{id:100002954960603, text:'Haha Popo'},
+	{id:100002970738216, text:'Hoang Thanh Hieu'},
+	{id:100002984883652, text:'Loc Huynh Dai'},
+	{id:100003001015693, text:'Phương Minh Nguyễn'},
+	{id:100003069326065, text:'Gin Tequila'},
+	{id:100003086658692, text:'Trang Truong'},
+	{id:100003090952069, text:'Le Nguyen My'},
+	{id:100003113641191, text:'Khang Huỳnh'},
+	{id:100003125874266, text:'Tinhyeu Thiensu'},
+	{id:100003130138537, text:'Liên Phạm'},
+	{id:100003130662091, text:'Phạm Hiếu'},
+	{id:100003132287259, text:'Duy Dẻo Dai'},
+	{id:100003145681781, text:'Nguyễn Hoàng Dũng'},
+	{id:100003167271906, text:'Thao Nguyen Juli'},
+	{id:100003184050201, text:'Duy Nguyen'},
+	{id:100003187297272, text:'Lanthao Maingoc'},
+	{id:100003213833010, text:'Ngọc Huyền Phan Lê'},
+	{id:100003232845561, text:'Tao Xanh'},
+	{id:100003267409876, text:'Lori Phạm'},
+	{id:100003316445767, text:'Jupasu Man'},
+	{id:100003319988818, text:'Pé Lyn'},
+	{id:100003622430571, text:'Nguyễn Thị Mỹ Linh'},
+	{id:100003719427893, text:'Phuong Nguyen'},
+	{id:100003725619740, text:'Nghiêm Đỗ'},
+	{id:100003734448896, text:'GD Top'},
+	{id:100003820672927, text:'Thảo Phan'},
+	{id:100003824005143, text:'Duyên Trần'},
+	{id:100004215842626, text:'Mơ Mộng'},
+	{id:100004221335055, text:'Tran Khanhtranbusney'},
+	{id:100004266330056, text:'Thếgiới Khôngtìnhyêu'},
+	{id:100004343650817, text:'Izy Phan'},
+	{id:100004404034776, text:'Khoa Đặng'},
+	{id:100004406436863, text:'Thuy Dung'},
+	{id:100004445079473, text:'Hana Lana'},
+	{id:100004457349573, text:'Isabella Linh'},
+	{id:100004711299270, text:'Thành Nhân'},
+	{id:100004958109771, text:'Nu Đầu Gấu'}
+];
+
+</script>

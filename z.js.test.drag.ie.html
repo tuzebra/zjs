@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>test zjs drag</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		
+		<style>div{position:fixed;background:blue;top:100px;left:100px;width:200px;height:200px;}</style>
+		
+		<script type="text/javascript" src="z.js" data-debug="true"></script>
+		
+		<script>
+			zjs.onready(function(){
+			
+				var a = document.getElementById('div1');
+				
+				a.attachEvent('onmousedown', function(event){
+					event = window.event;
+					alert(event.clientX);
+				});
+				
+			});
+		</script>
+		
+	</head>
+	
+	<body>
+		
+		<div id="div1"></div>
+		
+	</body>
+</html>

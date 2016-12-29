@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" class="flat">
+<head>
+	<title>zjs UI - Popup with animated</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="../../z.js" data-debug="true" data-theme="lee"></script>
+	<script>
+		zjs.onready('ui.popup, ui.hovercard', function(){
+			zjs('#button_popup_none').click(function(){zjs('#popup_none').popupShow()});
+			zjs('#button_popup_fade').click(function(){zjs('#popup_fade').popupShow()});
+			zjs('#button_popup_fadeInDown_fadeOutUp').click(function(){zjs('#popup_fadeInDown_fadeOutUp').popupShow()});
+			zjs('#button_popup_zoomIn_zoomOut').click(function(){zjs('#popup_zoomIn_zoomOut').popupShow()});
+			zjs('#button_popup_bounceIn_bounceOut').click(function(){zjs('#popup_bounceIn_bounceOut').popupShow()});
+			zjs('#button_popup_bounceInDown_bounceOutUp').click(function(){zjs('#popup_bounceInDown_bounceOutUp').popupShow()});
+			zjs('#button_popup_rollIn_rollOut').click(function(){zjs('#popup_rollIn_rollOut').popupShow()});
+			zjs('#button_popup_bounceIn_fadeOutUp').click(function(){zjs('#popup_bounceIn_fadeOutUp').popupShow()});
+			zjs('#button_popup_wobble').click(function(){zjs('#popup_wobble').popupShow()});
+			zjs('#button_popup_rubberBand').click(function(){zjs('#popup_rubberBand').popupShow()});
+			zjs('#button_popup_tada').click(function(){zjs('#popup_tada').popupShow()});
+			zjs('#button_popup_hinge').click(function(){zjs('#popup_hinge').popupShow()});
+			zjs('#button_popup_fadein_scale').click(function(){zjs('#popup_fadein_scale').popupShow()});
+			zjs('#button_popup_slideInRight').click(function(){zjs('#popup_slideInRight').popupShow()});
+			zjs('#button_popup_slideInBottom').click(function(){zjs('#popup_slideInBottom').popupShow()});
+			zjs('#button_popup_newsPaper').click(function(){zjs('#popup_newsPaper').popupShow()});
+			zjs('#button_popup_Fall').click(function(){zjs('#popup_Fall').popupShow()});
+			zjs('#button_popup_SlideDown').click(function(){zjs('#popup_SlideDown').popupShow()});
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	.header {
+		background: #D94839;
+		width: 100%;
+		color: #fff;
+	}
+	h1 {margin: 0px; font-size: 60px}
+	p {padding: 0px; margin: 0px;}
+	.wrapper{width:960px;margin:0 auto;padding:20px 0;}
+	label{color:red;}
+	.zpopup{width:60%;}
+	body .zui-popup-page-cover{background: rgba(0, 0, 0, 0.8);opacity: 1;}
+	body .zui-popup{border: 0;box-shadow: 0 1px 28px -6px rgba(0, 0, 0, 0.8);border-radius: 6px;}
+	</style>
+	
+	<link type="text/css" rel="stylesheet" href="lee.button.css" />
+	<link type="text/css" rel="stylesheet" href="z.module.ui.popup.css" />
+	
+</head>
+<body>
+	
+	<div class="header">
+		<div class="wrapper">
+			<h1>Zjs</h1>
+			<p>Some inspiration for different modal window appearances</p>
+		</div>
+	</div>
+	
+	<div class="wrapper">
+			
+		<div>
+			<a class="zbutton" id="button_popup_none">none</a>
+			<a class="zbutton" id="button_popup_fade">fade</a>
+			<a class="zbutton" id="button_popup_fadeInDown_fadeOutUp">fadeInDown fadeOutUp</a>
+			<a class="zbutton" id="button_popup_zoomIn_zoomOut">zoomIn zoomOut</a>
+			<a class="zbutton" id="button_popup_bounceIn_bounceOut">bounceIn bounceOut</a>
+			<a class="zbutton" id="button_popup_bounceInDown_bounceOutUp">bounceInDown bounceOutUp</a>
+			<a class="zbutton" id="button_popup_rollIn_rollOut">rollIn rollOut</a>
+			<a class="zbutton" id="button_popup_bounceIn_fadeOutUp">bounceIn fadeOutUp</a>
+			<a class="zbutton" id="button_popup_wobble">wobble bounceOut</a>
+			<a class="zbutton" id="button_popup_rubberBand">rubberBand bounceOut</a>
+			<a class="zbutton" id="button_popup_tada">tada bounceOut</a>
+			<a class="zbutton" id="button_popup_hinge">bounceIn hinge</a>
+			<a class="zbutton" id="button_popup_fadein_scale">FadeIn & Scale</a>
+			<a class="zbutton" id="button_popup_slideInRight">Slide in (right)</a>
+			<a class="zbutton" id="button_popup_slideInBottom">Slide in (bottom)</a>
+			<a class="zbutton" id="button_popup_SlideDown">Slide Down</a>
+			<a class="zbutton" id="button_popup_newsPaper">Newspaper</a>
+			<a class="zbutton" id="button_popup_Fall">Fall</a>
+		</div>
+		
+		<div class="zpopup" id="popup_none" data-option="fade:false">
+			<h3>Popup with hovercard inside</h3>
+			<p>Lorem ipsum <label class="zhovercard" title="Aenean ipsum purus tristique.">dolor</label> sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst.</p>
+		</div>
+		
+		<div class="zpopup" id="popup_fade" data-option="fade:true,fadeCover:true,fadeTime:600">
+			<h3>Popup with hovercard inside</h3>
+			<p>Lorem ipsum <label class="zhovercard" title="Aenean ipsum purus tristique.">dolor</label> sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst.</p>
+		</div>
+		
+		<div class="zpopup" id="popup_fadeInDown_fadeOutUp" data-option="animate:true,animateName:'fadeInDown fadeOutUp'">
+			<h3>Popup with hovercard inside</h3>
+			<p>Lorem ipsum <label class="zhovercard" title="Aenean ipsum purus tristique.">dolor</label> sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst.</p>
+		</div>
+		
+		<div class="zpopup" id="popup_zoomIn_zoomOut" data-option="animate:true,animateName:'zoomIn zoomOut'">
+			<h3>Popup with hovercard inside</h3>
+			<p>Lorem ipsum <label class="zhovercard" title="Aenean ipsum purus tristique.">dolor</label> sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst.</p>
+		</div>
+		
+		<div class="zpopup" id="popup_bounceIn_bounceOut" data-option="animate:true,animateName:'bounceIn bounceOut'">
+			<h3>Popup with hovercard inside</h3>
+			<p>Lorem ipsum <label class="zhovercard" title="Aenean ipsum purus tristique.">dolor</label> sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst.</p>
+		</div>
+		
+		<div class="zpopup" id="popup_bounceInDown_bounceOutUp" data-option="animate:true,animateName:'bounceInDown bounceOutUp'">
+			<h3>Popup with hovercard inside</h3>
+			<p>Lorem ipsum <label class="zhovercard" title="Aenean ipsum purus tristique.">dolor</label> sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst.</p>
+		</div>
+		
+		<div class="zpopup" id="popup_rollIn_rollOut" data-option="animate:true,animateName:'rollIn rollOut'">
+			<h3>Popup with hovercard inside</h3>
+			<p>Lorem ipsum <label class="zhovercard" title="Aenean ipsum purus tristique.">dolor</label> sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst.</p>
+		</div>
+		
+		<div class="zpopup" id="popup_bounceIn_fadeOutUp" data-option="animate:true,animateName:'bounceIn fadeOutUp'">
+			<h3>Popup with hovercard inside</h3>
+			<p>Lorem ipsum <label class="zhovercard" title="Aenean ipsum purus tristique.">dolor</label> sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst.</p>
+		</div>
+		
+		<div class="zpopup" id="popup_wobble" data-option="animate:true,animateName:'wobble bounceOut'">
+			<h3>Popup with hovercard inside</h3>
+			<p>Lorem ipsum <label class="zhovercard" title="Aenean ipsum purus tristique.">dolor</label> sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst.</p>
+		</div>
+		
+		<div class="zpopup" id="popup_rubberBand" data-option="animate:true,animateName:'rubberBand bounceOut'">
+			<h3>Popup with hovercard inside</h3>
+			<p>Lorem ipsum <label class="zhovercard" title="Aenean ipsum purus tristique.">dolor</label> sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst.</p>
+		</div>
+		
+		<div class="zpopup" id="popup_tada" data-option="animate:true,animateName:'tada bounceOut'">
+			<h3>Popup with hovercard inside</h3>
+			<p>Lorem ipsum <label class="zhovercard" title="Aenean ipsum purus tristique.">dolor</label> sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst.</p>
+		</div>
+		
+		<div class="zpopup" id="popup_hinge" data-option="animate:true,animateName:'bounceIn hinge'">
+			<h3>Popup with hovercard inside</h3>
+			<p>Lorem ipsum <label class="zhovercard" title="Aenean ipsum purus tristique.">dolor</label> sit amet, consectetur adipiscing elit. Proin hendrerit suscipit tincidunt. In hac habitasse platea dictumst.</p>
+		</div>
+		
+		<div class="zpopup" id="popup_fadein_scale" data-option="animate:true,animateName:'fadeInScale fadeOutScale',animateTime:300">
+			<h3>Modal Dialog</h3>
+			<div class="content">
+				<p>This is a modal window. You can do the following things with it:</p>
+				<ul>
+					<li><strong>Read:</strong> modal windows will probably tell you something important so don't forget to read what they say.</li>
+					<li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
+					<li><strong>Close:</strong> click on the button below to close the modal.</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="zpopup" id="popup_slideInRight" data-option="animate:true,animateName:'slideInRight slideOutRight',animateTime:300">
+			<h3>Modal Dialog</h3>
+			<div class="content">
+				<p>This is a modal window. You can do the following things with it:</p>
+				<ul>
+					<li><strong>Read:</strong> modal windows will probably tell you something important so don't forget to read what they say.</li>
+					<li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
+					<li><strong>Close:</strong> click on the button below to close the modal.</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="zpopup" id="popup_slideInBottom" data-option="animate:true,animateName:'slideInBottom slideOutBottom',animateTime:300">
+			<h3>Modal Dialog</h3>
+			<div class="content">
+				<p>This is a modal window. You can do the following things with it:</p>
+				<ul>
+					<li><strong>Read:</strong> modal windows will probably tell you something important so don't forget to read what they say.</li>
+					<li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
+					<li><strong>Close:</strong> click on the button below to close the modal.</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="zpopup" id="popup_newsPaper" data-option="animate:true,animateName:'newsPaperIn newsPaperOut',animateTime:300">
+			<h3>Modal Dialog</h3>
+			<div class="content">
+				<p>This is a modal window. You can do the following things with it:</p>
+				<ul>
+					<li><strong>Read:</strong> modal windows will probably tell you something important so don't forget to read what they say.</li>
+					<li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
+					<li><strong>Close:</strong> click on the button below to close the modal.</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="zpopup" id="popup_SlideDown" data-option="animate:true,animateName:'SlideDownIn SlideDownOut',animateTime:300">
+			<h3>Modal Dialog</h3>
+			<div class="content">
+				<p>This is a modal window. You can do the following things with it:</p>
+				<ul>
+					<li><strong>Read:</strong> modal windows will probably tell you something important so don't forget to read what they say.</li>
+					<li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
+					<li><strong>Close:</strong> click on the button below to close the modal.</li>
+				</ul>
+			</div>
+		</div>
+		
+	</div>
+</body>
+</html>

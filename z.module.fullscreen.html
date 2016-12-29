@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Demo module fullscreen</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		
+		<script type="text/javascript" src="z.js"></script>
+		<script>zjs.require('fullscreen')</script>
+		
+		<script>
+			
+			// run onready
+			zjs.onready(function(){
+				
+				// bind event for button
+				zjs('.full').click(function(){zjs.fullScreen();});
+				zjs('.exit').click(function(){zjs.cancelFullScreen();});
+				
+				// bind event for wrapper
+				zjs('.wrapper').onFullScreen(function(){
+					if(zjs.isFullScreen()){
+						zjs('.full').hide();
+						zjs('.exit').show();
+						return;
+					};
+					
+					zjs('.full').show();
+					zjs('.exit').hide();
+						
+				});
+				
+				// check support
+				if(!zjs.supportsFullScreen){
+					zjs('button').hide();
+				};
+			});
+			
+		</script>
+		
+	</head>
+	
+	<body>
+	
+		<div class="wrapper" style="width:500px;height:300px;background:#aaa;">
+			<p>content here</p>
+			<button class="full">enter fullscreen</button>
+			<button class="exit" style="display:none;">exit fullscreen</button>
+		</div>
+		
+	</body>
+</html>

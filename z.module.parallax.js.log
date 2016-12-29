@@ -1,0 +1,26 @@
+18/03/2014
+	10:00
+		+ chinh sua thu tu code, de thu tu event ra dep nhu the nay:
+		|	parallax.risingsection Object {prevSection: "section2", nextSection: "section3", percent: 0.9988713318284425}
+		|	parallax.risingsection Object {prevSection: "section2", nextSection: "section3", percent: 1}
+		|	parallax.changefullscreensection Object {lastFullScreenSection: "section3", prevFullScreenSection: "section2"}
+		|	parallax.risingsection Object {prevSection: "section3", nextSection: "section4", percent: 0} 
+	
+	11:15
+		+ them vao event "parallax.changefocussection"
+		
+20/03/2014
+	18:30
+		+ them method parallaxScrollToNextSection()
+		
+07/05/2014
+	20:30
+		+ support <a class="zparallax-navigation" data-name="about">About</a>
+
+29/06/2014
+	02:40
+		+ fix zparallax-element to support with/without scrollbar module (top/translate)
+
+06/09/2016
+	12:10
+		+ support indicatorTemplate with prop "name"

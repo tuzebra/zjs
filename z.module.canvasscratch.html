@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Demo module canvas scratch</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<script type="text/javascript" src="z.js"></script>
+	<script>
+		zjs.require('canvasscratch', function(){
+			zjs.canvasscratch.onHit = function(data){
+				alert(data)
+			}
+		});
+	</script>
+	
+	<style>
+		body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:url(images/z.module.canvasscratch.bg.png);}
+		.wrapper{position:relative;width:900px;margin:0 auto;padding-bottom:50px;}		
+		.canvasscratch,.zcanvasscratch{position:absolute;cursor:default;-webkit-user-select:none;text-align:center;}
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+	
+		<div class="zcanvasscratch" style="top:10px;left:20px;width:200px;height:100px;line-height:100px;" data-option="image:'images/z.module.canvasscratch.1.png',data:10000">10000</div>
+		<div class="zcanvasscratch" style="top:10px;left:220px;width:200px;height:100px;line-height:100px;" data-option="image:'images/z.module.canvasscratch.2.png',data:false"></div>
+		<div class="zcanvasscratch" style="top:10px;left:420px;width:200px;height:100px;line-height:100px;" data-option="image:'images/z.module.canvasscratch.3.png',data:false"></div>
+		<div class="zcanvasscratch" style="top:10px;left:620px;width:200px;height:100px;line-height:100px;" data-option="image:'images/z.module.canvasscratch.4.png',data:50000,color:'orange'">50000</div>
+		
+	</div>
+</body>
+</html>

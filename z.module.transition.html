@@ -1,0 +1,409 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Demo module transition</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+		<style>
+			body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#f0f0f0;}
+			.wrapper{width:80%;margin:0 auto;padding-bottom:50px;}
+			textarea{min-width:600px;min-height:100px;}
+			.CodeMirror{height:auto !important;}
+			.testarea{position:relative;height:40px;margin:10px 2px;}
+			h3{font-size:1.5em;margin-top: 50px;}
+			.box{position:absolute;width:40px;height:40px;background:#18c518;border-radius:3px;}
+			.boxb{width:300px;height:100px;background:#82ccb9;margin-right:5px;border-radius:5px;float:left;text-align:center;line-height: 100px;font-size: 50px;color: #927f7f;}
+		</style>
+		
+		<script type="text/javascript" src="z.js" data-debug="false"></script>
+		<script>zjs.require('transition, codeeditor')</script>
+		
+	</head>
+	
+	<body>
+	
+	<div class="wrapper">
+	
+		
+		<h3>khai báo và chạy hiệu ứng nhanh gọn lẹ</h3>
+		<p>sử dụng method <b>playTransition()</b> để khai báo và play</p>
+		<p>sử dụng method <b>stopTransition()</b> để stop</p>
+		<textarea class="zcodeeditor" data-option="readOnly:true">
+<div id="demo1" class="box"></div>
+<script>
+	zjs('#demo1play').click(function(){zjs('#demo1').playTransition({from:{left:0},to:{left:300}})});
+	zjs('#demo1stop').click(function(){zjs('#demo1').stopTransition()});
+</script>
+		</textarea></br>
+		<button id="demo1play">play</button> 
+		<button id="demo1stop">stop</button>
+		<div class="testarea">
+			<div id="demo1" class="box"></div>
+		</div>
+		<script>
+			zjs('#demo1play').click(function(){zjs('#demo1').playTransition({from:{left:0},to:{left:300}})});
+			zjs('#demo1stop').click(function(){zjs('#demo1').stopTransition()});
+		</script>
+		
+		</hr>
+		
+		<h3>khai báo hiệu ứng ngay trong code html</h3>
+		<p>chỉ cần thêm class <strong>ztransition</strong> và sau đó khai báo các thuộc tính inline html code</p>
+		<p>lúc chạy hiệu ứng chỉ cần gọi hàm <b>playTransition()</b> là đủ</p>
+		<textarea class="zcodeeditor" data-option="readOnly:true">
+<div id="demo2" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:false"></div>
+<script>
+	zjs('#demo2play').click(function(){zjs('#demo2').playTransition()});
+	zjs('#demo2stop').click(function(){zjs('#demo2').stopTransition()});
+</script>
+		</textarea></br>
+		<button id="demo2play">play</button>
+		<button id="demo2stop">stop</button>
+		<div class="testarea">
+			<div id="demo2" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:false"></div>
+		</div>
+		<script>
+			zjs('#demo2play').click(function(){zjs('#demo2').playTransition()});
+			zjs('#demo2stop').click(function(){zjs('#demo2').stopTransition()});
+		</script>
+		
+		
+		</hr>
+		
+		<h3>hoạt động với mouse hover event</h3>
+		<p>sử dụng method <b>playTransition()</b> để play</p>
+		<p>sử dụng method <b>reverseTransition()</b> để reverse</p>
+		<textarea class="zcodeeditor" data-option="readOnly:true">
+<div id="demo3wrapper" style="height:100%;background:#ddd;">
+	<div id="demo3" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:false"></div>
+</div>
+<script>
+	zjs('#demo3wrapper').hover(
+		// khi hover vô thì chạy hiệu ứng
+		function(){zjs('#demo3').playTransition()},
+		// khi không hover nữa thì reverse lại hiệu ứng
+		function(){zjs('#demo3').reverseTransition()}
+	);
+</script>
+		</textarea></br>
+		
+		<div class="testarea">
+			<div id="demo3wrapper" style="height:100%;background:#ddd;">
+				<div id="demo3" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:false"></div>
+			</div>
+		</div>
+		<script>
+			zjs('#demo3wrapper').hover(
+				function(){zjs('#demo3').playTransition()},
+				function(){zjs('#demo3').reverseTransition()}
+			);
+		</script>
+		
+		</hr>
+		
+		
+		<h3>hỗ trợ nhiều thuộc tính style cùng lúc</h3>
+		<textarea class="zcodeeditor" data-option="readOnly:true">
+<div id="demo4" class="box ztransition" data-option="from:{left:0,opacity:1},to:{left:300,opacity:0},autoplay:false"></div>
+<script>
+	zjs('#demo4play').click(function(){zjs('#demo4').playTransition()});
+</script>
+		</textarea></br>
+		<button id="demo4play">play</button>
+		<div class="testarea">
+			<div id="demo4" class="box ztransition" data-option="from:{left:0,opacity:1},to:{left:300,opacity:0},autoplay:false"></div>
+		</div>
+		<script>
+			zjs('#demo4play').click(function(){zjs('#demo4').playTransition()});
+		</script>
+		
+		
+		</hr>
+		
+		
+		<h3>delay lại 1 thời gian trước khi thực hiện hiệu ứng</h3>
+		<p>sử dụng option <b>delay</b> (milisecond)</p>
+		<p>tuy nhiên delay chỉ có tác dụng khi sử dụng kèm với option <b>autoplay</b> là <b>true</b></p>
+		<p>tức là sẽ không có tác dụng khi dùng method <b>playTransition()</b> để play hiệu ứng</p>
+		<textarea class="zcodeeditor" data-option="readOnly:true">
+<div id="demo5" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:false,delay:1000"></div>
+<script>
+	zjs('#demo5play').click(function(){zjs('#demo5').playTransition()});
+</script>
+		</textarea></br>
+		<button id="demo5play">play</button> (autoplay delay 1s)
+		<div class="testarea">
+			<div id="demo5" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:true,delay:1000"></div>
+		</div>
+		<button id="demo5bplay">play</button> (autoplay delay 0s)
+		<div class="testarea">
+			<div id="demo5b" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:true,delay:0"></div>
+		</div>
+		<script>
+			zjs('#demo5play').click(function(){zjs('#demo5').playTransition()});
+			zjs('#demo5bplay').click(function(){zjs('#demo5b').playTransition()});
+		</script>
+		
+		
+		</hr>
+		
+		
+		<h3>repeat lại hiệu ứng</h3>
+		<p>sử dụng option <b>repeat</b> true</p>
+		<p>đồng thời có thể sử dụng kèm option <b>delayrepeat</b> (milisecond) để có thể chỉnh delay cho repeat</p>
+		<textarea class="zcodeeditor" data-option="readOnly:true">
+<div id="demo6" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:true,repeat:true,delayrepeat:0"></div>
+		</textarea></br>
+		(delayrepeat: 0)
+		<div class="testarea">
+			<div id="demo6" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:true,repeat:true,delayrepeat:0"></div>
+		</div>
+		(delayrepeat: 1000)
+		<div class="testarea">
+			<div id="demo6b" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:true,repeat:true,delayrepeat:1000"></div>
+		</div>
+		
+		
+		</hr>
+		
+		
+		<h3>reverse lại hiệu ứng</h3>
+		<p>sử dụng option <b>reverse</b> true</p>
+		<p>đồng thời có thể sử dụng kèm option <b>delayreverse</b> (milisecond) để có thể chỉnh delay cho reverse</p>
+		<p>chỉ có thể reverse 1 lần, nếu muốn reverse nhiều lần thì dùng kèm với option repeat</p>
+		<textarea class="zcodeeditor" data-option="readOnly:true">
+<div id="demo7" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:true,reverse:true,delayreverse:0"></div>
+<script>
+	zjs('#demo7play').click(function(){zjs('#demo7').playTransition()});
+</script>
+		</textarea></br>
+		<button id="demo7play">play</button> (delayreverse: 0)
+		<div class="testarea">
+			<div id="demo7" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:true,reverse:true,delayreverse:0"></div>
+		</div>
+		<button id="demo7bplay">play</button> (delayreverse: 1000)
+		<div class="testarea">
+			<div id="demo7b" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:true,reverse:true,delayreverse:1000"></div>
+		</div>
+		<script>
+			zjs('#demo7play').click(function(){zjs('#demo7').playTransition()});
+			zjs('#demo7bplay').click(function(){zjs('#demo7b').playTransition()});
+		</script>		
+		
+		
+		</hr>
+		
+		
+		<h3>sử dụng kết hợp nhiều option</h3>
+		<p>sau khi chạy hiệu ứng lần đầu tiên, reverse lại hiệu ứng, sau đó thì repeat lại từ đầu</p>
+		<textarea class="zcodeeditor" data-option="readOnly:true">
+<div id="demo8" class="box ztransition" data-option="
+from:{left:0,opacity:1},
+to:{left:300,opacity:0.5},
+autoplay:true,
+repeat:true,
+reverse:true,
+delay:1000,
+delayrepeat:1000,
+delayreverse:1000"></div>
+		</textarea></br>
+		<div class="testarea">
+			<div id="demo8" class="box ztransition" data-option="from:{left:0,opacity:1},to:{left:300,opacity:0.5},autoplay:true,repeat:true,reverse:true,delay:1000,delayrepeat:1000,delayreverse:1000"></div>
+		</div>
+		
+		
+		</hr>
+		
+		
+		<h3>timingfunction</h3>
+		<p>sử dụng option <b>timingfunction</b> (integer)</p>
+		<p>mặc định giá trị là 2</p>
+		<textarea class="zcodeeditor" data-option="readOnly:true">
+<div id="demo9" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:true,repeat:true,reverse:true,timingfunction:0"></div>
+		</textarea></br>
+		<code>timingfunction: 0</code>
+		<div class="testarea">
+			<div id="demo9" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:true,repeat:true,reverse:true,timingfunction:0"></div>
+		</div>
+		<code>timingfunction: 1</code>
+		<div class="testarea">
+			<div id="demo9b" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:true,repeat:true,reverse:true,timingfunction:1"></div>
+		</div>
+		<code>timingfunction: 2</code>
+		<div class="testarea">
+			<div id="demo9c" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:true,repeat:true,reverse:true,timingfunction:2"></div>
+		</div>
+		<code>timingfunction: 3</code>
+		<div class="testarea">
+			<div id="demo9d" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:true,repeat:true,reverse:true,timingfunction:3"></div>
+		</div>
+		<code>timingfunction: 4</code>
+		<div class="testarea">
+			<div id="demo9e" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:true,repeat:true,reverse:true,timingfunction:4"></div>
+		</div>
+		có thể sử dụng cubic-bezier để tùy ý chỉnh hiệu ứng <br/>
+		<code>timingfunction: 'cubic-bezier(0.18, 0.17, 0.37, 0.99)'</code>
+		<div class="testarea">
+			<div id="demo9e" class="box ztransition" data-option="from:{left:0},to:{left:300},autoplay:true,repeat:true,reverse:true,timingfunction:'cubic-bezier(0.18, 0.17, 0.37, 0.99)'"></div>
+		</div>
+
+		
+		
+		
+		</hr>
+		
+		
+		<h3>keyframes</h3>
+		<p>sử dụng option <b>keyframes</b> (object)</p>
+		<p>keyframes cho phép đa dạng hoá hiệu ứng hơn là chỉ sử dụng đơn thuần from và to</p>
+		
+		<textarea class="zcodeeditor" data-option="readOnly:true">
+<div id="demo10" class="box ztransition" data-option="keyframes:{
+		0:{opacity:0},
+		35:{opacity:1,left:200},
+		65:{left:100,opacity:1},
+		100:{opacity:0,left:300}
+	},autoplay:true,repeat:true,reverse:true,timingfunction:0"></div>
+		</textarea></br>
+		
+		<div class="testarea">
+			<div id="demo10" class="box ztransition" data-option="keyframes:{0:{opacity:0},35:{opacity:1,left:200},65:{left:100,opacity:1},100:{opacity:0,left:300}},autoplay:true,repeat:true,reverse:true,timingfunction:0"></div>
+		</div>
+		
+		
+		<br/><br/>
+
+		<h3>Hỗ trợ thuộc tính scrollTop, scrollLeft</h3>
+		
+		<textarea class="zcodeeditor" data-option="readOnly:true">
+<div id="demo11" class="ztransition" style="overflow-x:auto;" data-option="autoplay:false,usecss:false">
+	1 2 3 4 5 6 7 8 9 10
+</div>
+<script>
+	zjs('#demo11playa').click(function(){
+		zjs('#demo11').playTransition({to: {scrollLeft: 600}})
+	});
+	zjs('#demo11playb').click(function(){
+		zjs('#demo11').playTransition({to: {scrollLeft: '+=200'}}
+	)});
+	zjs('#demo11playc').click(function(){
+		zjs('#demo11').playTransition({to: {scrollLeft: '+=200'}, time:3000})
+	});
+</script>
+		</textarea></br>
+		<button id="demo11playa">play</button> (scroll to 600)<br/> 
+		<button id="demo11playb">play</button> (scroll +200)<br/>
+		<button id="demo11playc">play</button> (scroll +200 in 3s)
+		<div id="demo11" class="ztransition" style="overflow-x:auto;" data-option="autoplay:false,usecss:false">
+			<div style="width:3050px;height:100px;">
+				<div class="boxb">1</div>
+				<div class="boxb">2</div>
+				<div class="boxb">3</div>
+				<div class="boxb">4</div>
+				<div class="boxb">5</div>
+				<div class="boxb">6</div>
+				<div class="boxb">7</div>
+				<div class="boxb">8</div>
+				<div class="boxb">9</div>
+				<div class="boxb">10</div>
+			</div>
+		</div>
+		<script>
+			zjs('#demo11playa').click(function(){zjs('#demo11').playTransition({to: {scrollLeft: 600}})});
+			zjs('#demo11playb').click(function(){zjs('#demo11').playTransition({to: {scrollLeft: '+=200'}})});
+			zjs('#demo11playc').click(function(){zjs('#demo11').playTransition({to: {scrollLeft: '+=200'}, time:3000})});
+		</script>		
+		
+		
+		<br/><br/>
+
+		<h3>Các default option của module transition</h3>
+		
+		<textarea class="zcodeeditor" data-option="readOnly:true,mode:'javascript'">
+{
+	from: {},
+	to: {},
+	keyframes: false,
+	time: 1000,
+	repeat: false,
+	reverse: false,
+	delay: 0,
+	delayrepeat: 0,
+	delayreverse: 0,
+	timingfunction: 2,
+	autoplay: true,
+	fillmode: 'backwards',
+	usecss: true
+}</textarea>
+	
+
+		<br/><br/>
+
+		<h3>Các cách gọi hàm <code>playTransition</code></h3>
+
+		<p>Có thể gọi hàm <b>playTransition()</b> bằng nhiều cách khác nhau, các cách sử dụng sau đây đều được:</p>
+
+		<textarea class="zcodeeditor" data-option="readOnly:true,mode:'javascript'" style="height:auto;">
+// Cách 1: 
+var option = {
+	to: {left: 500}
+};
+zelement.playTransition(option);
+
+// Cách 2:
+var option = {
+	to: {left: 500},
+	time: 3000
+};
+zelement.playTransition(option);
+
+// Cách 3:
+var to = {left: 500};
+zelement.playTransition(to);
+
+// Cách 4:
+var to = {left: 500};
+var option = {time: 3000};
+zelement.playTransition(to, option);
+
+// Cách 5:
+var to = {left: 500};
+var time = 3000;
+zelement.playTransition(to, time);
+
+// Cách 6:
+zelement.playTransition('left', 500);
+
+// Cách 7:
+var option = {time: 3000};
+zelement.playTransition('left', 500, option);
+
+// Cách 8:
+var time = 3000;
+zelement.playTransition('left', 500, time);
+</textarea>
+
+
+
+		</br></br></br></br>
+		
+		<!--div class="transition" style="" data-option="
+			from:{},
+			to:{},
+			time:1000,
+			repeat:false,
+			reverse:false,
+			delay:0,
+			delayrepeat:0,
+			delayreverse:0,
+			timingfunction:2,
+			autoplay:true">
+		</div-->
+		
+		
+		</div>
+		
+		
+	</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs UI - accordion</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="../z.js" data-debug="true"></script>
+	<script>
+		zjs.onready('ui.accordion, ui.tabpanel', function(){
+			
+			(function(){
+
+				zjs('.zui-tabpanel-nav-wrapper').insertAfter(
+					zjs('.zui-accordion-title').item(0)
+				);
+
+				zjs('.ztabpanel').on('ui.tabpanel.change', function(){
+					if(!zjs('.zui-accordion-title').item(0).hasClass('active'))
+						zjs('.zaccordion').accordionSelectSession(0);
+				});
+
+				zjs(document.body).removeClass('hidden');
+			}).delay(1000);
+
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	body .wrapper{width:50%;margin:0 auto;padding:100px 0;}
+	body .zui-accordion{background:#ccc;position: relative;}
+	body .zui-accordion-title{background:#aaa;color:#fff;padding:10px;}
+	body .zui-accordion-title.active{background:#777;}
+	body .zui-accordion-content{padding:10px;}
+	body.hidden{opacity:0;}
+
+	body .zui-tabpanel-nav-wrapper{
+		position: absolute;
+	    right: 0;
+	    top: 0;
+	    background: #595959;
+	}
+	body .zui-tabpanel-nav-wrapper li{
+		padding:6px 20px;
+	}
+	body .zui-tabpanel-content-wrapper{
+		padding-left:40%;
+	}
+	</style>
+	
+</head>
+<body class="hidden">
+	<div class="wrapper">
+		
+		<div class="zaccordion" data-option="titleclass: 'h3', allowclose: true, separate: true">
+			<h3>Meine Vorlieben</h3>
+			<div>
+				<div class="ztabpanel">
+					<ul>
+						<li>Tab 1</li>
+						<li>Tab 2</li>
+						<li>Tab 3</li>
+						<li>Tab 4</li>
+					</ul>
+					<div>
+						<p>Tab 1:</p>
+						<p>zaasdas dsa d</p>
+						<p>zaasdas dsa d sds ad sd ad</p>
+					</div>
+					<div>
+						<p>Tab 2:</p>
+						<p>asdasd ad sdas d sdas dad dasds da</p>
+						<p>asdasd ad sdas d sdas dad dasds da</p>
+						<p>ad as e  w  qeq s</p>
+						<p>asdasd ad sdas d sdas dad dasds da</p>
+					</div>
+					<div>
+						<p>Tab 3:</p>
+						<p>zaasdas dsa d</p>
+						<p>zaasdas dsa d sds ad sd ad</p>
+					</div>
+					<div>
+						<p>Tab 4:</p>
+						<p>zaasdas dsa d</p>
+						<p>zaasdas dsa d sds ad sd ad</p>
+					</div>
+				</div>
+			</div>
+
+			<h3>Über mich</h3>
+			<div>
+				<p>ad as e  w  qeq s</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+				<p>Fusce accumsan, ligula scelerisque eleifend bibendum, velit erat pellentesque arcu, eu scelerisque eros dui id erat. Etiam convallis accumsan mi at facilisis. Duis venenatis dapibus justo in mollis</p>
+				<p>ad as e  w  qeq s</p>
+				<p>asdasd ad sdas d sdas dad dasds da</p>
+			</div>
+
+		</div>
+		
+	</div>
+</body>
+</html>

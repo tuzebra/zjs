@@ -1,0 +1,27 @@
+.zfun-freezescreen{-webkit-user-select:none;}
+.zfun-freezescreen-defrost-button{
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	padding: 10px 20px;
+	line-height: 15px;
+	display: block;
+	background: #E96464;
+	color: #FFF;
+	text-decoration: none;
+	font-size: 20px;
+	border-radius: 6px;
+	box-shadow: 0 4px 0px #C94545;
+	cursor:pointer;
+	-webkit-user-select:none;
+}
+.zfun-freezescreen-defrost-button.hover{
+	background: #E78B8B;
+	box-shadow: 0 4px 0px #C96868;
+}
+.zfun-freezescreen-defrost-button.active{
+	margin-top:4px;
+	background: #E92F2F;
+	box-shadow: none;
+}
+.zfun-freezescreen canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer;-webkit-user-select:none;}

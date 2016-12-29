@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Demo module image slider theme linear</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		
+		<style>
+		body{
+			font-family: "Trebuchet MS", "Lucida Sans", "Lucida Grande", Arial, Helvetica, sans-serif;
+		}
+		
+		body .imageslider-linear .nav-button {
+		    width: 340px;
+			height:auto;
+		    background: rgba(255, 255, 255, 0.9);
+		}
+		body .imageslider-linear .nav-button img{
+			width:70px;
+		}
+		body .imageslider-linear .nav-back img{
+			float:left;
+		}
+		body .imageslider-linear .nav-next img{
+			float:right;
+		}
+		</style>
+		
+		<script type="text/javascript" src="z.min.js" data-debug="false"></script>
+		<script>
+			zjs.require('image.slider.theme.linear, codeeditor');
+			zjs.onready(function(){
+			//	zjs('.zslider').on('slider.change', function(event){console.log(event.data)});
+			});
+		</script>
+		
+	</head>
+	
+	<body>
+		
+		<div style="position:fixed;right:0;top:0;z-index:1;background:rgba(255,255,255,0.9);padding:10px 20px;">
+			<h2>Test API</h2>
+			<p><a href="javascript:;" onclick="zjs('.zslider').slideTo(3);">zjs('.zslider').slideTo(3)</a></p>
+			<p><a href="javascript:;" onclick="zjs('.zslider').slidePrev();">zjs('.zslider').slidePrev()</a></p>
+			<p><a href="javascript:;" onclick="zjs('.zslider').slideNext();">zjs('.zslider').slideNext()</a></p>
+			<p><a href="javascript:;" onclick="zjs('.zslider').slidePause();">zjs('.zslider').slidePause()</a></p>
+			<p><a href="javascript:;" onclick="zjs('.zslider').slidePlay();">zjs('.zslider').slidePlay()</a></p>
+		</div>
+		
+		
+		<h1>Custom Navigation button - demo 1</h1>
+		<p>used <code>navButtonTemplate</code> option
+		
+		<div class="zslider" data-option="
+			theme:'linear',
+			navThumb:false,
+			navButtonTemplate:'<a class=\'nav-button\' ><img src=\'${src}\' /> <b>${index}</b> <u>${title}</u> - ${description} </a>'
+		">
+			<ul>
+				<li>
+					<h3>IU</h3>
+					<img src="sliderimages/1thumb.jpg" largesrc="sliderimages/1.jpg" />
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu eleifend purus. Nulla in diam quam, sed aliquam ligula. Aenean volutpat euismod leo, non malesuada est euismod in.</p>
+				</li>
+				<li>
+					<h3>IU</h3>
+					<img class="thumb" src="sliderimages/2thumb.jpg" />
+					<img class="large" src="sliderimages/2.jpg" />
+					<p>Quisque id lorem ultricies erat venenatis aliquam in in nunc. Nunc rutrum sapien vitae augue rutrum vel pulvinar est ullamcorper.</p>
+				</li>
+				<li>
+					<h3>IU</h3>
+					<img src="sliderimages/3thumb.jpg" />
+					<img class="large" src="sliderimages/3.jpg" />
+					<p>Quisque orci metus, congue laoreet dapibus eu, vehicula fringilla arcu. Curabitur pulvinar mattis euismod.</p>
+				</li>
+				<li>
+					<img src="sliderimages/4thumb.jpg" data-src="sliderimages/4.jpg" title="Jessica" alt="Aliquam eu tortor tempus eros tempor pharetra vitae laoreet dolor. Fusce id pretium erat. Phasellus et est a ante blandit semper quis eu turpis." />
+				</li>
+				<li>
+					<img src="sliderimages/5thumb.jpg" data-src="sliderimages/5.jpg" title="Jessica" />
+					<p>Phasellus fermentum orci consequat enim laoreet vel sodales leo consectetur. Pellentesque luctus est at neque dictum sit amet suscipit magna eleifend.</p>
+				</li>
+				<li>
+					<img src="sliderimages/6thumb.jpg" />
+					<img class="large" src="sliderimages/6.jpg" />
+					<p class="title">Jessica</p>
+					<p class="description">Cras adipiscing semper erat, quis consectetur lacus eleifend cursus. Donec ac nisl quis nibh elementum molestie ut vitae mi.</p>
+				</li>
+			</ul>
+		</div>
+		
+		
+		<br/><br/><br/><br/>
+		<br/><br/><br/><br/>
+		
+		<h2>demo code</h2>
+		<code>HTML</code>
+		<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="zslider" data-option="
+	theme:'linear',
+	navThumb:false,
+	navButtonTemplate:'<a class=\'nav-button\' ><img src=\'${src}\' /> <b>${index}</b> <u>${title}</u> - ${description} </a>'
+">
+	<ul>
+		<li></li>
+		...
+	</ul>
+</div>
+		</textarea>
+		<code>CSS</code>
+		<textarea class="zcodeeditor" data-option="readOnly:true,mode:'css'">
+body .imageslider-linear .nav-button {
+    width: 340px;
+	height:auto;
+    background: rgba(255, 255, 255, 0.9);
+}
+body .imageslider-linear .nav-button img{
+	width:70px;
+}
+body .imageslider-linear .nav-back img{
+	float:left;
+}
+body .imageslider-linear .nav-next img{
+	float:right;
+}
+		</textarea>
+
+		
+		
+		
+		<br/><br/><br/><br/>
+		<br/><br/><br/><br/>
+		
+			
+			
+		<h1>Custom Navigation button - demo 2</h1>
+		<p>used <code>navButtonTemplate</code> option
+		<p>used <code>navButtonParentIsRoot:true</code> option for better result (and more easily to css)
+
+		<div class="zslider" data-option="
+			theme:'linear',
+			navThumb:false,
+			navButtonParentIsRoot:true,
+			navButtonTemplate:'<a class=\'nav-button\' ><img src=\'${src}\' /> <b>${index}</b> <u>${title}</u> - ${description} </a>'
+		">
+			<ul>
+				<li>
+					<h3>IU</h3>
+					<img src="sliderimages/1thumb.jpg" largesrc="sliderimages/1.jpg" />
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu eleifend purus. Nulla in diam quam, sed aliquam ligula. Aenean volutpat euismod leo, non malesuada est euismod in.</p>
+				</li>
+				<li>
+					<h3>IU</h3>
+					<img class="thumb" src="sliderimages/2thumb.jpg" />
+					<img class="large" src="sliderimages/2.jpg" />
+					<p>Quisque id lorem ultricies erat venenatis aliquam in in nunc. Nunc rutrum sapien vitae augue rutrum vel pulvinar est ullamcorper.</p>
+				</li>
+				<li>
+					<h3>IU</h3>
+					<img src="sliderimages/3thumb.jpg" />
+					<img class="large" src="sliderimages/3.jpg" />
+					<p>Quisque orci metus, congue laoreet dapibus eu, vehicula fringilla arcu. Curabitur pulvinar mattis euismod.</p>
+				</li>
+				<li>
+					<img src="sliderimages/4thumb.jpg" data-src="sliderimages/4.jpg" title="Jessica" alt="Aliquam eu tortor tempus eros tempor pharetra vitae laoreet dolor. Fusce id pretium erat. Phasellus et est a ante blandit semper quis eu turpis." />
+				</li>
+				<li>
+					<img src="sliderimages/5thumb.jpg" data-src="sliderimages/5.jpg" title="Jessica" />
+					<p>Phasellus fermentum orci consequat enim laoreet vel sodales leo consectetur. Pellentesque luctus est at neque dictum sit amet suscipit magna eleifend.</p>
+				</li>
+				<li>
+					<img src="sliderimages/6thumb.jpg" />
+					<img class="large" src="sliderimages/6.jpg" />
+					<p class="title">Jessica</p>
+					<p class="description">Cras adipiscing semper erat, quis consectetur lacus eleifend cursus. Donec ac nisl quis nibh elementum molestie ut vitae mi.</p>
+				</li>
+			</ul>
+		</div>
+
+
+		<br/><br/><br/><br/>
+
+		<h2>demo code</h2>
+		<textarea class="zcodeeditor" data-option="readOnly:true">
+<div class="zslider" data-option="
+	theme:'linear',
+	navThumb:false,
+	navButtonParentIsRoot:true,
+	navButtonTemplate:'<a class=\'nav-button\' ><img src=\'${src}\' /> <b>${index}</b> <u>${title}</u> - ${description} </a>'
+">
+	<ul>
+		<li></li>
+		...
+	</ul>
+</div>
+		</textarea>	
+		
+		
+		
+	</body>
+</html>

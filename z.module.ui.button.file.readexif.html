@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs UI - button file</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+	<script>
+		zjs.onready('ui.button.file', function(){
+		
+			// handler on file change
+			zjs('#main-upload-button').on('ui.button.file.change', function(event){
+				console.log('buttonfile.change', event.data);
+			});
+			
+			// handerl on select file with wrong file-extension
+			zjs('#main-upload-button').on('ui.button.file.wrongfileext', function(event){
+				console.log('buttonfile.wrongfileext', event.data);
+				alert('Your file extension is wrong');
+			});
+			
+			// handler on select file out of maximum number of file
+			zjs('#main-upload-button').on('ui.button.file.maxnumberoffile', function(event){
+				console.log('buttonfile.maxnumberoffile', event.data);
+				alert('Out of maximum number of file (10 files)');
+			});
+			
+			// handler on select file out of maximum file size
+			zjs('#main-upload-button').on('ui.button.file.maxfilesize', function(event){
+				console.log('buttonfile.maxfilesize', event.data);
+				alert('Out of maximum file size (10MB)');
+			});
+			
+			// handler when getting file content
+			zjs('#main-upload-button').on('ui.button.file.getcontent', function(event){
+				console.log('buttonfile.getcontent', event.data);
+				zjs('.log-wrap').append('<div>file EXIF: '+JSON.stringify(event.data.exif)+'</div>');
+			});
+			
+			
+			
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	.wrapper{width:80%;margin:0 auto;padding:50px 0;}
+	.log-wrap{background:#000;color:#FFF;padding:20px;border-radius:5px;}
+	a{color:#FFF;}
+	
+	/* css to help the button expand more bigger */
+	body.zui-body-ready-to-drop .zui-button-file.zui-support-drag-drop:not(.disabled){
+	    position: fixed !important;
+	    top: 5%;
+	    left: 5%;
+	    width: 90%;
+	    height: 90%;
+		opacity:0.95;
+		border-width:5px;
+	}
+	body.zui-body-ready-to-drop .zui-button-file.zui-support-drag-drop.zui-ready-to-drop{
+		opacity:1;
+	}
+	body .zui-button-file .zui-button-drop-text{
+	    font-size: 36px;
+	    line-height: 350px;
+	}
+	
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+	
+		<div>
+			
+			<h3>Demo read file EXIF.</h3>
+			<p>Just set the param getFileContent to <code>true</code>
+			</p>
+			<pre>autoupload: false,
+<b>getFileContent</b>: <b>true</b>,
+<b>readEXIF</b>: <b>true</b></pre>
+
+			<div>
+				<a id="main-upload-button" class="zbuttonfile" data-option="
+					autoupload: false,
+					getFileContent: true,
+					readEXIF: true
+				">Drag file here....</a>
+			</div>
+			<div class="files-wrap">
+			</div>
+			
+
+			
+			<!-- -->
+			
+			</br>
+			</br>
+			
+			<div class="log-wrap"></div>
+			
+		</div>
+		
+		
+		
+	</div>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>test zjs event for touch device</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+		
+		<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+		
+		<script>
+			
+			zjs(function(){
+				/*zjs('body').click(function(event, element){
+					
+					event.stop();
+					
+					console.log('click ', element);
+					console.log('x',event.x(), 'y',event.y());
+					console.log('clientX',event.clientX(),'clientY',event.clientY());
+					console.log('target',event.target());
+					console.log('fromTarget',event.fromTarget());
+					console.log('toTarget',event.toTarget());
+					
+				});*/
+				
+
+                
+                zjs(document.body)
+					
+					// event for touch screen
+					
+					.on('tap', function(event){ console.log('tap: ', this.attr('id'), 'target:', event.target()) })
+					.on('singletap', function(event){ console.log('singletap: ', this.attr('id')) })
+					.on('doubletap', function(event){ console.log('doubletap: ', this.attr('id')) })
+					.on('longtap', function(event){ console.log('longtap: ', this.attr('id')) })
+					
+                    .on('swipe', function(event){ console.log('swipe: ', this.attr('id')) })
+					.on('swipeleft', function(event){ console.log('swipeleft: ', this.attr('id')) })
+					.on('swiperight', function(event){ console.log('swiperight: ', this.attr('id')) })
+					.on('swipeup', function(event){ console.log('swipeup: ', this.attr('id')) })
+					.on('swipedown', function(event){ console.log('swipedown: ', this.attr('id')) });	
+					
+				
+				zjs('#div1')
+					
+					// event for touch screen
+					
+					.on('tap', function(event){ console.log('tap: ', this.attr('id'), 'target:', event.target()) })
+					.on('singletap', function(event){ console.log('singletap: ', this.attr('id')) })
+					.on('doubletap', function(event){ console.log('doubletap: ', this.attr('id')) })
+					.on('longtap', function(event){ console.log('longtap: ', this.attr('id')) });
+					
+				
+				zjs('#div2')
+					.on('click', function(event, element){ console.log('click in: ', this.attr('id')) })
+					.on('click', 'input', function(event, element){ console.log('click in: ', this.attr('id')) })
+					.on('clickout', function(event, element){ console.log('click out: ', this.attr('id')) })
+					
+					// event for touch screen
+					
+					.on('tap', function(event){ console.log('tap: ', this.attr('id'), 'target:', event.target()) })
+					.on('singletap', function(event){ console.log('singletap: ', this.attr('id')) })
+					.on('doubletap', function(event){ console.log('doubletap: ', this.attr('id')) })
+					.on('longtap', function(event){ console.log('longtap: ', this.attr('id')) })
+					
+					.on('swipe', function(event){ console.log('swipe: ', this.attr('id')) })
+					.on('swipeleft', function(event){ console.log('swipeleft: ', this.attr('id')) })
+					.on('swiperight', function(event){ console.log('swiperight: ', this.attr('id')) })
+					.on('swipeup', function(event){ console.log('swipeup: ', this.attr('id')) })
+					.on('swipedown', function(event){ console.log('swipedown: ', this.attr('id')) });
+				
+				zjs('#div2 a')
+					.on('tap', function(event){
+						event.preventDefault();
+						console.log('tap a link: ', this);
+					})
+					.on('click', function(event){
+						event.preventDefault();
+						console.log('click a link: ', this);
+					});
+					
+				zjs('#div3')
+					
+					// event for touch screen
+					
+					.on('tap', function(event){ console.log('tap: ', this.attr('id'), '-> prevent default', 'target:', event.target()); event.preventDefault(); })
+					.on('singletap', function(event){ console.log('singletap: ', this.attr('id')) })
+					.on('doubletap', function(event){ console.log('doubletap: ', this.attr('id')) })
+					.on('longtap', function(event){ console.log('longtap: ', this.attr('id')) })
+					
+					.on('swipe', function(event){ console.log('swipe: ', this.attr('id')) })
+					.on('swipeleft', function(event){ console.log('swipeleft: ', this.attr('id')) })
+					.on('swiperight', function(event){ console.log('swiperight: ', this.attr('id')) })
+					.on('swipeup', function(event){ console.log('swipeup: ', this.attr('id')) })
+					.on('swipedown', function(event){ console.log('swipedown: ', this.attr('id')) });
+                
+			});
+			
+		</script>
+		
+	</head>
+	
+	<body id="body" style="padding:0;margin:0;background:gray;">
+		body
+		<div id="div1" style="height:200px;width:200px;background:red;position:absolute;top:20px;left:20px;">
+			div1
+			<div id="div2" style="height:200px;width:200px;background:blue;position:absolute;top:90px;left:120px;">
+				div2
+				<div id="div3" style="height:200px;width:200px;background:pink;position:absolute;top:80px;left:110px;">div3 </div>
+				<input id="input1" style="height: 60px;width: 140px;background:yellow;position:absolute;top: 75px;left: -70px;" value="input1" />
+				<a href="#click" style="color:#fff">click me</a>
+			</div>
+		</div>
+	</body>
+</html>

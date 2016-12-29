@@ -1,0 +1,6 @@
+.zui-checkbox-wrap{}
+.zui-checkbox-image{position:absolute;width:24px;height:24px;background:#eee;border: 1px solid #E4D2D2;border-radius: 4px;}
+.zui-checkbox-label{}
+
+.checked .zui-checkbox-image{background-color: #CBCBCC;border-color: #B4A8A8;}
+.uncheck .zui-checkbox-image{}

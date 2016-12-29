@@ -1,0 +1,17 @@
+.zeditor-contextlinkprop-popup{width:280px;}
+.zeditor-contextlinkprop-popup form{margin:0;}
+.zeditor-contextlinkprop-popup form.prop{}
+.zeditor-contextlinkprop-popup form.action{}
+.zeditor-contextlinkprop-popup h3{margin-bottom:0px;}
+.zeditor-contextlinkprop-popup .field{margin:10px 0;}
+.zeditor-contextlinkprop-popup .field label{}
+.zeditor-contextlinkprop-popup .field label > span{display:block;margin-bottom:2px;}
+.zeditor-contextlinkprop-popup .field input{outline:none;}
+.zeditor-contextlinkprop-popup .field input[name=href],
+.zeditor-contextlinkprop-popup .field input[name=target]{width:100%;}
+.zeditor-contextlinkprop-popup .field textarea{width: 100%;}
+.zeditor-contextlinkprop-popup .field.field-href{}
+.zeditor-contextlinkprop-popup .field.field-target{}
+.zeditor-contextlinkprop-popup .field.field-title{margin-bottom:20px;}
+.zeditor-contextlinkprop-popup .buttons-wrapper{text-align:right;}
+.zeditor-contextlinkprop-popup .buttons-wrapper .zui-button{margin-left:10px;}

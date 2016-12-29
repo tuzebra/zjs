@@ -1,0 +1,20 @@
+27/10/2014
+		+ add class "active" for popup when show
+30/06/2015
+		+ add popup id to pagecover class => easy to style
+		
+08/12/2015
+		+ fix option closethenremove when html auto initilize
+		
+24/03/2016
+		+ add option "longPopup" to support very long popup that make body scroll
+
+23/04/2016
+		+ add class to body when longPopup is open
+
+02/07/2016
+		+ support class to prevent add an element to locked-div, class is "zpreventlongpopup"
+		+ support animate.css
+
+07/07/2016 
+		+ support new value for longPopup: "mobileOnly"

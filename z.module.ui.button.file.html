@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs UI - button file</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+	<script>
+		zjs.onready('ui.button.file', function(){
+		
+			// handler on file change
+			zjs('.zbuttonfile').on('ui.button.file.change', function(event){
+				console.log('buttonfile.change', event.data);
+			});
+			
+			// handerl on select file with wrong file-extension
+			zjs('.zbuttonfile').on('ui.button.file.wrongfileext', function(event){
+				console.log('buttonfile.wrongfileext', event.data);
+				alert('Your file extension is wrong');
+			});
+			
+			// handler on select file out of maximum number of file
+			zjs('.zbuttonfile').on('ui.button.file.maxnumberoffile', function(event){
+				console.log('buttonfile.maxnumberoffile', event.data);
+				alert('Out of maximum number of file (10 files)');
+			});
+			
+			// handler on select file out of maximum file size
+			zjs('.zbuttonfile').on('ui.button.file.maxfilesize', function(event){
+				console.log('buttonfile.maxfilesize', event.data);
+				alert('Out of maximum file size (10MB)');
+			});
+			
+			// handler on file when uploading
+			zjs('.zbuttonfile').on('ui.button.file.upload.loading', function(event){
+				console.log('buttonfile.upload.loading: percent', event.data.percent);
+				//console.log('- size:'+event.data.files[0].size+' -> upsize:'+event.data.files[0].upsize);
+			});
+			
+			// handler on file upload complete
+			zjs('.zbuttonfile').on('ui.button.file.upload.complete', function(event){
+				console.log('buttonfile.upload.complete', event.data);
+				
+				// show the file's details
+				if(event.data.response.successfiles && event.data.response.successfiles.length > 0)
+					zjs('.log-wrap').append('<div>upload.complete: response: file: '+event.data.response.successfiles[0].name+' (size:'+event.data.response.successfiles[0].size+')</div>');
+				
+				// show the response message from server
+				if(event.data.response.message)
+					zjs('.log-wrap').append('<div>upload.complete: response: message: '+event.data.response.message+'</div>');
+				
+			});
+			
+			
+			
+			// ===============
+			
+			
+			// upload via api
+			zjs('.manual-upload-btn').click(function(){
+				zjs.uploadFile({
+					fileLocation: 'file:///Users/huy/Desktop/iphone5-website.png',
+					uploadUrl: 'http://app.april.com.vn/zjs/vers/1.1/z.module.ui.button.file.upload.php',
+					data: {
+						'message': 'hehe, upload via api, custom message'
+					},
+					callback: function(response){
+						console.log('response', response);
+					}
+				});
+			});
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	.wrapper{width:80%;margin:0 auto;padding:50px 0;}
+	.log-wrap{background:#000;color:#FFF;padding:20px;border-radius:5px;}
+	a{color:#FFF;}
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+	
+		<div>
+			<h3>Based on &lt;a&gt; and autoupload via form-upload</h3>
+			<p>Right after you choose a file, that file will be uploading to server instantly, because autoupload is turn on</p>
+			<pre>&lt;a class="zbuttonfile" data-option="
+	name: 'filesupload', 
+	multiple: true, 
+	autoupload: '<b>form</b>', 
+	autouploadUrl: 'http://app.april.com.vn/zmvc/test/uploadfile',
+	data:{message:'custom message include with file upload'}
+"&gt;Choose File hihi&lt;/a&gt;</pre>
+
+			<div>
+				<a class="zbuttonfile" data-option="
+					name:'filesupload', 
+					multiple:true, 
+					autoupload:'form',
+					autouploadUrl:'http://app.april.com.vn/zmvc/test/uploadfile',
+					data:{message:'custom message include with file upload'}
+				">Choose File hihi</a>
+			</div>
+
+			<!-- -->
+
+			</br>
+			</br>
+			
+			<h3>Based on &lt;a&gt; and autoupload too, but uploading via ajax-upload</h3>
+			<p>just change the option "autoupload" to new value: "ajax", </br>
+				set new param to allow upload larger file, </br>
+				set param to show the percent of current uploading size (use <code>${percent}</code> into string to set the percent)
+			</p>
+			<pre>autoupload: '<b>ajax</b>',
+maxFileSize: 100 * 1024 * 1024 // <b>100 MB</b>,
+uploadingText: 'Uploading... <b>${percent}</b>%',
+dropText: 'Dropppppp nowwwwww!!!!'</pre>
+
+			<div>
+				<a class="zbuttonfile" data-option="
+					name:'filesupload', 
+					multiple:true, 
+					autoupload:'ajax',
+					maxFileSize: 100 * 1024 * 1024,
+					uploadingText: 'Uploading... ${percent}%',
+					dropText: 'Dropppppp nowwwwww!!!!',
+					autouploadUrl:'http://app.april.com.vn/zmvc/test/uploadfile',
+					data:{message:'custom message include with file upload'}
+				">Choose file to start upload</a>
+			</div>
+			
+			<!-- -->
+			
+			</br>
+			</br>
+			
+			<h3>Quickly init with default option</h3>
+			<p>Because ajax-upload is set as default option, so you just only need to set <code>uploadingText</code> and <code>autouploadUrl</code> like this: (max file size is only 10MB in default option)</p>
+			<pre>&lt;a class="zbuttonfile" data-option="
+	uploadingText: '<b>${percent}</b>%',
+	autouploadUrl: 'http://app.april.com.vn/zmvc/test/uploadfile'
+"&gt;Choose file to quick upload&lt;/a&gt;</pre>
+
+			<div>
+				<a class="zbuttonfile" data-option="
+					uploadingText: '${percent}%',
+					autouploadUrl:'http://app.april.com.vn/zmvc/test/uploadfile'
+				">Choose file to quick upload</a>
+			</div>
+			
+			<!-- -->
+			
+			</br>
+			</br>
+			
+			<h3>test based on &lt;input&gt;</h3>
+			<div>
+				<input class="zbuttonfile" type="file" name="uploadfile" multiple />
+			</div>
+			
+			<!-- -->
+			
+			</br>
+			</br>
+			
+			<h3>default &lt;input&gt;</h3>
+			<div>
+				<input type="file" name="uploadfile" />
+			</div>
+			
+			<!-- -->
+			
+			</br>
+			</br>
+
+			<h3>upload by API</h3>
+			<p>when you click this button, a litle javascript will handle the upload process</p> 
+			<div>
+				<button class="manual-upload-btn">click here to upload</button>
+			</div>
+			
+
+			
+			<!-- -->
+			
+			</br>
+			</br>
+			
+			<div class="log-wrap"></div>
+			
+		</div>
+		
+		
+		
+	</div>
+</body>
+</html>

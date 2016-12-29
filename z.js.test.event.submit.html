@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>test zjs event submit</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		
+		<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+		
+		<script>
+			
+			zjs.onready(function(){
+				
+				zjs('form').on('submit', function(event){
+					
+					console.log('before preventDefault');
+					
+					event.preventDefault();
+					
+					console.log('after preventDefault');
+					
+					console.log('data', this.getFormData());
+					
+				});
+				
+			});
+			
+		</script>
+		
+	</head>
+	
+	<body style="padding:0;margin:0;height:500px;background:gray;">
+		
+		<form method="GET">
+			
+			<input name="text" />
+			<button>submit</button>
+			
+		</form>
+		
+	</body>
+</html>

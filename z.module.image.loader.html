@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Demo z.module.image.loader - zjs</title>
+	<script type="text/javascript" src="z.js"></script>
+	<script>
+		zjs.require('image.loader', function(){
+			zjs.loadImages({
+				path: 'sliderimages/',
+				images: ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg'], 
+				delay: 800,
+				onLoaded: function(image){
+				
+					// callback when each image loaded
+					// image -> { width:, height:, src: }
+					zjs('<img src="'+image.src+'" height="150" />').appendTo(document.body);
+				},
+				onLoading: function(percent){
+				
+					// percent: 0 -> 100
+					zjs('#percent').html(percent);
+					
+				}, 
+				onFinish: function(){
+					// callback on all image loaded
+				},
+				onError: function(){
+					// callback 
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	
+	<div id="percent"></div>
+	
+</body>
+</html>

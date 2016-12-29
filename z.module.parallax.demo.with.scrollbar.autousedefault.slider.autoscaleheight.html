@@ -1,0 +1,321 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs parallax demo</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0" />
+	
+	<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+	
+	<script>
+		zjs.onready('pagepreload, parallax, scrollbar, image.slider.theme.linear', function(){
+		
+			// JUST LOAD NECESSARY MODULE 
+			// and done!
+	
+			// ----
+			
+			// Just for fun
+			// log section name, when change to new section
+			// you can delete this
+			//zjs(document.body).on('parallax.changesection', function(){
+			//	console.log('curent section is: ' + this.parallaxGetCurrentSection() );
+			//});
+			
+			// start write your code here
+			// ...
+		});
+	</script>
+	
+	
+	<style>
+		/**
+		 *  COMMON
+		 **/
+		body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;}
+		body .zparallax-section{background-size:cover;overflow:hidden;}
+		body .zparallax-indicator-wrapper{height: 142px;margin-top: -80px;right: 40px;}
+		.mainwidth{margin: 0 auto;width:600px;}
+
+		/**  
+		 * INDICATOR
+		 **/
+		.zparallax-indicator-wrapper{z-index:2;}
+		
+		/**  
+		 * SCROLLBAR
+		 **/
+		body .zui-scrollbar-wrap{background:#ecf0f1;}
+		body .zui-scrollbar{background:#2c3e50;}
+		
+		/**
+		 *  HEADER
+		 **/
+		header{position:fixed;top:0;left:0;height:60px;width:100%;background:#FFF;z-index:1;box-shadow:1px 0 7px -2px #000;}
+		header h1{float:left;text-transform: uppercase;margin: 0;margin-top: 14px;cursor:pointer;}
+		header .navigation{float: right;margin: 0;padding: 0;margin-top: 25px;}
+		header .navigation li{list-style:none;float:left;margin:0 10px;}
+		header .navigation li a{display: block;padding: 5px 0;color: #3498DB;text-transform: uppercase;cursor: pointer;}
+		header .navigation li a.active{border-bottom:2px solid #c0392b;}
+
+		/** 
+		*	SECTION 1 - SLIDESHOW SECTION
+		**/
+		.zparallax-section.section1{background-color:#3498db;}
+
+		/* CHANGE NAVIGATION DOT POSITION */
+		.zparallax-section.section1 .imageslider-linear .nav-container .nav-dots-wrap{top:-80px;}
+		.zparallax-section.section1 .imageslider-linear .nav-back, 
+		.zparallax-section.section1 .imageslider-linear .nav-next{top: 43%;background:none;}
+		.zparallax-section.section1 .imageslider-linear .nav-button:before{content:'';position:absolute;color: #FFF;font-size: 40px;}
+		.zparallax-section.section1 .imageslider-linear .nav-back{left: 120px;}
+		.zparallax-section.section1 .imageslider-linear .nav-next{right: 120px;}
+		.zparallax-section.section1 .imageslider-linear .nav-back:before{content:'←';content:'〈';}
+		.zparallax-section.section1 .imageslider-linear .nav-next:before{content:'→';content:'〉';}
+
+		/* CHANGE IMAGE TO SOLID COLOR */
+		.zparallax-section.section1 .image-hold.image0{background:#2ecc71 !important;}
+		.zparallax-section.section1 .image-hold.image1{background:#e67e22 !important;}
+		.zparallax-section.section1 .image-hold.image2{background:#8e44ad !important;}
+		.zparallax-section.section1 .image-hold.image3{background:#f1c40f !important;}
+		.zparallax-section.section1 .image-hold.image4{background:#1abc9c !important;}
+		.zparallax-section.section1 .image-hold.image5{background:#c0392b !important;}
+
+		/** 
+		*	OTHER SECTIONs
+		**/
+		.zparallax-section h1{position:relative;color:#FFF;text-align:center;margin: 210px 0 40px;font-size: 150px;} 
+		.zparallax-section h1 .zparallax-element{width: 100%;left: 0;}
+		.zparallax-section .content{position:relative;color:#FFF;text-align:center;font-size: 25px;margin: 0 100px;}
+		.zparallax-section .content .zparallax-element{width: 100%;left: 0;}
+		
+		.zparallax-section.section2{background-color:#e74c3c;}
+		.zparallax-section.section3{background-color:#2ecc71;}
+		.zparallax-section.section4{background-color:#34495e;}
+		.zparallax-section.section5{background-color:#c0392b;}
+		.zparallax-section.section6{background-color:#95a5a6;}
+		
+
+		/**
+		* MOBILE
+		**/
+		@media (max-width: 600px) {
+
+			/* common */
+			.mainwidth{width:100%;}
+			.zparallax-indicator-wrapper{display:none;}
+			header {position: static;height: auto;}
+			body .zparallax-section{height:auto !important;}
+			.zparallax-section h1{font-size: 50px;margin:40px 0;}
+			.zparallax-section h1 .fix-height{display:none}
+			.zparallax-section .content{font-size: 14px;margin:0 30px 60px;}
+			.zparallax-section h1 .zparallax-element,
+			.zparallax-section .content .zparallax-element{position:static !important;margin:0 !important;}
+
+			/* header */
+			header h1{margin: 5px 10px;}
+
+			/* section slider */
+			.zparallax-section.section1 .imageslider-linear .nav-container .nav-dots-wrap{top:-30px;}
+			.zparallax-section.section1 .imageslider-linear .nav-back, 
+			.zparallax-section.section1 .imageslider-linear .nav-next{top: 43%;}
+			.zparallax-section.section1 .imageslider-linear .nav-back{left:0;}
+			.zparallax-section.section1 .imageslider-linear .nav-next{right:30px;}
+
+		}
+	</style>
+	
+	
+	<!-- important: make body invisible before pagepreload module is loaded -->
+	<style>body.zpagepreload{visibility:hidden;}</style>
+</head>
+<body class="zpagepreload zparallax zscroll" data-preload-domready-method="scrollbar.ready" 
+		data-option="
+					
+					// OPTION FOR PARALLAX MODULE
+					indicator: true,
+					autoscaleusecss: false,
+					
+					// OPTION FOR SCROLL
+					scrolltime: 1000,
+					transition: 2,
+					
+					// OPTION FOR SCROLLBAR MODULE
+					usecss: false,
+					scrollline: 200,
+					scrolllinetouchpad: 80,
+					alwayshide: false,
+					shadow: false,
+					snapElements: '.zparallax-section',
+					looseSnap: true,
+					
+					customUsedefaultCssClass: 'ismobile',
+					autoUseDefaultWhenWidthLessThan: 600,
+					autoUseDefaultWithMobile: true,
+					
+					debug: false
+					">
+	
+	<!-- PRELOAD IMAGES -->
+	<ul id="zpagepreloadimages" style="display:none;">
+		<li data-src="sliderimages/1.jpg"></li>
+		<li data-src="sliderimages/2.jpg"></li>
+		<li data-src="sliderimages/3.jpg"></li>
+		<li data-src="sliderimages/4.jpg"></li>
+		<li data-src="sliderimages/5.jpg"></li>
+		<li data-src="sliderimages/6.jpg"></li>
+	</ul>
+	
+	
+	<!-- HEADER BAR -->
+	<header>
+		<div class="mainwidth">
+			<h1><a class="zparallax-navigation" data-name="home">Logo</a></h1>
+			<ul class="navigation">
+				<li><a class="zparallax-navigation" data-name="about">About</a></li>
+				<li><a class="zparallax-navigation" data-name="work">Work</a></li>
+				<li><a class="zparallax-navigation" data-name="client">Client</a></li>
+				<li><a class="zparallax-navigation" data-name="gallery">Gallery</a></li>
+				<li><a class="zparallax-navigation" data-name="contact">Contact</a></li>
+			</ul>
+		</div>
+	</header>
+	
+	
+	<!-- SECTION 1 WITH IMAGE SLIDER -->
+	<div class="zparallax-section section1" data-name="home">
+		<div class="zslider" data-option="theme:'linear',
+			transition:'horizontal',
+			border: false,
+			preload: false,
+			navButtonParentIsRoot: true,
+			navThumb: false,
+			fullHeight: true,
+			scaleHeightWhenWidthLessThan: 600">
+			<ul>
+				<li>
+					<img src="sliderimages/1.jpg" />
+					<div class="elements">
+						<div class="mainwidth">
+							<h1>Slide 1</h1>
+						</div>
+					</div>
+				</li>
+				<li>
+					<img src="sliderimages/2.jpg" />
+					<div class="elements">
+						<div class="mainwidth">
+							<h1>Slide 2</h1>
+						</div>
+					</div>
+				</li>
+				<li>
+					<img src="sliderimages/3.jpg" />
+					<div class="elements">
+						<div class="mainwidth">
+							<h1>Slide 3</h1>
+						</div>
+					</div>
+				</li>
+				<li>
+					<img src="sliderimages/4.jpg" />
+					<div class="elements">
+						<div class="mainwidth">
+							<h1>Slide 4</h1>
+						</div>
+					</div>
+				</li>
+				<li>
+					<img src="sliderimages/5.jpg" />
+					<div class="elements">
+						<div class="mainwidth">
+							<h1>Slide 5</h1>
+						</div>
+					</div>
+				</li>
+				<li>
+					<img src="sliderimages/6.jpg" />
+					<div class="elements">
+						<div class="mainwidth">
+							<h1>Slide 6</h1>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	
+	<!-- SECTION 2 -->
+	<div class="zparallax-section section2" data-name="about" id="about">
+		<div class="mainwidth">
+			<h1><span class="zparallax-element" data-ratio-vertical="1">About</span><i class="fix-height">&nbsp;</i></h1>
+			<div class="content">
+				<div class="zparallax-element" data-ratio-vertical="0.5">
+					Lorem ipsum dolor sit amet, consectetuer adipiscing elit, 
+					sed diam nonummy nibh euismod tincidunt ut 
+					laoreet dolore magna aliquam erat volutpat.
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- SECTION 3 -->
+	<div class="zparallax-section section3" data-name="work" id="work">
+		<div class="mainwidth">
+			<h1><span class="zparallax-element" data-ratio-vertical="-1">Work</span><i class="fix-height">&nbsp;</i></h1>
+			<div class="content">
+				<div class="zparallax-element" data-ratio-vertical="-1">
+					Lorem ipsum dolor sit amet, consectetuer adipiscing elit, 
+					sed diam nonummy nibh euismod tincidunt ut 
+					laoreet dolore magna aliquam erat volutpat.
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- SECTION 4 -->
+	<div class="zparallax-section section4" data-name="client">
+		<div class="mainwidth">
+			<h1><span class="zparallax-element" data-ratio-horizontal="1">Client</span><i class="fix-height">&nbsp;</i></h1>
+			<div class="content">
+				<div class="zparallax-element" data-ratio-horizontal="0.5">
+					Lorem ipsum dolor sit amet, consectetuer adipiscing elit, 
+					sed diam nonummy nibh euismod tincidunt ut 
+					laoreet dolore magna aliquam erat volutpat.
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- SECTION 5 -->
+	<div class="zparallax-section section5" data-name="gallery">
+		<div class="mainwidth">
+			<h1><span class="zparallax-element" data-ratio-horizontal="-1">Gallery</span><i class="fix-height">&nbsp;</i></h1>
+			<div class="content">
+				<div class="zparallax-element" data-ratio-horizontal="-0.5">
+					Lorem ipsum dolor sit amet, consectetuer adipiscing elit, 
+					sed diam nonummy nibh euismod tincidunt ut 
+					laoreet dolore magna aliquam erat volutpat.
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- SECTION 6 -->
+	<div class="zparallax-section section6" data-name="contact">
+		<div class="mainwidth">
+			<h1><span class="zparallax-element" data-ratio-vertical="-2">Contact</span><i class="fix-height">&nbsp;</i></h1>
+			<div class="content">
+				<div class="zparallax-element" data-ratio-vertical="-1.5">
+					Lorem ipsum dolor sit amet, consectetuer adipiscing elit, 
+					sed diam nonummy nibh euismod tincidunt ut 
+					laoreet dolore magna aliquam erat volutpat.
+				</div>
+			</div>
+		</div>
+	</div>
+		
+</body>
+</html>

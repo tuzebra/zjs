@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Demo module image slider theme linear</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		
+		<style>
+			body{font-family:arial;}
+		</style>
+		
+		<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+		<script>
+			zjs.require('image.slider.theme.linear');
+			zjs.onready(function(){
+			//	zjs('.zslider').on('slider.change', function(event){console.log(event.data)});
+			});
+		</script>
+		
+	</head>
+	
+	<body>
+		
+		
+		<h3>use LI (default)</h3>
+		<pre>theme:'linear',
+slideitem: 'li'
+</pre>
+		<div class="zslider" data-option="theme:'linear',
+			slideitem: 'li',
+			transition:'horizontal',
+			transitionTime:1400,
+			border: false,
+			preload: false,
+			autoplay: true,
+			autoplayTime: 3000,
+			playButton: true,
+			navButton: false,
+			navThumb: false,
+			navDot: true">
+
+			<ul>
+				<li>
+					<h3><a href="http://www.google.com/search?q=IU">IU</a></h3>
+					<img src="sliderimages/1thumb.jpg" largesrc="sliderimages/1.jpg" />
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu eleifend purus. Nulla in diam quam, sed aliquam ligula. Aenean volutpat euismod leo, non malesuada est euismod in.</p>
+					<div class="elements">Lorem ipsum dolor sit amet</div>
+				</li>
+				<li>
+					<h3>IU</h3>
+					<img class="thumb" src="sliderimages/2thumb.jpg" />
+					<img class="large" src="sliderimages/2.jpg" />
+					<p>Quisque id lorem ultricies erat venenatis aliquam in in nunc. Nunc rutrum sapien vitae augue rutrum vel pulvinar est ullamcorper.</p>
+					<div class="elements" style="float:right">Lorem ipsum dolor sit amet</div>
+				</li>
+				<li>
+					<h3>IU</h3>
+					<img src="sliderimages/3thumb.jpg" />
+					<img class="large" src="sliderimages/3.jpg" />
+					<p>Quisque orci metus, congue laoreet dapibus eu, vehicula fringilla arcu. Curabitur pulvinar mattis euismod.</p>
+					<div class="elements" style="float:right">Lorem ipsum dolor sit amet</div>
+				</li>
+			</ul>
+
+		</div>
+		
+		<!-- -->
+		<br/>
+		
+		<h3>use TR</h3>
+		<pre>theme:'linear',
+slideitem: 'tr'
+</pre>
+		<div class="zslider" data-option="theme:'linear',
+			slideitem: 'tr',
+			transition:'horizontal',
+			transitionTime:1400,
+			border: false,
+			preload: false,
+			autoplay: true,
+			autoplayTime: 3000,
+			playButton: true,
+			navButton: false,
+			navThumb: false,
+			navDot: true">
+			
+			<table>
+				<tr>
+					<td>
+						<img src="sliderimages/1thumb.jpg" largesrc="sliderimages/1.jpg" />
+					</td>
+					<td>
+						<h3><a href="http://www.google.com/search?q=IU">IU</a></h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu eleifend purus. Nulla in diam quam, sed aliquam ligula. Aenean volutpat euismod leo, non malesuada est euismod in.</p>
+						<div class="elements">Lorem ipsum dolor sit amet</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<img class="thumb" src="sliderimages/2thumb.jpg" />
+						<img class="large" src="sliderimages/2.jpg" />
+					</td>
+					<td>
+						<h3>IU</h3>
+						<p>Quisque id lorem ultricies erat venenatis aliquam in in nunc. Nunc rutrum sapien vitae augue rutrum vel pulvinar est ullamcorper.</p>
+						<div class="elements" style="float:right">Lorem ipsum dolor sit amet</div>
+					</td>
+				</tr>
+				<tr>
+					<td>						
+						<img src="sliderimages/3thumb.jpg" />
+						<img class="large" src="sliderimages/3.jpg" />
+					</td>
+					<td>
+						<h3>IU</h3>
+						<p>Quisque orci metus, congue laoreet dapibus eu, vehicula fringilla arcu. Curabitur pulvinar mattis euismod.</p>
+						<div class="elements" style="float:right">Lorem ipsum dolor sit amet</div>
+					</td>
+				</tr>
+			</table>
+
+		</div>
+		
+		<!-- -->
+		<br/>
+		
+		<h3>use TD</h3>
+		<pre>theme:'linear',
+slideitem: 'td'
+</pre>
+		<div class="zslider" data-option="theme:'linear',
+			slideitem: 'td',
+			transition:'horizontal',
+			transitionTime:1400,
+			border: false,
+			preload: false,
+			autoplay: true,
+			autoplayTime: 3000,
+			playButton: true,
+			navButton: false,
+			navThumb: false,
+			navDot: true">
+			
+			<table>
+				<tr>
+					<td>
+						<img src="sliderimages/1thumb.jpg" largesrc="sliderimages/1.jpg" />
+					</td>
+					<td>
+						<img class="large" src="sliderimages/2.jpg" />
+					</td>
+					<td>						
+						<img class="large" src="sliderimages/3.jpg" />
+					</td>
+				</tr>
+				<tr colspan="3">
+					<td>
+						<img class="large" src="sliderimages/4.jpg" />
+					</td>
+				</tr>
+			</table>
+
+		</div>
+		
+		<!-- -->
+		<br/>
+		
+		<h3>use custom class (.customclass)</h3>
+		<pre>theme:'linear',
+slideitem: '.customclass'
+</pre>
+		<div class="zslider" data-option="theme:'linear',
+			slideitem: '.customclass',
+			transition:'horizontal',
+			transitionTime:1400,
+			border: false,
+			preload: false,
+			autoplay: true,
+			autoplayTime: 3000,
+			playButton: true,
+			navButton: false,
+			navThumb: false,
+			navDot: true">
+			
+			<div class="customclass">
+				<img src="sliderimages/1thumb.jpg" largesrc="sliderimages/1.jpg" />
+			</div>
+			
+			<div class="customclass">
+				<img class="large" src="sliderimages/2.jpg" />
+			</div>
+			
+			<div class="customclass">
+				<img class="large" src="sliderimages/3.jpg" />
+			</div>
+			
+			<div class="customclass">
+				<img class="large" src="sliderimages/4.jpg" />
+			</div>
+
+		</div>
+		
+		
+	</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs UI - datepicker</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="z.js" data-debug="true"></script>
+	<script>
+		zjs.onready('ui.datepicker', function(){
+		
+			zjs('.zdatetimepicker, .zdatepicker')
+			.on('ui.datepicker.ready', function(event){
+				console.log('ui.datepicker.ready', this);
+			})
+			.on('ui.datepicker.change', function(event){
+				console.log('ui.datepicker.change:', event.data);
+				console.log('original value:', this.getValue(''));
+			});
+			
+			
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	.wrapper{width:60%;margin:0 auto;padding:20px 0;}
+	</style>
+	
+</head>
+<body>
+	<form class="wrapper">
+	
+		<p>please view html source to know how-to use the option</p>
+	
+		<h3>Default option</h3>
+		<input type="text" name="birthday" class="zdatetimepicker" value="1990-08-29 20:39:32" />
+		
+		<h3>Monday is first of week - vietnames language</h3>
+		<input type="text" name="birthday2" class="zdatetimepicker" data-option="language:'vi',format:'DD MMM YYYY - HH:mm',firstOfWeek:1" />
+		
+		<h3>If you don't want to select the time, just use class "zdatepicker" to init a datepicker</h3> 
+		<input type="text" name="birthday" class="zdatepicker" value="1990-08-29" data-option="format:'DD MMM YYYY'" />
+		
+		<h3>Show larger date picker panel</h3>
+		<input type="text" name="day" class="zdatepicker" data-option="full:true,format:'DD MMM YYYY'" />
+		<input type="text" name="day2" class="zdatepicker" data-option="full:true,language:'vi',format:'DD MMMM, YYYY',firstOfWeek:1" />
+		
+		<h3>Custom display test</h3>
+		<input type="text" name="day3" class="zdatetimepicker" data-option="full:true,language:'vi',format:'DD MMMM, YYYY [lúc] HH[h]mm',calendarTitleFormat:'MMMM [(Năm] YYYY[)]',firstOfWeek:1" />
+		
+		<h3>Use placeholder when no-default value is set</h3>
+		<input type="text" name="day4" class="zdatetimepicker" placeholder="Birthday" data-option="minutestep:10,second:false" />
+		
+		<h3>Use datepicker as a list of hyperlink, each date in the calendar is a link</h3>
+		<input type="text" name="birthday" class="zdatepicker" value="1990-08-29" data-option="format:'DD MMM YYYY'" data-href="?date=${date}" />
+		
+		<h3>Only want to select the week rather than the date</h3>
+		<input type="text" name="birthday" class="zdatepicker" value="1990-08-29" data-option="selectweek:true" />
+		
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<hr/>
+		<br/>
+		
+		<h3>Use the input field to manual type the date value</h3>
+		<input type="text" name="birthday" class="zdatepicker" placeholder=""  data-option="button:false,format:'DD/MM/YYYY'" />
+		
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<hr/>
+		<br/>
+		
+		<h3>If you want to disable one date or more date</h3>
+		<p>User can't choose the date has disabled</p>
+		<pre>disabledDate:'<b>before</b> 2015-06-05, 2015-06-10, 2015-06-15 <b>to</b> 2015-06-20, <b>after</b> 2015-06-25'</pre>
+		<input type="text" name="birthday" class="zdatepicker" placeholder=""  data-option="button:false,format:'DD/MM/YYYY',disabledDate:'before 2015-06-05, 2015-06-10, 2015-06-15 to 2015-06-20, after 2015-06-25'" />
+		
+		<br/>
+		<br/>
+		
+		<input type="text" name="birthday" class="zdatepicker" placeholder=""  data-option="button:true,format:'DD/MM/YYYY',disabledDate:'before 2015-06-05, 2015-06-10, 2015-06-15 to 2015-06-20, after 2015-06-25'" />
+		
+		<br/>
+		<br/>
+		
+		<pre>disabledDate:'<b>before today</b>, <b>today</b>'</pre>
+		<input type="text" name="birthday" class="zdatepicker" placeholder=""  data-option="button:false,format:'DD/MM/YYYY',disabledDate:'before today, today'" />
+		
+		<br/>
+		<br/>
+		
+		<p>the same with</p>
+		<pre>disabledDate:'<b>before tomorrow</b>'</pre>
+		<input type="text" name="birthday" class="zdatepicker" placeholder=""  data-option="button:true,format:'DD/MM/YYYY',disabledDate:'before tomorrow'" />
+		
+		<br/>
+		<br/>
+		<br/>
+		<hr/>
+		<br/>
+		
+		
+		<h3>Allow to quick jump to another month or year</h3>
+		
+		<input type="text" name="birthday" class="zdatepicker" placeholder=""  data-option="button:false,format:'DD/MM/YYYY',calendarChangeMonthYear:true" />
+		
+		<br/>
+		<br/>
+		<p>The field year can use a input</p>
+		<input type="text" name="birthday" class="zdatepicker" placeholder=""  data-option="button:false,format:'DD/MM/YYYY',calendarChangeMonthYear:true,calendarYearFieldUseInput:true" />
+		
+		
+		<br/>
+		<br/>
+		<p>And on the full calendar</p>
+		
+		<input type="text" name="birthday" class="zdatepicker" placeholder=""  data-option="full:true,format:'DD/MM/YYYY',calendarChangeMonthYear:true" />
+		
+		
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		
+	</form>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>zjs editor module</title>
+	<script type="text/javascript" src="z.js"></script>
+	<script>
+		zjs.onready('editor, editor.table, editor.paste, editor.autolink, editor.autoresize, editor.contexttableprop, editor.contextimageprop, editor.contextlinkprop, editor.sourcepopup, ui.button, ui.popup, scrollbar, textarea.autoheight, codeeditor, codeeditor.activeline, codeeditor.closetag', function(){
+			zjs.moduleEditorButtons.font = function(zEl){ 
+				var beforeValue = zEl.editorGetSelectionContent();
+				var newValue = ' <span style="font-family:Tahoma">'+beforeValue+'</span>';
+				zEl.editorInsert(newValue);
+			};
+			zjs.moduleEditorButtons.lineHeight = function(zEl){
+				var body = zEl.editorGetSelectionElements('p');
+				body.addClass('line-height');
+				body.addClass('line-height-2');
+			};
+			zjs.moduleEditorButtons.lineHeight2 = function(zEl){
+				var body = zEl.editorGetElements('p');
+				body.setStyle('line-height', '2em');
+			}
+			//
+			zjs('#editor1').on('editor.click, editor.keypress', function(){
+				if(this.editorGetNode().hasClass('line-height')){
+					zjs('a.zbutton.lineHeight').addClass('active');
+				}else{
+					zjs('a.zbutton.lineHeight').removeClass('active');
+				}
+			})
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	.wrapper{width:960px;margin:0 auto;padding:40px 0;}
+	input[type="text"]{width:300px;}
+	
+	</style>
+	
+	
+	
+</head>
+<body>
+	<div class="wrapper">
+		
+		<form method="post">
+			
+			<h3>Content</h3>
+			
+			<textarea class="zeditor" name="content" id="editor1" style="width:700px;height:300px;" data-option="buttons:'bold,italic,font,lineHeight,lineHeight2', usedefaultbutton:false, customcss: ['z.module.editor.custom.css']">
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu eleifend purus. Nulla in diam quam, sed aliquam ligula. Aenean volutpat euismod leo, non malesuada est euismod in.</p>
+				<p><em>Quisque id lorem ultricies erat venenatis aliquam in in nunc. Nunc rutrum sapien vitae augue rutrum vel pulvinar est ullamcorper.</em></p>
+				<p><strong>Quisque orci metus, congue laoreet dapibus eu, vehicula fringilla arcu. Curabitur pulvinar mattis euismod.</strong></p>
+			</textarea>
+			
+			<div>
+				<button class="zbutton blue" type="submit" />submit</button>
+			</div>
+			
+		</form>
+	</div>
+	
+	
+	<!-- POPUP INSERT LINK -->
+	<div class="zpopup" id="popupinsertlink" data-option="center:true">
+		<strong>Link properties</strong>
+		<form method="post" style="margin-top:20px;">
+			<p><label>Link<br/><input type="text" name="href" value="" placeholder="http://" /></label></p>
+			<p><label>Target<br/><input type="text" name="target" value="" placeholder="target" /></label></p>
+			<p><button class="zbutton" type="submit">Update</button></p>
+		</form>
+	</div>
+	
+	
+</body>
+</html>

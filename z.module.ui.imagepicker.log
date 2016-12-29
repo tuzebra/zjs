@@ -1,0 +1,6 @@
+25/04/2015
+		+ add option renderMethod: 'background' / 'img'
+		
+12/06/2015
+		+ support trigger: "ui.imagepicker.maxfilesize", "ui.imagepicker.wrongfileext"
+		+ add options: "uploadingText", "dropText"

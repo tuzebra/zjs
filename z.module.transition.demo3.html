@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Demo module transition</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+		<style>
+			body{margin:0;padding:0;min-width:600px;}
+			.box{position:absolute;top:0;left:0;height:50px;width:50px;background:red;}
+		</style>
+		
+		<script type="text/javascript" src="z.js"></script>
+		<script>
+			zjs.onready('transition', function(){
+				zjs('.ztransition').on('transition.finish', function(){
+					zjs.log('transition finish');
+				});
+			});
+		</script>
+		
+	</head>
+	
+	<body>
+		
+		<div style="position:relative;width:500px;height:200px;">
+			
+			<div class="box ztransition" data-option="
+				from:{left:0},
+				to:{left:800},
+				time:2000,
+				timingfunction:'cubic-bezier(0.42,0,0.58,1)'
+				"></div>
+			
+		</div>
+		
+	</body>
+</html>

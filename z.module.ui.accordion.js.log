@@ -1,0 +1,7 @@
+10/02/2015
+		+ add option "allowclose" -> click to title to close active session
+		
+05/06/2015
+		+ add option "useurlhash"
+		  => support use url hash to store current state of the select section
+		     and also support listening event "hashchange" to change the section 
