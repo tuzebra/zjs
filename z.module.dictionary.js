@@ -34,15 +34,26 @@
 		// tat nhien local khong the luu giu nhieu data duoc
 		// cho nen se can den 1 data source 
 		// va khi can thi dictionary se get more data (via ajax) 
+		this.usedCacheDataSource = false;
 		this.dataSourceUrl = '';
+		this.dataSourceDataStructure = '';
 		this.defaultSearchProperty = 'text';
 		this.lastRawquery = '';
+
+		this.dataSourceUrlIsLoaded = false;
 		
 		return this;
 	};
 	
+	zDictionary.prototype.useCacheDataSource = function(bool){
+		this.usedCacheDataSource = bool;
+	};
 	zDictionary.prototype.setDataSourceUrl = function(url){
 		this.dataSourceUrl = url;
+	};
+	
+	zDictionary.prototype.setDataSourceDataStructure = function(structure){
+		this.dataSourceDataStructure = structure;
 	};
 	
 	zDictionary.prototype.addIndex = function(raw, searchproperty){
@@ -198,6 +209,16 @@
 	
 	zDictionary.prototype.getDataFromDataSource = function(rawquery, callback){
 		var self = this;
+		
+		if(self.dataSourceUrlIsLoaded){
+			if(zjs.isFunction(callback))
+				callback();
+			return;
+		}
+
+		if(self.usedCacheDataSource)
+			self.dataSourceUrlIsLoaded = true;
+
 		zjs.ajax({
 			url:this.dataSourceUrl,
 			data: {f:'text',q:rawquery},
@@ -206,10 +227,22 @@
 			cache: false,
 			onBegin: false,
 			onLoading: false,
-			onComplete: function(data){
+			onComplete: function(rawdata){
+
 				// >>> test
 				// console.log('json: ', data)
-				
+				// fix raw data to usable data
+				var data = [];
+				if(self.dataSourceDataStructure != ''){
+					var st = self.dataSourceDataStructure.split('.');
+					if(st.length > 1 && st[0] == ''){
+						for(var si=1;si<st.length;si++){
+							rawdata = rawdata[st[si]];
+						}
+					}
+				}
+				data = rawdata;
+
 				// add vao index thoi
 				self.addIndex(data, self.defaultSearchProperty);
 				
@@ -245,9 +278,20 @@
 			cache: false,
 			onBegin: false,
 			onLoading: false,
-			onComplete: function(data){
+			onComplete: function(rawdata){
 				// >>> test
 				// console.log('json: ', data)
+				// fix raw data to usable data
+				var data = [];
+				if(self.dataSourceDataStructure != ''){
+					var st = self.dataSourceDataStructure.split('.');
+					if(st.length > 1 && st[0] == ''){
+						for(var si=1;si<st.length;si++){
+							rawdata = rawdata[st[si]];
+						}
+					}
+				}
+				data = rawdata;
 				
 				// add vao index thoi
 				self.addIndex(data, self.defaultSearchProperty);

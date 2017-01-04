@@ -25,6 +25,8 @@ zjs.require('dictionary, scrollbar', function(){
 			searchproperty: 'text',
 			source: [],
 			sourceUrl: '',
+			initSourceUrl: '',
+			sourceDataStructure: '',
 			itemtemplate: '<div class="item">${text}</div>',
 			itemhighlightclass: 'highlight'
 		}
@@ -260,7 +262,7 @@ zjs.require('dictionary, scrollbar', function(){
 		// set height panel
 		zPanel.height(option.panelmaxheight);
 		// make scrollbar xong moi hide
-		zPanelscroll.makeScrollbar({bounce:false,usekey:false});
+		zPanelscroll.makeScrollbar({bounce:false,usekey:false,customCssClass:'zui-autosuggestion-panel'});
 		zPanel.addClass('zui-panel-hide');
 		
 		// function giup thay doi height cua panel
@@ -303,6 +305,13 @@ zjs.require('dictionary, scrollbar', function(){
 		
 		if(option.sourceUrl != '')
 			dictionary.setDataSourceUrl(option.sourceUrl);
+		if(option.initSourceUrl != ''){
+			dictionary.setDataSourceUrl(option.initSourceUrl);
+			dictionary.useCacheDataSource(true);
+			dictionary.getDataFromDataSource();
+		}
+		if(option.sourceDataStructure != '')
+			dictionary.setDataSourceDataStructure(option.sourceDataStructure);
 			
 		// >>> test
 		zOriginalInput.setData(dictionarykey, dictionary);
@@ -340,6 +349,8 @@ zjs.require('dictionary, scrollbar', function(){
 				// thi se de event dien ra nhu binh thuong
 				if(!option.multichoice){
 					
+					var needToSendSubmitEvent = zPanel.hasClass('zui-panel-hide');
+
 					// moi thu dien ra binh thuong
 					if(eventname=='keydown')
 						onkeyenterhandler();
@@ -351,7 +362,9 @@ zjs.require('dictionary, scrollbar', function(){
 						// boi vi textarea khong auto send submit event to form
 						// cho nen sau do phai submit form manual luon
 						// (phai delay 1milisecond chu khong lai bi clear mat event)
-						(function(){zOriginalInput.findUp('form').submit()}).delay(1);
+						if(needToSendSubmitEvent){
+							(function(){zOriginalInput.findUp('form').submit()}).delay(1);
+						}
 					};
 				}
 				// neu nhu la multichoice 

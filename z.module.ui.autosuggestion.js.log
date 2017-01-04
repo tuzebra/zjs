@@ -10,3 +10,6 @@
 
 17/07/2015
 		+ add new option: multiline with default is "TRUE"
+
+04/01/2017
+		+ add new option: "initSourceUrl" & "sourceDataStructure"
