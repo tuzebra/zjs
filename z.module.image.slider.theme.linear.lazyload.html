@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Demo module image slider theme linear Lazy load</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+	<script>
+		zjs.onready('image.slider.theme.linear, codeeditor', function(){
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	.wrapper{width:40%;margin:0 auto;padding:100px 0;margin-left:80px;}
+	.wrapper section{position:relative;min-height:300px;}
+	.wrapper section .source-wrap{position:absolute;top:0;left:110%;width:100%;}
+
+	.image-hold.imageloadding{
+		background:red;
+	}
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+		
+		
+		<h3>Lazy load</h3>
+		<section>
+			
+			
+			<div class="zslider" data-option="theme:'linear',
+				transition:'horizontal',
+				transitionTime:400,
+				preload: false,
+				autoplay: true,
+				autoplayTime: 6000,
+				navButton: true,
+				navButtonParentIsRoot: true,
+				navThumb: false,
+				navDot: true,
+				lazyloadImage: true,
+				lazyloadDelay: 500">
+				<ul>
+					<li>
+						<h3>Slide1</h3>
+						<img largesrc="sliderimages/1.jpg" />
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu eleifend purus. Nulla in diam quam, sed aliquam ligula. Aenean volutpat euismod leo, non malesuada est euismod in.</p>
+					</li>
+					<li>
+						<h3>Slide2</h3>
+						<img largesrc="sliderimages/2.jpg" />
+						<p>Quisque id lorem ultricies erat venenatis aliquam in in nunc. Nunc rutrum sapien vitae augue rutrum vel pulvinar est ullamcorper.</p>
+					</li>
+					<li>
+						<h3>Slide3</h3>
+						<img largesrc="sliderimages/3.jpg" />
+						<p>Quisque orci metus, congue laoreet dapibus eu, vehicula fringilla arcu. Curabitur pulvinar mattis euismod.</p>
+					</li>
+					<li>
+						<img data-src="sliderimages/4.jpg" title="Slide4" alt="Aliquam eu tortor tempus eros tempor pharetra vitae laoreet dolor. Fusce id pretium erat. Phasellus et est a ante blandit semper quis eu turpis." />
+					</li>
+					<li>
+						<img data-src="sliderimages/5.jpg" title="Slide5" />
+						<p>Phasellus fermentum orci consequat enim laoreet vel sodales leo consectetur. Pellentesque luctus est at neque dictum sit amet suscipit magna eleifend.</p>
+					</li>
+					<li>
+						<img largesrc="sliderimages/6.jpg" />
+						<p class="title">Slide6</p>
+						<p class="description">Cras adipiscing semper erat, quis consectetur lacus eleifend cursus. Donec ac nisl quis nibh elementum molestie ut vitae mi.</p>
+					</li>
+				</ul>
+			</div>
+		
+		
+		
+			<div class="source-wrap">
+				<textarea class="zcodeeditor" data-option="readOnly:true">
+
+				</textarea>
+			</div>
+		
+		</section>
+		
+		
+		
+		<!-- -->
+		<br/><br/>
+		
+	</div>	
+		
+</body>
+</html>

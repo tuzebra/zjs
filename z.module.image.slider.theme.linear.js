@@ -20,6 +20,8 @@
 			transitionTimingfunction:2,
 			border: false,
 			preload: false,
+			lazyloadImage: false,
+			lazyloadDelay: 0,
 			autoplay: true,
 			autoplayTime: 1500,
 			playButton: false,
@@ -128,22 +130,26 @@
 		//slider.popup.show
 		//slider.disable
 		//slider.enable
-
-
-
+	
+		var _images = new Array();
+		zjs.foreach(images, function(image){
+			if(image.src != '' || image.srclazy != '')
+				_images.push(image);
+			// auto active option.lazyloadImage
+			if(image.srclazy)
+				option.lazyloadImage = true;
+		});
 		// neu nhu ma khong phai contentSlide thi phai nghiem ngat kiem tra images cho chinh xac
 		if(!option.contentSlide){
-			var _images = new Array();
-			zjs.foreach(images, function(image){
-				if(image.src != '')
-					_images.push(image);
-			});
 			images = _images;
-		};
+		}
 
 		// add them index
-		for(var _i=0;_i<images.length;_i++)
-			images[_i]['index']=_i;
+		for(var _i=0;_i<images.length;_i++){
+			images[_i].index = _i;
+			images[_i].lazyloaded = false;
+			images[_i].lazyEl = false;
+		}
 
 		// fix option
 		option.width = parseInt(option.width);
@@ -285,6 +291,8 @@
 			sliderDisableClass = 'slider-disabled',
 			navButtonDisableClass = 'disabled',
 
+			imageholdloadingClass = 'imageloading',
+
 			bodypopupshowClass = 'imageslider-popup-show',
 
 			sliderNotReadyClass = 'slider-not-ready';
@@ -329,6 +337,9 @@
 			}
 
 			images[index].customEl = _customEl.clone(true);
+			if(option.lazyloadImage){
+				images[index].customEl.addClass(imageholdloadingClass);
+			}
 		});
 		// - - -
 
@@ -630,7 +641,18 @@
 				var _srcForTempEl = zElementIsInPopup?
 									(image.srcpopup||image.srclarge||image.src):
 									(_tempElWidth<250?(image.src):(image.srclarge||image.src));
-				_tempEl.setStyle({'background-image':'url('+_srcForTempEl+')', top:0, left:0});
+				_tempEl.setStyle({top:0, left:0});
+				if(!option.lazyloadImage){
+					_tempEl.setStyle('background-image', 'url('+_srcForTempEl+')');
+				}else{
+					if(image.srclazy){
+						_tempEl.setStyle('background-image', 'url('+_srcForTempEl+')');
+					}else{
+						image.srclazy = _srcForTempEl;
+					}
+					_tempEl.addClass(imageholdloadingClass);
+					image.lazyEl = _tempEl;
+				}
 			};
 
 			// sau do se chinh vi tri cho dung
@@ -1331,6 +1353,32 @@
 					time: runtimeOption.autoplayTime
 				}).run();
 			};
+
+			// lazyload
+			if(option.lazyloadImage){
+				if(!images[currentIndex].lazyloaded){
+					images[currentIndex].lazyloaded = true;
+					var lazyEls = images[currentIndex].lazyEl || images[currentIndex].customEl;
+					if(lazyEls){
+						lazyEls.each(function(lazyEl){
+							lazyEl = zjs(lazyEl);
+							zjs.loadImage({
+								image: images[currentIndex].srclazy,
+								onError: function(image){},
+								onLoaded: function(image){
+									(function(){
+										lazyEl.removeClass(imageholdloadingClass);
+										if(lazyEl.is('img'))
+											lazyEl.setAttr('src', image.src);
+										else
+											lazyEl.setStyle('background-image', 'url('+image.src+')');
+									}).delay(option.lazyloadDelay);
+								}
+							});
+						});
+					}
+				}
+			}
 		};
 
 		// ham ho tro fix lai index cho dung
@@ -1777,10 +1825,12 @@
 				if(option.transition==0 
 				|| option.transition==1 
 				|| option.transition==2)
-				{
-					var _he = images[currentIndex].customEl.height();
-					if(_he>maxHeight)
-						maxHeight = _he;
+				{	
+					if('customEl' in images[currentIndex]){
+						var _he = images[currentIndex].customEl.height();
+						if(_he>maxHeight)
+							maxHeight = _he;
+					}
 				}
 
 
@@ -1792,6 +1842,7 @@
 				{
 					if(option.contentSlide){
 						images.each(function(_image){
+							if(typeof _image.customEl == 'undefined')return;
 							var _he = _image.customEl.height();
 							if(_he>maxHeight)
 								maxHeight = _he;

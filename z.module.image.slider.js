@@ -64,10 +64,15 @@
 				// gio` se~ get infomation truoc'
 				zjs(element).find(option.slideitem).each(function(li){
 				
-					var zli = zjs(li),src = '',srclarge = '',srcpopup = '',title = '',description = '',link = '';
+					var zli = zjs(li),src = '',srclarge = '',srcpopup = '',srclazy = '',title = '',description = '',link = '';
+					if(src=='')src = zli.find('img').getAttr('src','');
 					if(src=='')src = zli.find('img').getAttr('src','');
 					if(src=='')src = zli.find('img.thumb').getAttr('src','');
 					if(src=='')src = zli.find('[data-src]').getAttr('data-src','');
+					if(src=='')src = zli.find('img').getAttr('src','');
+					if(src=='')src = zli.find('img').getAttr('src','');
+					if(src=='')src = zli.getAttr('src','');
+					if(src=='')src = zli.getAttr('data-src','');
 					if(title=='')title = zli.find('.title').getInnerText();
 					if(title=='')title = zli.find('h3').getInnerText();
 					if(title=='')title = zli.find('img').getAttr('title','');
@@ -86,12 +91,17 @@
 					if(srcpopup=='')srcpopup = zli.find('img').getAttr('data-srcpopup','');
 					if(srcpopup=='')srcpopup = zli.find('img').getAttr('popupsrc','');
 					if(srcpopup=='')srcpopup = zli.find('img').getAttr('srcpopup','');
+					if(srclazy=='')srclazy = zli.find('img').getAttr('data-lazy-src','');
+					if(srclazy=='')srclazy = zli.find('img').getAttr('data-lazysrc','');
+					if(srclazy=='')srclazy = zli.find('img').getAttr('data-srclazy','');
+					if(srclazy=='')srclazy = zli.find('img').getAttr('srclazy','');
+					if(srclazy=='')srclazy = zli.getAttr('data-lazy-src','');
 					if(link=='')link = zli.find('a').getAttr('href','');
 					if(link=='')link = zli.find('img').getAttr('data-link','');
 					if(link=='')link = zli.find('img').getAttr('link','');
 					if(src=='' && srclarge!='')src = srclarge;
 					if(src=='' && srcpopup!='')src = srcpopup;
-					images.push({src: src, srclarge: srclarge, srcpopup: srcpopup, title: title, description: description, link: link});
+					images.push({src: src, srclarge: srclarge, srcpopup: srcpopup, srclazy: srclazy, title: title, description: description, link: link});
 				});
 				// bay gio` se~ quang het' cai' infomation nay` vao` theme xu? ly'
 				zjs(element).setData(themeobjkey, (sliderThemes[option.theme])(element, images, option));

@@ -112,3 +112,8 @@
 19/11/2016 
 		+ new option: autoDisableWhenWindowWidthLessThan 
 		+ new option: autoDisableWhenWindowWidthLargerThan
+
+06/01/2017
+		+ support lazyload image
+		+ new option: lazyloadImage: false
+		+ new option: lazyloadDelay: 0
