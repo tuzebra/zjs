@@ -77,11 +77,11 @@ zjs.require('ui', function(){
 			option.autoDisableWhenWidthLessThan = 0;
 		
 		// fix handler method
-		if(!(option.handlerFreezingMethod in handerMethods))
+		if(!(option.handlerFreezingMethod in handlerMethods))
 			option.handlerFreezingMethod = 'meet-top';
 
 		// save option
-		zFreezepanelEl.setData(optionkey, option);
+		// zFreezepanelEl.setData(optionkey, option);
 		
 		// - - -
 		// start coding module
@@ -125,9 +125,20 @@ zjs.require('ui', function(){
 		zFreezepanelEl.addClass(freezepanelclass);
 
 		// find handler method
-		var handlerMethod = handerMethods[option.handlerFreezingMethod];
+		var handlerMethod = handlerMethods[option.handlerFreezingMethod];
 		// find handler element
 		var handlerElement = (!option.handlerFreezingElement) ? zFreezepanelEl : zjs(option.handlerFreezingElement);
+		// test to fix handler method
+		if(handlerElement.item(0, true) === zFreezepanelEl.item(0, true)){
+			if(option.handlerFreezingMethod == 'scroll-over'){
+				option.handlerFreezingMethod = 'meet-top';
+				option.handlerFreezingElement = false;
+				handlerMethod = handlerMethods[option.handlerFreezingMethod];
+			}
+		}
+
+		// save option
+		zFreezepanelEl.setData(optionkey, option);
 
 		// get ra top
 		var zWindowEl = zjs(window),
@@ -411,7 +422,7 @@ zjs.require('ui', function(){
 
 	// HANDLER METHOD
 	// >>>>>>>>>>>>>>>>>>>>>>>
-	var handerMethods = {
+	var handlerMethods = {
 		'meet-top': function(command, handlerElement, option, data){
 			
 			if(command == 'getAnchorPosition'){
