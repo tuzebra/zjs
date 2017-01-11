@@ -60,7 +60,7 @@ zjs.require('ui', function(){
 		var zButtonLabelEl = zjs('<span>').addClass(zbuttonlabelclass);
 		
 		// copy het noi dung qua label
-		zButtonEl.child().each(function(el){zButtonLabelEl.append(el)});
+		zButtonEl.child().eachElement(function(el){zButtonLabelEl.append(el)});
 		zButtonEl.append(zButtonLabelEl);
 		
 		// bind event for prevent default action while button disable
@@ -72,7 +72,7 @@ zjs.require('ui', function(){
 	
 	// remove tat ca khoang trang giua cac button trong group
 	makeGroupButton = function(element){
-		zjs(element).addClass(zgroupclass).child().each(function(el){
+		zjs(element).addClass(zgroupclass).child().eachElement(function(el){
 			if(el.nodeType==3)zjs(el).remove();
 		});
 	};
@@ -81,10 +81,10 @@ zjs.require('ui', function(){
 	// EXTEND METHOD cho zjs-instance
 	zjs.extendMethod({
 		makeButton: function(useroption){
-			return this.each(function(element){makeButton(element, useroption)});
+			return this.eachElement(function(element){makeButton(element, useroption)});
 		},
 		makeGroupButton: function(useroption){
-			return this.each(function(element){makeGroupButton(element)});
+			return this.eachElement(function(element){makeGroupButton(element)});
 		}
 	});
 	

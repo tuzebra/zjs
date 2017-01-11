@@ -1,9 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////////
-// * ZJS - Zebra JavaScript Framework
+// * ZJS - Zebra JavaScript Library
 // * include Sizzle - CSS selector engine
 // * version: 1.1.14.12.25
-// * (c) 2009-2014 Zebra <tuzebra@gmail.com>
-// * last update 25/12/2014
+// * (c) 2009-2017 Zebra <tuzebra@gmail.com>
 /////////////////////////////////////////////////////////////////////////////////
 
 ;(function(window, undefined){
@@ -148,7 +147,7 @@ var version = '1.1',
 	},
 	
 	// dung ham each thay cho Object.each() -> gay ra qua nhieu loi cho cac thu vien thu 3
-	each = function(obj, fn){ // each(object, function(value, key){} )
+	each = eachItem = function(obj, fn){ // each(object, function(value, key){} )
 		if(isArray(obj)){
 			for(var i=0,n=obj.length;i<n;i++)
 				if(fn.call(obj, obj[i], i) === false)
@@ -617,7 +616,7 @@ var version = '1.1',
 			
 			// thang` function "each" la` thang` duy nhat'
 			// duoc phep' can thiep. truc tiep vao` cac' element
-			this.each = function(fn){
+			this.each = this.eachElement = function(fn){
 				if( ! isFunction(fn) || elements.length == 0)
 					return self;
 				for(var i = 0; i < elements.length; i++){
@@ -653,7 +652,7 @@ var version = '1.1',
 			if(isElement(selector)){elements.push(selector);return this;};
 			
 			// zjs( zjs )
-			if(isZjs(selector)){selector.each(function(el){elements.push(el)});return this;};
+			if(isZjs(selector)){selector.eachElement(function(el){elements.push(el)});return this;};
 			
 			// zjs( array of [DOM1, DOM2, DOM3,... ] )
 			if( isArray( selector ) ){
@@ -663,9 +662,9 @@ var version = '1.1',
 						selector[i] == window )
 						elements.push( selector[i] );
 					if( isZjs(selector[i]) )
-						selector[i].each(function(el){elements.push(el)});
+						selector[i].eachElement(function(el){elements.push(el)});
 					if( isString(selector[i]) )
-						zjs.call(window, selector[i]).each(function(el){elements.push(el)});
+						zjs.call(window, selector[i]).eachElement(function(el){elements.push(el)});
 				};
 				return this;
 			};
@@ -736,7 +735,7 @@ var version = '1.1',
 			}, {version: version, extendFn: extendMethod, extendMethod: extendMethod, isZjs: isZjs});
 	})(),
 	
-	// KHAI BAO' LOP' TIMER (quan trong)
+	// TIMER CLASS
 	Timer = function(mainOpt){
 		
 		var transitionFunc = {
@@ -922,9 +921,9 @@ var version = '1.1',
 				var data = option.data;
 				if(option.processData && !isString(data) && isObject(option.data)){
 					var str='';
-					each(data, function(value, key){
+					eachItem(data, function(value, key){
 						if(isArray(value))
-							each(value, function(arrvalue){
+							eachItem(value, function(arrvalue){
 								str += key + '[]=' + encodeURIComponent(arrvalue).replace(/%20/g,'+')+'&';
 							});
 						else 
@@ -987,7 +986,7 @@ var version = '1.1',
 						xhr.withCredentials = option.withCredentials;
 					}
 					else if(typeof ActiveXObject != 'undefined'){
-						each(['Msxml2.XMLHTTP', 'Microsoft.XMLHTTP'], function(str){
+						eachItem(['Msxml2.XMLHTTP', 'Microsoft.XMLHTTP'], function(str){
 							try{
 								xhr = new ActiveXObject(str);
 							}catch(e){};
@@ -1143,7 +1142,7 @@ var version = '1.1',
 				if(typeof element.zjseventid != 'undefined')eventid = parseInt(element.zjseventid);
 				if(eventid<=-1)return;
 				// bat dau tim kiem va remove tat ca
-				each(eventTypes, function(value, type){
+				eachItem(eventTypes, function(value, type){
 					if(typeof eventTypes[type]['el'+eventid] != 'undefined')
 						eventTypes[type]['el'+eventid] = [];
 				});
@@ -1176,7 +1175,7 @@ var version = '1.1',
 						// thang con cua thang element ma query dang tim
 						// de biet chac chan
 						if(targetElement)
-							zjs(element).find(query).each(function(el){
+							zjs(element).find(query).eachElement(function(el){
 								// kiem tra thang nay co phai la thang target hay khong
 								if(targetElement===el){
 									eventElement = el;
@@ -1185,7 +1184,7 @@ var version = '1.1',
 								};
 								// neu nhu thang nay khong phai thi phai kiem tra
 								// tat ca cac thang con cua no cho chinh xac
-								zjs(el).find('*').each(function(childEl){
+								zjs(el).find('*').eachElement(function(childEl){
 									if(targetElement===childEl){
 										eventElement = el;
 										ok=true;
@@ -1330,7 +1329,7 @@ var version = '1.1',
 		this.touchY = function(i){i=i||0; return ePageY; };
 		
 		// key
-		this.keyCode = function(){return e.keyCode};
+		this.keyCode = this.getKeyCode = function(){return e.keyCode};
 		this.shiftKey = function(){return e.shiftKey};
 		this.altKey = function(){return e.altKey};
 		this.ctrlKey = function(){return e.ctrlKey};
@@ -1541,7 +1540,7 @@ extend(String.prototype, {
 			return s+'';
 		};
 		var s = this;
-		each(obj, function(value, key){
+		eachItem(obj, function(value, key){
 			if(typeof value == 'object'){
 				for(var j in value)
 					s = s.format(value, _prefix+key+'\\.');
@@ -1710,7 +1709,15 @@ extend(String.prototype, {
 	
 },false, true);
 extend(Array.prototype, {
-	each: function(fun, step){ // each( function( value , index ,this){} )
+	each: function(fun, step){ // eachItem( function( value , index ,this){} )
+		var me=this;
+		step = step || 1;
+		for (var i = 0; i < this.length; i += step)
+			if(fun.call(this, this[i], i, me) === false)
+				break;
+		return this;
+	},
+	eachItem: function(fun, step){ // eachItem( function( value , index ,this){} )
 		var me=this;
 		step = step || 1;
 		for (var i = 0; i < this.length; i += step)
@@ -1859,7 +1866,7 @@ extend(zjs, {
 	},
 	hook: function(name, fn){
 		if(isString(name))Hook.reg(name, fn);
-		if(isObject(name))each(name, function(fn, name){Hook.reg(name, fn)});
+		if(isObject(name))eachItem(name, function(fn, name){Hook.reg(name, fn)});
 	},
 	enablehook: Hook.enable,
 	getUniqueId: (function(){
@@ -1918,7 +1925,7 @@ zjs.extendMethod({
 	// check all element matches the selector
 	is: function(selector){
 		var matchall = true;
-		this.each(function(el){
+		this.eachElement(function(el){
 			if(!Sizzle.matchesSelector(el, selector))
 				return (matchall = false);
 		});
@@ -1930,13 +1937,13 @@ zjs.extendMethod({
 			elems = [ elems ];
 		if( zjs.isZjs(elems) ){
 			var _elems = [];
-			elems.each(function(_el){
+			elems.eachElement(function(_el){
 				_elems.push(_el);
 			});
 			elems = _elems;
 		};
 		var theSame = true;
-		this.each(function(elem){
+		this.eachElement(function(elem){
 			for(var i=0;i < elems.length;i++)
 				if(elem != elems[i]){
 					theSame = false;
@@ -1954,7 +1961,7 @@ zjs.extendMethod({
 	},
 	filter: function(selector){
 		var matchedEls = [];
-		this.each(function(elem){
+		this.eachElement(function(elem){
 			if(zjs(elem).is(selector))
 				matchedEls.push(elem);
 		});
@@ -1962,14 +1969,14 @@ zjs.extendMethod({
 	},
 	find: function(selector){
 		var contexts = [];
-		this.each(function(el){contexts.push(el)});
+		this.eachElement(function(el){contexts.push(el)});
 		return zjs(selector, contexts);
 	},
 	findUp: function(selector){
 		// dau tien se co gang liet ke ra het cac parent cua element
 		// ma thoa man selector
 		var parentEls = [];
-		this.each(function(el){
+		this.eachElement(function(el){
 			var parentEl = el.parentNode;
 			while(parentEl){
 				// neu nhu len toi cap document roi thi thoi luon
@@ -2011,12 +2018,12 @@ zjs.extendMethod({
 	},
 	nextSibling: function(){
 		var els = [];
-		this.each(function(el){els.push(el.nextSibling)});
+		this.eachElement(function(el){els.push(el.nextSibling)});
 		return zjs(els);
 	},
 	previousSibling: function(){
 		var els = [];
-		this.each(function(el){els.push(el.previousSibling)});
+		this.eachElement(function(el){els.push(el.previousSibling)});
 		return zjs(els);
 	},
 	parent: function(relative){
@@ -2025,7 +2032,7 @@ zjs.extendMethod({
 		// hoac la body luon
 		relative = relative || false;
 		var elem = false;
-		this.each(function(e){elem = e;return false;});
+		this.eachElement(function(e){elem = e;return false;});
 		elem = elem.parentNode;
 		
 		// neu nhu khong yeu cau get ra relative thi vay la xong roi
@@ -2050,7 +2057,7 @@ zjs.extendMethod({
 	},
 	child: function(reverse){
 		var elems = [];
-		this.each(function(e){
+		this.eachElement(function(e){
 			var childs = e.childNodes,
 				n = childs.length;
 			for(var i=0;i<n;i++)
@@ -2073,7 +2080,7 @@ zjs.extendMethod({
 	},
 	item: function( index, realElement ){
 		var elem = false, i = 0;
-		this.each(function(e){
+		this.eachElement(function(e){
 			if( i == index ){
 				elem = e;
 				return false;
@@ -2089,7 +2096,7 @@ zjs.extendMethod({
 	},
 	clone: function(deep){
 		var _cloneEl = false;
-		this.each(function(e){
+		this.eachElement(function(e){
 			try{_cloneEl = e.cloneNode(deep);return;}catch(er){};
 		});
 		return zjs(_cloneEl);
@@ -2104,7 +2111,7 @@ zjs.extendMethod({
 		
 		// call main loop
 		var string = args[0], stringBk = args[0];
-		this.each(function(el){
+		this.eachElement(function(el){
 			if(Hook.enable('before_setInnerHTML'))string = Hook.run('before_setInnerHTML',el,stringBk);
 			try{el.innerHTML = string;}catch(er){};
 			if(Hook.enable('after_setInnerHTML'))Hook.run('after_setInnerHTML',el,stringBk);
@@ -2129,7 +2136,7 @@ zjs.extendMethod({
 	},
 	isChecked:function(){
 		var checked = false;
-		this.each(function(el){
+		this.eachElement(function(el){
 			checked = el.checked;
 			return false;
 		});
@@ -2137,7 +2144,7 @@ zjs.extendMethod({
 	},
 	check: function(value){
 		if(typeof value == 'undefined')value = '';
-		return this.each(function(el){
+		return this.eachElement(function(el){
 			// gio se xem coi cai element nay thuoc radio/checkbox
 			var zEl = zjs(el);
 			if(zEl.is('[type=radio]')){
@@ -2150,7 +2157,7 @@ zjs.extendMethod({
 	},
 	selected:function(value){
 		if(typeof value == 'undefined')value = '';
-		return this.each(function(el){
+		return this.eachElement(function(el){
 			try{el.selected = value;}catch(err){};
 		});
 	},
@@ -2168,10 +2175,10 @@ zjs.extendMethod({
 		
 		// normal event
 		var self = this;
-		return this.each(function(elem){
+		return this.eachElement(function(elem){
 			
 			// co the truyen vao nhieu type 1 luc nen se tach ra
-			types.split(/\s*,\s*/i).each(function(type){
+			types.split(/\s*,\s*/i).eachItem(function(type){
 				
 				// special event
 				if(type=='clickout')return self.clickout(handler);
@@ -2305,7 +2312,7 @@ zjs.extendMethod({
 		};
 		
 		
-		return this.each(function(elem){
+		return this.eachElement(function(elem){
 		
 			// tao moi event
 			if(!data)var newEvent = new Event(event, elem);
@@ -2413,16 +2420,16 @@ zjs.extendMethod({
 		if(!zEls)return this;
 		
 		var listDomEls = Array();
-		zEls.each(function(el){
+		zEls.eachElement(function(el){
 			listDomEls.push(el);
 		});
 		
-		return this.each(function(el){
+		return this.eachElement(function(el){
 			EventStore.setEventDistract(el, listDomEls);
 		});
 	},
 	removeAllDistractEvent: function(){
-		return this.each(function(el){
+		return this.eachElement(function(el){
 			EventStore.removeEventDistract(el);
 		});
 	},
@@ -2451,7 +2458,7 @@ zjs.extendMethod({
 	
 		miliseconds = miliseconds || 0;
 
-		return this.each(function(element){
+		return this.eachElement(function(element){
 
 			var self = zjs(element),
 				// cho 1 xiu roi moi goi function cua nguoi dung
@@ -2546,7 +2553,7 @@ zjs.extendMethod({
 		});
 	},
 	clickout: function(handler){
-		return this.each(function(element){
+		return this.eachElement(function(element){
 			zjs(document).click(function(event){
 				try{
 					// xem coi thang to element la di toi dau
@@ -2589,7 +2596,7 @@ zjs.extendMethod({
 			};
 		};
 	
-		return this.each(function(element){
+		return this.eachElement(function(element){
 			
 			var option = extend({
 				onStart: function(event, element){},
@@ -2737,7 +2744,7 @@ zjs.extendMethod({
 	remove: function(){
 		var args = makeArray(arguments);
 		var deep = (args.length == 0 ? true : args[0]);
-		return this.each(function(el){
+		return this.eachElement(function(el){
 			var zEl = zjs(el);
 			
 			// kiem tra stop fadeout/fadein truoc khi remove
@@ -2775,7 +2782,7 @@ zjs.extendMethod({
 		var defaultVal = null;
 		var attr = null;
 		var lowerAtt = att.toLowerCase();
-		this.each(function(e){
+		this.eachElement(function(e){
 			
 			// for
 			if(lowerAtt == 'for')try{attr = e.htmlFor;if(attr != null)return false;}catch(e){};
@@ -2799,12 +2806,12 @@ zjs.extendMethod({
 		// truyen vo 1 tap. gia' tri.
 		if(isObject(att)){
 			var self = this;
-			each(att, function(value, key){self.setAttr(key, value)});
+			eachItem(att, function(value, key){self.setAttr(key, value)});
 			return this;
 		};
 		var lowerAtt = att.toLowerCase();
 		// chi? truyen` vao` 1 gia tri
-		this.each(function(e){
+		this.eachElement(function(e){
 
 			var done = false;
 			
@@ -2825,7 +2832,7 @@ zjs.extendMethod({
 		return this;
 	},
 	removeAttr: function(att){
-		return this.each(function(el){
+		return this.eachElement(function(el){
 			if(typeof el.removeAttribute == 'function')
 				el.removeAttribute(att);
 		});
@@ -2833,7 +2840,7 @@ zjs.extendMethod({
 	getValue: function(defaultVal){
 		defaultVal = defaultVal || '';
 		var val = null;
-		this.each(function(e){
+		this.eachElement(function(e){
 			try{val = e.value;}catch(e){};
 			if(val == null){try{val = e.getAttribute('value');}catch(e){};};
 			return false;
@@ -2843,7 +2850,7 @@ zjs.extendMethod({
 	},
 	setValue: function(val){
 		if(typeof val == 'undefined')val='';
-		this.each(function(el){
+		this.eachElement(function(el){
 			try{el.value = val;
 			
 			// run hook
@@ -2913,7 +2920,7 @@ zjs.extendMethod({
 		if(key in stylePropertyNames)
 			key = stylePropertyNames[key].cssname;
 		
-		this.each(function(e){
+		this.eachElement(function(e){
 			// may cai dac biet
 			if(e==document && key=='height'){val = Math.max(Math.max(document.body.scrollHeight, document.documentElement.scrollHeight), Math.max(document.body.offsetHeight, document.documentElement.offsetHeight), Math.max(document.body.clientHeight, document.documentElement.clientHeight));return false;};
 			if(e==document && key=='width'){val = Math.max(Math.max(document.body.scrollWidth, document.documentElement.scrollWidth), Math.max(document.body.offsetWidth, document.documentElement.offsetWidth), Math.max(document.body.clientWidth, document.documentElement.clientWidth));return false;};
@@ -2988,7 +2995,7 @@ zjs.extendMethod({
 		// pass an object
 		if( isObject(key) ){
 			var self = this;
-			each(key, function(value, key){self.setStyle(key, value)});
+			eachItem(key, function(value, key){self.setStyle(key, value)});
 			return this;
 		};
 		
@@ -3006,9 +3013,9 @@ zjs.extendMethod({
 		// hack
 		// 1 so truong hop dat biet khong phai la style
 		if(key == 'scrollLeft')
-			return this.each(function(el){el.scrollLeft = val});
+			return this.eachElement(function(el){el.scrollLeft = val});
 		if(key == 'scrollTop')
-			return this.each(function(el){el.scrollTop = val});
+			return this.eachElement(function(el){el.scrollTop = val});
 		// truong hop dat biet cua zjs
 		if(key == 'zjsInteger'){
 			val = parseInt(val);
@@ -3034,7 +3041,7 @@ zjs.extendMethod({
 		if(key in stylePropertyNames)key = stylePropertyNames[key].name;
 		
 		// fix css3 value
-		if(isString(val))each(stylePropertyNames, function(style, prop){
+		if(isString(val))eachItem(stylePropertyNames, function(style, prop){
 			val = val.replace(new RegExp(prop,'gi'), style.prefix + prop);
 		});
 		
@@ -3084,11 +3091,11 @@ zjs.extendMethod({
 		};
 		
 		// start set style
-		return this.each(function(el){try{el.style[key] = val;}catch(e){};});
+		return this.eachElement(function(el){try{el.style[key] = val;}catch(e){};});
 	},
 	copyStyleFrom: function(element){
 		var csstext = zjs(element).getCss();
-		this.each(function(elem){
+		this.eachElement(function(elem){
 			elem.setAttribute('style',csstext);
 		});
 		return this;
@@ -3223,7 +3230,7 @@ zjs.extendMethod({
 	scrollTop: function(val){
 		// set
 		if(isDefined(val)){
-			this.each(function(elem){
+			this.eachElement(function(elem){
 				// try{
 				elem.scrollTop = val;
 				// }catch(e){};
@@ -3232,7 +3239,7 @@ zjs.extendMethod({
 		}
 		// get
 		var elem = false;
-		this.each(function(e){
+		this.eachElement(function(e){
 			elem = e;
 			return false;
 		});
@@ -3246,7 +3253,7 @@ zjs.extendMethod({
 	scrollLeft: function(val){
 		// set
 		if(isDefined(val)){
-			this.each(function(elem){
+			this.eachElement(function(elem){
 				// try{
 				elem.scrollLeft = val;
 				// }catch(e){};
@@ -3255,7 +3262,7 @@ zjs.extendMethod({
 		}
 		// get
 		var elem = false;
-		this.each(function(e){
+		this.eachElement(function(e){
 			elem = e;
 			return false;
 		});
@@ -3268,7 +3275,7 @@ zjs.extendMethod({
 	},
 	offsetTop: function(){
 		var top = 0;
-		this.each(function(e){
+		this.eachElement(function(e){
 			top = e.offsetTop;
 			return false;
 		});
@@ -3276,14 +3283,14 @@ zjs.extendMethod({
 	},
 	offsetLeft: function(){
 		var left = 0;
-		this.each(function(e){
+		this.eachElement(function(e){
 			left = e.offsetLeft;
 			return false;
 		});
 		return left;
 	},
 	focus: function(){
-		this.each(function(e){
+		this.eachElement(function(e){
 			if(e.focus){
 				e.focus();
 				zjs(e).trigger('focus');
@@ -3309,8 +3316,8 @@ zjs.extendMethod({
 	},
 	addClass: function(name){
 		var args = makeArray(arguments), className = args.join(' ');
-		this.each(function(elem){
-			each(className.split(/[^A-Za-z0-9-_]+/), function(name){
+		this.eachElement(function(elem){
+			eachItem(className.split(/[^A-Za-z0-9-_]+/), function(name){
 				// native way
 				var donenative=false;if(supportClassList)
 					try{elem.classList.add(name);donenative=true;}catch(e){donenative=true};
@@ -3327,8 +3334,8 @@ zjs.extendMethod({
 	},
 	removeClass: function(){
 		var args = makeArray(arguments), className = args.join(' ');
-		this.each(function(elem){
-			each(className.split(/[^A-Za-z0-9-_]+/), function(name){
+		this.eachElement(function(elem){
+			eachItem(className.split(/[^A-Za-z0-9-_]+/), function(name){
 				// native way
 				var donenative=false;if(supportClassList)
 					try{elem.classList.remove(name);donenative=true;}catch(e){donenative=true};
@@ -3343,7 +3350,7 @@ zjs.extendMethod({
 		return this;
 	},
 	toggleClass: function(name){
-		this.each(function(elem){
+		this.eachElement(function(elem){
 			// native way
 			if(supportClassList){
 				try{elem.classList.toggle(name);}catch(e){};
@@ -3355,21 +3362,21 @@ zjs.extendMethod({
 		return this;
 	},
 	show: function(){
-		this.each(function(e){
+		this.eachElement(function(e){
 			e.style.display = '';
 			zjs(e).trigger('show');
 		});
 		return this;
 	},
 	hide: function(){
-		this.each(function(e){
+		this.eachElement(function(e){
 			e.style.display = 'none';
 			zjs(e).trigger('hide');
 		});
 		return this;
 	},
 	toggleShowHide:function(){
-		this.each(function(e){
+		this.eachElement(function(e){
 			if(e.style.display == 'none')
 				zjs(e).show();
 			else
@@ -3387,7 +3394,7 @@ zjs.extendMethod({
 		}, options);
 
 		// main each
-		return this.each(function(el){
+		return this.eachElement(function(el){
 			var zEl = zjs(el);
 			
 			// kiem tra neu nhu co 1 timer 
@@ -3436,7 +3443,7 @@ zjs.extendMethod({
 		}, options);
 
 		// main each
-		return this.each(function(el){
+		return this.eachElement(function(el){
 			var zEl = zjs(el);
 			
 			// kiem tra neu nhu co 1 timer 
@@ -3475,7 +3482,7 @@ zjs.extendMethod({
 		});
 	},
 	fadeStop: function(){
-		return this.each(function(el){
+		return this.eachElement(function(el){
 			var zEl = zjs(el);
 			
 			// kiem tra stop fadeout/fadein de stop
@@ -3515,7 +3522,7 @@ zjs.extendMethod({
 		}, options);
 
 		// main each
-		return this.each(function(el){
+		return this.eachElement(function(el){
 			var zEl = zjs(el);
 			
 			// kiem tra neu nhu co 1 timer 
@@ -3590,7 +3597,7 @@ zjs.extendMethod({
 		}, options);
 
 		// main each
-		return this.each(function(el){
+		return this.eachElement(function(el){
 			var zEl = zjs(el);
 			
 			// kiem tra neu nhu co 1 timer 
@@ -3665,8 +3672,8 @@ zjs.extendMethod({
 		if(isArray(args[0])){for(var i=0;i<args[0].length;i++)this.append(args[0][i]);return this;};
 		
 		// string
-		if(isString(args[0]))return this.each(function(el){
-			zjs(args[0]).each(function(cel){
+		if(isString(args[0]))return this.eachElement(function(el){
+			zjs(args[0]).eachElement(function(cel){
 				el.appendChild(cel);
 				if(Hook.enable('after_insertDOM'))Hook.run('after_insertDOM',cel);
 			});
@@ -3680,7 +3687,7 @@ zjs.extendMethod({
 		};
 		
 		// zjs
-		if(zjs.isZjs(args[0]))args[0].each(function(el){
+		if(zjs.isZjs(args[0]))args[0].eachElement(function(el){
 			thisEl.appendChild(el);
 			if(Hook.enable('after_insertDOM'))Hook.run('after_insertDOM',el);
 		});
@@ -3699,8 +3706,8 @@ zjs.extendMethod({
 		if(isArray(args[0])){for(var i=0;i<args[0].length;i++)this.prepend(args[0][i]);return this;};
 		
 		// string
-		if(isString(args[0]))return this.each(function(el){
-			zjs(args[0]).each(function(cel){
+		if(isString(args[0]))return this.eachElement(function(el){
+			zjs(args[0]).eachElement(function(cel){
 				prependElement(el, cel);
 				if(Hook.enable('after_insertDOM'))Hook.run('after_insertDOM',cel);
 			});
@@ -3714,7 +3721,7 @@ zjs.extendMethod({
 		};
 		
 		// zjs
-		if(zjs.isZjs(args[0]))args[0].each(function(el){
+		if(zjs.isZjs(args[0]))args[0].eachElement(function(el){
 			prependElement(thisEl, el);
 			if(Hook.enable('after_insertDOM'))Hook.run('after_insertDOM',el);
 		});
@@ -3752,13 +3759,13 @@ zjs.extendMethod({
 		if( isString( element) )
 			targetElem = zjs(element).item(0, true);
 		if( zjs.isZjs( element ) )
-			element.each(function(el){
+			element.eachElement(function(el){
 				targetElem = el;
 				return false;
 			});
 		if( ! isElement( targetElem ) )
 			return this;
-		this.each(function(el){
+		this.eachElement(function(el){
 			var parent = targetElem.parentNode;
 			if(parent.lastchild == targetElem)parent.appendChild(el);
 			else parent.insertBefore(el, targetElem.nextSibling);
@@ -3773,13 +3780,13 @@ zjs.extendMethod({
 		if( isString( element) )
 			targetElem = zjs(element).item(0, true);
 		if( zjs.isZjs( element ) )
-			element.each(function(el){
+			element.eachElement(function(el){
 				targetElem = el;
 				return false;
 			});
 		if( ! isElement( targetElem ) )
 			return this;
-		this.each(function(el){
+		this.eachElement(function(el){
 			targetElem.parentNode.insertBefore(el,targetElem);
 			if(Hook.enable('after_insertDOM'))Hook.run('after_insertDOM',el);
 		});
@@ -3789,7 +3796,7 @@ zjs.extendMethod({
 	
 		if( zjs.isZjs( elem) ){
 			var _elem = false;
-			elem.each(function(e){
+			elem.eachElement(function(e){
 				_elem = e;
 				return false;
 			});
@@ -3800,7 +3807,7 @@ zjs.extendMethod({
 			return this;
 			
 		var thisElem = false;
-		this.each(function(e){
+		this.eachElement(function(e){
 			thisElem = e;
 			return false;
 		});
@@ -3856,7 +3863,7 @@ zjs.extendMethod({
 			};
 			
 		// loop all input and get data
-		formEl.find('[name]').each(function(element){
+		formEl.find('[name]').eachElement(function(element){
 			inputEl = zjs(element);
 			if(!inputEl.is('input') && !inputEl.is('textarea') && !inputEl.is('select') && !inputEl.is('button'))return;
 			name = inputEl.getAttr('name','');
@@ -3972,7 +3979,7 @@ zjs.extendMethod({
 			name = name || '';if(name=='')return this;
 			// moi element se co 1 data rieng biet
 			// khong con chung data nhu old version
-			this.each(function(el){
+			this.eachElement(function(el){
 				var dataid = -1;
 				if(typeof el.zjsdataid != 'undefined')dataid = parseInt(el.zjsdataid);
 				if(dataid<=-1){
@@ -4009,7 +4016,7 @@ zjs.extendMethod({
 		},
 		delData: function(name){
 			name = name || '';if(name=='')return false;
-			this.each(function(el){
+			this.eachElement(function(el){
 				var dataid = -1;
 				if(typeof el.zjsdataid != 'undefined')dataid = parseInt(el.zjsdataid);
 				if(dataid<=-1 || dataid>=dataarray.length)return;
@@ -4020,7 +4027,7 @@ zjs.extendMethod({
 			return this;
 		},
 		unsetData: function(){
-			this.each(function(el){
+			this.eachElement(function(el){
 				if(typeof el.zjsdataid == 'undefined')return;
 				var dataid = parseInt(el.zjsdataid);
 				// don gian la ko link data id vo nua
@@ -4057,7 +4064,7 @@ zjs.extendMethod({
 	}});
 	
 	// thu auto get root
-	zjs('script[src]').each(function(el){
+	zjs('script[src]').eachElement(function(el){
 		var zScriptEl = zjs(el),
 			src = zScriptEl.attr('src');
 		if(zScriptEl.is('[data-auto-load-js=false]')){
@@ -4103,13 +4110,13 @@ zjs.extendMethod({
 		loadRequire = function(){
 			if(!zjs.requireOption.autoLoadJs)return;
 			if(!listLoaded)return loadList();
-			each(requiresList, function(requiresListValue, name){
+			eachItem(requiresList, function(requiresListValue, name){
 				if(!isArray(requiresList[name]) || requiresList[name].length<=0)return;
 				var allLoaded = true;
-				each(name.split(/[^A-Za-z0-9-_\.\*]+/), function(na){
+				eachItem(name.split(/[^A-Za-z0-9-_\.\*]+/), function(na){
 								
 					//for(var fullname in allModuleFiles){
-					each(allModuleFiles, function(v, fullname){
+					eachItem(allModuleFiles, function(v, fullname){
 						
 						// neu nhu fullname la file min thi khong cho autoload (chuc nang load .*)
 						fullname = fullname.replace('.min.js', '.js');
@@ -4174,7 +4181,7 @@ zjs.extendMethod({
 			// cho nen neu nhu kiem tra o day ma empty, chung to la da xong het
 			// luc nay ta moi that su call nhung handler onready o day
 			var count = 0;
-			each(requiresList, function(){count++;});
+			eachItem(requiresList, function(){count++;});
 			if(count>0)return;
 			
 			domReadyFns.isModuleRequired = true;

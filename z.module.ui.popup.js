@@ -65,10 +65,10 @@ zjs.require('ui', function(){
 		try{var a = typeof top.document;
 		top.document.body.offsetTop = top.document.body.offsetTop;
 		topWindowAccess = true;
-		}catch(er){};
+		}catch(er){}
 		
 		if(topWindowAccess){if(isNaN(top.popuplastindex))top.popuplastindex = 10000;}
-		else{if(isNaN(window.popuplastindex))window.popuplastindex = 10000;};
+		else{if(isNaN(window.popuplastindex))window.popuplastindex = 10000;}
 		
 		return function(){
 			if(topWindowAccess)return top.popuplastindex++;
@@ -102,7 +102,7 @@ zjs.require('ui', function(){
 		if(option){
 			zPopupEl.setData(optionkey, zjs.extend(option, useroption));
 			return;
-		};
+		}
 		
 		// - - - 
 		// neu ma chua co thi se lam binh thuong
@@ -161,14 +161,14 @@ zjs.require('ui', function(){
 			// click outside to close ?
 			if(option.clickout)
 				zPopupPCoverEl.click(function(){popupHide(element)});
-		};
+		}
 		zPopupEl.setData(pagecoverElKey, zPopupPCoverEl);
 		
 		// popup wrapper
 		var zPopupWrapEl = zjs('<div>').addClass(wrapclass);
 		
 		// copy het noi dung qua wrapper
-		zPopupEl.child().each(function(el){zPopupWrapEl.append(el)});
+		zPopupEl.child().eachElement(function(el){zPopupWrapEl.append(el)});
 		zPopupEl.append(zPopupWrapEl);
 		
 		// --
@@ -185,7 +185,7 @@ zjs.require('ui', function(){
 			zPopupCloseEl = zjs(_closehtml).prependTo(zPopupEl);
 		// bind event cho cai nut close nay luon
 		zPopupCloseEl.click(function(event, el){
-			if(this.hasClass('disabled'))return;
+			if(zjs(this).hasClass('disabled'))return;
 			popupHide(element);
 		});
 		
@@ -209,14 +209,14 @@ zjs.require('ui', function(){
 	popupShow = function(element){
 		// check coi co phai la popup hay khong
 		var zPopupEl = zjs(element);
-		var option = zPopupEl.data(optionkey);
+		var option = zPopupEl.getData(optionkey);
 		if(!option)return;
 
 		// xem coi neu nhu popup chua active thi moi can phai show
 		if(zPopupEl.hasClass(activeclass))return;
 
-		zPopupEl.data(pagecoverElKey).insertBefore(zPopupEl).style('z-index', getPopuplastindex());
-		zPopupEl.removeClass(hideclass).style('z-index', getPopuplastindex());
+		zPopupEl.getData(pagecoverElKey).insertBefore(zPopupEl).setStyle('z-index', getPopuplastindex());
+		zPopupEl.removeClass(hideclass).setStyle('z-index', getPopuplastindex());
 		
 		// xem coi dang su dung default scroll hay la custom scrollbar
 		// de biet ma xu ly cho phu hop
@@ -239,7 +239,7 @@ zjs.require('ui', function(){
 			
 			var _topContentEl = !isInUsedBodyScrollbarModule ? zjs(document.body) : zjs(document.body).getData(scrollbarContentElkey, false);
 			if(_topContentEl){
-				_topContentEl.child().each(function(el){
+				_topContentEl.child().eachElement(function(el){
 					if(el.tagName == 'SCRIPT' 
 					|| el.tagName == 'LINK' 
 					|| zjs(el).hasClass(popupclass) 
@@ -267,7 +267,7 @@ zjs.require('ui', function(){
 
 			// va cuoi cung la phai loai bo ra nhung thang ma duoc "preventlongpopup"
 			var listElsHasSwap = [];
-			fixedBodyEl.find('.'+zpreventlongpopup).each(function(el){
+			fixedBodyEl.find('.'+zpreventlongpopup).eachElement(function(el){
 				// tao cho no 1 thang the chan (giu cho)
 				var swapEl = zjs('<span></span>').insertBefore(el);
 				zjs(el).setData('zlongpopupswapel', swapEl).insertBefore(fixedBodyEl);
@@ -285,7 +285,7 @@ zjs.require('ui', function(){
 		popupRefresh(element);
 		// neu nhu fade (old version) thi se dung script de fade
 		if(option.fade)zPopupEl.fadeIn({time:option.fadeTime});
-		if(option.fadeCover)zPopupEl.data(pagecoverElKey).fadeIn({time:option.fadeTime});
+		if(option.fadeCover)zPopupEl.getData(pagecoverElKey).fadeIn({time:option.fadeTime});
 		// neu nhu animate thi se add cac class phu hop de ma dung css3 animate
 		if(option.animate){
 			// stop timer truoc do cho chac an
@@ -315,7 +315,7 @@ zjs.require('ui', function(){
 	popupHide = function(element, notUseFade, initHide){
 		// check coi co phai la popup hay khong
 		var zPopupEl = zjs(element);
-		var option = zPopupEl.data(optionkey);
+		var option = zPopupEl.getData(optionkey);
 		if(!option)return;
 
 		// xem coi neu nhu popup phai active roi thi moi can phai hide
@@ -341,7 +341,7 @@ zjs.require('ui', function(){
 						var topContentEl = zjs(document.body).getData(scrollbarContentElkey, false);
 						topContentEl.prepend(fixedBodyEl);
 					};
-					fixedBodyEl.child().each(function(el){
+					fixedBodyEl.child().eachElement(function(el){
 						zjs(el).insertBefore(fixedBodyEl)
 					});
 						
@@ -356,7 +356,7 @@ zjs.require('ui', function(){
 
 					// cuoi cung la phai tra ve vi tri dung cho may cai element bi swap
 					var listElsHasSwap = zPopupEl.getData('zlongpopuplistelswap', []);
-					if(listElsHasSwap.length>0)listElsHasSwap.each(function(el){
+					if(listElsHasSwap.length>0)listElsHasSwap.eachElement(function(el){
 						var swapEl = zjs(el).getData('zlongpopupswapel', false);
 						if(swapEl)zjs(el).insertBefore(swapEl);
 						swapEl.remove();
@@ -368,7 +368,7 @@ zjs.require('ui', function(){
 			},
 			_popupCoverHide = function(){
 				if(zPopupEl){
-					var _coverEl = zPopupEl.data(pagecoverElKey);
+					var _coverEl = zPopupEl.getData(pagecoverElKey);
 					if(_coverEl)_coverEl.remove(false);
 				}
 			};
@@ -380,7 +380,7 @@ zjs.require('ui', function(){
 		// Phai remove page cover truoc
 		// chi remove pagecoverElKey thoi
 		// khong remove deep, vay nen set remove(deep = false)
-		if(!notUseFade && option.fadeCover)zPopupEl.data(pagecoverElKey).fadeOut({time:option.fadeTime, callback:_popupCoverHide});
+		if(!notUseFade && option.fadeCover)zPopupEl.getData(pagecoverElKey).fadeOut({time:option.fadeTime, callback:_popupCoverHide});
 		
 		else _popupCoverHide();
 		
@@ -408,7 +408,7 @@ zjs.require('ui', function(){
 	popupRefresh = function(element){
 		// check coi co phai la popup hay khong
 		var zPopupEl = zjs(element);
-		if(!zPopupEl.data(optionkey))return;
+		if(!zPopupEl.getData(optionkey))return;
 		if(zPopupEl.hasClass(hideclass))return;
 		// fix show to center
 		if(zPopupEl.hasClass(centerclass))popupAlignTop(element);
@@ -419,7 +419,7 @@ zjs.require('ui', function(){
 	popupAlignTop = function(element){
 		// check coi co phai la popup hay khong
 		var zPopupEl = zjs(element);
-		var option = zPopupEl.data(optionkey);
+		var option = zPopupEl.getData(optionkey);
 		if(!option)return;
 		if(!zPopupEl.hasClass(centerclass))return;
 		var diffHeight = zjs(window).height() - zPopupEl.height();
@@ -428,8 +428,8 @@ zjs.require('ui', function(){
 		if(checkIsLongPopup(option.longPopup)){
 			// neu nhu winheight > popup height thi moi can thiet
 			// con neu nhu khong thi thoi, cho tu xu trong css luon cho don gian
-			if(diffHeight > 0)zPopupEl.style('margin-top', diffHeight/2);
-			else zPopupEl.style('margin-top', '');
+			if(diffHeight > 0)zPopupEl.setStyle('margin-top', diffHeight/2);
+			else zPopupEl.setStyle('margin-top', '');
 			
 			// se anh huong den cac thang module khac
 			// cho nene se can refresh
@@ -458,17 +458,17 @@ zjs.require('ui', function(){
 			if(diffScrollTop > 0)diffScrollTop = 0;
 			
 			var marginTop = -zPopupEl.height()/2 - diffHeight /2 + diffScrollTop;
-		};
-		zPopupEl.style('margin-top', marginTop);
+		}
+		zPopupEl.setStyle('margin-top', marginTop);
 		
 		// margin left
-		zPopupEl.style('margin-left', -zPopupEl.width()/2);
+		zPopupEl.setStyle('margin-left', -zPopupEl.width()/2);
 	};
 	
 	
 	// bind event cho document
 	zjs(document).on('keyup', function(event){
-		if(event.keyCode() != 27)return;
+		if(event.getKeyCode() != 27)return;
 		
 		// bay gio se la qua trinh di tim cai thang can phai remove nha
 		var popupShowInstanceEl = false;
@@ -477,7 +477,7 @@ zjs.require('ui', function(){
 			popupShowInstanceEl = zjs('.zui-popup[data-show-instance="'+_id+'"]');
 			if(popupShowInstanceEl.count()>0)break;
 			else popupShowInstanceEl = false;
-		};
+		}
 		
 		// xem coi co tim ra duoc khong?
 		if(!popupShowInstanceEl)return;
@@ -494,16 +494,16 @@ zjs.require('ui', function(){
 	// EXTEND METHOD cho zjs-instance
 	zjs.extendMethod({
 		makePopup: function(useroption){
-			return this.each(function(element){makePopup(element, useroption)});
+			return this.eachElement(function(element){makePopup(element, useroption)});
 		},
 		popupShow: function(){
-			return this.each(function(element){popupShow(element)});
+			return this.eachElement(function(element){popupShow(element)});
 		},
 		popupHide: function(){
-			return this.each(function(element){popupHide(element)});
+			return this.eachElement(function(element){popupHide(element)});
 		},
 		popupRefresh: function(){
-			return this.each(function(element){popupRefresh(element)});
+			return this.eachElement(function(element){popupRefresh(element)});
 		}
 	});
 	

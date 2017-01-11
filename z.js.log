@@ -524,3 +524,7 @@
 12/11/2016
 		+ zjs.ajax() support new option "withCredentials" (with default value is false)
 		+ fix zjs::hidescale() zjs::showscale()
+
+11/01/2017
+		+ add method zjs::eachElement() and force all related method to use "eachElement" => it help solve conflict when use zjs with Zepto/jQuery
+		+ add method eachItem() and used it at related method
