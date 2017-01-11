@@ -9,8 +9,12 @@
 
 	<script type="text/javascript" src="zepto.js"></script>
 	<script type="text/javascript" src="z.zepto.js" data-debug="true"></script>
+
+	<!-- <script type="text/javascript" src="z.module.codeeditor.js"></script>	 -->
+	<script type="text/javascript" src="z.module.ui.popup.js"></script>	
+
 	<script>
-		zjs.onready('ui.popup, codeeditor', function(){
+		$(function(){
 			
 			console.log('popup api is ready to use...');
 
@@ -18,8 +22,8 @@
 				var classname = '',
 					dataoption = '';
 
-				var showeffect = zjs('#showeffect').on('change', createHtml).getValue(),
-					hideeffect = zjs('#hideeffect').on('change', createHtml).getValue();
+				var showeffect = $('#showeffect').on('change', createHtml).getValue(),
+					hideeffect = $('#hideeffect').on('change', createHtml).getValue();
 
 				var html = '<div class="zpopup${classname}" data-option="autoshow:true${dataoption}">\n\t ' +
 								'<h1>Popup title</h1>\n\t ' +
@@ -46,15 +50,17 @@
 					dataoption: dataoption
 				});
 
-				zjs('#code').codeEditorSetValue(html);
+				// $('#code').codeEditorSetValue(html);
+				$('#code').val(html);
 			};
 
 			// first call
 			createHtml.delay(100);
 
 			// bind event for button "Run"
-			zjs('#run').on('click', function(){
-				var html = zjs('#code').codeEditorGetValue();
+			$('#run').on('click', function(){
+				// var html = zjs('#code').codeEditorGetValue();
+				var html = zjs('#code').val();
 				var popup = zjs(html);
 				popup.appendTo(document.body);
 			});
@@ -70,6 +76,9 @@
 	a.zbutton{margin:10px 0;}
 	</style>
 	
+	<link rel="stylesheet" type="text/css" href="z.module.codeeditor.css" />
+	<link rel="stylesheet" type="text/css" href="z.module.ui.popup.css" />
+
 </head>
 <body>
 	<div class="wrapper">
