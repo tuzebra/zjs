@@ -1360,7 +1360,7 @@ var version = '1.1',
 		};
 		
 		// method cho mouse scroll - mousewheel
-		this.deltas = function(){
+		this.deltas = this.getDeltas = function(){
 			var delta = 0,
 				deltaX = 0,
 				deltaY = 0;
@@ -1387,14 +1387,14 @@ var version = '1.1',
 
 			return [delta, deltaX, deltaY];
 		};
-		this.deltaX = function(){
-			return this.deltas()[1];
+		this.deltaX = this.getDeltaX = function(){
+			return this.getDeltas()[1];
 		};
-		this.deltaY = function(){
-			return this.deltas()[2];
+		this.deltaY = this.getDeltaY = function(){
+			return this.getDeltas()[2];
 		};
 		this.isTouchpad = function(){
-			var a = Math.abs(this.deltaY());return parseInt(a)<a;
+			var a = Math.abs(this.getDeltaY());return parseInt(a)<a;
 		};
 		
 		// mouse button
@@ -1411,6 +1411,9 @@ var version = '1.1',
 		
 		// save original event
 		this.original = e;
+		this.getOriginal = function(){
+			return e;
+		};
 	},
 	
 	// HOOK
@@ -2103,7 +2106,7 @@ zjs.extendMethod({
 		});
 		return zjs(_cloneEl);
 	},
-	html: function(){
+	setInnerHTML: function(){
 		var args = makeArray(arguments);
 		if(args.length<1)return this.getInnerHTML('');
 		if(isFunction(args[0]))args[0]=args[0].call(this);
@@ -2119,6 +2122,10 @@ zjs.extendMethod({
 			if(Hook.enable('after_setInnerHTML'))Hook.run('after_setInnerHTML',el,stringBk);
 		});
 		return this;
+	},
+	html: function(){
+		var args = makeArray(arguments);
+		return this.setInnerHTML.call(this, args);
 	},
 	getInnerHTML: function(defaultStr){
 		defaultStr = defaultStr || '';
@@ -2545,7 +2552,7 @@ zjs.extendMethod({
 			// zjs(document).on('mouseout', onMouseOut);
 
 			zjs(window).on('mouseout', function(event){
-				if(event.original.toElement == null && event.original.relatedTarget == null){
+				if(event.getOriginal().toElement == null && event.getOriginal().relatedTarget == null){
 					onMouseOut(event, true);
 				};
 
@@ -4355,12 +4362,12 @@ zjs.extendMethod({
 			
 			// neu nhu ma day la pointer event (khong phai touch event)
 			// va no khong phai la primary touch thi thoi cho out
-			if((_isPointerType = isPointerEventType(e.original, 'down')) && !isPrimaryTouch(e.original))
+			if((_isPointerType = isPointerEventType(e.getOriginal(), 'down')) && !isPrimaryTouch(e.getOriginal()))
 				return;
 			
-			firstTouch = _isPointerType ? e.original : e.original.touches[0];
+			firstTouch = _isPointerType ? e.getOriginal() : e.getOriginal().touches[0];
 			
-			if(e.original.touches && e.original.touches.length === 1 && touch.x2){
+			if(e.getOriginal().touches && e.getOriginal().touches.length === 1 && touch.x2){
 				// Clear out touch movement data if we have it sticking around
 				// This can occur if touchcancel doesn't fire due to preventDefault, etc.
 				touch.x2 = undefined;
@@ -4401,7 +4408,7 @@ zjs.extendMethod({
 			}, zjs.mobileEventOption.longTapDelay);
 			
 			// adds the current touch contact for IE gesture recognition
-			if(gesture && _isPointerType)gesture.addPointer(e.original.pointerId);
+			if(gesture && _isPointerType)gesture.addPointer(e.getOriginal().pointerId);
 		});
       	
       	// on touch move
@@ -4409,13 +4416,13 @@ zjs.extendMethod({
 			
 			// neu nhu ma day la pointer event (khong phai touch event)
 			// va no khong phai la primary touch thi thoi cho out
-			if((_isPointerType = isPointerEventType(e.original, 'move')) && !isPrimaryTouch(e.original))
+			if((_isPointerType = isPointerEventType(e.getOriginal(), 'move')) && !isPrimaryTouch(e.getOriginal()))
 				return;
 			
 			// neu ma move roi thi khong co con longtap gi nua het ah
 			cancelLongTap();
 			
-			firstTouch = _isPointerType ? e.original : e.original.touches[0];
+			firstTouch = _isPointerType ? e.getOriginal() : e.getOriginal().touches[0];
 			touch.x2 = firstTouch.pageX;
 			touch.y2 = firstTouch.pageY;
 			
@@ -4442,7 +4449,7 @@ zjs.extendMethod({
 			
 			// neu nhu ma day la pointer event (khong phai touch event)
 			// va no khong phai la primary touch thi thoi cho out
-    	    if((_isPointerType = isPointerEventType(e.original, 'up')) && !isPrimaryTouch(e.original))
+    	    if((_isPointerType = isPointerEventType(e.getOriginal(), 'up')) && !isPrimaryTouch(e.getOriginal()))
     	    	return;
         	
         	// cho den en luon roi thi thoi, cancel cai thang longtap luon
@@ -4478,7 +4485,7 @@ zjs.extendMethod({
 						//console.log('touch', touch);
 						
 						if(!touch.isDoubleTap && touch.zEl){
-							touch.zEl.trigger('tap', e.original);
+							touch.zEl.trigger('tap', e.getOriginal());
 						}
 
 						// trigger double tap immediately

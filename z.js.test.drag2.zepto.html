@@ -10,6 +10,8 @@
 			*{-webkit-tap-highlight-color:rgba(255, 255, 255, 0);}
 			html{-webkit-overflow-scrolling:touch;-webkit-user-select:none;touch-action:manipulation;}
 			.css{position:fixed;background:blue;top:100px;left:100px;width:200px;height:200px;}
+			#div1{position:fixed;background:gray;top:100px;left:100px;width:400px;height:400px;}
+			#div2{position:absolute;background:blue;top:100px;left:100px;width:200px;height:200px;}
 		</style>
 		
 		<script type="text/javascript" src="zepto.js"></script>
@@ -18,19 +20,35 @@
 		<script>
 			$(function(){
 			
-				$('div').drag({
-					onStart: function(event, element){},
+				$('#div2').drag({
+					onStart: function(event, element){
+						console.log('start dragging');
+					},
 					onDrag: function(event, element, mouse, style){
-						//console.log('mouse:', mouse);
-						//console.log('style:', style);
-						
 						var newleft = style.left + mouse.x,
 							newtop = style.top + mouse.y;
 						
+						// fix
+						if(newleft < 0)
+							newleft = 0;
+						if(newleft > zjs('#div1').width() - zjs(element).width())
+							newleft = zjs('#div1').width() - zjs(element).width();
+						
+						if(newtop < 0)
+							newtop = 0;
+						if(newtop > zjs('#div1').height() - zjs(element).height())
+							newtop = zjs('#div1').height() - zjs(element).height();
+							
+						console.log('mouse:', mouse, ' | style:', style, ' | newtop:', newtop, ' | newleft:', newleft);
+
 						// apply new left, top
 						$(element).left(newleft).top(newtop);
 					},
-					onDrop: function(event, element, mouse, style){}
+					onDrop: function(event, element, mouse, style){
+						console.log('dropped');
+					}
+				}).click(function() {
+					console.log('clicked');
 				});
 				
 			});
@@ -40,9 +58,11 @@
 	
 	<body>
 		
-		<a href="z.js.test.drag2.zepto.html">test2</a>
+		<a href="z.js.test.drag.zepto.html">test1</a>
 		
-		<div class="css"></div>
+		<div id="div1">
+			<div id="div2"></div>
+		</div>
 		
 	</body>
 </html>

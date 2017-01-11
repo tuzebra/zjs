@@ -877,6 +877,11 @@ extend(Function.prototype, {
 	 	return window.setTimeout(function(){return f.apply(f,args)},t);
 	}
 });
+extend(Event.prototype, {
+	getData: function(){
+	 	return this._args || null;
+	}
+});
 extend(KeyboardEvent.prototype, {
 	getKeyCode: function(){
 	 	return this.keyCode;
@@ -886,6 +891,9 @@ extend(MouseEvent.prototype, {
 	stop: function(){
 		if(isFunction(this.stopPropagation))
 			return this.stopPropagation();
+	},
+	getOriginal: function(){
+		return this;
 	},
 	getClientX: function(){
 		var ePageX = this.pageX || 0;
@@ -910,6 +918,42 @@ extend(MouseEvent.prototype, {
 		}
 
 	 	return (this.clientY ? this.clientY + document.body.scrollTop : ePageY);
+	},
+	getDeltas: function(){
+		var delta = 0,
+			deltaX = 0,
+			deltaY = 0;
+		
+		// lay' ra gia' tri. delta nhu binh` thuong`
+		if(this.wheelDelta)delta= this.wheelDelta/120; /* IE/Opera */
+		// Mozilla case.
+		// In Mozilla, sign of delta is different than in IE.
+		// Also, delta is multiple of 3.
+		if(this.detail    )delta=-this.detail/3; 
+		
+		// lay' ra gia' tri. delta moi' ung' voi' 2 truc.
+		deltaY = delta;
+		
+		// Gecko
+		if(this.axis !== undefined && this.axis === this.HORIZONTAL_AXIS){
+			deltaY = 0;
+			deltaX = -1 * delta;
+		}
+		
+		// Webkit
+		if(this.wheelDeltaY !== undefined)deltaY = this.wheelDeltaY/120;
+		if(this.wheelDeltaX !== undefined)deltaX = -1 * this.wheelDeltaX/120;
+
+		return [delta, deltaX, deltaY];
+	},
+	getDeltaX: function(){
+		return this.getDeltas()[1];
+	},
+	getDeltaY: function(){
+		return this.getDeltas()[2];
+	},
+	isTouchpad: function(){
+		var a = Math.abs(this.getDeltaY());return parseInt(a)<a;
 	}
 });
 
@@ -1111,7 +1155,8 @@ zjs.extendMethod({
 	// next: function(){},
 	// prev: function(){},
 	getAttr: function(att, defaultVal){
-		defaultVal = defaultVal || null;
+		if(!isDefined(defaultVal))
+			defaultVal = null;
 		var attr = this.attr(att); 
 		if(attr == null)attr = defaultVal;
 		return attr;
@@ -1121,6 +1166,23 @@ zjs.extendMethod({
 	},
 	removeAttr: function(att){
 		return this.attr(att, null);
+	},
+	setInnerHTML: function(){
+		var args = makeArray(arguments);
+		if(args.length<1)return this.getInnerHTML('');
+		if(isFunction(args[0]))args[0]=args[0].call(this);
+		if(isObject(args[0]) && isFunction(args[0].toString))args[0]=args[0].toString();
+		if(isNumeric(args[0]))args[0]=args[0]+'';
+		if(!isString(args[0]))return this;
+		
+		// call main loop
+		var string = args[0], stringBk = args[0];
+		this.eachElement(function(el){
+			if(Hook.enable('before_setInnerHTML'))string = Hook.run('before_setInnerHTML',el,stringBk);
+			try{el.innerHTML = string;}catch(er){};
+			if(Hook.enable('after_setInnerHTML'))Hook.run('after_setInnerHTML',el,stringBk);
+		});
+		return this;
 	},
 	// html: function(){},
 	getInnerHTML: function(defaultStr){
@@ -1276,7 +1338,7 @@ zjs.extendMethod({
 			// zjs(document).on('mouseout', onMouseOut);
 
 			zjs(window).on('mouseout', function(event){
-				if(event.original.toElement == null && event.original.relatedTarget == null){
+				if(event.getOriginal().toElement == null && event.getOriginal().relatedTarget == null){
 					onMouseOut(event, true);
 				};
 

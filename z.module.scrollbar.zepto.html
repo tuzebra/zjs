@@ -4,21 +4,25 @@
 <head>
 	<title>Demo z.module.scroll - zjs</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<script type="text/javascript" src="z.js" data-debug="true"></script>
+	<script type="text/javascript" src="zepto.js"></script>
+	<script type="text/javascript" src="z.zepto.js"></script>
+	<script type="text/javascript" src="z.module.scrollbar.js"></script>
+
 	<script>
-		zjs.require('scrollbar', function(){
-			if(zjs.isTouchDevice())alert('touch device');
-			zjs.onready(function(){
-				zjs('.zscroll').on('scrollbar:scroll', function(event, element){
-					console.log('scrolltop: ' + event.getData().scrollTop);
-				});
+		$(function(){
+			if($.isTouchDevice())alert('touch device');
+			$('.zscroll').on('scrollbar:scroll', function(event, element){
+				console.log('scrolltop: ' + event.getData().scrollTop);
 			});
-		})
+		});
 	</script>
 	
 	<style>
 		body{margin:0;padding:0;}
 	</style>
+
+	<link rel="stylesheet" type="text/css" href="z.module.scrollbar.css" />
+
 </head>
 <body class="zscroll" data-option="debug:true">
 	

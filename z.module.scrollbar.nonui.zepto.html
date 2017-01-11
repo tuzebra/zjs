@@ -2,18 +2,18 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-	<title>Demo z.module.scroll non UI - zjs</title>
+	<title>Demo z.module.scroll non UI - zepto support</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<script type="text/javascript" src="z.js" data-debug="true"></script>
+	<script type="text/javascript" src="zepto.js"></script>
+	<script type="text/javascript" src="z.zepto.js"></script>
+	<script type="text/javascript" src="z.module.scrollbar.js"></script>
+
 	<script>
-		zjs.require('scrollbar', function(){
-			//if(zjs.isTouchDevice())alert('touch device');
-			zjs.onready(function(){
-				zjs('.zscroll').on('scrollbar:scroll', function(event, element){
-					zjs('.zscroll').setInnerHTML('scrolltop: ' + event.getData().scrollTop);
-				});
+		$(function(){
+			$('.zscroll').on('scrollbar:scroll', function(event, element){
+				$('.zscroll').setInnerHTML('scrolltop: ' + event.getData().scrollTop);
 			});
-		})
+		});
 	</script>
 </head>
 <body style="padding:0;margin:0;">

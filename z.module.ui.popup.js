@@ -35,9 +35,9 @@ zjs.require('ui', function(){
 	});
 	
 	// trigger
-	//ui.popup.hide
-	//ui.popup.show
-	//ui.popup.refresh
+	//ui:popup:hide
+	//ui:popup:show
+	//ui:popup:refresh
 	
 	// template
 	var popupclass = 'zui-popup',
@@ -296,7 +296,7 @@ zjs.require('ui', function(){
 		};
 		// add class cho popup
 		// run trigger
-		zPopupEl.addClass(activeclass).trigger('ui.popup.show');
+		zPopupEl.addClass(activeclass).trigger('ui:popup:show');
 		if(zPopupEl.hasClass(centerclass))popupAlignTop(element);
 		
 		// sau do se set 1 cai instant de ma co gi con dung esc duoc
@@ -325,7 +325,7 @@ zjs.require('ui', function(){
 		var _popupHide = function(){
 				zPopupEl.addClass(hideclass);
 				// run trigger
-				zPopupEl.removeClass(activeclass).trigger('ui.popup.hide');
+				zPopupEl.removeClass(activeclass).trigger('ui:popup:hide');
 				
 				// longPopup or have fixedBodyElement?
 				var fixedBodyEl = zPopupEl.getData(fixedBodyElKey, false);
@@ -413,7 +413,7 @@ zjs.require('ui', function(){
 		// fix show to center
 		if(zPopupEl.hasClass(centerclass))popupAlignTop(element);
 		// run trigger
-		zPopupEl.trigger('ui.popup.refresh');
+		zPopupEl.trigger('ui:popup:refresh');
 	},
 	
 	popupAlignTop = function(element){

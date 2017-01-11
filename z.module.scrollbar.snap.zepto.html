@@ -2,21 +2,26 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-	<title>Demo z.module.scroll - zjs</title>
+	<title>Demo z.module.scroll - zepto support</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<script type="text/javascript" src="z.js" data-debug="true"></script>
+	<script type="text/javascript" src="zepto.js"></script>
+	<script type="text/javascript" src="z.zepto.js"></script>
+	<script type="text/javascript" src="z.module.scrollbar.js"></script>
+
 	<script>
-		zjs.onready('scrollbar', function(){
-			zjs('.zscroll').on('scrollbar:scroll', function(event, element){
+		$(function(){
+			$('.zscroll').on('scrollbar:scroll', function(event, element){
 				console.log('scrolltop: ' + event.getData().scrollTop);
 			});
-		})
+		});
 	</script>
 	<style>
 		p{margin:20px 0;}
 		ul{width:1600px;}
 		li{display: block;float:left;width:150px;height:100px;background:#aaa;margin:0 15px;}
 	</style>
+
+	<link rel="stylesheet" type="text/css" href="z.module.scrollbar.css" />
 </head>
 <body>
 	
