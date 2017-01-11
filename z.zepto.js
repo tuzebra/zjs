@@ -1151,6 +1151,15 @@ zjs.extendMethod({
 		if(args.length<1)return this.trigger('click');
 		return this.on('click', args[0]);
 	},
+	getValue: function(defaultVal){
+		defaultVal = defaultVal || '';
+		var val = this.val();
+		if(!val)val = defaultVal;
+		return val;
+	},
+	setValue: function(val){
+		return this.val(val);
+	},
 	getCss: function(){
 		var element = this.item(0,true),
 			cssstyledeclaration = false;
