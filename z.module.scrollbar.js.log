@@ -58,3 +58,6 @@
 		
 24/03/2016
 		+ support ui.popup option "longPopup"
+
+11/01/2017
+		+ change event name from using "." (dot) to ":" (semicolon)

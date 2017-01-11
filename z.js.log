@@ -529,3 +529,4 @@
 		+ add method zjs::eachElement() and force all related method to use "eachElement" => it help solve conflict when use zjs with Zepto/jQuery
 		+ add method eachItem() and used it at related method
 		+ add method event::getClientX() & event::getClientY()
+		+ change event.data to event.getData() to support Zepto
