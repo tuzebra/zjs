@@ -640,7 +640,13 @@ var zjs = Zepto,
 			};
 		};
 		return new Hook();
-	})();
+	})(),
+
+	// ZJS
+	isZjs = function(o){
+		// return o && typeof o === "object" && o.constructor === zjs;
+		return o && typeof o === "object" && ('selector' in o);
+	};
 
 extend(String.prototype, {
 	toString: function(){
@@ -876,12 +882,39 @@ extend(KeyboardEvent.prototype, {
 	 	return this.keyCode;
 	}
 });
+extend(MouseEvent.prototype, {
+	stop: function(){
+		if(isFunction(this.stopPropagation))
+			return this.stopPropagation();
+	},
+	getClientX: function(){
+		var ePageX = this.pageX || 0;
+
+		// fix pageX, pageY in touchdevice
+		if(this.type == "touchstart" || this.type == "touchmove" || this.type == "touchend"){
+			if(isMobileDevice() && isTouchDevice() && 'targetTouches' in this && this.targetTouches.length > 0){
+				ePageX = e.targetTouches[0].pageX;
+			}
+		}
+
+	 	return (this.clientX ? this.clientX + document.body.scrollLeft : ePageX);
+	},
+	getClientY: function(){
+		var ePageY = this.pageY || 0;
+
+		// fix pageX, pageY in touchdevice
+		if(this.type == "touchstart" || this.type == "touchmove" || this.type == "touchend"){
+			if(isMobileDevice() && isTouchDevice() && 'targetTouches' in this && this.targetTouches.length > 0){
+				ePageY = e.targetTouches[0].pageY;
+			}
+		}
+
+	 	return (this.clientY ? this.clientY + document.body.scrollTop : ePageY);
+	}
+});
 
 extend(zjs, {
-	isZjs: function(o){
-		// return o && typeof o === "object" && o.constructor === zjs;
-		return o && typeof o === "object" && ('selector' in o);
-	},
+	isZjs: isZjs,
 	extendCore: function(name, fn){
 		if(isString(name) && zjs.isFunction(fn)){var fns={};fns[name]=fn;return extend(zjs, fns);};
 		if(isObject(name))return extend(zjs, name);
@@ -1150,6 +1183,299 @@ zjs.extendMethod({
 		var args = makeArray(arguments);
 		if(args.length<1)return this.trigger('click');
 		return this.on('click', args[0]);
+	},
+	hover: function(fn, fno){
+		return this.longHover(fn, fno, 0);
+	},
+	longHover: function(fn, fno, miliseconds){
+	
+		miliseconds = miliseconds || 0;
+
+		return this.eachElement(function(element){
+
+			var self = zjs(element),
+				// cho 1 xiu roi moi goi function cua nguoi dung
+				waitOnInCallback = -1,
+				// xem coi co cho phep thuc hien function call out hay khong?
+				allowCallOnOutCallback;
+
+			var isIn = false;
+			
+			// var catchEl = 
+			// console.log('element', element);
+
+			self.on('mouseover', function(event){
+				if(typeof fn != 'function')return;
+				if(isIn)return;isIn = true;
+				if(waitOnInCallback > 0)return;
+
+				// tu gio tro di se khong allow outCallback duoc thuc hien
+				allowCallOnOutCallback = false;
+
+				// cai nay la dien ra tuc thi luon
+				if(miliseconds <= 0){
+					fn.call(self, event, element);
+					allowCallOnOutCallback = true;
+					waitOnInCallback = -1;
+					return;
+				};
+
+				// support truong hop delay callback
+				waitOnInCallback = window.setTimeout(function(){
+					fn.call(self, event, element);
+					allowCallOnOutCallback = true;
+				}, miliseconds);
+				
+			});
+
+			var onMouseOut = function(event, forceOut){
+				if(typeof fno != 'function')return;
+				// neu nhu thang onInCallback chua duoc goi
+				// thi se khong cho thang onOutCallback goi
+				if(!allowCallOnOutCallback)return;
+				if(!isIn)return;
+				// khong the set isIn cho nay
+				// boi vi co the onMouseOut
+				// nhung ma cai element bi out ra
+				// khong phai la cai element chinh xac can track
+				// wrong >>> isIn = false;
+
+				// xem coi co the la out cai thang cha, boi vi chay vo trong thang con
+				// nen cho nay can track
+				if(!forceOut){
+					try{
+						// xem coi thang to element la di toi dau
+						// var toElement = currentMouseElement;
+						// var toElement = event.toElement;
+						// console.log('toElement', mouseTop, toElement);
+						var toElement = event.toTarget();
+					
+						// neu nhu co nguon goc tu element dang xet
+						// thi se bo qua
+						while(toElement){
+							if(toElement == element)return;
+							if(toElement == document)break;
+							toElement = toElement.parentNode;	
+						};
+					}catch(err){};
+				};
+				
+				// clear & reset timer ngay
+				if(waitOnInCallback > 0){
+					window.clearTimeout(waitOnInCallback);
+					waitOnInCallback = -1;
+				};
+
+				isIn = false;
+				fno.call(self, event, element);
+			};
+
+			self.on('mouseout', function(event){
+				onMouseOut(event, false);
+			});
+			// zjs(document).on('mouseout', onMouseOut);
+
+			zjs(window).on('mouseout', function(event){
+				if(event.original.toElement == null && event.original.relatedTarget == null){
+					onMouseOut(event, true);
+				};
+
+			});
+
+
+		});
+	},
+	clickout: function(handler){
+		return this.eachElement(function(element){
+			zjs(document).click(function(event){
+				try{
+					// xem coi thang to element la di toi dau
+					var toElement = event.toTarget();
+					// neu nhu co nguon goc tu element dang xet
+					// thi se bo qua
+					while(toElement){
+						if(toElement == element)return;
+						if(toElement == document)break;
+						toElement = toElement.parentNode;	
+					};
+				}catch(err){};
+				// bay gio chung to la dung click vao document roi
+				// thuc hien callback
+				if(isFunction(handler))handler.call(zjs(element), event, element);
+			});
+		});
+	},
+	mouseWheel: function(handler){
+		return this.on('mousewheel', handler);
+	},
+	drag: function(opt){
+		
+		var mousedownevent = 'mousedown',
+			mousemoveevent = 'mousemove',
+			mouseupevent = 'mouseup';
+		
+		// ho tro luon touch nen phai check truoc
+		if(isTouchDevice()){
+			// dung chung (boi vi co the nhieu khi dang chay window8
+			mousedownevent = 'mousedown, touchstart';
+			mousemoveevent = 'mousemove, touchmove';
+			mouseupevent = 'mouseup, touchend';
+
+			// nhung neu ma tren iso, android thi ko dung mousedown luon, do mat cong
+			if(isMobileDevice()){
+				mousedownevent = 'touchstart';
+				mousemoveevent = 'touchmove';
+				mouseupevent = 'touchend';
+			};
+		};
+	
+		return this.eachElement(function(element){
+			
+			var option = extend({
+				onStart: function(event, element){},
+				onDrag: function(event, element, mouse, style){},
+				onDrop: function(event, element, mouse, style){},
+				// mac dinh se ho tro 2 direction luon
+				// con neu nhu thiet lap direction la vertical, horizontal
+				direction: ''
+			}, opt);
+		
+			var mouseStart = {},
+				mouse = {},
+				style = {},
+				readyToMove = false,
+				currentElement = false,
+				preventClick = false,
+				
+				// cac bien phuc vu cho muc dich chinh 
+				checkedReponsibilityHandler = false,
+				touchStartPos = 0,
+				touchOtherStartPos = 0,
+				deltaSlide = 0,
+				deltaOtherSlide = 0,
+				
+				// handlers
+				mousemoveHandler = function(event){
+					if( ! readyToMove )return;
+					
+					mouse = {x: event.getClientX() - mouseStart.x, y: event.getClientY() - mouseStart.y};
+									
+					var eventTouchX = event.getClientX(),
+						eventTouchY = event.getClientY();
+				
+					// phuc vu cho muc dich prevent drag theo direction khong mong muon
+					if(option.direction != ''){
+					
+						if(option.direction == 'horizontal'){
+							deltaSlide = eventTouchX - touchStartPos;
+							deltaOtherSlide = eventTouchY - touchOtherStartPos;
+						};
+						if(option.direction == 'vertical'){
+							deltaSlide = eventTouchY - touchStartPos;
+							deltaOtherSlide = eventTouchX - touchOtherStartPos;
+						};
+				
+						// neu nhu > 5 roi thi moi quyet dinh coi la drag element hay la move scrollbar (browser default hander)	
+						if(!checkedReponsibilityHandler){
+					
+							// neu nhu delta <5 thi chua quyet dinh lam gi het
+							if((deltaSlide > 5 || deltaSlide < -5) && (deltaOtherSlide > 5 || deltaOtherSlide < -5))
+								return;
+						
+							// neu nhu ma deltaOther > delta tuc la khong phai muc dich la drag cai element nay
+							if(Math.abs(deltaOtherSlide) > Math.abs(deltaSlide)){
+								readyToMove = false;
+								return;
+							};
+					
+							// con khong thi chung to la muon move slider
+							checkedReponsibilityHandler = true;
+						};
+					};
+											
+					event.preventDefault();
+					event.stopPropagation();
+					
+					if( option.onDrag )option.onDrag( event, currentElement, mouse, style );
+					
+					// khong cho thuc hien click neu nhu move mouse khong xa
+					preventClick = (Math.abs(mouse.x) > 1 || Math.abs(mouse.y) > 1);
+				},
+				mouseupHandler = function(event){
+					if( ! readyToMove )return;
+					readyToMove = false;
+					if( option.onDrop )
+						option.onDrop( event, currentElement, mouse, style );
+				};
+			
+			// bind event cho no
+			zjs(element).on(mousedownevent, function(event, element){
+				
+				element = element || this;
+				if(isZjs(element))element = element.item(0, true);
+
+				// voi img element tren firefox co van de
+				// firefox se auto drag cai image di luon nen phai prevent default
+				try{
+					if(element.tagName == 'IMG' /*&& browser.name == 'firefox'*/)
+						event.preventDefault();
+				}catch(err){};
+				
+				mouseStart = { x: event.getClientX(), y: event.getClientY() };
+				
+				// khoi tao cac gia tri cho muc dich prevent drag theo direction khong mong muon
+				checkedReponsibilityHandler = false;
+				if(option.direction == 'horizontal'){
+					touchStartPos = event.getClientX();
+					touchOtherStartPos = event.getClientY();
+				};
+				if(option.direction == 'vertical'){
+					touchStartPos = event.getClientY();
+					touchOtherStartPos = event.getClientX();
+				};
+				
+				
+				// reset mouse lo nhu trong truong hop ko co move
+				mouse = {x:0, y:0};
+				
+				style = {
+					top: element.offsetTop || 0,
+					left: element.offsetLeft || 0,
+					height: element.offsetHeight || 0,
+					width: element.offsetWidth || 0
+				};
+				readyToMove = true;
+				currentElement = element;
+				if( option.onStart )
+					option.onStart( event, currentElement);
+			});
+
+			// luc' nay` moi bat dau` bind event cho document
+			zjs(document).on(mousemoveevent, mousemoveHandler)
+						.on(mouseupevent, mouseupHandler);
+			
+			// bind luon event click de xu ly khong cho goi onclick khi ma drag
+			zjs(element).on('click', function(event){
+				if(!preventClick)return;
+				preventClick = false;
+				event.preventDefault();
+				event.stop();
+			});
+			
+			/*
+			// Implement Native Drag and Drop
+			element.addEventListener('dragover', function(event){
+				event.preventDefault();
+			});
+			element.addEventListener('dragenter', function(event){
+				event.preventDefault();
+			});
+			fatherElement.addEventListener('drop', function(event){
+				element = event.dataTransfer;
+			});
+			*/
+			
+		});
 	},
 	getValue: function(defaultVal){
 		defaultVal = defaultVal || '';

@@ -147,21 +147,23 @@ var version = '1.1',
 	},
 	
 	// dung ham each thay cho Object.each() -> gay ra qua nhieu loi cho cac thu vien thu 3
-	each = eachItem = function(obj, fn){ // each(object, function(value, key){} )
+	each = function(obj, fn){ // each(object, function(value, key){} )
 		if(isArray(obj)){
 			for(var i=0,n=obj.length;i<n;i++)
 				if(fn.call(obj, obj[i], i) === false)
 					break;
 			return;
-		};
+		}
 		if(isObject(obj)){
 			var keys = objectKeys(obj);
 			for(var i=0,n=keys.length;i<n;i++)
 				if(fn.call(obj, obj[keys[i]], keys[i]) === false)
 					break;	
-		};
+		}
 	},
 	
+	eachItem = each,
+
 	clone = function(source){
 		if(isObject(source))return extend(new Object(), source);
 		if(isArray(source))return extend(new Array(), source);
@@ -1321,8 +1323,8 @@ var version = '1.1',
 			}
 		};
 		
-		this.clientX = function(){ return (e.clientX ? e.clientX + document.body.scrollLeft : ePageX); };
-		this.clientY = function(){ return (e.clientY ? e.clientY + document.body.scrollTop : ePageY); };
+		this.clientX = this.getClientX = function(){ return (e.clientX ? e.clientX + document.body.scrollLeft : ePageX); };
+		this.clientY = this.getClientY = function(){ return (e.clientY ? e.clientY + document.body.scrollTop : ePageY); };
 		
 		// touch
 		this.touchX = function(i){i=i||0; return ePageX; };
@@ -2625,10 +2627,10 @@ zjs.extendMethod({
 				mousemoveHandler = function(event){
 					if( ! readyToMove )return;
 					
-					mouse = {x: event.clientX() - mouseStart.x, y: event.clientY() - mouseStart.y};
+					mouse = {x: event.getClientX() - mouseStart.x, y: event.getClientY() - mouseStart.y};
 									
-					var eventTouchX = event.clientX(),
-						eventTouchY = event.clientY();
+					var eventTouchX = event.getClientX(),
+						eventTouchY = event.getClientY();
 				
 					// phuc vu cho muc dich prevent drag theo direction khong mong muon
 					if(option.direction != ''){
@@ -2685,17 +2687,17 @@ zjs.extendMethod({
 						event.preventDefault();
 				}catch(err){};
 				
-				mouseStart = { x: event.clientX(), y: event.clientY() };
+				mouseStart = { x: event.getClientX(), y: event.getClientY() };
 				
 				// khoi tao cac gia tri cho muc dich prevent drag theo direction khong mong muon
 				checkedReponsibilityHandler = false;
 				if(option.direction == 'horizontal'){
-					touchStartPos = event.clientX();
-					touchOtherStartPos = event.clientY();
+					touchStartPos = event.getClientX();
+					touchOtherStartPos = event.getClientY();
 				};
 				if(option.direction == 'vertical'){
-					touchStartPos = event.clientY();
-					touchOtherStartPos = event.clientX();
+					touchStartPos = event.getClientY();
+					touchOtherStartPos = event.getClientX();
 				};
 				
 				
