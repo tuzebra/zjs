@@ -33,10 +33,10 @@ zjs.require('dictionary, scrollbar', function(){
 	});
 	
 	// trigger
-	//ui.autosuggestion.highlight
-	//ui.autosuggestion.choice
-	//ui.autosuggestion.input
-	//ui.autosuggestion.blur
+	//ui:autosuggestion:highlight
+	//ui:autosuggestion:choice
+	//ui:autosuggestion:input
+	//ui:autosuggestion:blur
 	
 	// template
 	var zautosuggestionClass = 'zui-autosuggestion-wrap',
@@ -262,7 +262,7 @@ zjs.require('dictionary, scrollbar', function(){
 		// set height panel
 		zPanel.height(option.panelmaxheight);
 		// make scrollbar xong moi hide
-		zPanelscroll.makeScrollbar({bounce:false,usekey:false,customCssClass:'zui-autosuggestion-panel'});
+		zPanelscroll.makeScrollbar({bounce:false,usecss:false,usekey:false,customCssClass:'zui-autosuggestion-panel'});
 		zPanel.addClass('zui-panel-hide');
 		
 		// function giup thay doi height cua panel
@@ -285,9 +285,11 @@ zjs.require('dictionary, scrollbar', function(){
 			typevalueholder = '',
 			// luu lai coi dang show len holder la cai thang nao?
 			// index tuc la index cua cai thang dang nam trong list suggest
-			currentValueholderIndex = 0;
+			currentValueholderIndex = 0,
+			// realvalue that use in the result
+			usedvalue = '';
 		
-		zPlaceholder.html(placeholderText);
+		zPlaceholder.setInnerHTML(placeholderText);
 		
 		// - - - -
 		// hide old input
@@ -296,7 +298,7 @@ zjs.require('dictionary, scrollbar', function(){
 		// thi se empty cai placeholder di thoi
 		if(zOriginalInput.getValue('')!=''){
 			zInput.setValue(typevalue = zOriginalInput.getValue());
-			zPlaceholder.html('');
+			zPlaceholder.setInnerHTML('');
 		};
 		
 		// - - - -
@@ -325,21 +327,21 @@ zjs.require('dictionary, scrollbar', function(){
 			refreshOptionFn();
 			
 			// de xem no lam cai tro gi
-			var keycode = event.keyCode();
+			var keycode = event.getKeyCode();
 			// up/down
 			if(keycode==38||keycode==40){if(eventname=='keydown')onkeyupdownhandler(event, keycode);return;};
 			// left
-			if(keycode==37){return;};
+			if(keycode==37){return;}
 			// right / tab
 			if(keycode==39||keycode==9){
 				if(eventname=='keydown')onkeyrighthandler();
 				// neu nhu an tab thi se goi su kien blur luon
 				if(keycode==9){
 					zPanel.addClass('zui-panel-hide');
-					zOriginalInput.trigger('ui.autosuggestion.blur');
-				};
+					zOriginalInput.trigger('ui:autosuggestion:blur');
+				}
 				return;
-			};
+			}
 			// enter
 			if(keycode==13){
 				//console.log('>>> 13');
@@ -423,14 +425,14 @@ zjs.require('dictionary, scrollbar', function(){
 			var currentHighlightValue = '';
 			if(currentHighlightIndex==0){
 				currentHighlightValue = typevalue;
-				zPlaceholder.html(typevalueholder);
+				zPlaceholder.setInnerHTML(typevalueholder);
 			}
 			else{
-				var zItemwrap = zPanelcontent.find('.'+__itemclass+'[data-highlight='+currentHighlightIndex+']'),
+				var zItemwrap = zPanelcontent.find('.'+__itemclass+'[data-highlight="'+currentHighlightIndex+'"]'),
 					zItemwrapData = zItemwrap.getData('searchtempdata');
 				zItemwrap.addClass(option.itemhighlightclass);
 				currentHighlightValue = zItemwrapData.text;
-				zPlaceholder.html('');
+				zPlaceholder.setInnerHTML('');
 			};
 			// set text for input
 			zInput.setValue(currentHighlightValue);
@@ -439,7 +441,7 @@ zjs.require('dictionary, scrollbar', function(){
 			// bang cach la se get ra cai thang div<input test>
 			// sau do lay width cua no de ma add cho width cua thang input :))
 			if(option.multichoice){
-				zInput.width(zInputTestEl.html(zInput.getValue('')).width()+10);
+				zInput.width(zInputTestEl.setInnerHTML(zInput.getValue('')).width()+10);
 				zPanel.top(zWrapperInput.height());
 			};
 			
@@ -454,7 +456,7 @@ zjs.require('dictionary, scrollbar', function(){
 			zPanelscroll.scrollToElement(zItemwrap);
 			// trigger event
 			if(typeof zItemwrapData != 'object')return;
-			zOriginalInput.trigger('ui.autosuggestion.highlight', zItemwrapData);
+			zOriginalInput.trigger('ui:autosuggestion:highlight', zItemwrapData);
 		},
 		
 		onkeyrighthandler = function(){
@@ -463,7 +465,7 @@ zjs.require('dictionary, scrollbar', function(){
 			zInput.setValue(typevalue=typevalueholder);
 			
 			// hide placeholder
-			zPlaceholder.html(typevalueholder='');
+			zPlaceholder.setInnerHTML(typevalueholder='');
 			// set highlight
 			// neu nhu dang co highlight san thi thoi, boi vi highlight uu tien cao hon
 			if(currentHighlightIndex<=0)
@@ -473,7 +475,7 @@ zjs.require('dictionary, scrollbar', function(){
 			
 			// get ra object tuong ung voi highlight
 			if(currentHighlightIndex<=0)return;
-			var zItemwrapData = zPanelcontent.find('.'+__itemclass+'[data-highlight='+currentHighlightIndex+']').getData('searchtempdata');
+			var zItemwrapData = zPanelcontent.find('.'+__itemclass+'[data-highlight="'+currentHighlightIndex+'"]').getData('searchtempdata');
 			
 			// neu nhu khong tim duoc thi thoi
 			if(typeof zItemwrapData != 'object')return;
@@ -483,10 +485,10 @@ zjs.require('dictionary, scrollbar', function(){
 				if(option.multiline)fixheightmultiline();
 				// xem coi nen lay property nao 
 				if(zItemwrapData && option.usedproperty in zItemwrapData){
-					typevalue = zItemwrapData[option.usedproperty];
 					// set text for input lai 1 lan nua cho dung luon
-					zOriginalInput.setValue(typevalue);
-					zInput.setValue(typevalue);
+					usedvalue = zItemwrapData[option.usedproperty];
+					typevalue = zItemwrapData[option.searchproperty];
+					zOriginalInput.setValue(usedvalue);
 				}
 			}
 			// neu nhu la multichoice thi se append vao 1 cai token
@@ -494,7 +496,7 @@ zjs.require('dictionary, scrollbar', function(){
 				// empty text input
 				zInput.setValue('').width(10);
 				if(zItemwrapData && option.usedproperty in zItemwrapData){
-					zjs('<div class="zui-autosuggestion-token"></div>').html(zItemwrapData.text).setAttr('data-value', zItemwrapData[option.usedproperty]).insertBefore(zInput);
+					zjs('<div class="zui-autosuggestion-token"></div>').setInnerHTML(zItemwrapData.text).setAttr('data-value', zItemwrapData[option.usedproperty]).insertBefore(zInput);
 					// fix height cho nguyen thang input
 					zWrapperEl.addClass(zautosuggestionWithTokenClass);
 					// set value cho original
@@ -503,9 +505,9 @@ zjs.require('dictionary, scrollbar', function(){
 			};
 			
 			// trigger event
-			//zOriginalInput.trigger('ui.autosuggestion.highlight', zItemwrapData);
+			//zOriginalInput.trigger('ui:autosuggestion:highlight', zItemwrapData);
 			// trigger event
-			zOriginalInput.trigger('ui.autosuggestion.choice',zItemwrapData);
+			zOriginalInput.trigger('ui:autosuggestion:choice',zItemwrapData);
 		},
 		
 		onkeyeschandler = function(){
@@ -523,7 +525,7 @@ zjs.require('dictionary, scrollbar', function(){
 			zOriginalInput.setValue(option.usedproperty == 'text' ? typevalue : '');
 			
 			// hide placeholder
-			zPlaceholder.html(typevalueholder='');
+			zPlaceholder.setInnerHTML(typevalueholder='');
 			
 			// hide panel
 			zPanel.addClass('zui-panel-hide');
@@ -556,11 +558,11 @@ zjs.require('dictionary, scrollbar', function(){
 				// neu nhu dang co highlight cai item nao do
 				// thi cai item nay se duoc chon
 				if(currentHighlightIndex>0){
-					_highlightItemEl = zPanelcontent.find('.'+__itemclass+'[data-highlight='+currentHighlightIndex+']');
+					_highlightItemEl = zPanelcontent.find('.'+__itemclass+'[data-highlight="'+currentHighlightIndex+'"]');
 				// uu tien so 2:
 				// thang nao ma dang la holder value luon, thi se chon thang do
 				}else if(currentValueholderIndex>0){
-					_highlightItemEl = zPanelcontent.find('.'+__itemclass+'[data-highlight='+currentValueholderIndex+']');
+					_highlightItemEl = zPanelcontent.find('.'+__itemclass+'[data-highlight="'+currentValueholderIndex+'"]');
 				// uu tien so 3:
 				// thang dau tien trong list suggestion
 				// nhung ma cai nay ko co choi voi text, chi choi voi id thoi
@@ -582,7 +584,7 @@ zjs.require('dictionary, scrollbar', function(){
 			// enter roi thi se khong co can cai placeholder lam gi nua
 			// nhung ma trong truong hop input empty thi thoi
 			if(typevalue!='')
-				zPlaceholder.html(typevalueholder='');
+				zPlaceholder.setInnerHTML(typevalueholder='');
 			
 			// hide panel
 			zPanel.addClass('zui-panel-hide');
@@ -594,15 +596,18 @@ zjs.require('dictionary, scrollbar', function(){
 			// xu ly cho truong hop singlechoice
 			if(!option.multichoice){
 				if(zItemwrapData){
-					// set text for input
-					zInput.setValue(typevalue=zItemwrapData.text);
 					// hide placeholder
-					zPlaceholder.html(typevalueholder='');
+					zPlaceholder.setInnerHTML(typevalueholder='');
 					// hide panel
 					zPanel.addClass('zui-panel-hide');
+					// set text for input
+					if(option.searchproperty in zItemwrapData){
+						zInput.setValue(typevalue=zItemwrapData[option.searchproperty]);
+					}
 					// xem coi nen lay property nao 
-					if(option.usedproperty in zItemwrapData)
-					zOriginalInput.setValue(zItemwrapData[option.usedproperty]);
+					if(option.usedproperty in zItemwrapData){
+						zOriginalInput.setValue(zItemwrapData[option.usedproperty]);
+					}
 				}
 			}
 			// xu ly cho truong hop multichoice
@@ -613,7 +618,7 @@ zjs.require('dictionary, scrollbar', function(){
 				typevalue = '';
 				
 				if(zItemwrapData && option.usedproperty in zItemwrapData){
-					zjs('<div class="zui-autosuggestion-token"></div>').html(zItemwrapData.text).setAttr('data-value', zItemwrapData[option.usedproperty]).insertBefore(zInput);
+					zjs('<div class="zui-autosuggestion-token"></div>').setInnerHTML(zItemwrapData.text).setAttr('data-value', zItemwrapData[option.usedproperty]).insertBefore(zInput);
 					// fix height cho thang input
 					zWrapperEl.addClass(zautosuggestionWithTokenClass);
 					// voi thang multichoice thi se khong can thiet placeholder
@@ -629,7 +634,7 @@ zjs.require('dictionary, scrollbar', function(){
 			};
 			
 			// trigger event
-			zOriginalInput.trigger('ui.autosuggestion.choice',zItemwrapData);
+			zOriginalInput.trigger('ui:autosuggestion:choice',zItemwrapData);
 		},
 		
 		onkeybackspacehandler = function(){
@@ -654,7 +659,7 @@ zjs.require('dictionary, scrollbar', function(){
 				typevalueholder = '';
 				// delay 1 xiu de ma kip update top va left
 				(function(){
-					zPlaceholder.top(zInput.top()).left(zInput.left()).show().html(placeholderText);
+					zPlaceholder.top(zInput.top()).left(zInput.left()).show().setInnerHTML(placeholderText);
 				}).delay(80);
 			};
 		},
@@ -682,8 +687,8 @@ zjs.require('dictionary, scrollbar', function(){
 				// show placeholder and stop
 				if(rawvalue=='' || rawvalue.length<option.minlength){
 					typevalueholder = '';
-					if(rawvalue!='')zPlaceholder.html('');
-					else zPlaceholder.html(placeholderText);
+					if(rawvalue!='')zPlaceholder.setInnerHTML('');
+					else zPlaceholder.setInnerHTML(placeholderText);
 					zPanel.addClass('zui-panel-hide');
 					return;
 				};
@@ -691,7 +696,7 @@ zjs.require('dictionary, scrollbar', function(){
 			// day la truong hop cho multichoice
 			else{
 				// fix width cho input
-				zInput.width(zInputTestEl.html(rawvalue).width()+10);
+				zInput.width(zInputTestEl.setInnerHTML(rawvalue).width()+10);
 			
 				//console.log('onkeytypehandler - rawvalue: '+rawvalue+' zOriginalInput.getValue():'+zOriginalInput.getValue());
 				
@@ -703,14 +708,14 @@ zjs.require('dictionary, scrollbar', function(){
 				if(rawvalue==''){ /* khong nhap gi ne */
 					// va dong thoi thang original (thang dich) cung empty thi return ve defautl placeholder thoi
 					if(zOriginalInput.getValue()=='') 
-						zPlaceholder.show().html(placeholderText);
+						zPlaceholder.show().setInnerHTML(placeholderText);
 					// con neu nhu thang dich khong co empty thi thoi, se hide di cho roi
 					else 
 						zPlaceholder.hide();
 					
 					// neu nhu rawvalue empty thi gio neu dang co cai thang highlight nao thi cung phai empty luon
 					typevalueholder = '';
-					zPlaceholder.html(placeholderText);
+					zPlaceholder.setInnerHTML(placeholderText);
 					zPanel.addClass('zui-panel-hide');
 					return;
 				}
@@ -725,7 +730,7 @@ zjs.require('dictionary, scrollbar', function(){
 				//if(rawvalue=='' && zOriginalInput.getValue()=='')
 				// khong lien quan gio thoi cai thang zOriginalInput het tron
 				//if(rawvalue=='')
-				//	zPlaceholder.show().html(placeholderText);
+				//	zPlaceholder.show().setInnerHTML(placeholderText);
 				//else 
 				//	zPlaceholder.hide();
 				// @todo:
@@ -751,7 +756,7 @@ zjs.require('dictionary, scrollbar', function(){
 				// nhung ma ajax return data cham hon
 				// cho nen phai check input xem coi co can thiet show suggestion ra khong?
 				if(result.length==0 || zInput.getValue()==''){
-					zPlaceholder.html('');
+					zPlaceholder.setInnerHTML('');
 					zPanel.addClass('zui-panel-hide');
 					return;
 				};
@@ -763,12 +768,12 @@ zjs.require('dictionary, scrollbar', function(){
 				zPanel.removeClass('zui-panel-hide').top(zWrapperInput.height());
 			
 				// clean all item
-				zPanelcontent.html('');
+				zPanelcontent.setInnerHTML('');
 			
 				// count 
 				var allItemHeight = 0;
 			
-				result.each(function(item, i){
+				zjs.eachItem(result, function(item, i){
 				
 					// tao ra 1 itemwrap moi
 					var zItemwrap = zjs(__htmlitemtpl).appendTo(zPanelcontent);
@@ -799,7 +804,7 @@ zjs.require('dictionary, scrollbar', function(){
 				});
 			
 				// set placeholder
-				zPlaceholder.html(typevalueholder);
+				zPlaceholder.setInnerHTML(typevalueholder);
 			
 				//sau do se thay doi height cua panel
 				changePanelHeight(allItemHeight);
@@ -817,17 +822,17 @@ zjs.require('dictionary, scrollbar', function(){
 		
 		// HANDLER EVENT CHO MAY CAI HIGHLIGHT ITEM
 		// --------------
-		var onmousehoveritemhandler = function(event, element){
+		var onmousehoveritemhandler = function(event){
 			// turn off current highlight
 			zPanelcontent.find('.'+__itemclass).removeClass(option.itemhighlightclass);
-			var zItemwrapData = zjs(element).addClass(option.itemhighlightclass).getData('searchtempdata');
+			var zItemwrapData = zjs(this).addClass(option.itemhighlightclass).getData('searchtempdata');
 			// trigger event
 			if(typeof zItemwrapData != 'object')return;
-			zOriginalInput.trigger('ui.autosuggestion.highlight', zItemwrapData);
+			zOriginalInput.trigger('ui:autosuggestion:highlight', zItemwrapData);
 		},
 		
-		onmouseclickitemhandler = function(event, element){
-			var zItemwrap = zjs(element),
+		onmouseclickitemhandler = function(event){
+			var zItemwrap = zjs(this),
 				zItemwrapData = zItemwrap.getData('searchtempdata');
 				
 			// xem coi neu nhu khong search ra item nao thi thoi
@@ -842,7 +847,7 @@ zjs.require('dictionary, scrollbar', function(){
 				// empty text input
 				zInput.setValue('').width(10);
 				if(zItemwrapData && option.usedproperty in zItemwrapData){
-					zjs('<div class="zui-autosuggestion-token"></div>').html(zItemwrapData.text).setAttr('data-value', zItemwrapData[option.usedproperty]).insertBefore(zInput);
+					zjs('<div class="zui-autosuggestion-token"></div>').setInnerHTML(zItemwrapData.text).setAttr('data-value', zItemwrapData[option.usedproperty]).insertBefore(zInput);
 					// fix height cho thang input
 					zWrapperEl.addClass(zautosuggestionWithTokenClass);
 					// set value cho original
@@ -859,13 +864,13 @@ zjs.require('dictionary, scrollbar', function(){
 			// set highlight
 			currentHighlightIndex = zItemwrap.getAttr('data-highlight',0).toInt();
 			// hide placeholder
-			zPlaceholder.html(typevalueholder='');
+			zPlaceholder.setInnerHTML(typevalueholder='');
 			// hide panel
 			zPanel.addClass('zui-panel-hide');
 			// input focus
 			zInput.focus();
 			// trigger event
-			zOriginalInput.trigger('ui.autosuggestion.choice',zItemwrapData);
+			zOriginalInput.trigger('ui:autosuggestion:choice',zItemwrapData);
 		};
 		// end handler
 		// --------------------
@@ -875,7 +880,7 @@ zjs.require('dictionary, scrollbar', function(){
 		// khi su dung multichoice
 		var multichoiceSetValueForOriginalInput = function(){
 			var values = [];
-			zWrapperEl.find('.zui-autosuggestion-token').each(function(elem){
+			zWrapperEl.find('.zui-autosuggestion-token').eachElement(function(elem){
 				values.push(zjs(elem).getAttr('data-value',''));
 			});
 			zOriginalInput.setValue(values.join(','));
@@ -884,7 +889,7 @@ zjs.require('dictionary, scrollbar', function(){
 		
 		// ham giup fix height cho cai textarea
 		var fixheightmultiline = function(){
-			zEstimateHeightEl.html(zInput.getValue());
+			zEstimateHeightEl.setInnerHTML(zInput.getValue());
 			var height = Math.max(zEstimateHeightEl.height(), option.minheight);
 			zInput.height(height);
 			// fix height xong roi thi cung move thang suggestion panel thoi
@@ -912,7 +917,7 @@ zjs.require('dictionary, scrollbar', function(){
 					.on('keyup',function(event,element){onkeyhandler(event, 'keyup')})
 					.on('mouseup',function(event,element){onkeyhandler(event, 'keyup')});
 		// 
-		zInput.on('blur', function(event){zOriginalInput.trigger('ui.autosuggestion.blur')});
+		zInput.on('blur', function(event){zOriginalInput.trigger('ui:autosuggestion:blur')});
 		
 		// khi cai thang wrapper input click vao thi se auto focus cai thang input luon
 		zWrapperInput.on('click', function(){
@@ -932,7 +937,7 @@ zjs.require('dictionary, scrollbar', function(){
 				
 				// xem coi la click vao cai thang nao trong day?
 				// neu nhu ma click vao may cai token thi thoi, bo qua
-				var _targetClickEl = event.target();
+				var _targetClickEl = event.getTarget();
 				if(zjs(_targetClickEl).hasClass('zui-autosuggestion-token'))
 					return;
 				
@@ -951,12 +956,12 @@ zjs.require('dictionary, scrollbar', function(){
 					zPanel.removeClass('zui-panel-hide').top(zWrapperInput.height());
 			
 					// clean all item
-					zPanelcontent.html('');
+					zPanelcontent.setInnerHTML('');
 			
 					// count 
 					var allItemHeight = 0;
 					
-					result.each(function(item, i){
+					zjs.eachItem(result, function(item, i){
 				
 						// tao ra 1 itemwrap moi
 						var zItemwrap = zjs(__htmlitemtpl).appendTo(zPanelcontent);
@@ -987,7 +992,7 @@ zjs.require('dictionary, scrollbar', function(){
 		};
 		
 		
-		zjs(document).click(function(event){
+		zjs(document).on('click', function(event){
 			// hide panel
 			zPanel.addClass('zui-panel-hide');
 		});
@@ -1012,7 +1017,7 @@ zjs.require('dictionary, scrollbar', function(){
 					// thi gio show ra default placeholder text thoi
 					if(typevalue == ''){
 						typevalueholder = '';
-						zPlaceholder.html(placeholderText);
+						zPlaceholder.setInnerHTML(placeholderText);
 					};
 				};
 				
@@ -1033,22 +1038,22 @@ zjs.require('dictionary, scrollbar', function(){
 		// va phai use cai property la id hoac la text thi moi duoc
 		if(option.multichoice && typevalue!='' && (option.usedproperty=='id' || option.usedproperty=='text')){
 			if(option.usedproperty=='id'){
-				zjs.foreach(typevalue.split(/\s*,\s*/), function(_dataid){
+				zjs.eachItem(typevalue.split(/\s*,\s*/), function(_dataid){
 					dictionary.asyncGetItemById(_dataid, function(zItemwrapData){
 						if(!zItemwrapData)return;
-						zjs('<div class="zui-autosuggestion-token"></div>').html(zItemwrapData.text).setAttr('data-value', zItemwrapData[option.usedproperty]).insertBefore(zInput);
+						zjs('<div class="zui-autosuggestion-token"></div>').setInnerHTML(zItemwrapData.text).setAttr('data-value', zItemwrapData[option.usedproperty]).insertBefore(zInput);
 						// set value cho original (phai lam sau khi async)
 						multichoiceSetValueForOriginalInput();
 					});
 				});
 			}else if(option.usedproperty=='text'){
-				zjs.foreach(typevalue.split(/\s*,\s*/), function(_text){
+				zjs.eachItem(typevalue.split(/\s*,\s*/), function(_text){
 					// thu co gang search 
 					dictionary.asyncSearch(_text, function(_itemsdata){
 						// lay thang ket qua dau tien
 						if(_itemsdata.length<=0)return;
 						var zItemwrapData = _itemsdata[0];
-						zjs('<div class="zui-autosuggestion-token"></div>').html(zItemwrapData.text).setAttr('data-value', zItemwrapData[option.usedproperty]).insertBefore(zInput);
+						zjs('<div class="zui-autosuggestion-token"></div>').setInnerHTML(zItemwrapData.text).setAttr('data-value', zItemwrapData[option.usedproperty]).insertBefore(zInput);
 						// set value cho original (phai lam sau khi async)
 						multichoiceSetValueForOriginalInput();
 					});
@@ -1125,24 +1130,24 @@ zjs.require('dictionary, scrollbar', function(){
 	// extend method cho zjs-instance
 	zjs.extendMethod({
 		makeAutosuggestion: function(useroption){
-			return this.each(function(element){makeAutosuggestion(element, useroption)});
+			return this.eachElement(function(element){makeAutosuggestion(element, useroption)});
 		},
 		autosuggestionAddindex: function(raw){
 			// >>> test
 			//console.log('autosuggestionAddindex: ', raw);
-			return this.each(function(element){autosuggestionAddindex(element, raw)});
+			return this.eachElement(function(element){autosuggestionAddindex(element, raw)});
 		},
 		autosuggestionRemoveindex: function(query, confirmdel){
-			return this.each(function(element){autosuggestionRemoveindex(element, query, confirmdel)});
+			return this.eachElement(function(element){autosuggestionRemoveindex(element, query, confirmdel)});
 		},
 		autosuggestionFocus: function(){
-			return this.each(function(element){autosuggestionFocus(element)});
+			return this.eachElement(function(element){autosuggestionFocus(element)});
 		},
 		
 		// make lai phuong thuc setValue mac dinh cua zjs
 		autosuggestionSetValue: function(val){
 			if(typeof val == 'undefined')val='';
-			return this.each(function(element){
+			return this.eachElement(function(element){
 				// xem coi day co phai la 1 autosuggest input hay khong
 				var inputEl = zjs(element).getData(newinputkey);
 				if(inputEl)try{
@@ -1156,7 +1161,7 @@ zjs.require('dictionary, scrollbar', function(){
 		},
 		autosuggestionDisable: function(surehuh){
 			surehuh = surehuh || false;
-			return this.each(function(element){
+			return this.eachElement(function(element){
 				// xem coi day co phai la 1 autosuggest input hay khong
 				var inputEl = zjs(element).getData(newinputkey),
 					zWrapperEl = zjs(element).getData(wrapelkey);

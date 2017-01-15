@@ -25,10 +25,11 @@ textarea.zui-autosuggestion-input{height:18px;}
 .zui-autosuggestion-with-token .zui-autosuggestion-inputwrap{padding:1px 3px;}
 
 /** suggestion **/
-.zui-autosuggestion-panel-wrap{position:absolute;border:1px solid #bbb;border-radius:2px;margin-top:-1px;width:406px;background:#FFF;box-shadow:0 1px 6px -2px rgba(0,0,0,0.6);z-index:1;}
+.zui-autosuggestion-panel{width: 100% !important;}
+.zui-autosuggestion-panel-wrap{position:absolute;border:1px solid #bbb;border-radius:2px;margin-top:-1px;width:100%;background:#FFF;box-shadow:0 1px 6px -2px rgba(0,0,0,0.6);box-sizing:border-box;z-index:1;}
 .zui-autosuggestion-panel-wrap.zui-panel-hide{display:none;}
 .zui-autosuggestion-panel-wrap:hover{border-color:#4D90FE;}
-.zui-autosuggestion-panel-scroll{height: 100%;overflow: scroll;overflow-x:hidden;}
+.zui-autosuggestion-panel-scroll{position:relative !important;width:100% !important;height: 100%;overflow: scroll;overflow-x:hidden;}
 .zui-autosuggestion-panel-content{}
 
 /** token **/

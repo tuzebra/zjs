@@ -1309,7 +1309,7 @@ var version = '1.1',
 			};
 			return {x:x, y:y};
 		};
-		this.target = function(){ return (e.target || e.srcElement); };
+		this.target = this.getTarget = function(){ return (e.target || e.srcElement); };
 		this.fromTarget = function(){ return (e.relatedTarget || e.fromElement); };
 		this.toTarget = function(){ return (e.relatedTarget || e.toElement || e.target || e.srcElement || false); };
 		
@@ -1331,7 +1331,7 @@ var version = '1.1',
 		this.touchY = function(i){i=i||0; return ePageY; };
 		
 		// key
-		this.keyCode = this.getKeyCode = function(){return e.keyCode};
+		this.keyCode = this.getKeyCode = function(){return e.keyCode || -1};
 		this.shiftKey = function(){return e.shiftKey};
 		this.altKey = function(){return e.altKey};
 		this.ctrlKey = function(){return e.ctrlKey};
@@ -1846,6 +1846,7 @@ extend(zjs, {
 	isWindow: isWindow,
 	isFile: isFile,
 	each: each,
+	eachItem: eachItem,
 	clone: clone,
 	foreach: each,
 	extend: extend,
@@ -2075,6 +2076,9 @@ zjs.extendMethod({
 	childReverse: function(){
 		return this.child(true);
 	},
+	lastChild: function(realElement){
+		return this.item(this.count()-1, realElement);
+	},
 	next: function(){
 		//
 		return this;
@@ -2095,9 +2099,6 @@ zjs.extendMethod({
 		if( realElement )
 			return elem;
 		return zjs( elem );
-	},
-	lastChild: function(realElement){
-		return this.item(this.count()-1, realElement);
 	},
 	clone: function(deep){
 		var _cloneEl = false;
@@ -2505,7 +2506,6 @@ zjs.extendMethod({
 			});
 
 			var onMouseOut = function(event, forceOut){
-				if(typeof fno != 'function')return;
 				// neu nhu thang onInCallback chua duoc goi
 				// thi se khong cho thang onOutCallback goi
 				if(!allowCallOnOutCallback)return;
@@ -2543,7 +2543,9 @@ zjs.extendMethod({
 				};
 
 				isIn = false;
-				fno.call(self, event, element);
+
+				if(isFunction(fno))
+					fno.call(self, event, element);
 			};
 
 			self.on('mouseout', function(event){

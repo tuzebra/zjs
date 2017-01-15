@@ -880,9 +880,15 @@ extend(Function.prototype, {
 extend(Event.prototype, {
 	getData: function(){
 	 	return this._args || null;
+	},
+	getKeyCode: function(){
+	 	return -1;
 	}
 });
 extend(KeyboardEvent.prototype, {
+	getTarget: function(){
+		return this.target || this.srcElement;
+	},
 	getKeyCode: function(){
 	 	return this.keyCode;
 	}
@@ -894,6 +900,9 @@ extend(MouseEvent.prototype, {
 	},
 	getOriginal: function(){
 		return this;
+	},
+	getTarget: function(){
+		return this.target || this.srcElement;
 	},
 	getClientX: function(){
 		var ePageX = this.pageX || 0;
@@ -977,7 +986,8 @@ zjs.extendCore({
 	isObject: isObject,
 	isElement: isElement,
 	clone: clone,
-	
+	eachItem: eachItem,
+	foreach: eachItem,
 	browser: browser,
 	makeArray: makeArray,
 	objectKeys: objectKeys,
@@ -1152,6 +1162,9 @@ zjs.extendMethod({
 	childReverse: function(){
 		return this.child(true);
 	},
+	lastChild: function(realElement){
+		return this.item(this.count()-1, realElement);
+	},
 	// next: function(){},
 	// prev: function(){},
 	getAttr: function(att, defaultVal){
@@ -1291,7 +1304,6 @@ zjs.extendMethod({
 			});
 
 			var onMouseOut = function(event, forceOut){
-				if(typeof fno != 'function')return;
 				// neu nhu thang onInCallback chua duoc goi
 				// thi se khong cho thang onOutCallback goi
 				if(!allowCallOnOutCallback)return;
@@ -1329,7 +1341,9 @@ zjs.extendMethod({
 				};
 
 				isIn = false;
-				fno.call(self, event, element);
+
+				if(isFunction(fno))
+					fno.call(self, event, element);
 			};
 
 			self.on('mouseout', function(event){

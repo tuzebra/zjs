@@ -2,22 +2,32 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-	<title>Demo module autosuggestion</title>
+	<title>Demo module autosuggestion - zepto support</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	
-	<script type="text/javascript" src="z.js" data-debug="true"></script>
+	<script type="text/javascript" src="zepto.js"></script>
+	<script type="text/javascript" src="z.zepto.js"></script>
+
+	<script type="text/javascript" src="z.module.dictionary.js"></script>
+	<script type="text/javascript" src="z.module.scrollbar.js"></script>
+	<script type="text/javascript" src="z.module.ui.autosuggestion.js"></script>
+
 	<script>
-		zjs.onready('ui.autosuggestion', function(){
+		$(function(){
 			// bind event
-			zjs('.zautosuggestion')
-				.on('ui:autosuggestion:highlight', function(event, element){console.log('highlight:', event.data)})
-				.on('ui:autosuggestion:choice', function(event, element){console.log('choice:', event.data)});
+			$('.zautosuggestion')
+				.on('ui:autosuggestion:highlight', function(event){
+					console.log('highlight:', event.getData())
+				})
+				.on('ui:autosuggestion:choice', function(event){
+					console.log('choice:', event.getData())
+				});
 				
 	
-			zjs('form').on('submit', function(event){
+			$('form').on('submit', function(event){
 				event.preventDefault();
-				console.log('submit event prevent default', this.getFormData());
-				alert(zjs.jsonEncode(this.getFormData()));
+				console.log('submit event prevent default', $(this).getFormData());
+				alert($.jsonEncode($(this).getFormData()));
 			});
 				
 		});
@@ -27,13 +37,21 @@
 		body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#f0f0f0;}
 		.wrapper{width:70%;margin:50px auto;}
 	</style>
+
+	<link rel="stylesheet" type="text/css" href="z.module.scrollbar.css" />
+	<link rel="stylesheet" type="text/css" href="z.module.ui.autosuggestion.css" />
 	
 </head>
 <body>
 	<form>
 		<div class="wrapper">
-			<p><b>field1</b> single choice</p>
+			<p><b>field1</b> single choice (used text)</p>
 			<input class="zautosuggestion" name="field1" type="text" value="" placeholder="type something to search..." data-option="source:source, focusshowsuggestion:1"/>
+		</div>
+
+		<div class="wrapper">
+			<p><b>field1b</b> single choice (used id)</p>
+			<input class="zautosuggestion" name="field1b" type="text" value="" placeholder="type something to search..." data-option="source:source, focusshowsuggestion:1,usedproperty:'id'"/>
 		</div>
 		
 		<div class="wrapper">
@@ -52,7 +70,7 @@
 		</div>
 		
 		<div class="wrapper">
-			<p><b>field5</b> multi choice (source: object key=>value, searchproperty:id.text)</p>
+			<p><b>field5</b> multi choice (source: object key=>value, usedproperty:id.text)</p>
 			<input class="zautosuggestion" name="field5" type="text" value="tuanluonghoang,lacsu" placeholder="type something to search..." data-option="multichoice:true, focusshowsuggestion: 1, usedproperty:'id.text', source:source3"/>
 		</div>
 		
@@ -76,10 +94,10 @@
 </html>
 
 <script>
-zjs(function(){
+$(function(){
 	
 	// init auto suggestion
-	zjs('.autosuggestion').makeAutosuggestion({
+	$('.autosuggestion').makeAutosuggestion({
 		minlength: 1,
 		customcss: true,
 		panelmaxheight: 200,
@@ -89,13 +107,13 @@ zjs(function(){
 	});
 	
 	// add more data
-	zjs('.autosuggestion').autosuggestionAddindex('phan dang huy');
-	zjs('.autosuggestion').autosuggestionAddindex({text:'phan dang huy', name:'huy', link:'keke'});
-	zjs('.autosuggestion').autosuggestionAddindex(['phan dang huy', 'tuzebra']);
-	zjs('.autosuggestion').autosuggestionAddindex([{text:'phan dang huy', id:1}, {text:'tuzebra', id:2}]);
+	$('.autosuggestion').autosuggestionAddindex('phan dang huy');
+	$('.autosuggestion').autosuggestionAddindex({text:'phan dang huy', name:'huy', link:'keke'});
+	$('.autosuggestion').autosuggestionAddindex(['phan dang huy', 'tuzebra']);
+	$('.autosuggestion').autosuggestionAddindex([{text:'phan dang huy', id:1}, {text:'tuzebra', id:2}]);
 	
 	// remove data
-	zjs('.autosuggestion').autosuggestionRemoveindex('phan dang huy', function(data){return typeof data.id == 'undefined'});
+	$('.autosuggestion').autosuggestionRemoveindex('phan dang huy', function(data){return typeof data.id == 'undefined'});
 	
 	
 });
