@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs UI - Freezepanel inside Overflow scroll element</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="zepto.js"></script>
+	<script type="text/javascript" src="z.zepto.js"></script>
+	<script type="text/javascript" src="z.module.ui.freezepanel.js"></script>
+
+	<script>
+		$(function(){
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#ddd;}
+	.wrapper{width:60%;margin:20px auto;background:#fff;height:60vh;overflow:auto;}
+	p{padding:80px 10px;margin:0;border-bottom:1px solid #999;}
+	h3{margin:0;white-space: nowrap;overflow: hidden;}
+	h3.zfreezepanel{background: #EA4949; padding: 10px 10px;}
+	.bluebox{background:#C5C5F4;margin:0;width:150%;}
+	</style>
+
+	<link rel="stylesheet" type="text/css" href="z.module.ui.freezepanel.css" />
+	
+</head>
+<body>
+
+	<center><h1>Freezepanel support to display inside an overflow div</h1></center>
+	<div class="wrapper">
+		
+		<div class="bluebox">
+			<p>1</p>
+			<p>2</p>
+		</div>
+		
+		<div class="bluebox zfreezepanelwrap">
+			<h3 class="zfreezepanel">section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 section 1 </h3>
+			<p>3</p>
+			<p>4</p>
+			<p>5</p>
+		</div>
+		
+		<div class="bluebox zfreezepanelwrap">
+			<h3 class="zfreezepanel">section 2 section 2 section 2 section 2 section 2 section 2 section 2 section 2 section 2 section 2 section 2 section 2 section 2 section 2 section 2 section 2 section 2 section 2 section 2 </h3>
+			<p>6</p>
+			<p>7</p>
+			<p>8</p>
+		</div>
+		
+		<div class="bluebox">
+			<p>9</p>
+			<p>10</p>
+		</div>
+		
+	</div>
+</body>
+</html>

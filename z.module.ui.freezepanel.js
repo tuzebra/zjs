@@ -5,6 +5,7 @@ zjs.require('ui', function(){
 	var optionkey = 'zmoduleuifreezepaneloption',
 		freezepanelparentwrap = 'zmoduleuifreezepanelparentwrap',
 		freezepaneloverflowparentwrap = 'zmoduleuifreezepaneloverflowparentwrap',
+		freezepanelbufferel = 'zmoduleuifreezepanelbufferel', 
 		scrollbarIdkey = 'zmodulescrollbarid',
 		scrollbarOptionkey = 'zmodulescrollbaroption';
 	
@@ -23,7 +24,8 @@ zjs.require('ui', function(){
 
 	
 	// trigger
-	//ui.freezepanel.load
+	//ui:freezepanel:load
+	//trigger:refreshpanel
 	
 	// class
 	//zfreezepanel
@@ -40,8 +42,10 @@ zjs.require('ui', function(){
 	
 	// MAIN FUNCTIONS
 	
+	var zWindowEl, zBody;
+
 	var isBodyScrollbarActive = function(){
-		return !zjs(document.body).hasClass('zui-scrollbar-usedefault') && parseInt(zjs(document.body).getData(scrollbarIdkey,0))>0;
+		return !zBody.hasClass('zui-scrollbar-usedefault') && parseInt(zBody.getData(scrollbarIdkey,0))>0;
 	};
 	
 	var makeFreezepanel = function(element, useroption){
@@ -141,9 +145,9 @@ zjs.require('ui', function(){
 		zFreezepanelEl.setData(optionkey, option);
 
 		// get ra top
-		var zWindowEl = zjs(window),
-			zBody = zjs(document.body),
-			orgAnchorPosition = handlerMethod('getAnchorPosition', handlerElement),
+		zWindowEl = zWindowEl || zjs(window);
+		zBody = zBody || zjs(document.body);
+		var orgAnchorPosition = handlerMethod('getAnchorPosition', handlerElement),
 			parentTop = 0,
 			overflowParentTop = 0;
 		var moduleIsReady = true,
@@ -160,7 +164,7 @@ zjs.require('ui', function(){
 			parentTop-=overflowParentTop;
 		}else if(isBodyScrollbarActive()){
 			moduleIsReady = false;
-			zBody.on('scrollbar.ready', function(){
+			zBody.on('scrollbar:ready', function(){
 				orgAnchorPosition = handlerMethod('getAnchorPosition', handlerElement);
 				moduleIsReady = true;
 			});
@@ -169,6 +173,7 @@ zjs.require('ui', function(){
 		// tao ra 1 cai element chen vao giua
 		var zchemEl = zjs('<div>').insertBefore(zFreezepanelEl).hide();
 		zchemEl.addClass(chemclass);
+		zFreezepanelEl.setData(freezepanelbufferel, zchemEl);
 		//
 		
 		// bien nay se luu lai trang thai
@@ -383,7 +388,8 @@ zjs.require('ui', function(){
 		// sau do bind event window scroll
 		// se support scrollbar luon
 		if(isBodyScrollbarActive()){
-			zBody.on('scrollbar.scroll', function(){freezeHandler()});
+			console.log('isBodyScrollbarActive');
+			zBody.on('scrollbar:scroll', function(){freezeHandler()});
 		}
 		
 		// xem coi cai freezepanel nay se stick vao window hay la vao element
@@ -416,7 +422,7 @@ zjs.require('ui', function(){
 		//zWindowEl.trigger('resize');
 		
 		// xong het roi thi run trigger thoi
-		zFreezepanelEl.trigger('ui.freezepanel.load');
+		zFreezepanelEl.trigger('ui:freezepanel:load');
 	};
 
 
@@ -436,7 +442,10 @@ zjs.require('ui', function(){
 			}
 
 			if(command == 'checkActivate'){
+				// var active = 
 				return (data.scrollTop > data.orgAnchorPosition - option.marginTop);
+				// console.log('checkActivate: data.scrollTop', data.scrollTop, 'data.orgAnchorPosition', data.orgAnchorPosition, 'option.marginTop', option.marginTop);
+				// return active;
 			}
 		},
 		'scroll-over': function(command, handlerElement, option, data){
@@ -457,12 +466,34 @@ zjs.require('ui', function(){
 		}
 	};
 	
+
+	// helper method
+	var freezepanelGetOATop = function(getType, element){
+		var zFreezepanelEl = zjs(element),
+			option = zFreezepanelEl.getData(optionkey);
+		if(!option || !zFreezepanelEl.hasClass(freezingclass))return zFreezepanelEl.getAbsoluteTop();
+		var zchemEl = zFreezepanelEl.getData(freezepanelbufferel);
+		if(!zchemEl)return zFreezepanelEl.getAbsoluteTop();
+		// start get the top
+		if(getType == 'original')
+			return zchemEl.getAbsoluteTop();
+		// if original == 'absolute'
+		var freezingTop = zFreezepanelEl.getAbsoluteTop(),
+			currentScrollTop = currentScrollTop = isBodyScrollbarActive() ? zBody.scrollPosition() : zWindowEl.scrollTop();
+		return currentScrollTop + freezingTop;
+	};
 	
 	// - - - - - - - - - 
 	// EXTEND METHOD cho zjs-instance
 	zjs.extendMethod({
 		makeFreezepanel: function(useroption){
-			return this.each(function(element){makeFreezepanel(element, useroption)});
+			return this.eachElement(function(element){makeFreezepanel(element, useroption)});
+		},
+		freezepanelGetOriginalTop: function(){
+			return freezepanelGetOATop('original', this.item(0));
+		},
+		freezepanelGetAbsoluteTop: function(){
+			return freezepanelGetOATop('absolute', this.item(0));
 		}
 	});
 	
