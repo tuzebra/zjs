@@ -28,6 +28,7 @@ zjs.require('dictionary, scrollbar', function(){
 			initSourceUrl: '',
 			sourceDataStructure: '',
 			itemtemplate: '<div class="item">${text}</div>',
+			itemLinkFormat: '',
 			itemhighlightclass: 'highlight'
 		}
 	});
@@ -62,7 +63,8 @@ zjs.require('dictionary, scrollbar', function(){
 					'</div>',
 	
 		__itemclass = 'zui-autosuggestion-item',
-		__htmlitemtpl = '<div class="'+__itemclass+'"></div>';
+		__htmlitemtpl = '<div class="'+__itemclass+'"></div>',
+		__htmlitemlinktpl = '<a class="'+__itemclass+'"></a>';
 	
 	// - - - - - - - - -
 		
@@ -271,6 +273,9 @@ zjs.require('dictionary, scrollbar', function(){
 			zPanel.height(toheight);
 			zPanelscroll.scrollHeight(toheight).scrollToTop();
 		};
+
+		// check lai cai last link de co gi con redirect
+		var lastHighlightLinkByKeyUpDown = '';
 		
 		// END INIT ELEMENT
 		// - - - -
@@ -457,6 +462,11 @@ zjs.require('dictionary, scrollbar', function(){
 			// trigger event
 			if(typeof zItemwrapData != 'object')return;
 			zOriginalInput.trigger('ui:autosuggestion:highlight', zItemwrapData);
+
+			// save last highlight link
+			if(option.itemLinkFormat != ''){
+				lastHighlightLinkByKeyUpDown = zItemwrap.getAttr('href');
+			}
 		},
 		
 		onkeyrighthandler = function(){
@@ -547,13 +557,13 @@ zjs.require('dictionary, scrollbar', function(){
 			
 			// defailt
 			var zItemwrapData = {text:typevalue};
+			var _highlightItemEl = false;
 			
 			// phai dang show panel thi moi get item
 			//if(!zPanel.hasClass('zui-panel-hide') && typevalue!=''){
 			// update la khong phai la dang phai show panel thi moi lam
 			// ma la dang highligh hoac dang placeholder
 			if((currentValueholderIndex || currentHighlightIndex || !zPanel.hasClass('zui-panel-hide')) && typevalue!=''){
-				var _highlightItemEl = false;
 				// uu tien so 1:
 				// neu nhu dang co highlight cai item nao do
 				// thi cai item nay se duoc chon
@@ -635,6 +645,14 @@ zjs.require('dictionary, scrollbar', function(){
 			
 			// trigger event
 			zOriginalInput.trigger('ui:autosuggestion:choice',zItemwrapData);
+
+			// handler link
+			if(option.itemLinkFormat != '' && _highlightItemEl){
+				var linkChoiceByEnter = _highlightItemEl.getAttr('href');
+				if(linkChoiceByEnter == lastHighlightLinkByKeyUpDown){
+					window.location.href = linkChoiceByEnter;
+				}
+			}
 		},
 		
 		onkeybackspacehandler = function(){
@@ -776,18 +794,20 @@ zjs.require('dictionary, scrollbar', function(){
 				zjs.eachItem(result, function(item, i){
 				
 					// tao ra 1 itemwrap moi
-					var zItemwrap = zjs(__htmlitemtpl).appendTo(zPanelcontent);
+					// var zItemwrap = zjs(__htmlitemtpl).appendTo(zPanelcontent);
 					// save item data vao luon
-					zItemwrap.setData('searchtempdata', item);
-					zItemwrap.setAttr('data-highlight', i+1);
+					// zItemwrap.setData('searchtempdata', item);
+					// zItemwrap.setAttr('data-highlight', i+1);
 				
 					// sau do se format data va cho vao luon
-					var iteminnerhtml = '';
-					if(typeof option.itemtemplate == 'function')iteminnerhtml = option.itemtemplate(item);
-					if(typeof option.itemtemplate == 'string')iteminnerhtml = option.itemtemplate;
-					if(typeof iteminnerhtml == 'string')iteminnerhtml = iteminnerhtml.format(item);
+					// var iteminnerhtml = '';
+					// if(typeof option.itemtemplate == 'function')iteminnerhtml = option.itemtemplate(item);
+					// if(typeof option.itemtemplate == 'string')iteminnerhtml = option.itemtemplate;
+					// if(typeof iteminnerhtml == 'string')iteminnerhtml = iteminnerhtml.format(item);
 				
-					var zItem = zjs(iteminnerhtml).appendTo(zItemwrap);
+					// var zItem = zjs(iteminnerhtml).appendTo(zItemwrap);
+					
+					var zItemwrap = createHighlightItem(option, zPanelcontent, item, i);
 				
 					allItemHeight+= zItemwrap.height();
 				
@@ -964,18 +984,20 @@ zjs.require('dictionary, scrollbar', function(){
 					zjs.eachItem(result, function(item, i){
 				
 						// tao ra 1 itemwrap moi
-						var zItemwrap = zjs(__htmlitemtpl).appendTo(zPanelcontent);
+						// var zItemwrap = zjs(__htmlitemtpl).appendTo(zPanelcontent);
 						// save item data vao luon
-						zItemwrap.setData('searchtempdata', item);
-						zItemwrap.setAttr('data-highlight', i+1);
+						// zItemwrap.setData('searchtempdata', item);
+						// zItemwrap.setAttr('data-highlight', i+1);
 				
 						// sau do se format data va cho vao luon
-						var iteminnerhtml = '';
-						if(typeof option.itemtemplate == 'function')iteminnerhtml = option.itemtemplate(item);
-						if(typeof option.itemtemplate == 'string')iteminnerhtml = option.itemtemplate;
-						if(typeof iteminnerhtml == 'string')iteminnerhtml = iteminnerhtml.format(item);
+						// var iteminnerhtml = '';
+						// if(typeof option.itemtemplate == 'function')iteminnerhtml = option.itemtemplate(item);
+						// if(typeof option.itemtemplate == 'string')iteminnerhtml = option.itemtemplate;
+						// if(typeof iteminnerhtml == 'string')iteminnerhtml = iteminnerhtml.format(item);
 				
-						var zItem = zjs(iteminnerhtml).appendTo(zItemwrap);
+						// var zItem = zjs(iteminnerhtml).appendTo(zItemwrap);
+						
+						var zItemwrap = createHighlightItem(option, zPanelcontent, item, i);
 				
 						allItemHeight+= zItemwrap.height();
 				
@@ -1072,6 +1094,37 @@ zjs.require('dictionary, scrollbar', function(){
 		// - - -
 	},
 	
+	// help to create highlight item 
+	createHighlightItem = function(option, zPanelcontent, item, i){
+		// tao ra 1 itemwrap moi
+		var zItemwrap;
+		if(option.itemLinkFormat != '')
+			zItemwrap = zjs(__htmlitemlinktpl).setAttr('href', option.itemLinkFormat.format(item));
+		else 
+			zItemwrap = zjs(__htmlitemtpl);
+		zItemwrap.appendTo(zPanelcontent);
+
+		// save item data vao luon
+		zItemwrap.setData('searchtempdata', item);
+		zItemwrap.setAttr('data-highlight', i+1);
+	
+		// sau do se format data va cho vao luon
+		var iteminnerhtml = '';
+		if(typeof option.itemtemplate == 'function')iteminnerhtml = option.itemtemplate(item);
+		if(typeof option.itemtemplate == 'string')iteminnerhtml = option.itemtemplate;
+		if(typeof iteminnerhtml == 'string')iteminnerhtml = iteminnerhtml.format(item);
+	
+		var zItem = zjs(iteminnerhtml).appendTo(zItemwrap);
+	
+		// allItemHeight+= zItemwrap.height();
+	
+		// bind event cho thang nho nay luon
+		// zItemwrap.hover(onmousehoveritemhandler);
+		// zItemwrap.click(onmouseclickitemhandler);
+		
+		return zItemwrap;
+	},
+
 	// ham giup add index vao trong suggestion
 	autosuggestionAddindex = function(element, raw){
 		

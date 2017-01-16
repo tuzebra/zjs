@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Demo module autosuggestion - link</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<script type="text/javascript" src="z.js" data-debug="true"></script>
+	<script>
+		zjs.onready('ui.autosuggestion', function(){
+			// bind event
+			zjs('.zautosuggestion')
+			.on('ui:autosuggestion:highlight', function(event, element){
+				console.log('highlight:', event.getData())
+			})
+			.on('ui:autosuggestion:choice', function(event, element){
+				console.log('choice:', event.getData())
+			});
+				
+	
+			zjs('form').on('submit', function(event){
+				event.preventDefault();
+				console.log('submit event prevent default', this.getFormData());
+				alert(zjs.jsonEncode(this.getFormData()));
+			});
+				
+		});
+	</script>
+	
+	<style>
+		body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#f0f0f0;}
+		.wrapper{width:70%;margin:50px auto;}
+	</style>
+	
+</head>
+<body>
+	<form>
+		<div class="wrapper">
+			<p><b>field1</b></p>
+			<input class="zautosuggestion" name="field1" type="text" value="" placeholder="type something to search..." data-option="source:source, focusshowsuggestion:true,itemLinkFormat:'?id=${id}&name=${text}'" />
+		</div>
+		
+		<div class="wrapper">
+			<button type="submit">Submit</button>
+		</div>
+		
+	</form>
+</body>
+</html>
+
+<script>
+
+
+var source = [
+	{id:8371633, text:'Tuan Luong Hoang'},
+	{id:19101998, text:'Khanh Nguyen'},
+	{id:507121153, text:'Lac Su'},
+	{id:509941729, text:'Ailien Tran'},
+	{id:517032019, text:'Mint Ice'},
+	{id:518817256, text:'Mai Thuc Quyen'},
+	{id:519675318, text:'Tran Truong'},
+	{id:521291635, text:'Nguyen Giap'},
+	{id:521826769, text:'Khoa Luong'},
+	{id:529969656, text:'Hao Chanh'},
+	{id:548332403, text:'Khoa Ma'},
+	{id:548627652, text:'Ninh Le'},
+	{id:549058060, text:'Sirius Son Tran'}
+];
+
+</script>

@@ -36,7 +36,7 @@ textarea.zui-autosuggestion-input{height:18px;}
 .zui-autosuggestion-token{display: -moz-inline-stack;display: inline-block;vertical-align: baseline;zoom: 1;background:#4D90FE;color:#FFF;border-radius:2px;margin: 2px 4px 2px 0;padding: 0 4px;cursor:pointer;}
 
 /** item **/
-.zui-autosuggestion-item{cursor: pointer;line-height: 18px;font-size: 12px;white-space: nowrap;}
+.zui-autosuggestion-item{display:block;cursor: pointer;line-height: 18px;font-size: 12px;white-space: nowrap;}
 .zui-autosuggestion-item .item{padding:3px 10px;}
 .zui-autosuggestion-item.highlight{color:#FFF;background: #4D90FE;}
 .zui-autosuggestion-item.highlight .item{}
