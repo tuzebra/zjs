@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs UI - slider - zepto support</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="zepto.js"></script>
+	<script type="text/javascript" src="z.zepto.js"></script>
+	<script type="text/javascript" src="z.module.ui.button.js"></script>
+	<script type="text/javascript" src="z.module.ui.slider.js"></script>
+
+	<script>
+		$(function(){
+			
+			$('.zuislider').on('ui:slider:change', function(event){
+				console.log('ui:slider:change:', event.getData());
+				console.log('original value:', $(this).getValue());
+			});
+			
+			$('.zbutton').on('click', function(){
+				
+				// co 2 cach set value
+				// 1 la dung ham set value mac dinh cua thang slider
+				//zjs('.zuislider').sliderSetValue(14);
+				
+				// 2 la enable zjs hook len
+				// sau do chi can goi ham setValue cua zjs la xong luon
+				$('.zuislider').setValue(14);
+				
+			});
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	.wrapper{width:60%;margin:0 auto;padding:50px 0;}
+	</style>
+
+	<link rel="stylesheet" type="text/css" href="z.module.ui.button.css" />
+	<link rel="stylesheet" type="text/css" href="z.module.ui.slider.css" />
+	
+</head>
+<body>
+	<div class="wrapper">
+	
+		<form>
+			
+			<p>please view html source to know how-to use the option</p>
+			
+			
+			<h3>Default option</h3>
+			<pre>&lt;input class="zuislider" type="hidden" value="<b class="slidervalue0">0</b>" /&gt;</pre>
+			<input class="zuislider" name="input1" type="hidden" value="0" data-option="referer:'.slidervalue0'" />
+			
+			<br/>
+			
+			<h3>Can set the min and max value</h3>
+			<pre>&lt;input class="zuislider" type="hidden" value="<b class="slidervalue1">0</b>" data-option="min:1,max:100" /&gt;</pre>
+			<input class="zuislider" name="input2" type="hidden" value="0" data-option="min:1,max:100,referer:'.slidervalue1'" />
+			
+			<br/>
+			
+			<h3>Can set step</h3>
+			<pre>&lt;input class="zuislider" type="hidden" value="<b class="slidervalue2">0</b>" data-option="min:1,max:100,step:1" /&gt;</pre>
+			<input class="zuislider" name="input3" type="hidden" value="0" data-option="min:1,max:100,step:1,referer:'.slidervalue2'" />
+			
+			<br/>
+			<pre>&lt;input class="zuislider" type="hidden" value="<b class="slidervalue3">0</b>" data-option="min:10,max:20,step:1" /&gt;</pre>
+			<input class="zuislider" name="input4" type="hidden" value="0" data-option="min:10,max:20,step:1,referer:'.slidervalue3'" />
+			
+			<br/>
+			<pre>&lt;input class="zuislider" type="hidden" value="<b class="slidervalue4">12</b>" data-option="min:10,max:20,step:3" /&gt;</pre>
+			<input class="zuislider" name="input5" type="hidden" value="12" data-option="min:10,max:20,step:3,referer:'.slidervalue4'" />
+			
+			<br/>
+			<pre>&lt;input class="zuislider" type="hidden" value="<b class="slidervalue5">15</b>" data-option="min:10,max:20,step:0.5" /&gt;</pre>
+			<input class="zuislider" name="input6" type="hidden" value="15" data-option="min:10,max:20,step:0.5,referer:'.slidervalue5'" />
+			
+			<br/>
+			<pre>&lt;input class="zuislider" type="hidden" value="<b class="slidervalue6">1</b>" data-option="min:1,max:12" /&gt;</pre>
+			<input class="zuislider" name="input7" type="hidden" value="1" data-option="min:1,max:12,referer:'.slidervalue6'" />
+			
+			<br/>
+			
+			<h3>You can set array of values you want to use on slider</h3>
+			<pre>&lt;input class="zuislider" type="hidden" value="<b class="slidervalue7">1</b>" data-option="valueArray:[11,4,5,2,1,9,10,8,16]" /&gt;</pre>
+			<input class="zuislider" name="input8" type="hidden" value="1" data-option="valueArray:[11,4,5,2,1,9,10,8,16],referer:'.slidervalue7'" />
+			
+			<div>
+				<h3>You can use code to set the slider value</h3>
+				<a class="zbutton">$('.zuislider').setValue(14)</a>
+			</div>
+		</form>
+		
+	</div>
+</body>
+</html>

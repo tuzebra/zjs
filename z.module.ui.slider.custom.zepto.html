@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs UI - slider custom - zepto support</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="zepto.js"></script>
+	<script type="text/javascript" src="z.zepto.js"></script>
+	<script type="text/javascript" src="z.module.ui.button.js"></script>
+	<script type="text/javascript" src="z.module.ui.slider.js"></script>
+
+	<script>
+		$(function(){
+			
+			// append new span tag in to slider button
+			$('#slider-for-sliderABC .zui-slider-button').append('<span class="slider-value"></span>');
+			
+			$('#sliderABC').on('ui:slider:change', function(event){
+				$(this).getUiSliderElement().find('.slider-value').setInnerHTML(event.getData().value);
+			});
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
+	.wrapper{width:60%;margin:0 auto;padding:50px 0;}
+	</style>
+
+	<link rel="stylesheet" type="text/css" href="z.module.ui.button.css" />
+	<link rel="stylesheet" type="text/css" href="z.module.ui.slider.css" />
+	
+</head>
+<body>
+	<div class="wrapper">
+	
+		<form>
+			
+			<p>please view html source to know how-to use the option</p>
+			
+			<h3>Custom slider</h3>
+			<p>In this demo, a round button on slider will be custom. When the value changed, we will set that value display on the button.</p>
+			<input id="sliderABC" class="zuislider" name="input1" type="hidden" value="0" data-option="min:0,max:100,step:1" />
+			
+			<p>hihi, done!</p>
+			
+		</form>
+		
+	</div>
+</body>
+</html>

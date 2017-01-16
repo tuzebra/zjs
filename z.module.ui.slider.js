@@ -71,7 +71,7 @@ zjs.require('ui', function(){
 		if(zjs.isArray(option.valueArray)){
 			// makesure la array chay dung int
 			var _tempArr = [];
-			option.valueArray.each(function(value){
+			zjs.foreach(option.valueArray, function(value){
 				value = parseFloat(value);
 				if(zjs.isNumeric(value))
 					_tempArr.push(value);
@@ -210,9 +210,9 @@ zjs.require('ui', function(){
 			// sau do se run trigger neu nhu value da duoc thay doi
 			// (tuc la new value va old value khac nhau)
 			if(sliderOldValue != sliderValue)
-			zSliderEl.trigger('ui.slider.change', {value:sliderValue, via:'movebutton'});
+			zSliderEl.trigger('ui:slider:change', {value:sliderValue, via:'movebutton'});
 			// dong thoi update referer
-			if(option.referer)zjs(option.referer).html(sliderValue);
+			if(option.referer)zjs(option.referer).setInnerHTML(sliderValue);
 		};
 		
 		// bind event cho cai slider-button drag
@@ -298,22 +298,22 @@ zjs.require('ui', function(){
 		
 		// sau do se run trigger
 		if(sliderOldValue != sliderValue)
-		zSliderEl.trigger('ui.slider.change', {value:sliderValue, via:'setvalue'});
+		zSliderEl.trigger('ui:slider:change', {value:sliderValue, via:'setvalue'});
 		// dong thoi update referer
-		if(option.referer)zjs(option.referer).html(sliderValue);
+		if(option.referer)zjs(option.referer).setInnerHTML(sliderValue);
 	};
 	
 	// - - - - - - - - - 
 	// EXTEND METHOD cho zjs-instance
 	zjs.extendMethod({
 		makeUiSlider: function(useroption){
-			return this.each(function(element){makeUiSlider(element, useroption)});
+			return this.eachElement(function(element){makeUiSlider(element, useroption)});
 		},
 		getUiSliderElement: function(){
 			return this.item(0).getData(wrapelkey);
 		},
 		sliderSetValue: function(value){
-			return this.each(function(element){setSliderValue(element, value)});
+			return this.eachElement(function(element){setSliderValue(element, value)});
 		}
 	});
 	

@@ -3,3 +3,6 @@
 
 15/01/2017
 		+ add method $::lastChild()
+
+16/01/2017
+		+ fix method $::setValue()

@@ -1560,7 +1560,16 @@ zjs.extendMethod({
 		return val;
 	},
 	setValue: function(val){
-		return this.val(val);
+		if(typeof val == 'undefined')val='';
+		this.eachElement(function(el){
+			try{el.value = val;
+			
+			// run hook
+			if(Hook.enable('after_setValue'))Hook.run('after_setValue',el);
+			
+			}catch(err){};
+		});
+		return this;
 	},
 	getCss: function(){
 		var element = this.item(0,true),

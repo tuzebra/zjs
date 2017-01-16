@@ -4,3 +4,6 @@
 
 10/06/2015
 		+ fix text selection on IE
+
+16/01/2017
+		+ support Zepto
