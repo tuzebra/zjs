@@ -10,3 +10,6 @@
 30/06/2015
 		+ add option "calendarChangeMonthYear" with default value is "true"
 		+ fix some bug
+
+16/01/2017
+		+ Zepto support

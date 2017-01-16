@@ -1277,6 +1277,9 @@ var version = '1.1',
 		this.preventDefault = function(){
 			this.isDefaultPrevented = true;
 		};
+		this.getData = function(){
+			return this.data;
+		}
 	},
 	
 	// EVENT OBJECT for default browser event

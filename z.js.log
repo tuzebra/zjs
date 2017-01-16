@@ -530,3 +530,6 @@
 		+ add method eachItem() and used it at related method
 		+ add method event::getClientX() & event::getClientY()
 		+ change event.data to event.getData() to support Zepto
+
+16/01/2017
+		+ fix method Event::getData()
