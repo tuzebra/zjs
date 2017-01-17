@@ -37,7 +37,7 @@
 		this.usedCacheDataSource = false;
 		this.dataSourceUrl = '';
 		this.dataSourceDataStructure = '';
-		this.defaultSearchProperty = 'text';
+		this.defaultSearchProperty = searchproperty || 'text';
 		this.lastRawquery = '';
 
 		this.dataSourceUrlIsLoaded = false;

@@ -116,18 +116,18 @@ zjs.require('dictionary, scrollbar', function(){
 			option.searchproperty = 'text';
 			option.usedproperty = 'id';
 			searchpropertyTemp = 'id.text';
-		};
+		}
 		// fix option
 		// neu nhu dang trong mention mode thi se khong co vu multichoice gi ca
 		if(option.mentionmode){
 			option.multichoice = false;
-		};
+		}
 		// neu nhu dang trong multichoice mode thi se khong co support multiline
 		// boi vi multiline o day chi mang y nghia support cho single choice ma thoi
 		if(option.multichoice){
 			option.multiline = false;
-		};
-			
+		}
+		
 		// save option
 		zOriginalInput.setData(optionkey, option);
 		
