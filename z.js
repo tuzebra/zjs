@@ -2129,7 +2129,7 @@ zjs.extendMethod({
 	},
 	html: function(){
 		var args = makeArray(arguments);
-		return this.setInnerHTML.call(this, args);
+		return this.setInnerHTML.apply(this, args);
 	},
 	getInnerHTML: function(defaultStr){
 		defaultStr = defaultStr || '';
