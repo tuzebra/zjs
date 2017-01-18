@@ -124,12 +124,13 @@
 		}, option);
 
 		// trigger event
-		//slider.change
-		//slider.click
-		//slider.popup.hide
-		//slider.popup.show
-		//slider.disable
-		//slider.enable
+		//slider:load
+		//slider:change
+		//slider:click
+		//slider:popup:hide
+		//slider:popup:show
+		//slider:disable
+		//slider:enable
 	
 		var _images = new Array();
 		zjs.foreach(images, function(image){
@@ -304,7 +305,7 @@
 			zElementIsInPopup = !!zElement.getData(isPopupSliderKey, false),
 
 			// backup toan bo html lai cho chac
-			_zElementOriHtml  = zElement.html();
+			_zElementOriHtml  = zElement.getInnerHTML();
 
 		// remove luon data-option luon
 		zElement.removeAttr('data-option');
@@ -315,10 +316,8 @@
 
 		// add class de xac dinh width theo cai gi?
 		zElement.addClass(option.usePercentWidth ? 'use-percent' : 'use-pixel');
-
 		// get some custom html elements
-		//zElement.find('li').each(function(element, index){
-		zElement.find(option.slideitem).each(function(element, index){
+		zElement.find(option.slideitem).eachElement(function(element, index){
 			if(index>=images.length)return;
 
 			var separateOption = zjs(element).getAttr('data-option', '');
@@ -365,21 +364,21 @@
 		if(!option.popupOnly){
 
 			// old solution --
-			//zElement.addClass('imageslider-linear').html(_mainHtml);
+			//zElement.addClass('imageslider-linear').setInnerHTML(_mainHtml);
 
 			// new solution --
 			// tao ra 1 cai div tam wrap toan bo slider
-			var tempDivEl = zjs('<div></div>').html(_mainHtml);
+			var tempDivEl = zjs('<div></div>').setInnerHTML(_mainHtml);
 			// tao ra thang wrap element luon
 			var imagesliderWrapEl = zjs('<div></div>').addClass(sliderWrapClass);
 			// neu can thiet phai clean html thi lam thoi
-			if(option.cleanHtml)zElement.html('');
+			if(option.cleanHtml)zElement.setInnerHTML('');
 			// insert thang temp nay vao sau thang ul hoac ol
 			var ulEl = zElement.find('ul,ol,table,div').item(0);
 			if(ulEl.count())imagesliderWrapEl.insertAfter(ulEl);
 			else imagesliderWrapEl.appendTo(zElement);
-			/*tempDivEl.childReverse().each(function(_tempDivChileEl){*/
-			tempDivEl.child().each(function(_tempDivChileEl){
+			/*tempDivEl.childReverse().eachElement(function(_tempDivChileEl){*/
+			tempDivEl.child().eachElement(function(_tempDivChileEl){
 				zjs(_tempDivChileEl).appendTo(imagesliderWrapEl);
 			});
 			// sau do remove di thang ul hoac ol la duoc
@@ -404,10 +403,11 @@
 		// bind event click cho may cai thang li
 		else if(option.popupShowOnClick){
 
-			zElement.find(option.slideitem).each(function(element, index){
+			zElement.find(option.slideitem).eachElement(function(element, index){
 				zjs(element).setAttr('data-index', index).click(function(event){
 					event.preventDefault();
-					var index = this.getAttr('data-index');
+					var self = zjs(this),
+						index = self.getAttr('data-index');
 
 					// >>>>>>>>>>>>>>>>>>>
 					//console.log('click index:', index);
@@ -416,7 +416,7 @@
 					// thi shop popup o index bay nhieu
 					slidePopupShow(index);
 					// trigger thoi nao
-					zElement.trigger('slider.click', {index:index});
+					zElement.trigger('slider:click', {index:index});
 				});
 			});
 		};
@@ -578,7 +578,7 @@
 
 
 		// init image - images each - - -
-		images.each(function(image, index){
+		zjs.foreach(images, function(image, index){
 			if(option.popupOnly)return;
 
 			// neu nhu image khong co src thi bo qua luon
@@ -602,12 +602,12 @@
 						showLargeImage(index);
 					});
 				// add value into class title
-				if(image.title)zNavImageEl.find('.title').html(image.title);
+				if(image.title)zNavImageEl.find('.title').setInnerHTML(image.title);
 				// fix margin value
 				navImagesElMargin = zNavImageEl.getStyle('margin-right',true);
 				if(isNaN(navImagesElMargin) || !navImagesElMargin)
 					navImagesElMargin = option.navImagesElMargin;
-			};
+			}
 
 			// init navigation dot
 			if(option.navDot){
@@ -744,7 +744,8 @@
 				var oldNavBackButton = zElement.find('.nav-back').item(0);
 				newNavBackButton.insertBefore(oldNavBackButton).click(function(e){
 					e.preventDefault();
-					if(this.hasClass(navButtonDisableClass))return;
+					var self = zjs(this);
+					if(self.hasClass(navButtonDisableClass))return;
 					showPrevImage();
 				});
 				oldNavBackButton.remove();
@@ -757,7 +758,8 @@
 				var oldNavNextButton = zElement.find('.nav-next').item(0);
 				newNavNextButton.insertBefore(oldNavNextButton).click(function(e){
 					e.preventDefault();
-					if(this.hasClass(navButtonDisableClass))return;
+					var self = zjs(this);
+					if(self.hasClass(navButtonDisableClass))return;
 					showNextImage();
 				});
 				oldNavNextButton.remove();
@@ -804,7 +806,7 @@
 			var zNavThumbSliderWrapEl = zjs('<div></div>').appendTo(zElement).addClass('nav-slider-wrap');
 			// console.log('_zElementOriHtml', _zElementOriHtml);
 			// console.log('slideitem', option.slideitem);
-			var zNavThumbSliderEl = zjs('<div></div>').html(_zElementOriHtml).appendTo(zNavThumbSliderWrapEl);
+			var zNavThumbSliderEl = zjs('<div></div>').setInnerHTML(_zElementOriHtml).appendTo(zNavThumbSliderWrapEl);
 			zNavThumbSliderEl.addClass('imageslider-linear-navigation').makeSlider({
 				slideitem: option.slideitem,
 				theme:'linear',
@@ -827,16 +829,16 @@
 				autoHeight: option.navThumbSliderAutoHeight
 			})
 			// bind event luon
-			.on('slider.click', function(event){
+			.on('slider:click', function(event){
 				// show cai large image thoi
-				showLargeImage(event.data.index);
+				showLargeImage(event.getData().index);
 			});
 
 			// bind event theo huong nguoc lai
 			// khi main slider change -> show focus vao cai nav-slider
-			zElement.on('slider.change', function(event){
+			zElement.on('slider:change', function(event){
 				zNavThumbSliderEl.find('.image-hold').removeClass('main-slider-active');
-				var _imageHoldEl = zNavThumbSliderEl.find('.image-hold.image'+event.data.index).addClass('main-slider-active');
+				var _imageHoldEl = zNavThumbSliderEl.find('.image-hold.image'+event.getData().index).addClass('main-slider-active');
 				// tim cach move cai active qua cho dep dep coi ne
 				// nhung khong phai khi nao cung can thiet phai move
 				// cho nen phai test cai coi
@@ -850,7 +852,7 @@
 				// test cai thang active image hold khong nam trong khung hinh
 				// thi moi can move nhe
 				if(_vwx+_ihx < 0 || _vwx+_ihx+_ihw>_vww)
-					zNavThumbSliderEl.slideTo(event.data.index);
+					zNavThumbSliderEl.slideTo(event.getData().index);
 			});
 		};
 
@@ -1227,10 +1229,10 @@
 
 
 			// change slide title, description
-			if(option.linkTitle && currentLink!='')zImageTitleEl.html('<a href="'+currentLink+'">'+currentTitle+'</a>');
-			else zImageTitleEl.html(currentTitle);
+			if(option.linkTitle && currentLink!='')zImageTitleEl.setInnerHTML('<a href="'+currentLink+'">'+currentTitle+'</a>');
+			else zImageTitleEl.setInnerHTML(currentTitle);
 			if(option.linkCover && currentLink!='')zImageCoverLinkContainer.find('a').setAttr('href', currentLink);
-			zImageDesEl.html(currentDes);
+			zImageDesEl.setInnerHTML(currentDes);
 
 
 			// change avtive cho image slide
@@ -1339,7 +1341,7 @@
 			if(!notTriggerEvent){
 				option.onChange(moreparam);
 				// trigger event
-				zElement.trigger('slider.change', moreparam);
+				zElement.trigger('slider:change', moreparam);
 			};
 
 			// neu ma autoplay thi play thoi
@@ -1360,7 +1362,7 @@
 					images[currentIndex].lazyloaded = true;
 					var lazyEls = images[currentIndex].lazyEl || images[currentIndex].customEl;
 					if(lazyEls){
-						lazyEls.each(function(lazyEl){
+						lazyEls.eachElement(function(lazyEl){
 							lazyEl = zjs(lazyEl);
 							zjs.loadImage({
 								image: images[currentIndex].srclazy,
@@ -1603,14 +1605,14 @@
 			if(!imagesliderWrapEl)return;
 			slideRawContentEl = zjs('<div></div>').addClass(sliderRawContentClass);
 			slideRawContentEl.insertAfter(imagesliderWrapEl);
-			slideRawContentEl.html(_zElementOriHtml);
+			slideRawContentEl.setInnerHTML(_zElementOriHtml);
 			zElement.addClass(sliderDisableClass);
 			// imagesliderWrapEl.hide();
 			// imagesliderWrapEl.addClass('slider');
 			slideIsEnabled = false;
 			if(forceAutoOption)slideIsForceDisable = true;
 			if(forceAutoOption)slideIsForceEnable = false;
-			zElement.trigger('slider.disable');
+			zElement.trigger('slider:disable');
 		};
 
 		var slideEnable = function(forceAutoOption){
@@ -1622,7 +1624,7 @@
 			slideIsEnabled = true;
 			if(forceAutoOption)slideIsForceDisable = false;
 			if(forceAutoOption)slideIsForceEnable = true;
-			zElement.trigger('slider.enable');
+			zElement.trigger('slider:enable');
 		};
 
 
@@ -1690,7 +1692,7 @@
 						zImageViewWrapRealElNextPos = zImageViewWrapRealElNextPos * width / zImageViewElWidth;
 
 					// tinh toan lai left cua tung thang image hold
-					zImageViewWrap.find('.image-hold').each(function(el, index){
+					zImageViewWrap.find('.image-hold').eachElement(function(el, index){
 						var zEl = zjs(el);
 						if(!option.sequent)
 							zEl.left( zEl.left() * width / zImageViewElWidth );
@@ -1738,7 +1740,7 @@
 						zImageViewWrapRealElNextPos = zImageViewWrapRealElNextPos * zImageViewElHeight / _backUpHeight;
 
 					// tinh toan lai top cua tung thang image hold
-					zImageViewWrap.find('.image-hold').each(function(el, index){
+					zImageViewWrap.find('.image-hold').eachElement(function(el, index){
 						var zEl = zjs(el);
 						if(!option.sequent)
 							zEl.top( zEl.top() * zImageViewElHeight / _backUpHeight );
@@ -1841,7 +1843,7 @@
 				|| option.transition==205)
 				{
 					if(option.contentSlide){
-						images.each(function(_image){
+						zjs.foreach(images, function(_image){
 							if(typeof _image.customEl == 'undefined')return;
 							var _he = _image.customEl.height();
 							if(_he>maxHeight)
@@ -1935,7 +1937,7 @@
 
 				// gio se quyet dinh xem coi show va hide cai dot nao?
 				if((option.transition==202 || option.transition==205) && option.navDot){
-				zNavDotsEl.find('.nav-dot').each(function(eldot, index){
+				zNavDotsEl.find('.nav-dot').eachElement(function(eldot, index){
 					if(index % _imagePerPage == 0)zjs(eldot).show();
 					else zjs(eldot).hide();
 				})}
@@ -2006,7 +2008,7 @@
 
 
 			// bind event khi ma make slider thanh cong roi thi moi show ra
-			inpopupSliderEl.on('slider.ready', function(){
+			inpopupSliderEl.on('slider:ready', function(){
 				// stop lai cai thang autoplay cua main slider
 				slidePause();
 				// chinh thuc show ra popup container
@@ -2023,7 +2025,7 @@
 				};
 
 				// gio moi di goi callback cua cai thang popup cha
-				zElement.trigger('slider.popup.show', {index: defaultIndex, info: images[defaultIndex]});
+				zElement.trigger('slider:popup:show', {index: defaultIndex, info: images[defaultIndex]});
 			});
 
 			// fix new option cho inpopup 1 xiu
@@ -2065,7 +2067,7 @@
 			// gio thi make slider thoi
 			(function(){
 				// thay het html cho cai popup-wrap
-				inpopupSliderEl.html(_zElementOriHtml);
+				inpopupSliderEl.setInnerHTML(_zElementOriHtml);
 				inpopupSliderEl.setData(isPopupSliderKey, true).makeSlider(inpoupOption);
 			}).delay(100);
 
@@ -2142,7 +2144,7 @@
 					slidePopupShow(_clickIndex);
 
 				// trigger thoi nao
-				zElement.trigger('slider.click', {index:_clickIndex}, function(event){
+				zElement.trigger('slider:click', {index:_clickIndex}, function(event){
 					// neu nhu khong co gi thay doi thi se goi thang show large image cho nay
 					if(option.transition==203 && autoChangeSlide && !event.isDefaultPrevented){
 						showLargeImage(_clickIndex);
@@ -2198,7 +2200,7 @@
 			});
 
 			// gio thi trigger thoi
-			zElement.trigger('slider.popup.hide');
+			zElement.trigger('slider:popup:hide');
 		};
 
 
@@ -2239,7 +2241,7 @@
 					// khong muon show preload len UI thi thoi
 					if(!option.preload)return;
 
-					loaderEl.find('.percent').html(percent.toString());
+					loaderEl.find('.percent').setInnerHTML(percent.toString());
 				},
 				onFinish: function(){
 					// khong muon show preload len UI thi thoi
@@ -2261,7 +2263,7 @@
 					if(option.fullscreenWidth || option.fullWidth)fixrewidth();
 					if(option.autoplay)slidePlay();
 					// trigger event
-					zElement.trigger('slider.load');
+					zElement.trigger('slider:load');
 
 					// refresh 1 cai
 					refreshSlide();
@@ -2285,7 +2287,7 @@
 			if(option.autoplay)slidePlay();
 
 			// trigger event
-			zElement.trigger('slider.load');
+			zElement.trigger('slider:load');
 
 			// refresh 1 cai
 			refreshSlide();

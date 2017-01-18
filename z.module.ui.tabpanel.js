@@ -19,13 +19,24 @@ zjs.require('ui', function(){
 			transition:0,
 			activetab:0,
 			useurlhash:false,
-			hover:false
+			hover:false,
+
+			contentWrapperClass: '',
+
+			// option for responsive 
+			// auto disable this "tab" module
+			// when the width less than a [number]
+			autoDisableWhenWidthLessThan: 0, 
+			autoDisableWithMobile: false, 
+
+			// like option for mobile, but this is for desktop
+			autoDisableWhenWidthLargerThan: 0, 
 		}
 	});
 	
 	// trigger
-	//ui.tabpanel.load
-	//ui.tabpanel.change
+	//ui:tabpanel:load
+	//ui:tabpanel:change
 	
 	// template
 	var tabpanelclass = 'zui-tabpanel',
@@ -36,13 +47,15 @@ zjs.require('ui', function(){
 		contentclass = 'zui-tabpanel-content',
 		contentactiveclass = 'zui-active',
 		contentdeactiveclass = 'zui-deactive',
+		disableclass = 'zui-disable',
 		
-		_contentwrapperhtml = '<div class="'+contentwrapclass+'"></div>',
-		_contenthtml = '<div class="'+contentclass+'"></div>';
+		_contentwrapperhtml = '<div></div>',
+		_contenthtml = '<div></div>';
 		
 	
 	// static variable
-	var lastindex = 0;
+	var lastindex = 0,
+		windowEl = zjs(window);
 		
 	// - - - - - - - - -
 	
@@ -90,6 +103,14 @@ zjs.require('ui', function(){
 		option.useurlhash=(!!option.useurlhash);
 		// use hover to change tab
 		option.hover = (!!option.hover);
+		// auto disable option
+		option.autoDisableWhenWidthLessThan = parseInt(option.autoDisableWhenWidthLessThan);
+		if(option.autoDisableWhenWidthLessThan < 0)
+			option.autoDisableWhenWidthLessThan = 0;
+		//
+		option.autoDisableWhenWidthLargerThan = parseInt(option.autoDisableWhenWidthLargerThan);
+		if(option.autoDisableWhenWidthLargerThan < 0)
+			option.autoDisableWhenWidthLargerThan = 0;
 		// save option
 		zTabPanelEl.setData(optionkey, option);
 		
@@ -106,6 +127,10 @@ zjs.require('ui', function(){
 		var zNavWrapEl = false,
 			zContentWrapEl = zjs(_contentwrapperhtml).setData(contentwrapidkey, zjs.getUniqueId()),
 			zContentWrapElIndom = false;
+
+		if(option.contentWrapperClass != '')
+			zContentWrapEl.addClass(option.contentWrapperClass);
+		zContentWrapEl.addClass(contentwrapclass);
 		
 		// 
 		function initnavwrap(__ztempEl){
@@ -175,7 +200,12 @@ zjs.require('ui', function(){
 					zContentWrapElIndom = true;
 					zContentWrapEl.insertBefore(zEl);
 				};
-				zjs(_contenthtml).appendTo(zContentWrapEl).append(el);
+				var tabContentEl = zjs(_contenthtml).appendTo(zContentWrapEl);
+				tabContentEl.append(el);
+				var customTabContentClass = zjs(el).getAttr('data-tabpanel-class', '');
+				if(customTabContentClass != '')
+					tabContentEl.addClass(customTabContentClass);
+				tabContentEl.addClass(contentclass);
 				
 				// neu nhu thang el nay la zscrollbar thi se link cho no cai size wrapper luon
 				var zScrollbarEl = zjs(el).getData(scrollbarContentElkey);
@@ -239,12 +269,44 @@ zjs.require('ui', function(){
 			});
 		};
 		
+
+		// Handler disable/enable case
+		if(option.autoDisableWhenWidthLargerThan > 0){
+			var minW = option.autoDisableWhenWidthLargerThan,
+				isMinW = (windowEl.width() >= minW);
+
+			var handlerDisableOrNotDisableByWidthLarger = function(){
+				if(minW > 0){
+					// xem coi qua cot moc 600px chua?
+					if(windowEl.width() >= minW && !isMinW){
+						isMinW = true;
+						zTabPanelEl.addClass(disableclass);
+					}
+	
+					if(windowEl.width() < minW && isMinW){
+						isMinW = false;
+						zTabPanelEl.removeClass(disableclass);
+					}
+				};
+			};
+			
+			// bind event xu ly khi window resize
+			windowEl.on('resize', function(){
+				handlerDisableOrNotDisableByWidthLarger();
+			});
+			
+			// first handler
+			isMinW = !isMinW;
+			handlerDisableOrNotDisableByWidthLarger();
+		}
+
+
 		// select first tab for default
 		if(!_focusedFirsttab)
 			tabpanelSelectTab(element, option.activetab);
 		
 		// run trigger
-		zTabPanelEl.trigger('ui.tabpanel.load');
+		zTabPanelEl.trigger('ui:tabpanel:load');
 	},
 	
 	// select tab by hash, neu lam dc thi return true
@@ -356,14 +418,14 @@ zjs.require('ui', function(){
 			if(option.autoheight && typeof zjs.moduleImageSliderOption != 'undefined' && imageSliderOption){
 				// console.log('here');
 				// (function(){console.log('here2');
-					zCurrentContentEl.child().slideRefresh()
+					zCurrentContentEl.child().slideRefresh();
 				// }).delay(1000);
 			}
 		};
 		
 		
 		// trigger event
-		zTabPanelEl.trigger('ui.tabpanel.change', {index:index});
+		zTabPanelEl.trigger('ui:tabpanel:change', {index:index});
 	};
 	
 	

@@ -117,3 +117,6 @@
 		+ support lazyload image
 		+ new option: lazyloadImage: false
 		+ new option: lazyloadDelay: 0
+
+18/01/2017
+		+ support Zepto

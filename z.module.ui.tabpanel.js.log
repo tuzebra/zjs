@@ -9,3 +9,7 @@
 
 07/09/2016
 		+ better support embed image slider inside
+
+18/01/2017
+		+ add option "autoDisableWhenWidthLargerThan" 
+		+ support Zepto
