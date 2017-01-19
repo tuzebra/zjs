@@ -196,7 +196,7 @@
 			//option.linkCover = false;
 			option.hoverToSlide = false;
 			option.showInfo = false;
-		};
+		}
 
 		// fix option
 		// chi cho start index > 0 va < images length
@@ -332,12 +332,11 @@
 				_customEl = _zEl;
 				// _customEl.setAttr('data-need-to-append');
 			}
-			if(_customEl.count() <= 0){
-				// binh thuong thi se bo cuoc
-				// nhung ma neu nhu su dung content slide
-				// thi bat buoc phai co content
-				if(option.contentSlide)
-					_customEl = _zEl;
+			// binh thuong thi se bo cuoc
+			// nhung ma neu nhu su dung content slide
+			// thi bat buoc phai co content
+			if(_customEl.count() <= 0 && option.contentSlide){
+				_customEl = _zEl;
 			}
 
 			images[index].customEl = _customEl.clone(true);
@@ -379,16 +378,21 @@
 			// neu can thiet phai clean html thi lam thoi
 			if(option.cleanHtml)zElement.setInnerHTML('');
 			// insert thang temp nay vao sau thang ul hoac ol
-			var ulEl = zElement.find('ul,ol,table,div').item(0);
-			if(ulEl.count())imagesliderWrapEl.insertAfter(ulEl);
-			else imagesliderWrapEl.appendTo(zElement);
+			var ulEl;
+			if(zElement.find('> '+option.slideitem).count()){
+				imagesliderWrapEl.appendTo(zElement);
+			}else{
+				ulEl = zElement.find('ul,ol,table,div').item(0);
+				if(ulEl.count())imagesliderWrapEl.insertAfter(ulEl);
+				else imagesliderWrapEl.appendTo(zElement);
+			}
 			/*tempDivEl.childReverse().eachElement(function(_tempDivChileEl){*/
 			tempDivEl.child().eachElement(function(_tempDivChileEl){
 				zjs(_tempDivChileEl).appendTo(imagesliderWrapEl);
 			});
 			// sau do remove di thang ul hoac ol la duoc
 			zElement.find(option.slideitem).remove();
-			ulEl.remove();tempDivEl.remove();
+			if(ulEl)ulEl.remove();tempDivEl.remove();
 			// add class cho thang cha ngoai cung
 			zElement.addClass('imageslider-linear');
 			// add class count image
@@ -585,11 +589,9 @@
 		// init image - images each - - -
 		zjs.foreach(images, function(image, index){
 			if(option.popupOnly)return;
-
 			// neu nhu image khong co src thi bo qua luon
 			// neu nhu su dung contentSlide thi se bo qua
 			if(image.src=='' && !option.contentSlide)return;
-
 
 			// init navigation thumbnail
 			if(option.navThumb){
@@ -626,23 +628,21 @@
 						var index = zjs(el).getAttr('data-index').toInt();
 						showLargeImage(index);
 					});
-			};
-
+			}
+			
 			// init image holder
 			// tuy vao tung loai transition ma image holder
 			// se co cac cach sap xep khac nhau
 			// - horizontal: cac image holder se xep theo hang ngang
 			// - vertical: cac image holder se xep theo hang doc
 			// - fade & none: cac image hodler se xep chong len nhau
-			var _tempEl = zjs(_imageHoldHtml)
-				.addClass('image'+index)
-				.setData('image-index', index)
-				// append no vao luon
-				.appendTo(zImageViewWrap);
+			var _tempEl = zjs(_imageHoldHtml);
+			_tempEl.appendTo(zImageViewWrap); 
+			_tempEl.addClass('image'+index);
+			_tempEl.setData('image-index', index);
 			// sau do se gan cai custom elements
-			if(image.customEl){
+			if(image.customEl)
 				_tempEl.append(image.customEl);
-			}
 			var _tempElWidth = _tempEl.width();
 			if(!option.contentSlide){
 				var _srcForTempEl = zElementIsInPopup?
@@ -1355,7 +1355,7 @@
 			if(option.autoplay){
 
 				var runtimeOption = option;
-				if(zjs.isObject(images[currentIndex].option))
+				if(images[currentIndex] && zjs.isObject(images[currentIndex].option))
 					runtimeOption = zjs.extend(runtimeOption, images[currentIndex].option);
 
 				autoplayTimer.set({
@@ -1365,7 +1365,7 @@
 
 			// lazyload
 			if(option.lazyloadImage){
-				if(!images[currentIndex].lazyloaded){
+				if(images[currentIndex] && !images[currentIndex].lazyloaded){
 					images[currentIndex].lazyloaded = true;
 					var lazyEls = images[currentIndex].lazyEl || images[currentIndex].customEl;
 					if(lazyEls){
@@ -1835,7 +1835,7 @@
 				|| option.transition==1 
 				|| option.transition==2)
 				{	
-					if('customEl' in images[currentIndex]){
+					if(images[currentIndex] && ('customEl' in images[currentIndex])){
 						var _he = images[currentIndex].customEl.height();
 						if(_he>maxHeight)
 							maxHeight = _he;
