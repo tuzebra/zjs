@@ -320,19 +320,24 @@
 		zElement.find(option.slideitem).eachElement(function(element, index){
 			if(index>=images.length)return;
 
-			var separateOption = zjs(element).getAttr('data-option', '');
+			var _zEl = zjs(element);
+			var separateOption = _zEl.getAttr('data-option', '');
 			if(zjs.isString(separateOption) && separateOption.trim()!='')
 				separateOption = separateOption.jsonDecode();
 			if(!zjs.isObject(separateOption))separateOption = false;
 			images[index].option = separateOption;
 
-			var _customEl = zjs(element).find('.'+option.customElementsClass);
+			var _customEl = _zEl.find('.'+option.customElementsClass);
+			if(_customEl.count() <= 0 && _zEl.hasClass(option.customElementsClass) && _zEl.is('img')){
+				_customEl = _zEl;
+				// _customEl.setAttr('data-need-to-append');
+			}
 			if(_customEl.count() <= 0){
 				// binh thuong thi se bo cuoc
 				// nhung ma neu nhu su dung content slide
 				// thi bat buoc phai co content
 				if(option.contentSlide)
-					_customEl = zjs(element);
+					_customEl = _zEl;
 			}
 
 			images[index].customEl = _customEl.clone(true);
@@ -633,9 +638,11 @@
 				.addClass('image'+index)
 				.setData('image-index', index)
 				// append no vao luon
-				.appendTo(zImageViewWrap)
-				// sau do se gan cai custom elements
-				.append(image.customEl);
+				.appendTo(zImageViewWrap);
+			// sau do se gan cai custom elements
+			if(image.customEl){
+				_tempEl.append(image.customEl);
+			}
 			var _tempElWidth = _tempEl.width();
 			if(!option.contentSlide){
 				var _srcForTempEl = zElementIsInPopup?
