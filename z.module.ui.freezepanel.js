@@ -471,12 +471,42 @@ zjs.require('ui', function(){
 	var freezepanelGetOATop = function(getType, element){
 		var zFreezepanelEl = zjs(element),
 			option = zFreezepanelEl.getData(optionkey);
-		if(!option || !zFreezepanelEl.hasClass(freezingclass))return zFreezepanelEl.getAbsoluteTop();
+
+		// if dont have option => this element is not a freeze element
+		// we need to make sure if this element is inside an freeze element or not
+		if(!option){
+			var isInsideFreezepanel = false, zParentEl, parent = zFreezepanelEl.parent(true).item(0,true);
+			while(parent && parent != document.body){
+				zParentEl = zjs(parent);
+				if(zParentEl.getData(optionkey)){
+					isInsideFreezepanel = true;
+					break;
+				}
+				parent = zParentEl.parent(true).item(0,true);
+			}
+			if(isInsideFreezepanel){
+
+				// check to see if this parent (freeze element) is freezing or not?
+				// if not freezing, dont care
+				if(!zParentEl.hasClass(freezingclass))
+					return zFreezepanelEl.getAbsoluteTop();
+
+				return zFreezepanelEl.getAbsoluteTop() + freezepanelGetOATop(getType, parent);
+			}
+
+			return zFreezepanelEl.getAbsoluteTop();
+		}
+
+		// this is freeze element, but not freezing yet
+		if(!zFreezepanelEl.hasClass(freezingclass))
+			return zFreezepanelEl.getAbsoluteTop();
+
 		var zchemEl = zFreezepanelEl.getData(freezepanelbufferel);
-		if(!zchemEl)return zFreezepanelEl.getAbsoluteTop();
+
 		// start get the top
 		if(getType == 'original')
-			return zchemEl.getAbsoluteTop();
+			return zchemEl ? zchemEl.getAbsoluteTop() : zFreezepanelEl.getAbsoluteTop();
+
 		// if original == 'absolute'
 		var freezingTop = zFreezepanelEl.getAbsoluteTop(),
 			currentScrollTop = currentScrollTop = isBodyScrollbarActive() ? zBody.scrollPosition() : zWindowEl.scrollTop();

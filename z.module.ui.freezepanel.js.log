@@ -13,3 +13,6 @@
 16/01/2017
 		+ support Zepto
 		+ add new method: zjs::freezepanelGetOriginalTop(), zjs::freezepanelGetAbsoluteTop()
+
+19/01/2017
+		+ method zjs::freezepanelGetAbsoluteTop() now support element that inside another "freeze element"
