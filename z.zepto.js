@@ -663,6 +663,44 @@ var zjs = Zepto,
 		return o && typeof o === "object" && ('selector' in o);
 	};
 
+extend(Number.prototype, {
+	toString: function(){
+		return (this+'');
+	},
+	addPadded: function(n, str){
+		return this.toString().addPadded(str,n);
+	},
+	removePadded: function(str){
+		return this.toString().removePadded(str);
+	},
+	toPaddedString: function(length, radix){
+		var string = this.toString(radix || 10);
+		return '0'.times(length - string.length) + string;
+	},
+	pow: function(p){
+		return Math.pow(this, p || 1);
+	},
+	abs: function(){
+		return Math.abs(this);
+	},
+	toInt: function(radix){
+		return parseInt(this, radix || 10);
+	},
+	toFloat: function(radix){
+		return parseFloat(this, radix || 10);
+	},
+	secondsToTime: function(){
+		var secs = this;
+		var t = new Date(1970,0,1);
+		t.setSeconds(secs);
+		var s = t.toTimeString().substr(0,8);
+		if(secs > 86399)
+			s = Math.floor((t - Date.parse("1/1/70")) / 3600000) + s.substr(2);
+		if(secs < 3600)
+			s = s.substr(3);
+		return s;
+	}
+});
 extend(String.prototype, {
 	toString: function(){
 		return this;
@@ -885,7 +923,7 @@ extend(String.prototype, {
 			return str;
 		}
 	})(),
-})
+});
 extend(Function.prototype, {
 	delay: function(){
 	 	var f = this, args = makeArray(arguments), t = args.shift();
@@ -918,6 +956,9 @@ extend(MouseEvent.prototype, {
 	},
 	getTarget: function(){
 		return this.target || this.srcElement;
+	},
+	getToTarget: function(){
+		return this.relatedTarget || this.toElement || this.target || this.srcElement;
 	},
 	getClientX: function(){
 		var ePageX = this.pageX || 0;
@@ -1162,7 +1203,39 @@ zjs.extendMethod({
 		this.eachElement(function(el){els.push(el.previousSibling)});
 		return zjs(els);
 	},
-	// parent: function(relative){},
+	getParent: function(relative){
+		// relative option se get ra parent element
+		// nhung ma parent nay se la parent co position relative/absolute/fixed
+		// hoac la body luon
+		relative = relative || false;
+		var elem = false;
+		this.eachElement(function(e){elem = e;return false;});
+		elem = elem.parentNode;
+		
+		// neu nhu khong yeu cau get ra relative thi vay la xong roi
+		if(!relative)return zjs(elem);
+		
+		// neu yeu cau relative thi phai di nguoc len tren de tim
+		var position = '';
+		while(elem){
+			// neu truy toi body luon roi thi thoi
+			if(elem == document.body)break;
+			// kiem tra coi element nay co thoa man relative chua
+			try{
+				var zParentEl = zjs(elem);
+				// neu nhu element la table roi thi coi nhu la co relative roi
+				if(zParentEl.is('table'))break;
+				position = zParentEl.getStyle('position');
+				if(position=='relative' || position=='absolute' || position=='fixed')break;
+			}catch(err){};
+			elem = elem.parentNode;
+		};
+		return zjs(elem);
+	},
+	// parent: function(relative){}, /* use zepto */
+	relativeParent: function(){
+		return this.getParent(true);
+	},
 	child: function(reverse){
 		var elems = [];
 		this.eachElement(function(e){
@@ -1652,7 +1725,7 @@ zjs.extendMethod({
 					// voi bottom thi phai lay height cua parent element tru di top
 					// nhung ma top dc baseon parent nao ma co position la relative/absolute/fixed
 					// nen phai di get duoc parent element nao ma co position relative/absolute/fixed moi dung
-					var parent = zjs(e).parent(true).item(0,true);
+					var parent = zjs(e).relativeParent().item(0,true);
 					// neu nhu ma get ra duoc thi quoc thoi - con khong thi bo tay
 					if(parent){
 						var pheight = parent.offsetHeight;
@@ -1671,7 +1744,7 @@ zjs.extendMethod({
 				};
 				if(key == 'right'){
 					if(e == document.body){val = 0;return false;};
-					var parent = zjs(e).parent(true).item(0,true);
+					var parent = zjs(e).relativeParent().item(0,true);
 					// neu nhu ma get ra duoc thi quoc thoi - con khong thi bo tay
 					if(parent){
 						var pwidth = parent.offsetWidth;
@@ -1849,7 +1922,7 @@ zjs.extendMethod({
 		var zEl = this.item(0),
 			top = zEl.top() - zEl.scrollTop(),
 			// get ra thang parent relative
-			parent = zEl.parent(true).item(0,true),
+			parent = zEl.relativeParent().item(0,true),
 			_parentTop = 0;
 		
 		// support zscrollbar
@@ -1861,7 +1934,7 @@ zjs.extendMethod({
 			zEl = zjs(parent);
 			_parentTop = zEl.getData(scrollbarIsContentElkey, false) ? 0 : zEl.top();
 			top += _parentTop - zEl.scrollTop();
-			parent = zEl.parent(true).item(0,true);
+			parent = zEl.relativeParent().item(0,true);
 		};
 		return top;
 	},
@@ -1869,14 +1942,14 @@ zjs.extendMethod({
 		var zEl = this.item(0),
 			bottom = zEl.bottom(),
 			// get ra thang parent relative
-			parent = zEl.parent(true).item(0,true);
+			parent = zEl.relativeParent().item(0,true);
 			
 		// neu nhu ma get ra duoc thi quoc thoi - con khong thi bo tay
 		// get tu tu ra bottom luon
 		while(parent && parent != document.body){
 			zEl = zjs(parent);
 			bottom += zEl.bottom();
-			parent = zEl.parent(true).item(0,true);
+			parent = zEl.relativeParent().item(0,true);
 		};
 		return bottom;
 	},
@@ -1884,7 +1957,7 @@ zjs.extendMethod({
 		var zEl = this.item(0),
 			left = zEl.left(),
 			// get ra thang parent relative
-			parent = zEl.parent(true).item(0,true),
+			parent = zEl.relativeParent().item(0,true),
 			_parentLeft = 0;
 		
 		// support zscrollbar
@@ -1896,7 +1969,7 @@ zjs.extendMethod({
 			zEl = zjs(parent);
 			_parentLeft = zEl.left();
 			left += _parentLeft;
-			parent = zEl.parent(true).item(0,true);
+			parent = zEl.relativeParent().item(0,true);
 		};
 		return left;
 	},
@@ -1904,14 +1977,14 @@ zjs.extendMethod({
 		var zEl = this.item(0),
 			right = zEl.right(),
 			// get ra thang parent relative
-			parent = zEl.parent(true).item(0,true);
+			parent = zEl.relativeParent().item(0,true);
 			
 		// neu nhu ma get ra duoc thi quoc thoi - con khong thi bo tay
 		// get tu tu ra right luon
 		while(parent && parent != document.body){
 			zEl = zjs(parent);
 			right += zEl.right();
-			parent = zEl.parent(true).item(0,true);
+			parent = zEl.relativeParent().item(0,true);
 		};
 		return right;
 	},
@@ -2572,8 +2645,8 @@ if(typeof window.z == 'undefined')window.z = zjs;
 			var name = args[0];
 			var defaultData = (args.length >= 2 ? args[1] : false);
 			if(name=='')return defaultData;
-			// chi can lay 1 thang element dau tien lam dai dien thoi
 			var el = this.item(0,true);
+			if(!el)return defaultData;
 			var dataid = -1;
 			if(typeof el.zjsdataid != 'undefined')dataid = parseInt(el.zjsdataid);
 			if(dataid<=-1 || dataid>=dataarray.length)return defaultData;

@@ -6,3 +6,6 @@
 
 16/01/2017
 		+ fix method $::setValue()
+
+23/01/2017
+		+ support method $::relativeParent()

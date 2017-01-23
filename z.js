@@ -1329,7 +1329,7 @@ var version = '1.1',
 		};
 		this.target = this.getTarget = function(){ return (e.target || e.srcElement); };
 		this.fromTarget = function(){ return (e.relatedTarget || e.fromElement); };
-		this.toTarget = function(){ return (e.relatedTarget || e.toElement || e.target || e.srcElement || false); };
+		this.toTarget = this.getToTarget = function(){ return (e.relatedTarget || e.toElement || e.target || e.srcElement || false); };
 		
 		// fix pageX, pageY tren touchdevice
 		if(e.type == "touchstart" || e.type == "touchmove" || e.type == "touchend"){
@@ -2051,7 +2051,7 @@ zjs.extendMethod({
 		this.eachElement(function(el){els.push(el.previousSibling)});
 		return zjs(els);
 	},
-	parent: function(relative){
+	getParent: function(relative){
 		// relative option se get ra parent element
 		// nhung ma parent nay se la parent co position relative/absolute/fixed
 		// hoac la body luon
@@ -2079,6 +2079,12 @@ zjs.extendMethod({
 			elem = elem.parentNode;
 		};
 		return zjs(elem);
+	},
+	parent: function(relative){
+		return this.getParent(relative);
+	},
+	relativeParent: function(){
+		return this.getParent(true);
 	},
 	child: function(reverse){
 		var elems = [];
@@ -2968,7 +2974,7 @@ zjs.extendMethod({
 					// voi bottom thi phai lay height cua parent element tru di top
 					// nhung ma top dc baseon parent nao ma co position la relative/absolute/fixed
 					// nen phai di get duoc parent element nao ma co position relative/absolute/fixed moi dung
-					var parent = zjs(e).parent(true).item(0,true);
+					var parent = zjs(e).relativeParent().item(0,true);
 					// neu nhu ma get ra duoc thi quoc thoi - con khong thi bo tay
 					if(parent){
 						var pheight = parent.offsetHeight;
@@ -2987,7 +2993,7 @@ zjs.extendMethod({
 				};
 				if(key == 'right'){
 					if(e == document.body){val = 0;return false;};
-					var parent = zjs(e).parent(true).item(0,true);
+					var parent = zjs(e).relativeParent().item(0,true);
 					// neu nhu ma get ra duoc thi quoc thoi - con khong thi bo tay
 					if(parent){
 						var pwidth = parent.offsetWidth;
@@ -3165,7 +3171,7 @@ zjs.extendMethod({
 		var zEl = this.item(0),
 			top = zEl.top() - zEl.scrollTop(),
 			// get ra thang parent relative
-			parent = zEl.parent(true).item(0,true),
+			parent = zEl.relativeParent().item(0,true),
 			_parentTop = 0;
 		
 		// support zscrollbar
@@ -3177,7 +3183,7 @@ zjs.extendMethod({
 			zEl = zjs(parent);
 			_parentTop = zEl.getData(scrollbarIsContentElkey, false) ? 0 : zEl.top();
 			top += _parentTop - zEl.scrollTop();
-			parent = zEl.parent(true).item(0,true);
+			parent = zEl.relativeParent().item(0,true);
 		};
 		return top;
 	},
@@ -3185,14 +3191,14 @@ zjs.extendMethod({
 		var zEl = this.item(0),
 			bottom = zEl.bottom(),
 			// get ra thang parent relative
-			parent = zEl.parent(true).item(0,true);
+			parent = zEl.relativeParent().item(0,true);
 			
 		// neu nhu ma get ra duoc thi quoc thoi - con khong thi bo tay
 		// get tu tu ra bottom luon
 		while(parent && parent != document.body){
 			zEl = zjs(parent);
 			bottom += zEl.bottom();
-			parent = zEl.parent(true).item(0,true);
+			parent = zEl.relativeParent().item(0,true);
 		};
 		return bottom;
 	},
@@ -3200,7 +3206,7 @@ zjs.extendMethod({
 		var zEl = this.item(0),
 			left = zEl.left(),
 			// get ra thang parent relative
-			parent = zEl.parent(true).item(0,true),
+			parent = zEl.relativeParent().item(0,true),
 			_parentLeft = 0;
 		
 		// support zscrollbar
@@ -3212,7 +3218,7 @@ zjs.extendMethod({
 			zEl = zjs(parent);
 			_parentLeft = zEl.left();
 			left += _parentLeft;
-			parent = zEl.parent(true).item(0,true);
+			parent = zEl.relativeParent().item(0,true);
 		};
 		return left;
 	},
@@ -3220,14 +3226,14 @@ zjs.extendMethod({
 		var zEl = this.item(0),
 			right = zEl.right(),
 			// get ra thang parent relative
-			parent = zEl.parent(true).item(0,true);
+			parent = zEl.relativeParent().item(0,true);
 			
 		// neu nhu ma get ra duoc thi quoc thoi - con khong thi bo tay
 		// get tu tu ra right luon
 		while(parent && parent != document.body){
 			zEl = zjs(parent);
 			right += zEl.right();
-			parent = zEl.parent(true).item(0,true);
+			parent = zEl.relativeParent().item(0,true);
 		};
 		return right;
 	},
@@ -4030,6 +4036,7 @@ zjs.extendMethod({
 			if(name=='')return defaultData;
 			// chi can lay 1 thang element dau tien lam dai dien thoi
 			var el = this.item(0,true);
+			if(!el)return defaultData;
 			var dataid = -1;
 			if(typeof el.zjsdataid != 'undefined')dataid = parseInt(el.zjsdataid);
 			if(dataid<=-1 || dataid>=dataarray.length)return defaultData;
