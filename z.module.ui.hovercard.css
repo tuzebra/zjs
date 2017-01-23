@@ -1,3 +1,5 @@
+.zui-uihide{position:fixed !important;top:-10000px !important;left:-10000px !important;visibility:hidden !important;overflow:hidden !important;opacity:0 !important;padding:0 !important;margin:0 !important;border:0 !important;color:transparent !important;}
+
 .zui-hovercard{}
 .zui-hovercard.zui-hovercard-fix{position:relative !important;}
 .zui-hovercard-panel-wrap{position:absolute;}

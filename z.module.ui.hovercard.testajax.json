@@ -1,0 +1,19 @@
+{
+	"status": "200",
+	"message": "ok",
+	"data": {
+		"products": [
+			{
+				"product_id": "123",
+				"product_name": "Coolll",
+				"_html": "<div class='product'><h3>Coolll</h3><p>Pace subdita nix possedit volucres tuba. Quarum sunt. Hanc extendi mundo peregrinum aliis. Diremit fluminaque.</p></div>"
+			},
+			{
+				"product_id": "456",
+				"product_name": "Greatttt",
+				"_html": "<div class='product'><h3>Greatttt</h3><p>Pace subdita nix possedit volucres tuba. Quarum sunt. Hanc extendi mundo peregrinum aliis. Diremit fluminaque.</p></div>"
+			}
+		]
+		
+	}
+}

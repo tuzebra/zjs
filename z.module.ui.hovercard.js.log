@@ -1,2 +1,6 @@
 02/11/2016
 	+ add new option: "customContentElement"
+
+23/01/2017
+	+ add new option: "ajaxContentDataStructure"
+	+ support zepto
