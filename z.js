@@ -145,6 +145,21 @@ var version = '1.1',
 				return keys[i];
 		return false;
 	},
+
+	getValueByKey = function(object, key){
+		var value = object;
+		each(key.split(/\.|\[|\]/), function(k){
+			if(typeof value == 'undefined')return;
+			if(k==='')return;
+			if(!isNaN(k))k=parseInt(k);
+			if(typeof value[k] == 'undefined'){
+				value = undefined;
+				return false;
+			}
+			value = value[k];
+		});
+		return value;
+	},
 	
 	// dung ham each thay cho Object.each() -> gay ra qua nhieu loi cho cac thu vien thu 3
 	each = function(obj, fn){ // each(object, function(value, key){} )
@@ -1857,6 +1872,7 @@ extend(zjs, {
 	makeArray: makeArray,
 	objectKeys: objectKeys,
 	objectIndexOf: objectIndexOf,
+	getValueByKey: getValueByKey,
 	isTouchDevice: isTouchDevice,
 	isMobileDevice: isMobileDevice,
 	supportFlexbox: supportFlexbox,

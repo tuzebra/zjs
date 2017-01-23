@@ -116,6 +116,21 @@ var zjs = Zepto,
 		return false;
 	},
 
+	getValueByKey = function(object, key){
+		var value = object;
+		each(key.split(/\.|\[|\]/), function(k){
+			if(typeof value == 'undefined')return;
+			if(k==='')return;
+			if(!isNaN(k))k=parseInt(k);
+			if(typeof value[k] == 'undefined'){
+				value = undefined;
+				return false;
+			}
+			value = value[k];
+		});
+		return value;
+	},
+
 	clone = function(source){
 		if(isObject(source))return extend(new Object(), source);
 		if(isArray(source))return extend(new Array(), source);
@@ -992,6 +1007,7 @@ zjs.extendCore({
 	makeArray: makeArray,
 	objectKeys: objectKeys,
 	objectIndexOf: objectIndexOf,
+	getValueByKey: getValueByKey,
 	isTouchDevice: isTouchDevice,
 	isMobileDevice: isMobileDevice,
 	supportFlexbox: supportFlexbox,
