@@ -118,7 +118,7 @@ var zjs = Zepto,
 
 	getValueByKey = function(object, key){
 		var value = object;
-		each(key.split(/\.|\[|\]/), function(k){
+		eachItem(key.split(/\.|\[|\]/), function(k){
 			if(typeof value == 'undefined')return;
 			if(k==='')return;
 			if(!isNaN(k))k=parseInt(k);
@@ -661,7 +661,9 @@ var zjs = Zepto,
 	isZjs = function(o){
 		// return o && typeof o === "object" && o.constructor === zjs;
 		return o && typeof o === "object" && ('selector' in o);
-	};
+	},
+	
+	isZepto = isZjs;
 
 extend(Number.prototype, {
 	toString: function(){
@@ -1024,6 +1026,7 @@ extend(MouseEvent.prototype, {
 
 extend(zjs, {
 	isZjs: isZjs,
+	isZepto: isZepto,
 	extendCore: function(name, fn){
 		if(isString(name) && zjs.isFunction(fn)){var fns={};fns[name]=fn;return extend(zjs, fns);};
 		if(isObject(name))return extend(zjs, name);

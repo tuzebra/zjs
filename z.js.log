@@ -536,3 +536,4 @@
 
 23/01/2017
 		+ add method zjs.getValueByKey(obj, key) => help to get a value of object by key, support multi level key.
+		+ support Zepto ajax

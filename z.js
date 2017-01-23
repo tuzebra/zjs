@@ -148,7 +148,7 @@ var version = '1.1',
 
 	getValueByKey = function(object, key){
 		var value = object;
-		each(key.split(/\.|\[|\]/), function(k){
+		eachItem(key.split(/\.|\[|\]/), function(k){
 			if(typeof value == 'undefined')return;
 			if(k==='')return;
 			if(!isNaN(k))k=parseInt(k);
@@ -910,7 +910,8 @@ var version = '1.1',
 					url:'',
 					data: '',
 					headers: {},
-					type: 'raw', // json, jsonp
+					// type: 'raw', // html, json, jsonp
+					dataType: 'html', // json, jsonp
 					method: 'get',
 					contentType: 'application/x-www-form-urlencoded',
 					repeat: -1,
@@ -927,7 +928,20 @@ var version = '1.1',
 			
 			
 			var callajax = function(){
-			
+				
+				// fix option
+				// (still fallback to support "type", 
+				// because now we re replace it with "dataType"
+				if('type' in option && typeof option.type != 'undefined' && !('isZepto' in zjs)){
+					option.dataType = option.type;
+				}
+
+				// fix option
+				// because we support Zepto, so need to support it "success" option
+				if('success' in option && isFunction(option.success) && !('isZepto' in zjs)){
+					option.onComplete = option.success;
+				}
+
 				// get now time to avoid cache url
 				var now = 'zuid='+(new Date()).getTime(), url = option.url;
 			
@@ -954,7 +968,7 @@ var version = '1.1',
 				zjs.trigger('ajax.begin');
 			
 				// jsonp
-				if(option.type.toLowerCase() == 'jsonp'){
+				if(option.dataType.toLowerCase() == 'jsonp'){
 				
 					if(typeof option.onLoading == 'function')option.onLoading();
 				
@@ -1026,7 +1040,7 @@ var version = '1.1',
 							var result = '';
 							if(option.debug && console)console.log('response: ' + xhr.responseText);
 							if(xhr.responseText)result = xhr.responseText.replace(/[\n\r]/g,'');
-							if(option.type.toLowerCase() == 'json')result = result.jsonDecode();
+							if(option.dataType.toLowerCase() == 'json')result = result.jsonDecode();
 							//if(xhr.status == 200){
 							if(xhr.status >= 200 && xhr.status < 300 || xhr.status === 304 || xhr.status === 0){
 								if(typeof option.onComplete == 'function')option.onComplete(result);
