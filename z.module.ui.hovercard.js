@@ -280,13 +280,15 @@ zjs.require('ui', function(){
 		if(!useCustomWrapElement && option.ajaxContent && !zHovercardEl.getData(ajaxloadedkey)){
 		
 			var zHovercardPanelinnerEl = zHovercardPanelwrapEl.find('.'+hovercardpanelinnerclass);
-			var ajaxType = (option.ajaxContentDataStructure != '') ? 'json' : 'raw';
+			var ajaxDataType = (option.ajaxContentDataStructure != '') ? 'json' : 'html';
+
 			//ajaxContent
 			zjs.ajax({
-				url:option.ajaxContent,type:ajaxType,cache:false,
-				onComplete:function(response){
+				url:option.ajaxContent,
+				dataType:ajaxDataType,
+				success:function(response){
 					var html = response;
-					if(ajaxType === 'json' && zjs.isObject(response)){
+					if(ajaxDataType === 'json' && zjs.isObject(response)){
 						html = zjs.getValueByKey(response, option.ajaxContentDataStructure);
 					}
 					zHovercardEl.setData(ajaxloadedkey, true);
