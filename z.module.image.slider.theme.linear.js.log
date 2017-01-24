@@ -120,3 +120,7 @@
 
 18/01/2017
 		+ support Zepto
+
+25/01/2017
+		+ new method zjs::slideFilter(function slideItemFilterHandler(item){})
+		=> just basic support option.transition: 'horizontal'

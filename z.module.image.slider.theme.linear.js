@@ -306,6 +306,7 @@
 			navButtonDisableClass = 'disabled',
 
 			imageholdloadingClass = 'imageloading',
+			imageholdhideClass = 'slide-hide',
 
 			bodypopupshowClass = 'imageslider-popup-show',
 
@@ -467,6 +468,8 @@
 
 			currentIndex = -1,
 			currentTempIndex = -1,
+			currentOrdering = -1,
+			currentTempOrdering = -1,
 			currentImageSrc = '',
 			currentTempImageSrc = '',
 			currentTitle = '',
@@ -477,6 +480,8 @@
 			// tinh toan truoc 1 so buoc luon
 			estimateNextIndex = -1,
 			estimatePrevIndex = -1,
+			estimateNextOrdering = -1,
+			estimatePrevOrdering = -1,
 
 			zImageViewElWidth = option.width,
 			zImageViewElHeight = option.height,
@@ -509,7 +514,7 @@
 		if(zImageViewElWidth<=0){
 			// cung lam thi choi get width cua window luon
 			zImageViewElWidth = zBody.width();
-		};
+		}
 		if(zImageViewElHeight<=0)zImageViewElHeight = zImageViewWrap.height();
 		if(zImageViewElHeight<=0)zImageViewElHeight = parseInt(zElementParent.height());
 		if(zImageViewElHeight<=0){
@@ -521,12 +526,12 @@
 					if(zjs.isArray(heightInfo))
 						zImageViewElHeight = parseInt(heightInfo[2]);
 				}
-			}catch(err){};
-		};
+			}catch(err){}
+		}
 		if(zImageViewElHeight<=0){
 			// cung lam thi set cung luon
 			zImageViewElHeight = 376;
-		};
+		}
 		zImageViewElOriHeight = zImageViewElHeight;
 		// neu nhu co fullheight
 		// thi can gi cai thang original height nua?
@@ -587,13 +592,13 @@
 				case 2:case 'quadratic':cubicbezier = 'cubic-bezier(0.18, 0.17, 0.37, 0.99)';break;
 				case 3:case 'cubic':cubicbezier = 'cubic-bezier(.34,.95,.84,1.39)';break;
 				case 4:case 'elastic':cubicbezier = 'cubic-bezier(.71,1.61,.5,.82)';break;
-			};
+			}
 			if(typeof option.transitionTimingfunction == 'string' && option.transitionTimingfunction.indexOf('cubic-bezier')>=0){
 				cubicbezier = option.transitionTimingfunction;
-			};
+			}
 			// turn on thoi
 			imageViewWrapCssTransitionTurnOn();
-		};
+		}
 
 
 		// - - - -
@@ -902,8 +907,6 @@
 		// luu tru lai cai margin dang co
 		var imagesliderWrapElHorizontalPadding = 0;
 
-
-
 		// ham view large image
 		var showLargeImage = function(index, moreparam, notTransition, notTriggerEvent, isInnerCall){
 
@@ -917,7 +920,7 @@
 				// neu ma autoplay thi play thoi
 				if(option.autoplay)autoplayTimer.run();
 				return;
-			};
+			}
 
 			index = parseInt(index);
 
@@ -925,8 +928,16 @@
 			// de trong qua trinh dang run transition cua slide
 			// thi se khong bi chay autorun qua slide khac
 			if(autoplayTimer.isRunning())autoplayTimer.stop();
-			if(index >= images.length)index = images.length-1;
-			if(index < 0)index=0;
+
+			// Fix 
+			// if(index >= images.length)index = images.length-1;
+			// if(index < 0)index=0;
+			// console.log('index before', index);
+			var direction = 1;
+			if(moreparam && (typeof moreparam.direction != 'undefined') && moreparam.direction == 'prev')
+				direction = -1;
+			index = getShownIndexKeyByNormalIndex(index, direction);
+			// console.log('index after', index);
 
 			// xem coi co dc thay doi hay khong
 			// neu nhu dang touch slide thi se out ra
@@ -934,11 +945,14 @@
 				// neu ma autoplay thi` play thoi
 				if(option.autoplay)autoplayTimer.run();
 				return;
-			};
+			}
 
 			// backup and then set new index
 			currentTempIndex = currentIndex;
 			currentIndex = index;
+			currentTempOrdering = currentOrdering;
+			currentOrdering = findOrderingNumberByShownIndex(index);
+
 
 			// neu nhu khong co effect tu tu
 			// thi phai check coi co trung nhau hay khong
@@ -954,7 +968,7 @@
 				currentLink = images[index].link;
 				currentDes = images[index].description;
 				currentLink = images[index].link;
-			};
+			}
 
 			// stop custom animation
 			if(zjs.moduleTransition)
@@ -1004,7 +1018,8 @@
 					// neu nhu currentTempIndex = -1 : tuc la vua moi slide lan dau tien
 					// thi cung coi nhu la sequent luon
 					if(option.sequent || currentTempIndex<0){
-						zImageViewWrapRealElNextPos = -zImageViewElWidth * index;
+						// zImageViewWrapRealElNextPos = -zImageViewElWidth * index;
+						zImageViewWrapRealElNextPos = -zImageViewElWidth * currentOrdering;
 					}else{
 						// xem coi neu nhu thang nay nen dat ben phai hay ben trai
 						currentSequentDirect = (currentTempIndex < currentIndex ? 1 : -1);
@@ -1628,8 +1643,75 @@
 				images[i].isShown = isShown;
 			};
 			generateShownImageIndexsFromImages();
-			// console.log('images', images);
-			// console.log('shownImageIndexs', shownImageIndexs);
+			applyFilterToSlider();
+		};
+
+		var applyFilterToSlider = function(){
+			// step 1: hide/show the image-hold & navdot
+			var zNavDotDotsEl = false;
+			if(option.navDot){
+				zNavDotDotsEl = zNavDotsEl.find('.nav-dot');
+				if(!zNavDotDotsEl.count())
+					zNavDotDotsEl = false;
+			}
+			var i;for(i=0;i<images.length;i++){
+				if(images[i].isShown){
+					images[i].el.removeClass(imageholdhideClass);
+					zNavDotDotsEl.item(i).show();
+				}else{
+					images[i].el.addClass(imageholdhideClass);
+					zNavDotDotsEl.item(i).hide();
+				}
+			}
+			// step 2: refresh slider
+			refreshSlide();
+		};
+
+		// ham co nhiem vu convert index => shownindex
+		var getShownIndexKeyByNormalIndex = function(index, direction){
+			direction = direction || 1;
+			
+			// do nothing;
+			if(shownImageIndexs.length == images.length)
+				return index;
+
+			var shownIndex = shownImageIndexs.indexOf(index);
+			// if the index in the shown list, just return it
+			if(shownIndex>-1)
+				return index;
+			// if it not in the list, need to find the: 
+			// - next one (if direction > 0)
+			// - previous one (if direction < 0)
+			var i;
+			if(direction>0){
+				if(index>=images.length){
+					index = 0;
+				}
+				for(i=0;i<shownImageIndexs.length;i++){
+					if(shownImageIndexs[i] > index){
+						return shownImageIndexs[i];
+					}
+				}
+				return getShownIndexKeyByNormalIndex(0, direction);
+			}
+			if(direction<0){
+				if(index<0){
+					index = images.length - 1;
+				}
+				for(i=shownImageIndexs.length-1;i>=0;i--){
+					if(shownImageIndexs[i] < index){
+						return shownImageIndexs[i];
+					}
+				}
+				return getShownIndexKeyByNormalIndex(images.length - 1, direction);
+			}
+			// default
+			// return (direction>0) ? shownImageIndexs[0] : shownImageIndexs[shownImageIndexs.lenght - 1];
+		};
+
+		// ham co nhiem vu tim ra vi tri (ordering) cua shownindex
+		var findOrderingNumberByShownIndex = function(shownIndex){
+			return shownImageIndexs.indexOf(shownIndex);
 		};
 
 
@@ -1732,13 +1814,18 @@
 						zImageViewWrapRealElNextPos = zImageViewWrapRealElNextPos * width / zImageViewElWidth;
 
 					// tinh toan lai left cua tung thang image hold
-					zImageViewWrap.find('.image-hold').eachElement(function(el, index){
-						var zEl = zjs(el);
-						if(!option.sequent)
-							zEl.left( zEl.left() * width / zImageViewElWidth );
-						else
-							zEl.left( width * index );
-					});
+					if(!option.usePercentWidth){
+						zImageViewWrap.find('.image-hold').eachElement(function(el, index){
+							var ordering = findOrderingNumberByShownIndex(index);
+							if(ordering<0)return;
+							
+							var zEl = zjs(el);
+							if(!option.sequent)
+								zEl.left( zEl.left() * width / zImageViewElWidth );
+							else
+								zEl.left( width * ordering );
+						});
+					}
 
 					// fix thang viewwrap
 					zImageViewWrapRealElMove(zImageViewWrapRealElNextPos);
@@ -1823,20 +1910,24 @@
 
 			var fixrewidthPercent = function()
 			{	
-
+				// console.log('fixrewidthPercent');
 				// cap nhat lai cai width quan trong
 				zImageViewElWidth = zImageViewContainer.width();
 
 				// di toi
 				var _lastLeft = 0;
-				for(var i = 0;i<images.length;i++){
+				//for(var i = 0;i<images.length;i++){
+				for(var i = 0;i<shownImageIndexs.length;i++){
+					var ordering = shownImageIndexs[i];
+					// console.log('ordering', ordering);
 
 					//get ra cai left va width hien tai
-					var zEl = zjs(images[i].el);
+					var zEl = zjs(images[ordering].el);
+					// console.log('el', images[ordering].el.item(0,true));
+					// console.log('_lastLeft', _lastLeft);
 
 					zEl.left(_lastLeft);
 					_lastLeft += zEl.width();
-
 				}
 
 				// fix lien vi tri left current
@@ -1977,10 +2068,11 @@
 
 				// gio se quyet dinh xem coi show va hide cai dot nao?
 				if((option.transition==202 || option.transition==205) && option.navDot){
-				zNavDotsEl.find('.nav-dot').eachElement(function(eldot, index){
-					if(index % _imagePerPage == 0)zjs(eldot).show();
-					else zjs(eldot).hide();
-				})}
+					zNavDotsEl.find('.nav-dot').eachElement(function(eldot, index){
+						if(index % _imagePerPage == 0)zjs(eldot).show();
+						else zjs(eldot).hide();
+					})
+				}
 				// quyet dinh coi move left bao nhieu?
 				if(option.transition==204 || option.transition==205){
 					var _margin = (imagesliderWrapEl.width() - _imagePerPage*zImageViewElWidth)/2;
