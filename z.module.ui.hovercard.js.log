@@ -5,3 +5,7 @@
 	+ add new option: "ajaxContentDataStructure"
 	+ support zepto
 	+ support zepto ajax
+
+24/01/2017
+	+ add new option: "ajaxLoadingHtml"
+	+ support cache ajax

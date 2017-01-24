@@ -25,14 +25,20 @@
 	.zui-hovercard-panel-wrap.product-card{
 		max-width: 300px;
 	}
-	.zui-hovercard-panel-wrap.product-card .zui-hovercard-panel{background:#e88686;padding:5px 10px;border-radius:2px;box-shadow:0 1px 15px -2px #bb8d8d;}
+	.zui-hovercard-panel-wrap.product-card .zui-hovercard-panel{background:#fdfefe;padding:5px 10px;border-radius:2px;box-shadow:0 1px 15px -2px #bb8d8d;}
 
 	.zui-hovercard-panel-wrap.product-card .zui-hovercard-panel-arrow{width:0;height:0;border-style:solid;border-width:5px;border-color:transparent;box-sizing:content-box;}
 	.zui-hovercard-panel-wrap.product-card.zui-left .zui-hovercard-panel-arrow{left:15px;right:auto !important;margin-left:-5px;}
 	.zui-hovercard-panel-wrap.product-card.zui-right .zui-hovercard-panel-arrow{left:auto !important;right:15px;margin-right:-5px;}
-	.zui-hovercard-panel-wrap.product-card.zui-top .zui-hovercard-panel-arrow{border-bottom-width:0;border-top-color:#e88686;bottom:0;}
-	.zui-hovercard-panel-wrap.product-card.zui-bottom .zui-hovercard-panel-arrow{border-top-width:0;border-bottom-color:#e88686;top:0;}
+	.zui-hovercard-panel-wrap.product-card.zui-top .zui-hovercard-panel-arrow{border-bottom-width:0;border-top-color:#697979;bottom:0;}
+	.zui-hovercard-panel-wrap.product-card.zui-bottom .zui-hovercard-panel-arrow{border-top-width:0;border-bottom-color:#697979;top:0;}
 	
+	/** loading style for ajax */
+	.zui-hovercard-panel-wrap.ajax-loading .loading-icon{
+		height: 20px;
+		width: 20px;
+		background: url('/images/z.module.zmvc.opengraph.loading.gif') center no-repeat;
+	}
 
 	</style>
 	
@@ -76,7 +82,7 @@
 
 		
 		<h3>Card element that get content by ajax</h3>
-		<p>Card can get from a "raw html file" source via ajax <a class="zhovercard" target="_blank" href="z.module.ui.hovercard.testajax.html" data-option="customCssClass:'product-card',ajaxContent:'z.module.ui.hovercard.testajax.html'">z.module.ui.hovercard.testajax.html</a></p>
+		<p>Card can get from a "raw html file" source via ajax <a class="zhovercard" target="_blank" href="z.module.ui.hovercard.testajax.html" data-option="appendToBody:true,horizontal:'center',customCssClass:'product-card',ajaxContent:'z.module.ui.hovercard.testajax.html'">z.module.ui.hovercard.testajax.html</a></p>
 
 		<p>Card also can get from a "json file" that contain a "rendered html" <a class="zhovercard" target="_blank" href="z.module.ui.hovercard.testajax.json" data-option="customCssClass:'product-card',ajaxContent:'z.module.ui.hovercard.testajax.json',ajaxContentDataStructure:'.data.products[1]._html'">z.module.ui.hovercard.testajax.json</a></p>
 
@@ -84,6 +90,9 @@
 
 		<p>Tristique in bibendum sed, mollis sit amet dolor. Etiam sed tristique odio. Vivamus vel est sapien, sit amet dignissim risus. Curabitur a tellus dui, eu sodales sem. Sed in tortor eget metus rutrum fermentum. Donec mattis, erat id mollis feugiat, est mi posuere urna, ut porttitor libero sapien nec arcu.</p>
 
+		<p>Tristique in bibendum sed, mollis sit amet dolor. Etiam sed tristique odio. Vivamus vel est sapien, sit amet dignissim risus. Curabitur a tellus dui, eu sodales sem. Sed in tortor eget metus rutrum fermentum. Donec mattis, erat id mollis feugiat, est mi posuere urna, ut porttitor libero sapien nec arcu.</p>
+		<p>Tristique in bibendum sed, mollis sit amet dolor. Etiam sed tristique odio. Vivamus vel est sapien, sit amet dignissim risus. Curabitur a tellus dui, eu sodales sem. Sed in tortor eget metus rutrum fermentum. Donec mattis, erat id mollis feugiat, est mi posuere urna, ut porttitor libero sapien nec arcu.</p>
+		<p>Tristique in bibendum sed, mollis sit amet dolor. Etiam sed tristique odio. Vivamus vel est sapien, sit amet dignissim risus. Curabitur a tellus dui, eu sodales sem. Sed in tortor eget metus rutrum fermentum. Donec mattis, erat id mollis feugiat, est mi posuere urna, ut porttitor libero sapien nec arcu.</p>
 		<p>Tristique in bibendum sed, mollis sit amet dolor. Etiam sed tristique odio. Vivamus vel est sapien, sit amet dignissim risus. Curabitur a tellus dui, eu sodales sem. Sed in tortor eget metus rutrum fermentum. Donec mattis, erat id mollis feugiat, est mi posuere urna, ut porttitor libero sapien nec arcu.</p>
 
 	</div>
