@@ -34,6 +34,7 @@ zjs.require('ui', function(){
 			ajaxContent:false,
 			ajaxContentDataStructure:'',
 			ajaxLoadingHtml: '<div class="loading-icon"></div>',
+			cacheAjax: true,
 			customContentElement:false,
 		}
 	});
@@ -283,6 +284,9 @@ zjs.require('ui', function(){
 		zHovercardPanelwrapEl.removeClass(uihideclass).addClass(contextualpanelwrapactiveclass);
 		// bay gio moi di fix align lai position cua hovercard
 		hovercardAlign(element);
+		(function(){
+			hovercardAlign(element);
+		}).delay(200);
 
 		// neu nhu thang hovercard nay co 1 thang wrap lam cha
 		// thi se set thang cha dang bi phu thuoc 1 thang, khong cho thang cha hide
@@ -312,7 +316,7 @@ zjs.require('ui', function(){
 			// find in ajax cache first
 			var urlHash = 'aj'+option.ajaxContent.hashCode();
 			// console.log('urlHash', urlHash);
-			if(typeof ajaxCache[urlHash] !== 'undefined'){
+			if(option.cacheAjax && (typeof ajaxCache[urlHash] !== 'undefined')){
 				ajaxCallback(ajaxCache[urlHash]);
 				return;
 			}
@@ -327,7 +331,9 @@ zjs.require('ui', function(){
 						html = zjs.getValueByKey(response, option.ajaxContentDataStructure);
 					}
 					if(html){
-						ajaxCache[urlHash] = html;
+						if(option.cacheAjax){
+							ajaxCache[urlHash] = html;
+						}
 						ajaxCallback(html);
 					}
 				}
@@ -499,14 +505,15 @@ zjs.require('ui', function(){
 					var windowInnerHeight = zWindowEl.height();
 					if(etop + eheight + pheight > (positionFixed ? 0 : document.body.scrollTop) + windowInnerHeight)vertical = 'top';
 				}
+
 				// horizontal
-				if(horizontal == 'right'){
-					var bodyWidth = zjs(document.body).width();
-					if(bodyWidth - eright - ewidth - pwidth < document.body.scrollLeft)horizontal = 'left';
-				}
 				if(horizontal == 'left'){
 					var windowInnerWidth = zWindowEl.width();
 					if(eleft + ewidth + pwidth > document.body.scrollLeft + windowInnerWidth)horizontal = 'right';
+				}
+				if(horizontal == 'right'){
+					var bodyWidth = zjs(document.body).width();
+					if(bodyWidth - eright - ewidth - pwidth < document.body.scrollLeft)horizontal = 'left';
 				}
 			}
 		}
@@ -540,9 +547,26 @@ zjs.require('ui', function(){
 		// horizontal
 		if(horizontal == 'center'){
 			// set panel hien thi canh theo center cua element
+			// nhung cung phai fix lai cho hop ly
+			var pleft = eleft - pwidth/2 + ewidth/2;
+			var aleft = pwidth/2;
+			if(option.appendToBody){
+				var windowInnerWidth = zWindowEl.width();
+				var new_pleft = pleft;
+				if(pleft + pwidth + 10 > document.body.scrollLeft + windowInnerWidth){
+					new_pleft = document.body.scrollLeft + windowInnerWidth - pwidth - 10;
+				}
+				if(pleft - 10 < document.body.scrollLeft){
+					new_pleft = document.body.scrollLeft + 10;
+				}
+				if(pleft !== new_pleft){
+					aleft-= (new_pleft - pleft);
+					pleft = new_pleft;
+				}
+			}
 			zHovercardPanelwrapEl.addClass(hovercardpanelwrapleftclass);
-			zHovercardPanelwrapEl.left(eleft - pwidth/2 + ewidth/2);
-			zHovercardArrowEl.left(pwidth/2).right('auto');
+			zHovercardPanelwrapEl.left(pleft);
+			zHovercardArrowEl.left(aleft).right('auto');
 		}else if(horizontal == 'left'){
 			// set panel hien thi canh theo left cua element
 			zHovercardPanelwrapEl.addClass(hovercardpanelwrapleftclass);
