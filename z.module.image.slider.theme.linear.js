@@ -150,7 +150,20 @@
 			images[_i].index = _i;
 			images[_i].lazyloaded = false;
 			images[_i].lazyEl = false;
+			images[_i].isShown = true;
 		}
+
+		var shownImageIndexs;
+		var generateShownImageIndexsFromImages = function(){
+			shownImageIndexs = [];
+			for(var _i=0;_i<images.length;_i++){
+				if(images[_i].isShown)
+					shownImageIndexs.push(_i);
+			}
+		};
+
+		// first run to generate images to use
+		generateShownImageIndexsFromImages();
 
 		// fix option
 		option.width = parseInt(option.width);
@@ -176,7 +189,7 @@
 				option.navButtonParentIsRoot = true;
 			if(option.transition==202 || option.transition==205)
 				option.sequent = true;
-		};
+		}
 
 		// fix option 
 		option.usePercentWidth = !!option.usePercentWidth;
@@ -209,7 +222,7 @@
 		if(option.navThumbSlider){
 			option.navButtonParentIsRoot = true;
 			option.navThumb = false;
-		};
+		}
 
 		// fix option
 		// neu nhu su dung option popupOnly thi chac chan phai su dung popup
@@ -220,7 +233,7 @@
 		if(option.popupAnimate){
 			option.popupAnimateTime = parseInt(option.popupAnimateTime);
 			zjs.require('ui.popup');
-		};
+		}
 
 		// fix option
 		option.scaleHeightWhenWidthLessThan = parseInt(option.scaleHeightWhenWidthLessThan);
@@ -428,7 +441,7 @@
 					zElement.trigger('slider:click', {index:index});
 				});
 			});
-		};
+		}
 
 		// end prepare UI
 		// ===========
@@ -474,12 +487,12 @@
 		// neu nhu co fullwidth, thi se lay width cua thang cha
 		if(option.fullscreenWidth || option.fullWidth || option.usePercentWidth){
 			zImageViewElWidth = option.fullscreenWidth ? zBody.width() : zElementParent.width();
-		};
+		}
 
 		// neu nhu co fullheight thi se lay height cua thang cha
 		if(option.fullHeight){
 			zImageViewElHeight = zElementParent.height();
-		};
+		}
 
 		// console.log('zImageViewElWidth:', zImageViewElWidth);
 // 		console.log('zImageViewElHeight:', zImageViewElHeight);
@@ -1602,6 +1615,26 @@
 
 		// - - - -
 
+		var slideFilter = function(slideItemFilterHandler){
+			// just loop through the images and update the show/hide status
+			var i;for(i=0;i<images.length;i++){
+				var isShown = true;
+				if(zjs.isFunction(slideItemFilterHandler)){
+					var handlerResult = slideItemFilterHandler(images[i]);
+					if(typeof handlerResult !== 'undefined')
+						isShown = handlerResult;
+				}
+				// update it to rawimage
+				images[i].isShown = isShown;
+			};
+			generateShownImageIndexsFromImages();
+			// console.log('images', images);
+			// console.log('shownImageIndexs', shownImageIndexs);
+		};
+
+
+		// - - - - 
+
 
 
 		// ham lam nhiem vu disable / enable slide
@@ -2311,7 +2344,8 @@
 			slidePopupHide: slidePopupHide,
 			slideRefresh: refreshSlide,
 			slideDisable: function(){slideDisable(true)},
-			slideEnable: function(){slideEnable(true)}
+			slideEnable: function(){slideEnable(true)},
+			slideFilter: slideFilter,
 		};
 
 	});

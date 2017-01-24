@@ -173,6 +173,12 @@
 				var themeObj = zjs(element).getData(themeobjkey);
 				if(typeof themeObj == 'object' && typeof themeObj.slideEnable =='function')themeObj.slideEnable();
 			});
+		},
+		slideFilter: function(slideItemFilterHandler){
+			return this.eachElement(function(element){
+				var themeObj = zjs(element).getData(themeobjkey);
+				if(typeof themeObj == 'object' && typeof themeObj.slideFilter =='function')themeObj.slideFilter(slideItemFilterHandler);
+			});
 		}
 	});
 	
