@@ -8,6 +8,15 @@
 		<style>
 			body{font-family:arial;padding:40px;margin:0;}
 			.elements{font-size: 110px;text-align: center;line-height: 180px;color: rgba(137, 137, 137, 0.65);}
+
+			.bootstrap-row{
+				margin-left: -10px;
+				margin-right: -10px;
+			}
+			.bootstrap-col{
+				padding-left: 10px;
+				padding-right: 10px;
+			}
 		</style>
 		
 		<script type="text/javascript" src="z.min.js" data-debug="true"></script>
@@ -73,7 +82,7 @@ usePercentWidth: true
 </pre>
 		<div class="zslider" data-option="theme:'linear',
 			transition:'horizontal-stack',
-			transitionTime:2400,
+			transitionTime:800,
 			autoplay: false,
 			autoplayTime: 3000,
 			navButton: true,
@@ -81,6 +90,50 @@ usePercentWidth: true
 			navDot: false,
 			showInfo: false,
 			usePercentWidth: true">
+
+			<ul>
+				<li><img src="sliderimages/1.jpg" /><div class="elements">1</div></li>
+				<li><img src="sliderimages/2.jpg" /><div class="elements">2</div></li>
+				<li><img src="sliderimages/3.jpg" /><div class="elements">3</div></li>
+				<li><img src="sliderimages/4.jpg" /><div class="elements">4</div></li>
+				<li><img src="sliderimages/5.jpg" /><div class="elements">5</div></li>
+				<li><img src="sliderimages/6.jpg" /><div class="elements">6</div></li>
+				<li><img src="sliderimages/1.jpg" /><div class="elements">7</div></li>
+				<li><img src="sliderimages/2.jpg" /><div class="elements">8</div></li>
+				<li><img src="sliderimages/3.jpg" /><div class="elements">9</div></li>
+				<li><img src="sliderimages/4.jpg" /><div class="elements">10</div></li>
+				<li><img src="sliderimages/5.jpg" /><div class="elements">11</div></li>
+				<li><img src="sliderimages/6.jpg" /><div class="elements">12</div></li>
+			</ul>
+
+		</div>
+		
+
+
+		<!-- -->
+		<br/>
+		<br/>
+		
+		<h3>Horizontal Stack with custom item width (item width use percent) And have margin between each item</h3>
+		<pre>theme:'linear',
+transition: 'horizontal-stack',
+usePercentWidth: true,
+<b>wrapClass: 'bootstrap-row',</b>
+<b>imageHoldClass: 'bootstrap-col'</b>
+</pre>
+		<div class="zslider slider-demo-3" data-option="theme:'linear',
+			transition:'horizontal-stack',
+			transitionTime:800,
+			autoplay: false,
+			autoplayTime: 3000,
+			navButton: true,
+			navThumb: false,
+			navDot: false,
+			showInfo: false,
+			usePercentWidth: true,
+
+			wrapClass: 'bootstrap-row',
+			imageHoldClass: 'bootstrap-col'">
 
 			<ul>
 				<li><img src="sliderimages/1.jpg" /><div class="elements">1</div></li>

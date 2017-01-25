@@ -48,6 +48,9 @@
 
 
 			// cac option phuc vu cho responsive
+			wrapClass: '',
+			imageViewClass: '',
+			imageHoldClass: '',
 			autoHeight: false,
 			fullHeight: false,
 			fullWidth: true,
@@ -285,6 +288,7 @@
 							'</div>'+
 						'</div>',
 			_imageHoldHtml = '<div class="image-hold"></div>',
+			_imageItemHtml = '<div class="image-item"></div>',
 			_loaderHtml = '<div class="slider-loading-wrap"><div class="text-wrap"><span class="percent"></span>%</div></div>',
 
 			// dung cho popup
@@ -300,6 +304,7 @@
 		var linkcoverhoverClass = 'linkcoverhover',
 			linktitlehoverClass = 'linktitlehover',
 
+			sliderContainerClass = 'imageslider-container',
 			sliderWrapClass = 'imageslider-wrap',
 			sliderRawContentClass = 'imageslider-raw',
 			sliderDisableClass = 'slider-disabled',
@@ -387,6 +392,7 @@
 			// new solution --
 			// tao ra 1 cai div tam wrap toan bo slider
 			var tempDivEl = zjs('<div></div>').setInnerHTML(_mainHtml);
+			var imagesliderContainerEl = zjs('<div></div>').addClass(sliderContainerClass);
 			// tao ra thang wrap element luon
 			var imagesliderWrapEl = zjs('<div></div>').addClass(sliderWrapClass);
 			// neu can thiet phai clean html thi lam thoi
@@ -400,10 +406,18 @@
 				if(ulEl.count())imagesliderWrapEl.insertAfter(ulEl);
 				else imagesliderWrapEl.appendTo(zElement);
 			}
+			// fix imageslider-wrap append into imageslider-container
+			imagesliderContainerEl.insertAfter(imagesliderWrapEl);
+			imagesliderWrapEl.appendTo(imagesliderContainerEl);
+			if(option.wrapClass !== ''){
+				imagesliderWrapEl.addClass(option.wrapClass);
+			}
 			/*tempDivEl.childReverse().eachElement(function(_tempDivChileEl){*/
 			tempDivEl.child().eachElement(function(_tempDivChileEl){
 				zjs(_tempDivChileEl).appendTo(imagesliderWrapEl);
 			});
+			var navWrapEl = imagesliderContainerEl.find('.nav-wrap');
+			navWrapEl.insertAfter(imagesliderContainerEl);
 			// sau do remove di thang ul hoac ol la duoc
 			zElement.find(option.slideitem).remove();
 			if(ulEl)ulEl.remove();tempDivEl.remove();
@@ -556,6 +570,9 @@
 			zImageViewContainer.width(zImageViewElWidth);
 
 		zImageViewWrap.setStyle('position','absolute');
+		if(option.imageViewClass !== ''){
+			zImageViewContainer.addClass(option.imageViewClass);
+		}
 
 		// - - - -
 
@@ -658,9 +675,15 @@
 			_tempEl.appendTo(zImageViewWrap); 
 			_tempEl.addClass('image'+index);
 			_tempEl.setData('image-index', index);
+			if(option.imageHoldClass !== ''){
+				_tempEl.addClass(option.imageHoldClass);
+			}
+			var _imageItemEl = zjs(_imageItemHtml);
+			_tempEl.append(_imageItemEl);
+
 			// sau do se gan cai custom elements
 			if(image.customEl)
-				_tempEl.append(image.customEl);
+				_imageItemEl.append(image.customEl);
 			var _tempElWidth = _tempEl.width();
 			if(!option.contentSlide){
 				var _srcForTempEl = zElementIsInPopup?
@@ -668,15 +691,15 @@
 									(_tempElWidth<250?(image.src):(image.srclarge||image.src));
 				_tempEl.setStyle({top:0, left:0});
 				if(!option.lazyloadImage){
-					_tempEl.setStyle('background-image', 'url('+_srcForTempEl+')');
+					_imageItemEl.setStyle('background-image', 'url('+_srcForTempEl+')');
 				}else{
 					if(image.srclazy){
-						_tempEl.setStyle('background-image', 'url('+_srcForTempEl+')');
+						_imageItemEl.setStyle('background-image', 'url('+_srcForTempEl+')');
 					}else{
 						image.srclazy = _srcForTempEl;
 					}
-					_tempEl.addClass(imageholdloadingClass);
-					image.lazyEl = _tempEl;
+					_imageItemEl.addClass(imageholdloadingClass);
+					image.lazyEl = _imageItemEl;
 				}
 			};
 
