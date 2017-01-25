@@ -8,13 +8,14 @@ zjs.require('scrollbar, ui, ui.button', function(){
 	// extend core mot so option
 	zjs.extendCore({
 		moduleUiSelectboxOption: {
-			panelmaxheight: 250
+			panelmaxheight: 250,
+			itemtemplate: '${text}',
 		}
 	});
 	
 	// trigger
-	//ui.selectbox.change
-	//ui.selectbox.clickchange
+	//ui:selectbox:change
+	//ui:selectbox:clickchange
 	
 	// template
 	var selectboxclass = 'zui-selectbox',
@@ -109,22 +110,33 @@ zjs.require('scrollbar, ui, ui.button', function(){
 			zSelectboxPanelEl = zSelectboxWrapEl.find('.'+selectboxpanelclass);
 		
 		// bay gio se tien hanh di get ra toan bo value cua cai selectbox
-		zSelectboxEl.find('option,optgroup').each(function(el){
+		zSelectboxEl.find('option,optgroup').eachElement(function(el){
 			var zEl = zjs(el);
 			// kiem tra xem coi type cua element de lam 
 			if(zEl.is('optgroup')){
 				// append 1 cai header vao panel
 				var headerEl = zjs(selectboxitemheaderhtml).appendTo(zSelectboxPanelEl);
-				if(zEl.getAttr('label','')!='')headerEl.html(zEl.getAttr('label'));
+				if(zEl.getAttr('label','')!='')headerEl.setInnerHTML(zEl.getAttr('label'));
 				else headerEl.addClass(selectboxitemheaderlineclass);
 			}
 			else if(zEl.is('option')){
 				var itemEl = zjs(selectboxitemhtml).appendTo(zSelectboxPanelEl);
-				itemEl.setAttr('data-value', zEl.is('[value]') ? zEl.getAttr('value','') : zEl.getInnerHTML());
+				var itemValue = zEl.is('[value]') ? zEl.getAttr('value','') : zEl.getInnerHTML();
+				itemEl.setAttr('data-value', itemValue);
 				// set custom html
 				var customhtml = zEl.getAttr('data-html', '');
-				if(customhtml=='')customhtml = zEl.getInnerHTML();
-				itemEl.html(customhtml);
+				if(customhtml==''){
+					var formatData = {
+						value: itemValue,
+						text: zEl.getInnerHTML(),
+					};
+					var iteminnerhtml = '';
+					if(typeof option.itemtemplate == 'function')iteminnerhtml = option.itemtemplate(formatData);
+					if(typeof option.itemtemplate == 'string')iteminnerhtml = option.itemtemplate;
+					if(typeof iteminnerhtml == 'string')iteminnerhtml = iteminnerhtml.format(formatData);
+					customhtml = iteminnerhtml;
+				}
+				itemEl.setInnerHTML(customhtml);
 				// cem coi thang nay neu nhu disabled thi thoi
 				if(zEl.is('[disabled]')){
 					itemEl.addClass(selectboxitemdisabledclass);
@@ -136,7 +148,7 @@ zjs.require('scrollbar, ui, ui.button', function(){
 				if(href!='')itemEl.setAttr('href', href);
 				if(zEl.is('[selected]'))itemEl.addClass(selectboxitemselectedclass);
 				// san tien fix lai cau truc cua thang select goc luon
-				zEl.attr('value', itemEl.attr('data-value'));
+				zEl.setAttr('value', itemEl.getAttr('data-value'));
 				// custom class
 				var customclass = zEl.getAttr('data-class', '');
 				if(customclass!='')itemEl.addClass(customclass);
@@ -160,19 +172,19 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		
 		// bind event click cho tung thang item
 		// bind theo kieu live de sau nay co gi append item vao them duoc
-		zSelectboxPanelEl.on('click', '.'+selectboxitemclass, function(event, element){
-			var zSelectboxItemEl = this;
+		zSelectboxPanelEl.on('click', '.'+selectboxitemclass, function(event){
+			var zSelectboxItemEl = zjs(this);
 			
 			// neu nhu thang nay dang disable thi thoi
 			if(zSelectboxItemEl.hasClass(selectboxitemdisabledclass))
 				return;
 				
-			selectboxSelectValue(zSelectboxEl, zSelectboxItemEl.attr('data-value'), 'click');
+			selectboxSelectValue(zSelectboxEl, zSelectboxItemEl.getAttr('data-value'), 'click');
 		});
 		
 		// sau khi init xong panel roi thi se 
 		// remove di cai position relative cua thang zui-selectbox luon
-		zSelectboxWrapEl.style('position','initial');
+		zSelectboxWrapEl.setStyle('position','initial');
 		// set width cho thang panel
 		zSelectboxPanelWrapEl.width(zSelectboxWrapEl.width());
 		
@@ -181,14 +193,21 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		
 		// gio moi di set value cho thang button ne
 		var zSelectboxButtonEl = zSelectboxWrapEl.find('.'+selectboxbuttonclass);
+		var zSelectboxButtonLabelEl;
 		// truoc tien phai make no thanh zjs uibutton cai da
-		zSelectboxButtonEl.makeButton();
+		if(zjs.isFunction(zSelectboxButtonEl.makeButton)){
+			zSelectboxButtonEl.makeButton();
+			zSelectboxButtonLabelEl = zSelectboxButtonEl.find('.'+zbuttonlabelclass);
+		}
+		else{
+			zSelectboxButtonLabelEl = zSelectboxButtonEl;
+		}
 		
 		// gio se set text cho no la thang selected item trong panel
-		zSelectboxButtonEl.find('.'+zbuttonlabelclass).html(zSelectboxPanelEl.find('.'+selectboxitemclass+'.'+selectboxitemselectedclass).item(0).getInnerHTML());
+		zSelectboxButtonLabelEl.setInnerHTML(zSelectboxPanelEl.find('.'+selectboxitemclass+'.'+selectboxitemselectedclass).item(0).getInnerHTML());
 		
 		// bind event click cho button
-		zSelectboxButtonEl.click(function(event, el){
+		zSelectboxButtonEl.on('click', function(event){
 			event.preventDefault();
 			event.stop();
 			// kiem tra coi button nay co active chua truoc tien
@@ -213,12 +232,12 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		var inlineJsFunctionName = zSelectboxEl.getAttr('onchange', '');
 		if(inlineJsFunctionName != ''){
 			var func = new Function('event', 'return '+inlineJsFunctionName+'.call(this, event)');
-			zSelectboxEl.on('ui.selectbox.change', func);
-		};
+			zSelectboxEl.on('ui:selectbox:change', func);
+		}
 	};
 	
 	// bind event cho document luon
-	zjs(document).click(function(){
+	zjs(document).on('click', function(){
 		zjs('.'+selectboxbuttonclass).removeClass(zbuttonactiveclass);
 		zjs('.'+selectboxpanelwrapclass).addClass(contextualpanelwraphideclass);
 	});
@@ -234,7 +253,10 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		
 		//
 		var zSelectboxPanelEl = zSelectboxWrapEl.find('.'+selectboxpanelclass),
-			zSelectboxButtonEl = zSelectboxWrapEl.find('.'+selectboxbuttonclass);
+			zSelectboxButtonEl = zSelectboxWrapEl.find('.'+selectboxbuttonclass),
+			zSelectboxButtonLabelEl = zSelectboxButtonEl.find('.'+zbuttonlabelclass);
+		if(!zSelectboxButtonLabelEl.count())
+			zSelectboxButtonLabelEl = zSelectboxButtonEl;
 			
 		// kiem coi co cai item nao thoa man value khong
 		var zSelectboxItemEl = zSelectboxPanelEl.find('.'+selectboxitemclass+'[data-value="'+value+'"]').item(0);
@@ -247,7 +269,7 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		zSelectboxPanelEl.find('.'+selectboxitemclass).removeClass(selectboxitemselectedclass);
 		zSelectboxItemEl.addClass(selectboxitemselectedclass);
 		// change button text
-		zSelectboxButtonEl.find('.'+zbuttonlabelclass).html(zSelectboxItemEl.getInnerHTML());
+		zSelectboxButtonLabelEl.setInnerHTML(zSelectboxItemEl.getInnerHTML());
 		
 		// sau do se change thang <option selected> trong cai <select> goc
 		zSelectboxEl.find('option[selected]').selected(false);
@@ -255,8 +277,8 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		
 		// run trigger
 		if(typeof click != 'undefined' && click == 'click')
-		zSelectboxEl.trigger('ui.selectbox.clickchange', {value:value, text:zSelectboxItemEl.getInnerHTML()});
-		zSelectboxEl.trigger('ui.selectbox.change', {value:value, text:zSelectboxItemEl.getInnerHTML()});
+		zSelectboxEl.trigger('ui:selectbox:clickchange', {value:value, text:zSelectboxItemEl.getInnerHTML()});
+		zSelectboxEl.trigger('ui:selectbox:change', {value:value, text:zSelectboxItemEl.getInnerHTML()});
 	};
 	
 	
@@ -264,10 +286,10 @@ zjs.require('scrollbar, ui, ui.button', function(){
 	// EXTEND METHOD cho zjs-instance
 	zjs.extendMethod({
 		makeSelectbox: function(useroption){
-			return this.each(function(element){makeSelectbox(element, useroption)});
+			return this.eachElement(function(element){makeSelectbox(element, useroption)});
 		},
 		selectboxSelectValue: function(value){
-			return this.each(function(element){selectboxSelectValue(element, value)});
+			return this.eachElement(function(element){selectboxSelectValue(element, value)});
 		}
 	});
 	

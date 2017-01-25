@@ -1,3 +1,5 @@
+.zui-uihide{position:fixed !important;top:-10000px !important;left:-10000px !important;visibility:hidden !important;overflow:hidden !important;opacity:0 !important;padding:0 !important;margin:0 !important;border:0 !important;color:transparent !important;}
+
 .zui-selectbox{position:relative;display: -moz-inline-stack;display: inline-block;vertical-align:bottom;zoom: 1;-webkit-user-select:none;}
 .zui-selectbox-button-wrap{}
 .zui-selectbox-button{width:100%;}

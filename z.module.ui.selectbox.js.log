@@ -5,3 +5,7 @@
 16/09/2015
 	17:00 
 		+ support html inline attribute "onchange"
+
+25/01/2017
+		+ support Zepto
+		+ add new option "itemtemplate" with default value is "${text}"
