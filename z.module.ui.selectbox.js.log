@@ -10,3 +10,4 @@
 		+ support Zepto
 		+ add new option "itemtemplate" with default value is "${text}"
 		+ add new method zjs::selectboxGetAllValue() to help get all available value
+		+ rename class follow BEM naming convention

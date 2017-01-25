@@ -8,6 +8,7 @@ zjs.require('scrollbar, ui, ui.button', function(){
 	// extend core mot so option
 	zjs.extendCore({
 		moduleUiSelectboxOption: {
+			width: 'auto', // 'auto', number
 			panelmaxheight: 250,
 			itemtemplate: '${text}',
 		}
@@ -19,15 +20,15 @@ zjs.require('scrollbar, ui, ui.button', function(){
 	
 	// template
 	var selectboxclass = 'zui-selectbox',
-		selectboxbuttonwrapclass = 'zui-selectbox-button-wrap',
-		selectboxbuttonclass = 'zui-selectbox-button',
+		selectboxbuttonwrapclass = 'zui-selectbox__button-wrap',
+		selectboxbuttonclass = 'zui-selectbox__button',
 		contextualbuttonclass = 'zui-contextual-button',
 		contextualpanelwrapclass = 'zui-contextual-panel-wrap',
-		selectboxpanelwrapclass = 'zui-selectbox-panel-wrap',
+		selectboxpanelwrapclass = 'zui-selectbox__panel-wrap',
 		selectboxpanelwrapinitclass = 'zui-initing',
 		contextualpanelwraphideclass = 'zui-hide',
-		selectboxpanelinnerclass = 'zui-selectbox-panel-inner',
-		selectboxpanelclass = 'zui-selectbox-panel',
+		selectboxpanelinnerclass = 'zui-selectbox__panel-inner',
+		selectboxpanelclass = 'zui-selectbox__panel',
 		selectboxwraphtml = '<div class="'+selectboxclass+'">'+
 								'<div class="'+selectboxbuttonwrapclass+'">'+
 									'<a class="'+contextualbuttonclass+' '+selectboxbuttonclass+'"></a>'+
@@ -38,12 +39,12 @@ zjs.require('scrollbar, ui, ui.button', function(){
 									'</div>'+
 								'</div>'+
 							'</div>',
-		selectboxitemclass = 'zui-selectbox-item',
+		selectboxitemclass = 'zui-selectbox__item',
 		selectboxitemselectedclass = 'zui-selected',
 		selectboxitemdisabledclass = 'zui-disabled',
 		selectboxitemhtml = '<a class="'+selectboxitemclass+'"></a>',
-		selectboxitemheaderclass = 'zui-selectbox-item-header',
-		selectboxitemheaderlineclass = 'zui-selectbox-item-header-line',
+		selectboxitemheaderclass = 'zui-selectbox__item-header',
+		selectboxitemheaderlineclass = 'zui-selectbox__item-header-line',
 		selectboxitemheaderhtml = '<span class="'+selectboxitemheaderclass+'"></span>',
 		
 		// cai nay khong duoc sua doi, vi la defined trong ui.button
@@ -94,7 +95,8 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		var zSelectboxWrapEl = zjs(selectboxwraphtml);
 		
 		// set width
-		zSelectboxWrapEl.width(zSelectboxEl.width());
+		if(option.width == 'auto')
+			zSelectboxWrapEl.width(zSelectboxEl.width());
 		
 		// sau do luu lai luon de sau nay truy xuat
 		zSelectboxEl.setData(wrapelkey, zSelectboxWrapEl);
@@ -184,7 +186,7 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		
 		// sau khi init xong panel roi thi se 
 		// remove di cai position relative cua thang zui-selectbox luon
-		zSelectboxWrapEl.setStyle('position','initial');
+		// zSelectboxWrapEl.setStyle('position','initial');
 		// set width cho thang panel
 		//zSelectboxPanelWrapEl.width(zSelectboxWrapEl.width()); /* to remove */
 		
