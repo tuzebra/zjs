@@ -112,6 +112,7 @@ zjs.require('scrollbar, ui, ui.button', function(){
 			zSelectboxPanelEl = zSelectboxWrapEl.find('.'+selectboxpanelclass);
 		
 		// bay gio se tien hanh di get ra toan bo value cua cai selectbox
+		var countTotalItem = 0, countTotalActiveItem = 0;
 		zSelectboxEl.find('option,optgroup').eachElement(function(el){
 			var zEl = zjs(el);
 			// kiem tra xem coi type cua element de lam 
@@ -122,6 +123,7 @@ zjs.require('scrollbar, ui, ui.button', function(){
 				else headerEl.addClass(selectboxitemheaderlineclass);
 			}
 			else if(zEl.is('option')){
+				countTotalItem++;
 				var itemEl = zjs(selectboxitemhtml).appendTo(zSelectboxPanelEl);
 				var itemValue = zEl.is('[value]') ? zEl.getAttr('value','') : zEl.getInnerHTML();
 				itemEl.setAttr('data-value', itemValue);
@@ -144,6 +146,7 @@ zjs.require('scrollbar, ui, ui.button', function(){
 					itemEl.addClass(selectboxitemdisabledclass);
 					return;
 				}
+				countTotalActiveItem++;
 				// xem coi neu nhu thang option nay co data-href
 				// thi set cho thang a 1 cai href luon
 				var href = zEl.getAttr('data-href', '');
@@ -156,6 +159,9 @@ zjs.require('scrollbar, ui, ui.button', function(){
 				if(customclass!='')itemEl.addClass(customclass);
 			};
 		});
+
+		// add them class de biet duong ma style
+		zSelectboxWrapEl.addClass('total-item-'+countTotalItem).addClass('total-active-item-'+countTotalActiveItem);
 		
 		// boi vi can makeScrollbar cho panel (width, height)
 		// nen trong luc init phai set visibility cua 
