@@ -186,7 +186,7 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		// remove di cai position relative cua thang zui-selectbox luon
 		zSelectboxWrapEl.setStyle('position','initial');
 		// set width cho thang panel
-		zSelectboxPanelWrapEl.width(zSelectboxWrapEl.width());
+		//zSelectboxPanelWrapEl.width(zSelectboxWrapEl.width()); /* to remove */
 		
 		// BUTTON  
 		// - - - -
@@ -280,6 +280,20 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		zSelectboxEl.trigger('ui:selectbox:clickchange', {value:value, text:zSelectboxItemEl.getInnerHTML()});
 		zSelectboxEl.trigger('ui:selectbox:change', {value:value, text:zSelectboxItemEl.getInnerHTML()});
 	};
+
+	// ham giup get ra tat ca value dang co
+	var selectboxGetAllValue = function(element){
+		var zSelectboxEl = zjs(element);
+		// neu nhu khong phai la zjs uiselectbox thi thoi
+		var zSelectboxWrapEl = zSelectboxEl.getData(wrapelkey, false);
+		if(!zSelectboxWrapEl)return [];
+
+		var values = [];
+		zSelectboxWrapEl.find('.'+selectboxitemclass).eachElement(function(el){
+			values.push(z(el).getAttr('data-value', ''))
+		});
+		return values;
+	};
 	
 	
 	// - - - - - - - - - 
@@ -290,6 +304,9 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		},
 		selectboxSelectValue: function(value){
 			return this.eachElement(function(element){selectboxSelectValue(element, value)});
+		},
+		selectboxGetAllValue: function(){
+			return selectboxGetAllValue(this.item(0, true));
 		}
 	});
 	
