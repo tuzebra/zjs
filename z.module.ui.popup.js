@@ -149,6 +149,9 @@ zjs.require('ui', function(){
 			zPopupEl.addClass(centerclass);
 		if(option.animate)
 			zPopupEl.addClass(option.animateName).setStyle('animation-duration', option.animateTime+'ms');
+
+		if(option.longPopup)
+			zPopupEl.appendTo(document.body);
 		
 		// popup page cover
 		var zPopupPCoverEl = zjs();
