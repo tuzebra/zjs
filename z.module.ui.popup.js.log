@@ -21,3 +21,9 @@
 
 11/01/2017
 		+ change event name from using "." (dot) to ":" (semicolon)
+
+11/02/2017
+		+ fix longpopup
+
+22/02/2017
+		+ add option "scrollPopup" work better than "longPopup"

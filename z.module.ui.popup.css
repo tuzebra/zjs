@@ -1,4 +1,5 @@
 .zui-popup-page-cover{position:fixed;left:0;top:0;background:rgba(255,255,255,.75);width:100%;height:100%;}
+.zui-popup-scrollwrap{position:fixed;left:0;top:0;right:0;bottom:0;overflow:auto;}
 .zui-popup{position:absolute;background:#fff;border:1px solid #c4cde0;box-shadow:0 1px 3px -1px rgba(0,0,0,0.5);}
 .zui-popup.zui-popup-center{position:fixed;top:50%;left:50%;}
 .zui-popup-wrapper{margin:20px;}
@@ -9,6 +10,7 @@
 .zui-popup.zui-popup-hide,.zui-long-popup.zui-popup-hide{position:fixed;top:-10000px;left:-10000px;visibility:hidden;pointer-events: none;}
 .zpopupuninithide{visibility:hidden;overflow:hidden;opacity:0;height:0;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";filter: alpha(opacity=0);}
 body.zui-long-popup-is-open{overflow:auto;}
+body.zui-scroll-popup-is-open{overflow:hidden;}
 
 /* animate */
 body .zui-popup,.zui-popup.zanimate.zanimate-end{-webkit-animation-name:none;-moz-animation-name:none;animation-name:none;}

@@ -4,6 +4,7 @@ zjs.require('ui', function(){
 	
 	var optionkey = 'zmoduleuipopupoption',
 		pagecoverElKey = 'zmoduleuipopupcoverel',
+		scrollwrapElKey = 'zmoduleuipopupscrollwrapel',
 		showedScrolltopkey = 'zmoduleuipopupscrolltop',
 		fixedBodyElKey = 'zmoduleuipopupfixedbodyel';	
 	
@@ -30,7 +31,8 @@ zjs.require('ui', function(){
 			animate: false,
 			animateTime: 1000,
 			animateName:'',
-			longPopup: false 		// false | true | "mobileOnly"
+			longPopup: false, 		// false | true | "mobileOnly"
+			scrollPopup: false 		// false | true | "mobileOnly"
 		}
 	});
 	
@@ -44,6 +46,8 @@ zjs.require('ui', function(){
 		hideclass = 'zui-popup-hide',
 		longpopupclass = 'zui-long-popup',
 		bodyclasswhenlongpopup = 'zui-long-popup-is-open',
+		bodyclasswhenscrollpopup = 'zui-scroll-popup-is-open',
+		scrollwrapclass = 'zui-popup-scrollwrap',
 		coverclass = 'zui-popup-page-cover',
 		wrapclass = 'zui-popup-wrapper',
 		centerclass = 'zui-popup-center',
@@ -131,6 +135,16 @@ zjs.require('ui', function(){
 			option.longPopup = !(!option.longPopup);
 		if(option.longPopup)
 			option.centerY = false;
+
+		// scrollPopup cung giong nhu long popup
+		// nhung khong phai su dung co che wrap all content into fixed div
+		// thay vao do de su dung 1 div rieng de scroll cai popup
+		// neu nhu su dung mobileOnly thi se fallback ve long popup cho khoe
+		if(option.scrollPopup == 'mobileOnly'){
+			option.longPopup = 'mobileOnly';
+			option.scrollPopup = false;
+		}
+
 		// save option
 		zPopupEl.setData(optionkey, option);
 		
@@ -150,9 +164,18 @@ zjs.require('ui', function(){
 		if(option.animate)
 			zPopupEl.addClass(option.animateName).setStyle('animation-duration', option.animateTime+'ms');
 
-		if(option.longPopup)
+		if(option.longPopup || option.scrollPopup)
 			zPopupEl.appendTo(document.body);
 		
+		// popup scrollwrap
+		var zPopupScrollwrapEl = zjs();
+		if(option.scrollPopup!==false){
+			zPopupScrollwrapEl = zjs('<div>').addClass(scrollwrapclass).hide();
+			zPopupScrollwrapEl.insertBefore(zPopupEl);
+			zPopupScrollwrapEl.append(zPopupEl);
+		}
+		zPopupEl.setData(scrollwrapElKey, zPopupScrollwrapEl);
+
 		// popup page cover
 		var zPopupPCoverEl = zjs();
 		if(option.pagecover){
@@ -279,6 +302,22 @@ zjs.require('ui', function(){
 			// save lai luon
 			zPopupEl.setData('zlongpopuplistelswap', listElsHasSwap);
 		}
+		// neu nhu la scroll popup
+		else if(option.scrollPopup!==false){
+			zPopupEl.addClass(longpopupclass).getData(scrollwrapElKey).show();
+			zjs(document.body).addClass(bodyclasswhenscrollpopup);
+			// get scroll width
+			var scrw = getScrollbarWidth();
+			if(scrw > 0){
+				var currentBodyPaddingRight = zjs(document.body).getStyle('padding-right').toInt();
+				if(currentBodyPaddingRight > 0){
+					zjs(document.body).setData('data-bakpdr', currentBodyPaddingRight);
+					scrw += currentBodyPaddingRight;
+				}
+				zjs(document.body).setStyle('padding-right', scrw);
+			}
+		}
+		// neu nhu lam binh thuong
 		else{
 			// remove class neu nhu khong phai
 			zPopupEl.removeClass(longpopupclass);
@@ -364,7 +403,7 @@ zjs.require('ui', function(){
 						if(swapEl)zjs(el).insertBefore(swapEl);
 						swapEl.remove();
 					});
-				};
+				}
 				
 				// closethenremove ?
 				if(!initHide && option.closethenremove)zPopupEl.remove();
@@ -373,6 +412,12 @@ zjs.require('ui', function(){
 				if(zPopupEl){
 					var _coverEl = zPopupEl.getData(pagecoverElKey);
 					if(_coverEl)_coverEl.remove(false);
+
+					// neu nhu la scroll popup, thi hide luon scrollwrap
+					if(option.scrollPopup!==false){
+						zPopupEl.getData(scrollwrapElKey).hide();
+						zjs(document.body).removeClass(bodyclasswhenscrollpopup).setStyle('padding-right', '');
+					}
 				}
 			};
 		
@@ -428,7 +473,7 @@ zjs.require('ui', function(){
 		var diffHeight = zjs(window).height() - zPopupEl.height();
 		
 		// uu tien xem set de set margin theo relative popup (longPopup)
-		if(checkIsLongPopup(option.longPopup)){
+		if(checkIsLongPopup(option.longPopup) || option.scrollPopup!==false){
 			// neu nhu winheight > popup height thi moi can thiet
 			// con neu nhu khong thi thoi, cho tu xu trong css luon cho don gian
 			if(diffHeight > 0)zPopupEl.setStyle('margin-top', diffHeight/2);
@@ -466,6 +511,18 @@ zjs.require('ui', function(){
 		
 		// margin left
 		zPopupEl.setStyle('margin-left', -zPopupEl.width()/2);
+	};
+
+	// helper
+	var getScrollbarWidth = function(){ 
+	    var divMersure = zjs('<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;"><div style="height:100px;"></div>'); 
+	    // Append our div, do our calculation and then remove it 
+	    zjs(document.body).append(divMersure);
+	    var w1 = divMersure.item(0, true).offsetWidth;
+	    divMersure.setStyle('overflow', 'scroll');
+	    var w2 = divMersure.item(0, true).clientWidth;
+	    divMersure.remove(); 
+	    return (w1 - w2); 
 	};
 	
 	
