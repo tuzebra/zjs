@@ -18,6 +18,7 @@ zjs.require('ui', function(){
 			overflowParent: 'auto',
 			pendingScrollTime: 0,
 			autoHideWhenReach: false,
+			useHeightBuffer: true,
 			handlerFreezingElement: false, // false mean: self,	
 			handlerFreezingMethod: 'meet-top' // scroll-over
 		}
@@ -127,6 +128,8 @@ zjs.require('ui', function(){
 		var inlineoption = zFreezepanelEl.getAttr('data-option', '');
 		if(zjs.isString(inlineoption) && inlineoption.trim()!='')
 			option = zjs.extend(option, inlineoption.jsonDecode());
+		// sau do remove di luon inline option luon, cho html ra dep
+		zFreezepanelEl.removeAttr('data-option');
 		// extend from user option ?
 		if(typeof useroption!='undefined')
 			option = zjs.extend(option, useroption);
@@ -199,12 +202,21 @@ zjs.require('ui', function(){
 
 		// find "auto hide when reach" element
 		var  handlerAHWRElement = false;
-		if(option.autoHideWhenReach){
+		if(zjs.isString(option.autoHideWhenReach)){
 			handlerAHWRElement = zjs(option.autoHideWhenReach);
 			if(handlerAHWRElement.count() < 1){
 				handlerAHWRElement = option.autoHideWhenReach = false;
+			}else{
+				handlerAHWRElement = handlerAHWRElement.item(0);
+			}
+		}else if(zjs.isNumeric(option.autoHideWhenReach)){
+			handlerAHWRElement = {
+				getAbsoluteTop: function(){
+					return option.autoHideWhenReach;
+				}
 			}
 		}
+
 
 		// save option
 		zFreezepanelEl.setData(optionkey, option);
@@ -256,7 +268,7 @@ zjs.require('ui', function(){
 			autoresize = false,
 			isPendingScroll = false;
 		
-		var lastLargestScrollTop = 0;
+		var lastLargestScrollTop = zFreezepanelEl.height();
 		
 		// ham xu ly freeze
 		function freezeHandler(){
@@ -425,7 +437,10 @@ zjs.require('ui', function(){
 				zFreezepanelEl.width(width);
 				
 				// show ra cai chem de giu dung chieu cao
-				zchemEl = zjs('<div>').insertBefore(zFreezepanelEl);
+				zchemEl = zjs('<div>');
+				if(option.useHeightBuffer){
+					zchemEl.insertBefore(zFreezepanelEl);
+				}
 				zchemEl.setStyle({
 					'height': height,
 					'margin-top': mgTop,
@@ -574,7 +589,7 @@ zjs.require('ui', function(){
 
 			if(command == 'checkActivate'){
 				// var active = 
-				return (data.scrollTop + data.viewTop > data.orgAnchorPosition - option.marginTop);
+				return (data.scrollTop + data.viewTop >= data.orgAnchorPosition - option.marginTop);
 				// console.log('checkActivate: data.scrollTop', data.scrollTop, 'data.orgAnchorPosition', data.orgAnchorPosition, 'option.marginTop', option.marginTop);
 				// return active;
 			}
@@ -592,7 +607,7 @@ zjs.require('ui', function(){
 			}
 
 			if(command == 'checkActivate'){
-				return (data.scrollTop + data.viewTop > data.orgAnchorPosition);
+				return (data.scrollTop + data.viewTop >= data.orgAnchorPosition);
 			}
 		}
 	};
