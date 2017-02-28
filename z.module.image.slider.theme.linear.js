@@ -685,6 +685,7 @@
 			if(image.customEl)
 				_imageItemEl.append(image.customEl);
 			var _tempElWidth = _tempEl.width();
+			// tim kiem image src + lazysrc
 			if(!option.contentSlide){
 				var _srcForTempEl = zElementIsInPopup?
 									(image.srcpopup||image.srclarge||image.src):
@@ -701,7 +702,16 @@
 					_imageItemEl.addClass(imageholdloadingClass);
 					image.lazyEl = _imageItemEl;
 				}
-			};
+			}
+			// doi voi contentslider
+			// thi lazyimg se nam ben trong cai div content
+			// cho nen se phai tim lazyEl
+			else{
+				var maybeLazyEl = _imageItemEl.find('img[data-lazy-src], img[data-lazysrc], img[data-srclazy], img[srclazy]');
+				if(maybeLazyEl.count()){
+					image.lazyEl = maybeLazyEl;
+				}
+			}
 
 			// sau do se chinh vi tri cho dung
 			if(option.transition==0 || option.transition==1)_tempEl.setStyle({opacity:0,'z-index':0}).hide();
@@ -1016,7 +1026,7 @@
 
 			// xem coi co khong cho su dung transition hay khong
 			notTransition = notTransition || false;
-
+			// console.log('switch', option.transition);
 			// lua chon hieu ung phu hop
 			// va tien hanh transition
 			switch(option.transition){
@@ -1326,11 +1336,18 @@
 			// --
 			estimatePrevIndex = currentIndex-1;
 			estimateNextIndex = currentIndex+1;
-			// truong hop dac biet (horizontal-page / horizontal-page-center) move nguyen 1 page
-			if(option.transition == 202 || option.transition == 205){
+
+			// tinh toan ra coi co bao nhieu images per page
+			var _imagePerPage = 1;
+			if(option.transition >= 200){
 				// xem coi voi cai width cua "imageslider-wrap" (imagesliderWrapEl.width())
 				// thi chua duoc bao nhieu hinh, voi width 1 hinh la (zImageViewElWidth)
-				var _imagePerPage = parseInt((imagesliderWrapEl.width() / zImageViewElWidth)+0.1);
+				_imagePerPage = parseInt((imagesliderWrapEl.width() / zImageViewElWidth)+0.1);
+				// console.log('tinh toan', _imagePerPage);
+			}
+
+			// truong hop dac biet (horizontal-page / horizontal-page-center) move nguyen 1 page
+			if(option.transition == 202 || option.transition == 205){
 				// xem coi co tong cong bao nhieu page (images.length)
 				// va voi cai page hien tai (currentIndex)
 				// thi phai move them (_imagePerPage) page nua moi du
@@ -1358,7 +1375,6 @@
 			// truong hop horizontal-stack-center (204)
 			// truong hop horizontal-page-center (205)
 			if(option.transition==204 || option.transition==205){
-				var _imagePerPage = parseInt((imagesliderWrapEl.width() / zImageViewElWidth)+0.1);
 				// add class cua 2 cai thang out of range
 				_utiImageHoldAddClass(index-1, 'out-of-range');
 				_utiImageHoldAddClass(index+_imagePerPage, 'out-of-range');
@@ -1366,7 +1382,6 @@
 
 			// truong hop horizontal-stack
 			if(option.transition==201 || option.transition==204){
-				var _imagePerPage = parseInt((imagesliderWrapEl.width() / zImageViewElWidth)+0.1);
 				// kiem tra coi thang next co thuc su la next duoc khong?
 				// boi vi bi thang nam cuoi cung giu chan lai
 				if(estimateNextIndex + _imagePerPage > images.length)
@@ -1375,8 +1390,13 @@
 
 
 			// truong hop autoheight
-			if(option.autoHeight && option.transition==2){
-				fixreheight();
+			if(option.autoHeight && (option.transition==2 || option.transition==203)){ //horizontal-center
+				(function(){
+					var indexNeedToFix = currentIndex;
+					(function(){
+						fixreheight(indexNeedToFix);
+					}).delay(option.transitionTime+100);
+				})();
 			}
 
 
@@ -1413,29 +1433,34 @@
 					time: runtimeOption.autoplayTime
 				}).run();
 			};
-
+			// console.log('lazyloadImage');
 			// lazyload
 			if(option.lazyloadImage){
-				if(images[currentIndex] && !images[currentIndex].lazyloaded){
-					images[currentIndex].lazyloaded = true;
-					var lazyEls = images[currentIndex].lazyEl || images[currentIndex].customEl;
-					if(lazyEls){
-						lazyEls.eachElement(function(lazyEl){
-							lazyEl = zjs(lazyEl);
-							zjs.loadImage({
-								image: images[currentIndex].srclazy,
-								onError: function(image){},
-								onLoaded: function(image){
-									(function(){
-										lazyEl.removeClass(imageholdloadingClass);
-										if(lazyEl.is('img'))
-											lazyEl.setAttr('src', image.src);
-										else
-											lazyEl.setStyle('background-image', 'url('+image.src+')');
-									}).delay(option.lazyloadDelay);
-								}
+				var il=0,ic;
+				for(il;il<_imagePerPage;il++){
+					ic = currentIndex+il;
+					if(images[ic] && !images[ic].lazyloaded){
+						// console.log('lazy load index: ', ic, _imagePerPage);
+						images[ic].lazyloaded = true;
+						var lazyEls = images[ic].lazyEl || images[ic].customEl;
+						if(lazyEls){
+							lazyEls.eachElement(function(lazyEl){
+								lazyEl = zjs(lazyEl);
+								zjs.loadImage({
+									image: images[ic].srclazy,
+									onError: function(image){},
+									onLoaded: function(image){
+										(function(){
+											lazyEl.removeClass(imageholdloadingClass);
+											if(lazyEl.is('img'))
+												lazyEl.setAttr('src', image.src);
+											else
+												lazyEl.setStyle('background-image', 'url('+image.src+')');
+										}).delay(option.lazyloadDelay);
+									}
+								});
 							});
-						});
+						}
 					}
 				}
 			}
@@ -1970,9 +1995,11 @@
 
 		var fixreheight = function(){};
 		if(option.autoHeight){
-			fixreheight = function()
+			var lastReHeight = -1;
+			fixreheight = function(indexNeedToFix)
 			{	
 				if(!slideIsEnabled)return;
+				if(indexNeedToFix != currentIndex)return;
 
 				// tim ra cai height cao nhat
 				var maxHeight = 0;
@@ -1980,7 +2007,8 @@
 				
 				if(option.transition==0 
 				|| option.transition==1 
-				|| option.transition==2)
+				|| option.transition==2
+				|| option.transition==203 )
 				{	
 					if(images[currentIndex] && ('customEl' in images[currentIndex])){
 						var _he = images[currentIndex].customEl.height();
@@ -1992,7 +2020,6 @@
 
 				if(option.transition==201 
 				|| option.transition==202 
-				|| option.transition==203 
 				|| option.transition==204 
 				|| option.transition==205)
 				{
@@ -2006,7 +2033,8 @@
 					}
 				}
 
-				if(maxHeight){
+				if(maxHeight && maxHeight != lastReHeight){
+					lastReHeight = maxHeight;
 					// zElement.height(maxHeight);
 					imagesliderWrapEl.height(maxHeight);
 					zImageViewContainer.height(maxHeight);
@@ -2016,8 +2044,8 @@
 			};
 
 			// first fix
-			zWindow.on('resize', fixreheight);
-			fixreheight.delay(500);
+			zWindow.on('resize', function(){fixreheight(currentIndex)});
+			(function(){fixreheight(currentIndex)}).delay(500);
 		}
 
 

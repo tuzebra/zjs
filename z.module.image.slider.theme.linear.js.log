@@ -124,3 +124,7 @@
 25/01/2017
 		+ new method zjs::slideFilter(function slideItemFilterHandler(item){}) => just basic support option.transition: 'horizontal'
 		+ new option: "wrapClass", "imageViewClass", "imageHoldClass" => it much more easier to make responsive with bootstrap
+
+28/02/2017
+		+ fix lazy load
+		+ fix autoheight feature for transition option that set to "horizontal-center"
