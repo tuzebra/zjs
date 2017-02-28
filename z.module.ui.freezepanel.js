@@ -19,6 +19,7 @@ zjs.require('ui', function(){
 			pendingScrollTime: 0,
 			autoHideWhenReach: false,
 			useHeightBuffer: true,
+			excludeFromFreezingStack: false,
 			handlerFreezingElement: false, // false mean: self,	
 			handlerFreezingMethod: 'meet-top' // scroll-over
 		}
@@ -87,12 +88,16 @@ zjs.require('ui', function(){
 			zjs(allFreezepanelInPage[i].el).setStyle('z-index', allFreezepanelInPage.length - i);
 			if(allFreezepanelInPage[i].el === element)
 				break;
+			if(allFreezepanelInPage[i].exclude){
+				continue;
+			}
 			if(allFreezepanelInPage[i].freezing){
 				tempVisibleHeight = allFreezepanelInPage[i].top + allFreezepanelInPage[i].height;
 				if(totalFreezingHeight < tempVisibleHeight)
 					totalFreezingHeight = tempVisibleHeight;
 			}
 		}
+		// console.log('totalFreezingHeight', totalFreezingHeight);
 		return totalFreezingHeight;
 	},
 
@@ -142,6 +147,11 @@ zjs.require('ui', function(){
 		// fix handler method
 		if(!(option.handlerFreezingMethod in handlerMethods))
 			option.handlerFreezingMethod = 'meet-top';
+
+		option.excludeFromFreezingStack = !!option.excludeFromFreezingStack;
+		// if(zFreezepanelEl.is('header'))
+			// option.excludeFromFreezingStack = false;
+		// console.log('option.excludeFromFreezingStack', option.excludeFromFreezingStack);
 
 		// save option
 		// zFreezepanelEl.setData(optionkey, option);
@@ -227,8 +237,10 @@ zjs.require('ui', function(){
 			top: zFreezepanelEl.getAbsoluteTop(), 
 			height: 0, 
 			freezing: 0,
-			viewTop: 0
+			viewTop: 0,
+			exclude: option.excludeFromFreezingStack
 		});
+		// console.log('allFreezepanelInPage', allFreezepanelInPage);
 		allFreezepanelInPage.sort(function(a, b){
 			return parseInt(a.top, 10) - parseInt(b.top, 10);
 		});

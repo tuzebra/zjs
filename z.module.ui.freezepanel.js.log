@@ -20,3 +20,7 @@
 24/02/2017
 		+ add new option "autoHideWhenReach"
 		+ support multi zfreezepanel show as a stack
+
+28/02/2017
+		+ add new option "useHeightBuffer" (default is TRUE)
+		+ add new option "excludeFromFreezingStack" (default is FALSE)
