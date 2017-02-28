@@ -40,3 +40,6 @@
 		  
 06/04/2016
 		+ fix option "checkboxClass", "radiogroupClass"
+
+28/02/2018
+		+ support German (de) language

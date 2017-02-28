@@ -35,6 +35,17 @@
 			minlength: 'Value as least minlength',
 			repassword: 'Password does not match'
 		},
+		de:{
+			required: 'Feld ist erforderlich',
+			email: 'Keine gültige E-Mail',
+			url: 'Nicht eine gültige URL',
+			date: 'Nicht gültiges Datum',
+			number: 'Nicht eine Nummer',
+			phonenumber: 'Nicht eine Telefonnummer',
+			digits: 'Nicht eine Ziffern',
+			minlength: 'Wert so wenig minderlth',
+			repassword: 'Passwort stimmt nicht'
+		},
 		vi:{
 			required: 'Còn thiếu thông tin này',
 			email: 'Sai định dạng email',
@@ -83,9 +94,9 @@
 	});
 	
 	// trigger
-	//form.validation.success
-	//form.validation.failed
-	//form.validation.checking
+	//form:validation:success
+	//form:validation:failed
+	//form:validation:checking
 	
 	// template
 	var formclass = 'z-form-validation',
@@ -165,7 +176,7 @@
 			var currentZjsHookEnable = zjs.enablehook();
 			zjs.enablehook(false);
 			// bat dau man thoi
-			zForm.find(inputsQuery+', .'+option.customInputClass).each(function(element){
+			zForm.find(inputsQuery+', .'+option.customInputClass).eachElement(function(element){
 				var zInput = zjs(element);
 			
 				// xem coi neu nhu thang input nay la thang input dac biet thi thoi, ko ho tro
@@ -191,7 +202,7 @@
 				
 				// bind event cho input
 				if(option.autoCheckWhenBlur){
-					zInput.on('blur, ui.autosuggestion.blur, ui.datepicker.blur', function(){
+					zInput.on('blur, ui:autosuggestion:blur, ui:datepicker:blur', function(){
 						//console.log('on ui.datepicker.blur');
 						handlerTestResult(this, checkInput(this, option, zForm), option);
 					});
@@ -253,14 +264,14 @@
 					// nen khong cho lam gi tiep theo
 					return;
 				};
-				this.trigger('form.validation.success', {}, function(customEvent){
+				this.trigger('form:validation:success', {}, function(customEvent){
 					if(customEvent.isDefaultPrevented)
 						event.preventDefault();
 				});
 			}
 			else{
 				this.addClass('zvalidation-invalid')
-				.trigger('form.validation.failed', {
+				.trigger('form:validation:failed', {
 					status: zForm.getData(passstatuskey)
 				});
 			}
@@ -270,7 +281,7 @@
 		
 		// bind event khong cho tuy tien enter
 		zjs(window).on('keydown', function(event){
-			if(event.keyCode() == 13){
+			if(event.getKeyCode() == 13){
 				// check coi cai thang input nay co thang form cha la thang nao?
 				var _iszForm = zjs(event.target()).findUp('form');
 				if(_iszForm.count() > 0){
@@ -312,8 +323,8 @@
 		var passStatus = {};
 		
 		//var inputsQuery = 'input[type=text], input[type=email], textarea, .radiogroup';	
-		//zForm.find('input,textarea').each(function(element){
-		zForm.find('input,textarea,.'+option.radiogroupClass+',.'+option.checkboxClass+',.'+option.customInputClass).each(function(element){
+		//zForm.find('input,textarea').eachElement(function(element){
+		zForm.find('input,textarea,.'+option.radiogroupClass+',.'+option.checkboxClass+',.'+option.customInputClass).eachElement(function(element){
 			var zInput = zjs(element);
 			
 			//console.log('before', element);
@@ -377,7 +388,7 @@
 		var option = zForm.getData(optionkey, false);
 		if(!option)return;
 		
-		zForm.find('input,textarea').each(function(element){
+		zForm.find('input,textarea').eachElement(function(element){
 			var zInput = zjs(element);
 			
 			// xem coi thang input nay co cai tip-element nao khong
@@ -435,7 +446,7 @@
 			var tipText = option.tips[test.type];
 			if(zInput.getAttr('data-tip-'+test.type, '') != '')
 				tipText = zInput.getAttr('data-tip-'+test.type, '');
-			ztipEl.show().find('.'+tiptextclass).html(tipText);
+			ztipEl.show().find('.'+tiptextclass).setInnerHTML(tipText);
 		};
 		
 		// kiem tra coi day co phai la 1 datepicker khong
@@ -536,7 +547,7 @@
 				var _currentPassInputIndex = -1;
 				
 				// get ra cai password field truoc do
-				passwordInputEls.each(function(_passInputEl, _passInputIndex){
+				passwordInputEls.eachElement(function(_passInputEl, _passInputIndex){
 					if(zInput.isTheSame(_passInputEl)){
 						_currentPassInputIndex = _passInputIndex;
 						return;
@@ -553,7 +564,7 @@
 		};
 		
 		// n. custom check 
-		zForm.trigger('form.validation.checking', {element:element, option:option}, function(customEvent){
+		zForm.trigger('form:validation:checking', {element:element, option:option}, function(customEvent){
 			//if(customEvent.isDefaultPrevented)
 			//	event.preventDefault();
 		});
@@ -670,15 +681,15 @@
 	// EXTEND METHOD cho zjs-instance
 	zjs.extendMethod({
 		formValidation: function(useroption){
-			return this.each(function(element){formValidation(element, useroption)});
+			return this.eachElement(function(element){formValidation(element, useroption)});
 		},
 		formValidationReset: function(){
-			return this.each(function(element){formErrorReset(element)});
+			return this.eachElement(function(element){formErrorReset(element)});
 		},
 		formValidationCheck: function(){
 			// ket qua cuoi cung
 			var result = false;
-			this.each(function(element){
+			this.eachElement(function(element){
 				result = formCheck(element, false);
 			});
 			return result;
