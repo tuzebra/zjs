@@ -128,3 +128,6 @@
 28/02/2017
 		+ fix lazy load
 		+ fix autoheight feature for transition option that set to "horizontal-center"
+
+01/03/2017
+		+ auto fix index when use "horizontal-stack" transition, index alway is the first one that shown (not include the one that hidden - before the one that shown)

@@ -707,7 +707,7 @@
 			// thi lazyimg se nam ben trong cai div content
 			// cho nen se phai tim lazyEl
 			else{
-				var maybeLazyEl = _imageItemEl.find('img[data-lazy-src], img[data-lazysrc], img[data-srclazy], img[srclazy]');
+				var maybeLazyEl = _imageItemEl.find('[data-lazy-src], [data-lazysrc], [data-srclazy], [srclazy]');
 				if(maybeLazyEl.count()){
 					image.lazyEl = maybeLazyEl;
 				}
@@ -957,6 +957,59 @@
 
 			index = parseInt(index);
 
+
+
+			// tinh toan so luong image/page
+			var _imagePerPage = 1;
+			if(option.transition >= 200){
+				// xem coi voi cai width cua "imageslider-wrap" (imagesliderWrapEl.width())
+				// thi chua duoc bao nhieu hinh, voi width 1 hinh la (zImageViewElWidth)
+				_imagePerPage = parseInt((imagesliderWrapEl.width() / zImageViewElWidth)+0.1);
+				// console.log('tinh toan', _imagePerPage);
+			}
+
+			// truong hop dac biet (horizontal-page / horizontal-page-center) move nguyen 1 page
+			if(option.transition == 202 || option.transition == 205){
+				// xem coi co tong cong bao nhieu page (images.length)
+				// va voi cai page hien tai (index)
+				// thi phai move them (_imagePerPage) page nua moi du
+				estimatePrevIndex = index - _imagePerPage;
+				estimateNextIndex = index + _imagePerPage;
+				// nhung neu nhu index ve < 0 thi cho di lai tu dau kia
+				if(estimatePrevIndex + _imagePerPage <= 0){
+					estimatePrevIndex = images.length - _imagePerPage;
+				}
+				// con neu nhu gan ve toi, thi cho ve toi luon
+				else if(estimatePrevIndex < 0){
+					estimatePrevIndex = 0;
+				};
+				// nhung neu nhu index vuoi qua tong so page, thi cho di lai tu dau luon
+				if(estimateNextIndex>=images.length){
+					estimateNextIndex = 0;
+				}
+				// con neu nhu hoi vuot qua so so thoi, thi doi lai 1 xiu
+				else if(estimateNextIndex + _imagePerPage > images.length){
+					estimateNextIndex = images.length - _imagePerPage;
+				};
+			};
+
+			if(isNaN(_imagePerPage)){
+				_imagePerPage = 1;
+			}
+
+			// if(images.length == 10){
+				// console.log('_imagePerPage: ', _imagePerPage);
+			// }
+
+			// fix index
+			if(option.transition === 201 && _imagePerPage > 1 && index + _imagePerPage >= images.length){
+				// console.log('old index', index);
+				index = images.length - _imagePerPage;
+				// console.log('to new index', index);
+			}
+
+
+
 			// stop autorun first
 			// de trong qua trinh dang run transition cua slide
 			// thi se khong bi chay autorun qua slide khac
@@ -979,6 +1032,7 @@
 				if(option.autoplay)autoplayTimer.run();
 				return;
 			}
+
 
 			// backup and then set new index
 			currentTempIndex = currentIndex;
@@ -1019,7 +1073,7 @@
 			}, moreparam);
 
 
-			// luon luon uu tien thang vu tro thanh current index
+			// luon luon uu tien thang vua tro thanh current index
 			// se co z-index cao hon cac thang con lai
 			zImageViewWrap.find('.image'+currentIndex).setStyle('z-index', zIndexCounting++);
 
@@ -1042,8 +1096,8 @@
 					break;
 
 				// slide left right
-				case 2:
-				case 203:
+				case 2: // horizontal
+				case 203: // horizontal-center
 					// tinh toan ra position se phai move cai image-view-wrap toi
 					// neu nhu cac image duoc sap xep sequent (theo thu tu) thi de roi
 					// khi cac image khong duoc sap xep sequent thi bay gio phai
@@ -1338,6 +1392,8 @@
 			estimateNextIndex = currentIndex+1;
 
 			// tinh toan ra coi co bao nhieu images per page
+			// cai buoc tinh toan nay quan trong nen se duoc move len phia tren ^ 
+			/*
 			var _imagePerPage = 1;
 			if(option.transition >= 200){
 				// xem coi voi cai width cua "imageslider-wrap" (imagesliderWrapEl.width())
@@ -1370,6 +1426,7 @@
 					estimateNextIndex = images.length - _imagePerPage;
 				};
 			};
+			*/
 
 
 			// truong hop horizontal-stack-center (204)
@@ -1436,33 +1493,47 @@
 			// console.log('lazyloadImage');
 			// lazyload
 			if(option.lazyloadImage){
-				var il=0,ic;
-				for(il;il<_imagePerPage;il++){
-					ic = currentIndex+il;
-					if(images[ic] && !images[ic].lazyloaded){
-						// console.log('lazy load index: ', ic, _imagePerPage);
-						images[ic].lazyloaded = true;
-						var lazyEls = images[ic].lazyEl || images[ic].customEl;
-						if(lazyEls){
-							lazyEls.eachElement(function(lazyEl){
-								lazyEl = zjs(lazyEl);
-								zjs.loadImage({
-									image: images[ic].srclazy,
-									onError: function(image){},
-									onLoaded: function(image){
-										(function(){
-											lazyEl.removeClass(imageholdloadingClass);
-											if(lazyEl.is('img'))
-												lazyEl.setAttr('src', image.src);
-											else
-												lazyEl.setStyle('background-image', 'url('+image.src+')');
-										}).delay(option.lazyloadDelay);
+				var il=0;
+				// console.log(currentIndex, _imagePerPage);
+				for(il;il<_imagePerPage;il++){(function(){
+					// console.log('il', il);
+					var ic = currentIndex+il;
+					if(!images[ic] || images[ic].lazyloaded)
+						return;
+
+					// console.log('lazy load index: ', ic, _imagePerPage);
+					images[ic].lazyloaded = true;
+					var lazyEls = images[ic].lazyEl || images[ic].customEl;
+					if(!lazyEls)
+						return;
+					
+					lazyEls.eachElement(function(lazyEl){
+						lazyEl = zjs(lazyEl);
+						// console.log('images[ic]', images[ic]);
+						zjs.loadImage({
+							image: images[ic].srclazy,
+							onError: function(image){},
+							onLoaded: function(image){
+								(function(){
+									// console.log('loaded: ', ic);
+									lazyEl.removeClass(imageholdloadingClass);
+									if(images[ic].customEl){
+										// console.log('customEl', ic, images[ic].customEl.item(0, true));
+										images[ic].customEl.removeClass(imageholdloadingClass);
 									}
-								});
-							});
-						}
-					}
-				}
+									if(lazyEl.is('img')){
+										lazyEl.setAttr('src', image.src);
+									}
+									else{
+										lazyEl.setStyle('background-image', 'url('+image.src+')');
+									}
+								}).delay(option.lazyloadDelay);
+							}
+						});
+					});
+
+				})();}
+				// endfor
 			}
 		};
 

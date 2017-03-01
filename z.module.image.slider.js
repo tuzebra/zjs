@@ -97,10 +97,10 @@
 					if(srcpopup=='')srcpopup = zli.find('img').getAttr('data-srcpopup','');
 					if(srcpopup=='')srcpopup = zli.find('img').getAttr('popupsrc','');
 					if(srcpopup=='')srcpopup = zli.find('img').getAttr('srcpopup','');
-					if(srclazy=='')srclazy = zli.find('img').getAttr('data-lazy-src','');
-					if(srclazy=='')srclazy = zli.find('img').getAttr('data-lazysrc','');
-					if(srclazy=='')srclazy = zli.find('img').getAttr('data-srclazy','');
-					if(srclazy=='')srclazy = zli.find('img').getAttr('srclazy','');
+					if(srclazy=='')srclazy = zli.find('[data-lazy-src]').getAttr('data-lazy-src','');
+					if(srclazy=='')srclazy = zli.find('[data-lazysrc]').getAttr('data-lazysrc','');
+					if(srclazy=='')srclazy = zli.find('[data-srclazy]').getAttr('data-srclazy','');
+					if(srclazy=='')srclazy = zli.find('[srclazy]').getAttr('srclazy','');
 					if(srclazy=='')srclazy = zli.getAttr('srclazy','');
 					if(srclazy=='')srclazy = zli.getAttr('data-lazy-src','');
 					if(link=='')link = zli.find('a').getAttr('href','');
