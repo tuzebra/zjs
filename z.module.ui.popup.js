@@ -406,7 +406,13 @@ zjs.require('ui', function(){
 				}
 				
 				// closethenremove ?
-				if(!initHide && option.closethenremove)zPopupEl.remove();
+				if(!initHide && option.closethenremove){
+					if(option.scrollPopup!==false){
+						zPopupEl.getData(scrollwrapElKey).remove();
+					}else{
+						zPopupEl.remove();
+					}
+				}
 			},
 			_popupCoverHide = function(){
 				if(zPopupEl){
