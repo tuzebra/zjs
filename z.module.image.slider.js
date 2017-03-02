@@ -98,6 +98,8 @@
 					if(srcpopup=='')srcpopup = zli.find('img').getAttr('data-srcpopup','');
 					if(srcpopup=='')srcpopup = zli.find('img').getAttr('popupsrc','');
 					if(srcpopup=='')srcpopup = zli.find('img').getAttr('srcpopup','');
+					if(srcpopup=='')srcpopup = zli.getAttr('popupsrc','');
+					if(srcpopup=='')srcpopup = zli.getAttr('srcpopup','');
 					if(srclazy=='')srclazy = zli.find('[data-lazy-src]').getAttr('data-lazy-src','');
 					if(srclazy=='')srclazy = zli.find('[data-lazysrc]').getAttr('data-lazysrc','');
 					if(srclazy=='')srclazy = zli.find('[data-srclazy]').getAttr('data-srclazy','');

@@ -134,3 +134,4 @@
 
 02/03/2017
 		+ improve feature "popup slider"
+		+ improve lazyload when use with popup slider

@@ -103,6 +103,8 @@
 			popupTransitionTime: false,				// <- ket thua tu thang popup cha
 			popupTransitionTimingfunction: false,	// <- ket thua tu thang popup cha
 
+			popupLazyloadImage: false,
+			popupLazyloadDelay: false,
 			popupAutoplay: true,
 			popupAutoplayTime: 6000,
 			popupPlayButton: false,
@@ -142,11 +144,13 @@
 	
 		var _images = new Array();
 		zjs.foreach(images, function(image){
-			if(image.src != '' || image.srclazy != '')
+			if(image.src != '' || image.srclazy != ''){
 				_images.push(image);
+			}
 			// auto active option.lazyloadImage
-			if(image.srclazy)
+			if(image.srclazy){
 				option.lazyloadImage = true;
+			}
 		});
 		// neu nhu ma khong phai contentSlide thi phai nghiem ngat kiem tra images cho chinh xac
 		if(!option.contentSlide){
@@ -223,7 +227,7 @@
 			//option.linkTitle = false;
 			//option.linkCover = false;
 			option.hoverToSlide = false;
-			option.showInfo = false;
+			// option.showInfo = false; => show info that ra cung ko lien quan den content slide
 		}
 
 		// fix option
@@ -696,28 +700,29 @@
 			_tempEl.append(_imageItemEl);
 
 			// sau do se gan cai custom elements
-			if(image.customEl)
+			if(image.customEl){
 				_imageItemEl.append(image.customEl);
+			}
 			var _tempElWidth = _tempEl.width();
+
 			// tim kiem image src + lazysrc
-			if(!option.contentSlide){
-				var _srcForTempEl = zElementIsInPopup?
+			var _srcForTempEl = zElementIsInPopup?
 									(image.srcpopup||image.srclarge||image.src):
 									(_tempElWidth<250?(image.src):(image.srclarge||image.src));
-				_tempEl.setStyle({top:0, left:0});
-				if(!option.lazyloadImage){
-					_imageItemEl.setStyle('background-image', 'url('+_srcForTempEl+')');
-				}else{
+			// xu ly lazyload
+			// truong hop defaule
+			if(!option.contentSlide){
+				if(option.lazyloadImage){
 					if(image.srclazy){
 						_imageItemEl.setStyle('background-image', 'url('+_srcForTempEl+')');
-					}else{
-						image.srclazy = _srcForTempEl;
 					}
-					_imageItemEl.addClass(imageholdloadingClass);
 					image.lazyEl = _imageItemEl;
 				}
+				else{
+					_imageItemEl.setStyle('background-image', 'url('+_srcForTempEl+')');
+				}
 			}
-			// doi voi contentslider
+			// doi voi contentSlide
 			// thi lazyimg se nam ben trong cai div content
 			// cho nen se phai tim lazyEl
 			else{
@@ -725,9 +730,29 @@
 				if(maybeLazyEl.count()){
 					image.lazyEl = maybeLazyEl;
 				}
+
+				// chan chan la user dang thuc su muon sai lazyload
+				if(option.lazyloadImage){
+					// neu van chua co lazyElement thi se thu tim trong popup?
+					if(!image.lazyEl){
+						maybeLazyEl = _imageItemEl.find('[popupsrc], [srcpopup], [data-popupsrc], [data-srcpopup]');
+						if(maybeLazyEl.count()){
+							image.lazyEl = maybeLazyEl;
+						}
+					}
+				}
+			}
+
+			if(option.lazyloadImage){
+				_imageItemEl.addClass(imageholdloadingClass);
+				// neu van chua co lazy image thi phai lay tu thang khac qua
+				if(!image.srclazy){
+					image.srclazy = _srcForTempEl;
+				}
 			}
 
 			// sau do se chinh vi tri cho dung
+			_tempEl.setStyle({top:0, left:0});
 			if(option.transition==0 || option.transition==1)_tempEl.setStyle({opacity:0,'z-index':0}).hide();
 			if(option.transition==1 && flagSlideUseCssTransform)_tempEl.show().setStyle('transition', 'opacity ' + option.transitionTime + 'ms '+cubicbezier);
 			if(option.transition==2 || option.transition==201 || option.transition==202 || option.transition==203 || option.transition==204 || option.transition==205){
@@ -1474,26 +1499,6 @@
 			};
 
 
-			// truong hop autoheight
-			if(option.autoHeight){
-
-				//horizontal
-				if(option.transition === 1 || option.transition === 2){
-					fixreheight(currentIndex);
-				}
-
-				//horizontal-center
-				if(option.transition === 203){ 
-					(function(){
-						var indexNeedToFix = currentIndex;
-						(function(){
-							fixreheight(indexNeedToFix);
-						}).delay(option.transitionTime+100);
-					})();
-				}
-			}
-
-
 			if(estimatePrevIndex<0)
 				estimatePrevIndex = images.length-1;
 			if(estimateNextIndex>=images.length)
@@ -1527,12 +1532,13 @@
 					time: runtimeOption.autoplayTime
 				}).run();
 			};
+
 			// console.log('lazyloadImage');
 			// lazyload
 			if(option.lazyloadImage){
-				var il=0;
+				var il;
 				// console.log(currentIndex, _imagePerPage);
-				for(il;il<_imagePerPage;il++){(function(){
+				for(il=0;il<_imagePerPage;il++){(function(){
 					// console.log('il', il);
 					var ic = currentIndex+il;
 					if(!images[ic] || images[ic].lazyloaded)
@@ -1541,6 +1547,8 @@
 					// console.log('lazy load index: ', ic, _imagePerPage);
 					images[ic].lazyloaded = true;
 					var lazyEls = images[ic].lazyEl || images[ic].customEl;
+
+					// console.log('lazyEls', lazyEls.item(0,true) );
 					if(!lazyEls)
 						return;
 					
@@ -1554,6 +1562,7 @@
 								(function(){
 									// console.log('loaded: ', ic);
 									lazyEl.removeClass(imageholdloadingClass);
+									images[ic].el.find('.image-item').removeClass(imageholdloadingClass);
 									if(images[ic].customEl){
 										// console.log('customEl', ic, images[ic].customEl.item(0, true));
 										images[ic].customEl.removeClass(imageholdloadingClass);
@@ -1564,6 +1573,11 @@
 									else{
 										lazyEl.setStyle('background-image', 'url('+image.src+')');
 									}
+
+									if(option.autoHeight){
+										_runfixreheight();
+									}
+
 								}).delay(option.lazyloadDelay);
 							}
 						});
@@ -1571,6 +1585,45 @@
 
 				})();}
 				// endfor
+			}
+			// neu khong lazyload thi se fix autoheight
+			// truong hop autoheight
+			else if(option.autoHeight){
+				_runfixreheight();
+				/*
+				//horizontal
+				if(option.transition === 1 || option.transition === 2){
+					fixreheight(currentIndex);
+				}
+
+				//horizontal-center
+				if(option.transition === 203){ 
+					(function(){
+						var indexNeedToFix = currentIndex;
+						(function(){
+							fixreheight(indexNeedToFix);
+						}).delay(option.transitionTime+100);
+					})();
+				}
+				*/
+			}
+
+		};
+
+		var _runfixreheight = function(){
+			//horizontal
+			if(option.transition === 1 || option.transition === 2){
+				fixreheight(currentIndex);
+			}
+
+			//horizontal-center
+			if(option.transition === 203){ 
+				(function(){
+					var indexNeedToFix = currentIndex;
+					(function(){
+						fixreheight(indexNeedToFix);
+					}).delay(option.transitionTime+100);
+				})();
 			}
 		};
 
@@ -2217,7 +2270,11 @@
 		if(!option.navDot && !option.navThumb && (!option.navButton || option.navButtonParentIsRoot))zElement.find('.nav-wrap').remove();
 		if(!option.playButton)zElement.find('.play-wrap').remove();
 		if(!option.border)zElement.find('.image-view-border').remove();
-		if(option.contentSlide || !option.showInfo)zElement.find('.image-info-wrap').remove();
+
+		// can nhac, vi contentSlide cung khong lien quan lam den show info
+		// co info thi cu show ra thoi.
+		// if(option.contentSlide || !option.showInfo)zElement.find('.image-info-wrap').remove();
+		if(!option.showInfo)zElement.find('.image-info-wrap').remove();
 
 
 
@@ -2383,7 +2440,9 @@
 				// start index
 				startIndex: 			defaultIndex,
 
-				// option auto play
+				// option cho slider
+				lazyloadImage: 			option.popupLazyloadImage,
+				lazyloadDelay: 			option.popupLazyloadDelay,
 				autoplay:				option.popupAutoplay,
 				autoplayTime:			option.popupAutoplayTime,
 				playButton:				option.popupPlayButton,
