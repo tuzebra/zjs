@@ -26,6 +26,7 @@
 			autoplayTime: 1500,
 			playButton: false,
 			navButton: true,
+			navButtonParent: false,
 			navButtonParentIsRoot: false,
 			navButtonAutoDisable: false,
 			navThumb: true,
@@ -34,7 +35,7 @@
 			linkTitle: false,
 			linkCover: false,
 			sequent: true,
-			usePercentWidth: false,
+			usePercentWidth: true,
 
 			// option tao ra 1 cai navigation moi
 			// dua tren horizontal-stack / horizontal-page / horizontal-center
@@ -43,7 +44,7 @@
 			navThumbSliderTransitionTime: 1600,
 			navThumbSliderTransitionTimingfunction: 2,
 			navThumbSliderNavButton: true,
-			navThumbSliderUsePercentWidth: false,
+			navThumbSliderUsePercentWidth: true,
 			navThumbSliderAutoHeight: false,
 
 
@@ -90,6 +91,7 @@
 			popupHideOnClickOut: false,
 			popupCloseButton: true,
 			popupAllowKeyboard: true,
+			popupScrollPopup: false,  				// false | true | "mobileOnly"
 
 			// animate when show popup
 			popupAnimate: false,
@@ -106,13 +108,16 @@
 			popupPlayButton: false,
 
 			popupNavButton: true,
+			popupNavButtonParent: false,
 			popupNavButtonParentIsRoot: false,
 			popupNavThumb: true,
 			popupNavDot: true,
+			popupShowInfo: true,
 			popupLinkTitle: false,
 			popupLinkCover: false,
 			popupSequent: true,
 			popupFullscreenWidth: false,
+			popupContentSlide: false,
 
 			popupPageCoverClass: '',
 			popupContainerClass: '',
@@ -188,16 +193,23 @@
 		if(option.transition > 200){
 			option.fullWidth = false;
 			option.fullscreenWidth = false;
-			if(option.transition==201 || option.transition==202 || option.transition==204 || option.transition==205)
+			if(option.transition==201 || option.transition==202 || option.transition==204 || option.transition==205){
 				option.navButtonParentIsRoot = true;
-			if(option.transition==202 || option.transition==205)
+			}
+			if(option.transition==202 || option.transition==205){
 				option.sequent = true;
+			}
 		}
 
 		// fix option 
 		option.usePercentWidth = !!option.usePercentWidth;
 		option.autoHeight = !!option.autoHeight;
 		option.navButtonAutoDisable = !!option.navButtonAutoDisable;
+
+		// fix navButtonParent
+		if(option.navButtonParentIsRoot){
+			option.navButtonParent = false;
+		}
 
 		// fix option
 		// chi cho 1 trong 2 thang, hoac la fullwidth, hoac la fullscreen width
@@ -224,6 +236,7 @@
 		// neu nhu su dung navThumbSlider thi se phai chinh lai 1 so option cho phu hop
 		if(option.navThumbSlider){
 			option.navButtonParentIsRoot = true;
+			option.navButtonParent = false;
 			option.navThumb = false;
 		}
 
@@ -294,7 +307,7 @@
 			// dung cho popup
 			_popupPageCoverHtml = '<div class="imageslider-popup-page-cover"></div>',
 			_popupContainerHtml = '<div class="imageslider-popup-container">'+
-									'<a class="imageslider-popup-close-button">&times;<i class="icon"></i></a>'+
+									'<div class="imageslider-popup-close-button">&times;<i class="icon"></i></div>'+
 									'<div class="imageslider-popup-wrap">'+
 										'<div class="inpopup-imageslider"></div>'+
 									'</div>'+
@@ -416,8 +429,9 @@
 			tempDivEl.child().eachElement(function(_tempDivChileEl){
 				zjs(_tempDivChileEl).appendTo(imagesliderWrapEl);
 			});
-			var navWrapEl = imagesliderContainerEl.find('.nav-wrap');
-			navWrapEl.insertAfter(imagesliderContainerEl);
+			// move info-wrap, nav-wrap out of container
+			imagesliderContainerEl.find('.image-info-wrap').insertAfter(imagesliderContainerEl);
+			imagesliderContainerEl.find('.nav-wrap').insertAfter(imagesliderContainerEl);
 			// sau do remove di thang ul hoac ol la duoc
 			zElement.find(option.slideitem).remove();
 			if(ulEl)ulEl.remove();tempDivEl.remove();
@@ -716,7 +730,9 @@
 			// sau do se chinh vi tri cho dung
 			if(option.transition==0 || option.transition==1)_tempEl.setStyle({opacity:0,'z-index':0}).hide();
 			if(option.transition==1 && flagSlideUseCssTransform)_tempEl.show().setStyle('transition', 'opacity ' + option.transitionTime + 'ms '+cubicbezier);
-			if(option.transition==2 || option.transition==201 || option.transition==202 || option.transition==203 || option.transition==204 || option.transition==205)_tempEl.left(zImageViewElWidth * index);
+			if(option.transition==2 || option.transition==201 || option.transition==202 || option.transition==203 || option.transition==204 || option.transition==205){
+				_tempEl.left(zImageViewElWidth * index);
+			}
 			if(option.transition==3)_tempEl.top(zImageViewElHeight * index);
 
 			
@@ -782,8 +798,20 @@
 		if(option.navButton){
 
 			// xem coi neu nhu option la root thi move luon
-			if(option.navButtonParentIsRoot)
+			if(option.navButtonParentIsRoot){
 				zElement.find('.nav-next, .nav-back').appendTo(zElement);
+			}
+			if(option.navButtonParent && zjs.isString(option.navButtonParent)){
+				var zNavButtonParent = zElement.find(option.navButtonParent);
+				if(zNavButtonParent.count()){
+					option.navButtonParent = zNavButtonParent;
+				}else{
+					option.navButtonParent = false;
+				}
+			}
+			if(option.navButtonParent){
+				zElement.find('.nav-next, .nav-back').appendTo(option.navButtonParent);
+			}
 
 			// build 2 cai navigation button thoi
 			doTriggerChangeNavButton = function(moreparam){
@@ -1447,13 +1475,22 @@
 
 
 			// truong hop autoheight
-			if(option.autoHeight && (option.transition==2 || option.transition==203)){ //horizontal-center
-				(function(){
-					var indexNeedToFix = currentIndex;
+			if(option.autoHeight){
+
+				//horizontal
+				if(option.transition === 1 || option.transition === 2){
+					fixreheight(currentIndex);
+				}
+
+				//horizontal-center
+				if(option.transition === 203){ 
 					(function(){
-						fixreheight(indexNeedToFix);
-					}).delay(option.transitionTime+100);
-				})();
+						var indexNeedToFix = currentIndex;
+						(function(){
+							fixreheight(indexNeedToFix);
+						}).delay(option.transitionTime+100);
+					})();
+				}
 			}
 
 
@@ -1926,7 +1963,7 @@
 
 				// voi slide horizontal / center, can fix lai width
 				// ================================================
-				if(option.transition==2 || option.transition==203){
+				if(option.transition===2 || option.transition===203){
 
 					// tinh toan lai zImageViewWrapRealElNextPos trong truong hop ko su dung sequent
 					if(!option.sequent)
@@ -1979,7 +2016,7 @@
 				};
 
 				// voi slide vertical
-				if(option.transition==3){
+				if(option.transition===3){
 
 					// tinh toan lai zImageViewWrapRealElNextPos trong truong hop ko su dung sequent
 					if(!option.sequent)
@@ -2029,6 +2066,10 @@
 
 			var fixrewidthPercent = function()
 			{	
+				if(option.transition <= 1){
+					return;
+				}
+
 				// console.log('fixrewidthPercent');
 				// cap nhat lai cai width quan trong
 				zImageViewElWidth = zImageViewContainer.width();
@@ -2110,12 +2151,16 @@
 					imagesliderWrapEl.height(maxHeight);
 					zImageViewContainer.height(maxHeight);
 					zImageViewWrap.height(maxHeight);
+
+					// trigger event
+					zElement.trigger('slider:fixheight');
 				}
 
 			};
 
 			// first fix
 			zWindow.on('resize', function(){fixreheight(currentIndex)});
+			fixreheight(currentIndex);
 			(function(){fixreheight(currentIndex)}).delay(500);
 		}
 
@@ -2214,9 +2259,13 @@
 		var popupTimer1 = false,
 			popupTimer2 = false;
 
+		var isPopupShowed = false;
+
 		// ham lam nhiem vu show popup (alias voi main slider)
 		var slidePopupShow = function(defaultIndex){
 			if(!option.popup)return;
+			if(isPopupShowed)return;
+			isPopupShowed = true;
 
 			try{
 			defaultIndex = (defaultIndex !== 0) ? (defaultIndex || -1) : 0;
@@ -2227,10 +2276,19 @@
 				defaultIndex = currentIndex;
 			};
 			//console.log('slidePopupShow at index: '+defaultIndex);
+			
+			// co 2 cach:
+			// + 1 la su dung module ui.popup => ok hon, vi ui.popup xu ly ra nhieu truong hop roi
+			// + 2 la se tu handle cai popup => mat cong hon
+			var usePopupModule = zjs.isObject(zjs.moduleUiPopupOption);
+
 
 			// dau tien la append vao body cai page cover
-			var popupPageCoverEl = zjs(_popupPageCoverHtml).appendTo(document.body);
-			popupPageCoverEl.addClass(option.popupPageCoverClass);
+			var popupPageCoverEl;
+			if(!usePopupModule){
+				popupPageCoverEl = zjs(_popupPageCoverHtml).appendTo(document.body);
+				popupPageCoverEl.addClass(option.popupPageCoverClass);	
+			}
 
 			// sau do append vao body cai popup slide container
 			var popupContainerEl = zjs(_popupContainerHtml).appendTo(document.body),
@@ -2252,34 +2310,65 @@
 			zElement.setData('popupsliderels_inpopupSliderEl', inpopupSliderEl);
 			inpopupSliderEl.setData('parent_SliderEl', zElement);
 
-			// neu nhu co animate thi cover luon luon la fade
-			// va dong thoi coi nhu popup container la zui-popup luon
-			popupPageCoverEl.fadeIn({
-				time: option.popupAnimateTime
-			});
-			if(option.popupAnimate)
-				popupContainerEl.addClass('zui-popup hide-before-animate '+option.popupAnimateName).setStyle('animation-duration', option.animateTime+'ms');
-
+			// bay gio moi bat dau show cai popup len
+			if(usePopupModule){
+				popupContainerEl.makePopup({
+					closebutton: false, // se su dung custom close button chu khong can default popup button
+					closethenremove: true,
+					pagecover: true,
+					clickout: option.popupHideOnClickOut,
+					pressEsc: option.popupAllowKeyboard,
+					fade: true,
+					fadeTime: option.popupAnimateTime,
+					animate: option.popupAnimate,
+					animateTime: option.popupAnimateTime,
+					animateName: option.popupAnimateName,
+					scrollPopup: option.popupScrollPopup, 		// false | true | "mobileOnly"
+				}).on('ui:popup:hide', function(){
+					isPopupShowed = false;
+				});
+			}
+			// neu khong su dung module thi tu handler
+			else{
+				// truong hop ko 
+				// neu nhu co animate thi cover luon luon la fade
+				// va dong thoi coi nhu popup container la zui-popup luon
+				popupPageCoverEl.fadeIn({
+					time: option.popupAnimateTime
+				});
+				if(option.popupAnimate)
+					popupContainerEl.addClass('zui-popup hide-before-animate '+option.popupAnimateName).setStyle('animation-duration', option.animateTime+'ms');
+			}
 
 			// bind event khi ma make slider thanh cong roi thi moi show ra
 			inpopupSliderEl.on('slider:ready', function(){
 				// stop lai cai thang autoplay cua main slider
 				slidePause();
 				// chinh thuc show ra popup container
-				//popupContainerEl.removeClass('hide');
-				if(option.popupAnimate){
-					popupContainerEl.removeClass('hide-before-animate');
-					// stop timer truoc do cho chac an
-					window.clearTimeout(popupTimer1);window.clearTimeout(popupTimer2);
-					popupContainerEl.addClass('showing animate animate-start');
-					popupTimer1 = (function(){popupContainerEl.addClass('animate-end')}).delay(option.popupAnimateTime);
-					popupTimer2 = (function(){popupContainerEl.removeClass('showing animate animate-start animate-end')}).delay(option.popupAnimateTime + 100);
-				}else{
-					popupContainerEl.fadeIn();
-				};
+				if(usePopupModule){
+					popupContainerEl.popupShow();
+				}
+				// neu khong su dung module thi tu handler
+				else{
+					if(option.popupAnimate){
+						popupContainerEl.removeClass('hide-before-animate');
+						// stop timer truoc do cho chac an
+						window.clearTimeout(popupTimer1);window.clearTimeout(popupTimer2);
+						popupContainerEl.addClass('showing zanimate zanimate-start');
+						popupTimer1 = (function(){popupContainerEl.addClass('zanimate-end')}).delay(option.popupAnimateTime);
+						popupTimer2 = (function(){popupContainerEl.removeClass('showing zanimate zanimate-start zanimate-end')}).delay(option.popupAnimateTime + 100);
+					}else{
+						popupContainerEl.fadeIn();
+					};
+				}
 
 				// gio moi di goi callback cua cai thang popup cha
 				zElement.trigger('slider:popup:show', {index: defaultIndex, info: images[defaultIndex]});
+			})
+			.on('slider:fixheight', function(){
+				if(usePopupModule){
+					popupContainerEl.popupRefresh();
+				}
 			});
 
 			// fix new option cho inpopup 1 xiu
@@ -2301,14 +2390,18 @@
 
 				// cac option ve navigation
 				navButton: 				option.popupNavButton,
+				navButtonParent: 		option.popupNavButtonParent,
 				navButtonParentIsRoot: 	option.popupNavButtonParentIsRoot,
 				navThumb: 				option.popupNavThumb,
 				navDot: 				option.popupNavDot,
+				showInfo: 				option.popupShowInfo,
 				linkTitle: 				option.popupLinkTitle,
 				linkCover: 				option.popupLinkCover,
 				sequent: 				option.popupSequent,
 				fullWidth: 				option.popupFullWidth,
-				fullscreenWidth: 		option.popupFullscreenWidth
+				fullscreenWidth: 		option.popupFullscreenWidth,
+
+				contentSlide: 			option.popupContentSlide,
 			});
 
 			// bay gio moi di fix may cai inpopup dac biet
@@ -2326,19 +2419,21 @@
 			}).delay(100);
 
 			// bind 1 de close popup
-			if(option.popupHideOnClickOut)
+			if(option.popupHideOnClickOut && !usePopupModule){
 				popupPageCoverEl.click(function(event){
 					event.preventDefault();
 					slidePopupHide();
 				});
+			}
 
 			if(option.popupCloseButton){
 				popupCloseButtonEl.click(function(event){
 					event.preventDefault();
 					slidePopupHide();
 				});
-			}else
+			}else{
 				popupCloseButtonEl.remove();
+			}
 
 
 			// doi 1 chut cho browser on dinh da roi moi effect ra
@@ -2421,37 +2516,51 @@
 		// ham lam nhiem vu close popup
 		var slidePopupHide = function(){
 			if(!option.popup)return;
+			if(!isPopupShowed)return;
+			isPopupShowed = false;
 
 			// get ra het
 			var popupPageCoverEl = zElement.getData('popupsliderels_popupPageCoverEl'),
 				popupContainerEl = zElement.getData('popupsliderels_popupContainerEl'),
 				inpopupSliderEl = zElement.getData('popupsliderels_inpopupSliderEl');
 
+			// xem coi show popup ra bang cach nao?
+			var usePopupModule = zjs.isObject(zjs.moduleUiPopupOption);
+
 			// stop neu nhu no co autoplay
 			if(inpopupSliderEl)
 				inpopupSliderEl.slidePause();
 
-			// neu nhu co animate thi se run truoc khi remove
-			if(popupContainerEl){
-				if(option.popupAnimate){
-					window.clearTimeout(popupTimer1);window.clearTimeout(popupTimer2);
-					popupContainerEl.addClass('hiding animate animate-start');
-					popupTimer1 = (function(){popupContainerEl.addClass('animate-end')}).delay(option.popupAnimateTime);
-					popupTimer2 = (function(){popupContainerEl.removeClass('hiding animate animate-start animate-end');popupContainerEl.remove()}).delay(option.popupAnimateTime + 100);
-				}
-				// con khong thi cung remove tu tu bang js
-				else
-					popupContainerEl.removeSlow();
-			};
-
-			// remove cover thi luon luon 1 hieu ung thoi thoi
-			if(popupPageCoverEl)popupPageCoverEl.fadeOut({
-				time: option.popupAnimateTime,
-				callback: function(){
-					popupPageCoverEl.remove();
+			// bat dau hide popup
+			if(usePopupModule){
+				popupContainerEl.on('ui:popup:hide', function(){
 					zBody.removeClass(bodypopupshowClass);
-				}
-			});
+				}).popupHide();
+			}
+			// neu nhu khong su dung module thi se tu xu
+			else{
+				// neu nhu co animate thi se run truoc khi remove
+				if(popupContainerEl){
+					if(option.popupAnimate){
+						window.clearTimeout(popupTimer1);window.clearTimeout(popupTimer2);
+						popupContainerEl.addClass('hiding animate animate-start');
+						popupTimer1 = (function(){popupContainerEl.addClass('animate-end')}).delay(option.popupAnimateTime);
+						popupTimer2 = (function(){popupContainerEl.removeClass('hiding animate animate-start animate-end');popupContainerEl.remove()}).delay(option.popupAnimateTime + 100);
+					}
+					// con khong thi cung remove tu tu bang js
+					else
+						popupContainerEl.removeSlow();
+				};
+
+				// remove cover thi luon luon 1 hieu ung thoi thoi
+				if(popupPageCoverEl)popupPageCoverEl.fadeOut({
+					time: option.popupAnimateTime,
+					callback: function(){
+						popupPageCoverEl.remove();
+						zBody.removeClass(bodypopupshowClass);
+					}
+				});
+			}
 
 			// gio thi trigger thoi
 			zElement.trigger('slider:popup:hide');
@@ -2466,7 +2575,10 @@
 
 
 		// trigger event
-		zElement.trigger('slider.ready');
+		zElement.trigger('slider:ready');
+		(function(){
+			zElement.trigger('slider:ready:fixheight');
+		}).delay(500);
 
 		// preload image and then autoplay
 		// sua code lai 1 chut

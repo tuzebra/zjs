@@ -85,6 +85,7 @@
 					if(description=='')description = zli.find('.caption').getInnerText();
 					if(description=='')description = zli.find('p').getInnerText();
 					if(description=='')description = zli.find('img').getAttr('alt','');
+					if(description=='')description = zli.getAttr('alt','');
 					if(srclarge=='')srclarge = zli.find('img.large').getAttr('src','');
 					if(srclarge=='')srclarge = zli.find('img').getAttr('data-largesrc','');
 					if(srclarge=='')srclarge = zli.find('img').getAttr('data-srclarge','');
