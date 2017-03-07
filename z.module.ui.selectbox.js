@@ -9,6 +9,7 @@ zjs.require('scrollbar, ui, ui.button', function(){
 	zjs.extendCore({
 		moduleUiSelectboxOption: {
 			width: 'auto', // 'auto', number
+			customCssClass: '',
 			panelmaxheight: 250,
 			itemtemplate: '${text}',
 		}
@@ -52,6 +53,8 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		zbuttonactiveclass = 'activenothover',
 		zuihideclass = 'zui-uihide';
 	
+	var regDataAttr = /^data\-(.+)$/;
+
 	// - - - - - - - - -
 	
 	// MAIN FUNCTIONS
@@ -95,9 +98,13 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		var zSelectboxWrapEl = zjs(selectboxwraphtml);
 		
 		// set width
-		if(option.width == 'auto')
+		if(option.width == 'auto'){
 			zSelectboxWrapEl.width(zSelectboxEl.width());
-		
+		}
+		if(option.customCssClass !=''){
+			zSelectboxWrapEl.addClass(option.customCssClass);
+		}
+
 		// sau do luu lai luon de sau nay truy xuat
 		zSelectboxEl.setData(wrapelkey, zSelectboxWrapEl);
 		
@@ -134,6 +141,13 @@ zjs.require('scrollbar, ui, ui.button', function(){
 						value: itemValue,
 						text: zEl.getInnerHTML(),
 					};
+					// get them nhung thang attribute nao bat dau bang "data-"
+					zjs.foreach(zEl.item(0,true).attributes, function(attr){
+						if (regDataAttr.test(attr.nodeName)) {
+							var key = attr.nodeName.match(regDataAttr)[1];
+							formatData[key] = attr.nodeValue;
+						}
+					});
 					var iteminnerhtml = '';
 					if(typeof option.itemtemplate == 'function')iteminnerhtml = option.itemtemplate(formatData);
 					if(typeof option.itemtemplate == 'string')iteminnerhtml = option.itemtemplate;

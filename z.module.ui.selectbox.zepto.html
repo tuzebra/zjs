@@ -31,6 +31,25 @@
 	<style>
 	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#fff;}
 	.wrapper{width:900px;margin:0 auto;padding:50px 0;}
+
+	/* demo for render image inside selectbox */
+	.image-selectbox{
+		width: 300px;
+	}
+	.image-selectbox .zui-selectbox__button-wrap .zui-button{
+		height: auto;
+		padding: 5px 10px;
+	}
+	.image-selectbox .zui-selectbox__button-wrap .zui-button img{
+		width: 40px;
+	}
+	.image-selectbox .zui-selectbox__item{
+		height: auto;
+		padding: 5px 10px;
+	}
+	.image-selectbox .zui-selectbox__item img{
+		width: 40px;
+	}
 	</style>
 
 	<link rel="stylesheet" type="text/css" href="z.module.scrollbar.css" />
@@ -119,6 +138,34 @@
 			
 			<option>armscii8_bin</option>
 		
+		</select>
+
+
+		<h3>Custom template</h3>
+
+		<select class="zselectbox" data-option="
+				width: false,
+				customCssClass: 'image-selectbox',
+				itemtemplate: '<img src=\'${image}\' /> <b>${value}</b>. ${text}'
+			">
+
+			<optgroup label="You can set a template to render option data">
+
+				<option value="1" data-image="https://image.flaticon.com/icons/png/128/164/164826.png">option 1</option>
+
+				<option value="2" data-image="http://thammyvienngocdung.com/media/upload/images/flower%20icon.png">option 2</option>
+
+				<option value="3" data-image="http://www.iconsfind.com/wp-content/uploads/2013/11/20131108_527ce72064507.png">option 3</option>
+
+			</optgroup>
+
+			<optgroup label="you even can add different custom html for each option">
+
+				<option value="5" data-html="OPTION <b>FOUR</b>">option 4</option>
+				<option value="6" data-html="option <u>Five</u>">option 5</option>
+
+			</optgroup>
+
 		</select>
 		
 		
