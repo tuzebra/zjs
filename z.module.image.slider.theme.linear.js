@@ -1411,12 +1411,16 @@
 
 
 			// change avtive cho image slide
-			zImageViewWrap.find('.image-hold').removeClass('active active-next active-back active-next2 active-back2 out-of-range');
+			zImageViewWrap.find('.image-hold').removeClass('active active-next active-back active-next2 active-back2 active-next3 active-back3 active-next4 active-back4 out-of-range');
 			_utiImageHoldAddClass(index, 'active');
 			if(images.length>1)_utiImageHoldAddClass(index+1, 'active-next');
 			if(images.length>2)_utiImageHoldAddClass(index-1, 'active-back');
 			if(images.length>3)_utiImageHoldAddClass(index+2, 'active-next2');
 			if(images.length>4)_utiImageHoldAddClass(index-2, 'active-back2');
+			if(images.length>5)_utiImageHoldAddClass(index+3, 'active-next3');
+			if(images.length>6)_utiImageHoldAddClass(index-3, 'active-back3');
+			if(images.length>7)_utiImageHoldAddClass(index+4, 'active-next4');
+			if(images.length>8)_utiImageHoldAddClass(index-4, 'active-back4');
 
 
 
