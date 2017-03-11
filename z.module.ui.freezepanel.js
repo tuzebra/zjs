@@ -18,6 +18,8 @@ zjs.require('ui', function(){
 			overflowParent: 'auto',
 			pendingScrollTime: 0,
 			autoHideWhenReach: false,
+			autoHideSpeed: 2000,
+			autoHideDelay: 0,
 			useHeightBuffer: true,
 			excludeFromFreezingStack: false,
 			handlerFreezingElement: false, // false mean: self,	
@@ -58,9 +60,6 @@ zjs.require('ui', function(){
 
 	var findIndexOfFreezePanel = function(element){
 		for(var i=0;i<allFreezepanelInPage.length;i++){
-			// fix index
-			// zjs(allFreezepanelInPage[i].el).setStyle('z-index', allFreezepanelInPage.length - i);
-			// find
 			if(allFreezepanelInPage[i].el === element){
 				return i;
 			}
@@ -99,15 +98,19 @@ zjs.require('ui', function(){
 		}
 		// console.log('totalFreezingHeight', totalFreezingHeight);
 		return totalFreezingHeight;
+	};
+
+	var freezeFakePx = 0;
+
+	// function help to get window scrollTop
+	// it merge real scrollTop with fakeScrollTop
+	// help to implement autoHideSpeed feature
+	var getWindowScrollTop = function(){
+		return zWindowEl.scrollTop()+freezeFakePx;
 	},
 
-	calViewTop = function(element){
-		// find this element
-		var i = findIndexOfFreezePanel(element);
-		if(i-1 >= 0){
-			return allFreezepanelInPage[i-1].viewTop + allFreezepanelInPage[i-1].height;
-		}
-		return 0;
+	getAbsoluteTop = function(zEl){
+		return zEl.getAbsoluteTop()+freezeFakePx;
 	},
 	
 	makeFreezepanel = function(element, useroption){
@@ -149,12 +152,7 @@ zjs.require('ui', function(){
 			option.handlerFreezingMethod = 'meet-top';
 
 		option.excludeFromFreezingStack = !!option.excludeFromFreezingStack;
-		// if(zFreezepanelEl.is('header'))
-			// option.excludeFromFreezingStack = false;
-		// console.log('option.excludeFromFreezingStack', option.excludeFromFreezingStack);
 
-		// save option
-		// zFreezepanelEl.setData(optionkey, option);
 		
 		// - - -
 		// start coding module
@@ -227,6 +225,39 @@ zjs.require('ui', function(){
 			}
 		}
 
+		// fix autoHideSpeed
+		var autoHideTimer = false;
+		option.autoHideSpeed = parseInt(option.autoHideSpeed, 10);
+		option.autoHideDelay = parseInt(option.autoHideDelay, 10);
+		if(isNaN(option.autoHideDelay) || option.autoHideDelay < 0){
+			option.autoHideDelay = 0;
+		}
+
+		if(isNaN(option.autoHideSpeed) || option.autoHideSpeed < 0){
+			option.autoHideSpeed = 0;
+		}else{
+			// hien tai chi support trong page co 1 cai panel auto hide ma thoi
+			// neu co nhieu hon 2 cai panel auto hide thi se bi loi
+			 autoHideTimer = zjs.timer({
+			 	from: 0,
+				to: 0,
+				time: option.autoHideSpeed, 
+				// transition: 'quadratic', // linear, sinoidal, quadratic, cubic, elastic
+				onStart: function(from, to){
+					freezeFakePx = from;
+					refreshAllfreezepanel();
+				},
+				onProcess: function(current, from, to){
+					freezeFakePx = current;
+					refreshAllfreezepanel();
+				},
+				// onStop: function(from, to){},
+				onFinish: function(from, to){
+					freezeFakePx = to;
+					refreshAllfreezepanel();
+				}
+			 });
+		}
 
 		// save option
 		zFreezepanelEl.setData(optionkey, option);
@@ -234,7 +265,8 @@ zjs.require('ui', function(){
 		// push to array to management later
 		allFreezepanelInPage.push({
 			el: element, 
-			top: zFreezepanelEl.getAbsoluteTop(), 
+			zEl: zFreezepanelEl,
+			top: getAbsoluteTop(zFreezepanelEl), 
 			height: 0, 
 			freezing: 0,
 			viewTop: 0,
@@ -257,10 +289,10 @@ zjs.require('ui', function(){
 
 
 		if(zParentEl)
-			parentTop = zParentEl.getAbsoluteTop();
+			parentTop = getAbsoluteTop(zParentEl);
 
 		if(zOverflowParentEl)
-			overflowParentTop = zOverflowParentEl.getAbsoluteTop();
+			overflowParentTop = getAbsoluteTop(zOverflowParentEl);
 		if(!windowScrollHandler){	
 			orgAnchorPosition-=overflowParentTop;
 			parentTop-=overflowParentTop;
@@ -291,7 +323,7 @@ zjs.require('ui', function(){
 			
 			// if(zOverflowParentEl)
 			if(windowScrollHandler){
-				_currentScrollTop = isBodyScrollbarActive() ? zBody.scrollPosition() : zWindowEl.scrollTop();
+				_currentScrollTop = isBodyScrollbarActive() ? zBody.scrollPosition() : getWindowScrollTop();
 			}
 			else{
 				_currentScrollTop = zOverflowParentEl.getStyle('scrollTop');
@@ -332,22 +364,23 @@ zjs.require('ui', function(){
 			// neu nhu trang thai van nhu cu thi thoi
 			if(hasNewTopbtnsStt === lastTopbtnsStt){
 				// nhung truoc khi return thi se coi co phai la dang freezee khong
-				// if((zParentEl || handlerAHWRElement) && zFreezepanelEl.hasClass(freezingclass)){
 				if(zFreezepanelEl.hasClass(freezingclass)){
 					// check thu height cua thang cha, va thang con
 					// coi co nen thay doi top cua thang con (thang freeze) hay khong
 					var parentHeight = zParentEl ? zParentEl.height() : zDocument.height(),
 						height = zFreezepanelEl.height();
 
-					var _AHWRTop = handlerAHWRElement ? handlerAHWRElement.getAbsoluteTop() : zDocument.height();
+					var _AHWRTop = handlerAHWRElement ? getAbsoluteTop(handlerAHWRElement) : zDocument.height();
 
-					parentTop = zParentEl ? zParentEl.getAbsoluteTop() : 0;
+					parentTop = zParentEl ? getAbsoluteTop(zParentEl) : 0;
 					if(!windowScrollHandler)
-						parentTop-=zOverflowParentEl.getAbsoluteTop();
+						parentTop-=getAbsoluteTop(zOverflowParentEl);
 
 					var visibleTop = parentTop+parentHeight;
-					if(visibleTop > _AHWRTop)
+					// uu tien AHWRtop hon
+					if(visibleTop > _AHWRTop){
 						visibleTop = _AHWRTop;
+					}
 
 					var _freezepanelNewTop;
 					// fix lai top cua freeze neu duoc
@@ -513,12 +546,12 @@ zjs.require('ui', function(){
 			var _topChem = 0;
 			if(zchemEl){
 				zchemEl.height(zFreezepanelEl.height());
-				_topChem = zchemEl.getAbsoluteTop();
+				_topChem = getAbsoluteTop(zchemEl);
 			}
 		
 			// fix lai thang top
 			if(zOverflowParentEl)
-				overflowParentTop = zOverflowParentEl.getAbsoluteTop();
+				overflowParentTop = getAbsoluteTop(zOverflowParentEl);
 			if(!windowScrollHandler){	
 				orgAnchorPosition-=overflowParentTop;
 				parentTop-=overflowParentTop;
@@ -563,6 +596,75 @@ zjs.require('ui', function(){
 					event.preventDefault();
 				});
 			}
+			// window.fflog = function(){
+				// console.log('freezeFakePx', freezeFakePx);
+			// }
+			// support autohidespeed
+			var lastDeltaY = 0,
+				lastScrollTop = 0;
+
+			function autoHideHandlerScroll(){
+				var currentScrollTop = zWindowEl.scrollTop();
+
+				var deltaY = (lastScrollTop - currentScrollTop);
+				if(deltaY < 0)deltaY = -1;
+				else if(deltaY > 0)deltaY = 1;
+
+				lastScrollTop = currentScrollTop;
+				// console.log('deltaY', deltaY, freezeFakePx);
+
+				if(deltaY !== 0 && deltaY != lastDeltaY){
+					// console.log('stop');
+					autoHideTimer.stop();
+					lastDeltaY = deltaY;
+				}
+
+				if(autoHideTimer.isRunning()){
+					// console.log('autoHideTimer.isRunning');
+					return;
+				}
+
+				var ph = zFreezepanelEl.height() * 2;
+				// var ph = 120;
+				// get ra real scrolltop
+				// get ra real handlerAHWRElement top, 
+				// tai vi day la can xac dinh that, khong phai bi thang fakedata kiem soat
+				var diffAHWRvsST = handlerAHWRElement.getAbsoluteTop() - zWindowEl.scrollTop();
+				// console.log(diffAHWRvsST);
+
+				// chay len (hide)
+				if(diffAHWRvsST <= 0 && deltaY < 0 && freezeFakePx < ph){
+					// console.log('set hide, is running', autoHideTimer.isRunning());
+					// neu nhu doi chieu dot ngot thi phai dung cai timer lai ngay
+
+					if(!autoHideTimer.isRunning()){
+						// console.log('start hide');
+						autoHideTimer.set({
+							// from: 0,
+							from: freezeFakePx,
+							to: ph
+							// to: zFreezepanelEl.height()
+						}).run();
+					}
+				}
+
+				// chay xuong (show)
+				if(diffAHWRvsST <= 0 && deltaY > 0 && freezeFakePx > 0){
+					// neu nhu doi chieu dot ngot thi phai dung cai timer lai ngay
+					if(deltaY != lastDeltaY){
+						autoHideTimer.stop();
+					}
+					if(!autoHideTimer.isRunning()){
+						// console.log('start show');
+						autoHideTimer.set({
+							// from: zFreezepanelEl.height(),
+							from: freezeFakePx,
+							to: 0
+						}).run();
+					}
+				}
+			}
+
 			zWindowEl.on('scroll', function(event){
 				if(isPendingScroll)return;
 				if(isBodyScrollbarActive())return;
@@ -570,6 +672,23 @@ zjs.require('ui', function(){
 				if(!moduleIsReady && zjs(document.body).hasClass('zui-scrollbar-usedefault'))
 					moduleIsReady = true;
 				freezeHandler();
+
+				if(option.autoHideSpeed <= 0 || !handlerAHWRElement){
+					return;
+				}
+
+				//zWindowEl.on('mousewheel', function(event){
+				
+				// console.log(event.getDeltaY());
+				// var deltaY = event.getDeltaY();
+				if(option.autoHideDelay > 0){
+					autoHideHandlerScroll.delay(option.autoHideDelay);
+				}
+				else{
+					autoHideHandlerScroll();
+				}
+
+
 			});
 		}
 		
@@ -583,6 +702,17 @@ zjs.require('ui', function(){
 		zFreezepanelEl.trigger('ui:freezepanel:load');
 	};
 
+	function freezepanelRefresh(element){
+		// var zFreezepanelEl = zjs(element);
+		zjs(element).trigger('trigger:refreshpanel');
+	}
+
+	function refreshAllfreezepanel(){
+		allFreezepanelInPage.map(function(_o){
+			_o.zEl.trigger('trigger:refreshpanel');
+		});
+	}
+
 
 	// HANDLER METHOD
 	// >>>>>>>>>>>>>>>>>>>>>>>
@@ -590,12 +720,12 @@ zjs.require('ui', function(){
 		'meet-top': function(command, handlerElement, option, data){
 			
 			if(command == 'getAnchorPosition'){
-				return handlerElement.getAbsoluteTop();
+				return getAbsoluteTop(handlerElement);
 			}
 
 			if(command == 'getAnchorPositionWhenActivated'){
 				return option.handlerFreezingElement ? 
-					handlerElement.getAbsoluteTop() : 
+					getAbsoluteTop(handlerElement) : 
 					data.estimateOrgTop;
 			}
 
@@ -609,12 +739,12 @@ zjs.require('ui', function(){
 		'scroll-over': function(command, handlerElement, option, data){
 			
 			if(command == 'getAnchorPosition'){
-				return handlerElement.getAbsoluteTop() + handlerElement.height();
+				return getAbsoluteTop(handlerElement) + handlerElement.height();
 			}
 
 			if(command == 'getAnchorPositionWhenActivated'){
 				return option.handlerFreezingElement ? 
-					handlerElement.getAbsoluteTop() + handlerElement.height() : 
+					getAbsoluteTop(handlerElement) + handlerElement.height() : 
 					data.estimateOrgTop + handlerElement.height();
 			}
 
@@ -647,27 +777,27 @@ zjs.require('ui', function(){
 				// check to see if this parent (freeze element) is freezing or not?
 				// if not freezing, dont care
 				if(!zParentEl.hasClass(freezingclass))
-					return zFreezepanelEl.getAbsoluteTop();
+					return getAbsoluteTop(zFreezepanelEl);
 
-				return zFreezepanelEl.getAbsoluteTop() + freezepanelGetOATop(getType, parent);
+				return getAbsoluteTop(zFreezepanelEl) + freezepanelGetOATop(getType, parent);
 			}
 
-			return zFreezepanelEl.getAbsoluteTop();
+			return getAbsoluteTop(zFreezepanelEl);
 		}
 
 		// this is freeze element, but not freezing yet
 		if(!zFreezepanelEl.hasClass(freezingclass))
-			return zFreezepanelEl.getAbsoluteTop();
+			return getAbsoluteTop(zFreezepanelEl);
 
 		var zchemEl = zFreezepanelEl.getData(freezepanelbufferel, null);
 
 		// start get the top
 		if(getType == 'original')
-			return zchemEl ? zchemEl.getAbsoluteTop() : zFreezepanelEl.getAbsoluteTop();
+			return zchemEl ? getAbsoluteTop(zchemEl) : getAbsoluteTop(zFreezepanelEl);
 
 		// if original == 'absolute'
-		var freezingTop = zFreezepanelEl.getAbsoluteTop(),
-			currentScrollTop = currentScrollTop = isBodyScrollbarActive() ? zBody.scrollPosition() : zWindowEl.scrollTop();
+		var freezingTop = getAbsoluteTop(zFreezepanelEl),
+			currentScrollTop = currentScrollTop = isBodyScrollbarActive() ? zBody.scrollPosition() : getWindowScrollTop();
 		return currentScrollTop + freezingTop;
 	};
 	
@@ -682,6 +812,9 @@ zjs.require('ui', function(){
 		},
 		freezepanelGetAbsoluteTop: function(){
 			return freezepanelGetOATop('absolute', this.item(0));
+		},
+		freezepanelRefresh: function(){
+			return this.eachElement(function(element){freezepanelRefresh(element)});
 		}
 	});
 	

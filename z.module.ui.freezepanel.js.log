@@ -24,3 +24,8 @@
 28/02/2017
 		+ add new option "useHeightBuffer" (default is TRUE)
 		+ add new option "excludeFromFreezingStack" (default is FALSE)
+
+11/03/2017
+		+ support option "autoHideWhenReach" accept a number
+		+ add new option "autoHideSpeed" with default value is 2000
+		+ add new option "autoHideDelay" with default value is 0 (zero)
