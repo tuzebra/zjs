@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>zjs UI - Size Adaptable</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<script type="text/javascript" src="z.js" data-debug="true"></script>
+	<script>
+		zjs.onready('ui.sizeadaptable', function(){
+			
+			
+			
+		});
+	</script>
+	
+	<style>
+	body{font-family:arial,tahomal;padding:0;margin:0;font-size:24px;line-height:1.4;color:#444;background:#fff;}
+	.wrapper{width:50%;margin:0 auto;padding:50px 0;}
+	form{
+		width: 450px;
+		padding: 20px;
+	    box-sizing: border-box;
+	}
+	label, input{
+		display: block;
+		width: 100%;
+	    box-sizing: border-box;
+	}
+	input{
+		border: 1px solid #000;
+	    border-radius: 3px;
+	    padding: 5px 10px;
+	    font-size: 16px;
+	}
+	</style>
+	
+</head>
+<body>
+	<div class="wrapper">
+		
+		<h3>This image display inside a div, but look like it a background (with property <code>background-size: cover</code>)</h3>
+		<p>(Try to resize the window to see how it react)</p>
+
+		<div style="position:relative;background:#DEDEDE;width:100%;height:50vh;overflow:hidden;">
+
+			<img class="zsizeadaptable" src="images/sun-flower.jpg" style="position:absolute;" />
+
+		</div>
+
+		<br/>
+		<br/>
+		<br/>
+
+		<h3>This form can scale look like it is an image</h3>
+		<p>(Try to resize the window to see how it react)</p>
+
+		<div style="position:relative;background:#DEDEDE;width:100%;">
+			<form class="zsizeadaptable" data-option="handlerResizeMethod:'slai'">
+				<label>Email:</label>
+				<input type="text" />
+				<label>Password:</label>
+				<input type="password" />
+			</form>
+		</div>
+
+	</div>
+</body>
+</html>

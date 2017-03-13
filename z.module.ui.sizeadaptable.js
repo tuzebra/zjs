@@ -1,7 +1,7 @@
-// extend module Image Resize cho zjs
-;zjs.onready(function(){
+// extend module cho zjs
+(function(){
 //"use strict";
-	
+
 	var optionkey = 'zmoduleuisizeadaptableoption',
 		originalratiokey = 'zmoduleuisizeadaptableoriginalratio';
 	
@@ -10,7 +10,7 @@
 		moduleUiSizeAdaptableOption: {
 			aspectRatio: false,
 			parent: false,
-			handlerResizeMethod: 'cover'
+			handlerResizeMethod: 'cover', // cover | slai (scale like an image)
 		}
 	});
 	
@@ -54,7 +54,7 @@
 		
 		// fix option...
 		if(option.aspectRatio){
-			option.aspectRatio = parseInt(option.aspectRatio, 10);
+			option.aspectRatio = parseFloat(option.aspectRatio, 10);
 			if(isNaN(option.aspectRatio))
 				option.aspectRatio = false;
 		}
@@ -85,7 +85,7 @@
 		if(!zParentEl || !zParentEl.count()){
 			zParentEl = zSizeAdaptableEl.parent();
 		}
-		// re-check again, if still don't got the parent, we don't need to do anything
+		// re-check again, if still don't got the parent, we don't need to do anything else
 		if(!zParentEl.count()){
 			return;
 		}
@@ -159,6 +159,27 @@
 	        	left: newElLeft,
 	        });
 		},
+
+		// scale like an image
+		slai: function(zSizeAdaptableEl, zParentEl, originalRatio, option){
+			
+			var areaWidth = zParentEl.width(),
+				elWidth = zSizeAdaptableEl.width(),
+				elHeight = zSizeAdaptableEl.height();
+			
+			var scale = areaWidth/elWidth;
+			var newAreaHeight = elHeight*scale;
+
+
+	        // apply size
+	        zParentEl.height(newAreaHeight);
+	        zSizeAdaptableEl.setStyle({
+	        	position: 'absolute',
+	        	top: '50%',
+	        	left: '50%',
+	        	transform: 'translate(-50%,-50%) scale('+scale+')',
+	        });
+		},
 	};
 	
 	// - - - - - - - - - 
@@ -187,10 +208,11 @@
 	
 	// AUTO INIT
 	zjs.onready(function(){
+		console.log('asdasdsadsd');
 		zjs('.zsizeadaptable').makeSizeAdaptable();
 	});
 	//fix de tuong thich voi zjs version 1.0
 	if('required' in zjs)
 	zjs.required('ui.sizeadaptable');
 
-});
+})();
