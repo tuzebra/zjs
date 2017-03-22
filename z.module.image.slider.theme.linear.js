@@ -123,6 +123,7 @@
 
 			popupPageCoverClass: '',
 			popupContainerClass: '',
+			popupImagesliderPopupWrapClass: '',
 
 			cleanHtml: false,
 
@@ -2357,6 +2358,9 @@
 				inpopupSliderEl = popupContainerEl.find('.inpopup-imageslider');
 
 			popupContainerEl.addClass(option.popupContainerClass);
+			if(option.popupImagesliderPopupWrapClass){
+				popupContainerEl.find('.imageslider-popup-wrap').addClass(option.popupImagesliderPopupWrapClass);
+			}
 
 			// dong thoi add vao body 1 cai class thong bao la show popup
 			zBody.addClass(bodypopupshowClass);
