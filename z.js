@@ -2944,10 +2944,18 @@ zjs.extendMethod({
 		var val = false;
 
 		// 1 so truong hop dat biet khong phai la style
-		if(key == 'scrollLeft')
-			return this.item(0, true).scrollLeft;
-		if(key == 'scrollTop')
-			return this.item(0, true).scrollTop;
+		if(key == 'scrollLeft'){
+			var el = this.item(0, true);
+			if(el === document.body)
+				return (document.scrollingElement || document.documentElement || document.body).scrollLeft;
+			return el.scrollLeft;
+		}
+		if(key == 'scrollTop'){
+			var el = this.item(0, true);
+			if(el === document.body)
+				return (document.scrollingElement || document.documentElement || document.body).scrollTop;
+			return el.scrollTop;
+		}
 		
 		// dau tien la phai replace lai cai key cho chuan
 		// marginTop -> margin-top
@@ -3062,10 +3070,30 @@ zjs.extendMethod({
 		// --
 		// hack
 		// 1 so truong hop dat biet khong phai la style
-		if(key == 'scrollLeft')
-			return this.eachElement(function(el){el.scrollLeft = val});
-		if(key == 'scrollTop')
-			return this.eachElement(function(el){el.scrollTop = val});
+		if(key == 'scrollLeft'){
+			return this.eachElement(function(el){
+				// Fix to have better compatible (Firefox)
+				if(el === document.body){
+					var scrollTop = (document.scrollingElement || document.documentElement || document.body).scrollTop;
+					window.scrollTo(val, scrollTop);
+				}
+				else{
+					el.scrollLeft = val;
+				}
+			});
+		}
+		if(key == 'scrollTop'){
+			return this.eachElement(function(el){
+				// Fix to have better compatible (Firefox)
+				if(el === document.body){
+					var scrollLeft = (document.scrollingElement || document.documentElement || document.body).scrollLeft;
+					window.scrollTo(scrollLeft, val);
+				}
+				else{
+					el.scrollTop = val;
+				}
+			});
+		}
 		// truong hop dat biet cua zjs
 		if(key == 'zjsInteger'){
 			val = parseInt(val);
