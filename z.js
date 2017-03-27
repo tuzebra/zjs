@@ -4428,7 +4428,8 @@ zjs.extendMethod({
 		});
 		
 		// on touch start
-		zjs(document).on('touchstart, MSPointerDown, pointerdown', function(e){
+		// zjs(document).on('touchstart, MSPointerDown, pointerdown', function(e){
+		zjs(document).on('touchstart', function(e){
 			
 			// neu nhu ma day la pointer event (khong phai touch event)
 			// va no khong phai la primary touch thi thoi cho out
@@ -4515,7 +4516,8 @@ zjs.extendMethod({
 		});
 		
 		// on touch end
-		zjs(document).on('touchend, MSPointerUp, pointerup', function(e){
+		// zjs(document).on('touchend, MSPointerUp, pointerup', function(e){
+		zjs(document).on('touchend', function(e){
 			
 			// neu nhu ma day la pointer event (khong phai touch event)
 			// va no khong phai la primary touch thi thoi cho out
