@@ -208,7 +208,6 @@
 	
 	// AUTO INIT
 	zjs.onready(function(){
-		console.log('asdasdsadsd');
 		zjs('.zsizeadaptable').makeSizeAdaptable();
 	});
 	//fix de tuong thich voi zjs version 1.0
