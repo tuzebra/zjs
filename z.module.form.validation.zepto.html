@@ -2,14 +2,32 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-	<title>Demo module form validation</title>
+	<title>Demo module form validation - Zepto support</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	
-	<script type="text/javascript" src="z.min.js" data-debug="true"></script>
+	<script type="text/javascript" src="zepto.js"></script>
+	<script type="text/javascript" src="z.zepto.js"></script>
+	
+	<!-- moment  is required by datepicker -->
+	<script type="text/javascript" src="z.module.moment.js"></script>
+	<script type="text/javascript" src="z.module.ui.datepicker.js"></script>
+	
+	<!-- scrollbar, dictionary is required by autosuggesstion -->
+	<script type="text/javascript" src="z.module.scrollbar.js"></script>
+	<script type="text/javascript" src="z.module.dictionary.js"></script>
+	<script type="text/javascript" src="z.module.ui.autosuggestion.js"></script>
+
+	<!-- buttonfile is required by imagepicker -->
+	<script type="text/javascript" src="z.module.ui.button.js"></script>
+	<script type="text/javascript" src="z.module.ui.button.file.js"></script>
+	<script type="text/javascript" src="z.module.ui.imagepicker.js"></script>
+
+	<script type="text/javascript" src="z.module.form.validation.js"></script>
+
 	<script>
-		zjs.onready('ui.button, ui.datepicker, ui.autosuggestion, ui.imagepicker, form.validation', function(){
+		$(function(){
 			
-			zjs('form').on('form:validation:success', function(event){
+			$('form').on('form:validation:success', function(event){
 				
 				// neu muon ngan khong cho submit luon thi lam nhu the nay:
 				event.preventDefault();
@@ -20,6 +38,12 @@
 			
 		});
 	</script>
+
+	<link rel="stylesheet" type="text/css" href="z.module.ui.button.css" />
+	<link rel="stylesheet" type="text/css" href="z.module.ui.datepicker.css" />
+	<link rel="stylesheet" type="text/css" href="z.module.ui.autosuggestion.css" />
+	<link rel="stylesheet" type="text/css" href="z.module.ui.imagepicker.css" />
+	<link rel="stylesheet" type="text/css" href="z.module.form.validation.css" />
 	
 	<style>
 		body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;background:#FAFAFA;}
