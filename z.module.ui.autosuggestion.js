@@ -16,13 +16,14 @@ zjs.require('dictionary, scrollbar', function(){
 			minheight: 18,
 			customcss: true,
 			focusshowsuggestion: false,
-			autofocus: true,
+			autofocus: false,
 			panelmaxheight: 200,
 			multiline: true,
 			multichoice: false,
 			mentionmode: false,
 			usedproperty: 'text',
 			searchproperty: 'text',
+			noneValue: '',
 			source: [],
 			sourceUrl: '',
 			initSourceUrl: '',
@@ -109,6 +110,59 @@ zjs.require('dictionary, scrollbar', function(){
 		// extend from user option ?
 		if(typeof useroption!='undefined')
 			option = zjs.extend(option, useroption);
+
+		// support source is a <select>
+		var selectSourceEl = false;
+		var selectSourceDefaultValue = false;
+		var selectNoneValue = '';
+		var selectNoneText = '';
+		if(zjs.isString(option.source)){
+			selectSourceEl = zjs(option.source);
+			if(selectSourceEl.count()>0){
+				// fix option luon
+				option.multichoice = false;
+				option.usedproperty = 'id.text';
+				// init data cho thang option
+				option.source = {};
+				selectSourceEl.find('option').eachElement(function(optionEl, index){
+					var _optionValue = zjs(optionEl).getValue();
+					var _optionText = zjs(optionEl).getInnerText();
+
+					// @todo: need to improve it later
+					// just reture because we don't need this data
+					if(_optionValue === option.noneValue){
+						return;
+					}
+
+					// option.source.push({
+					// 	id: _optionValue, 
+					// 	text: _optionText
+					// });
+					option.source[_optionValue] = _optionText;
+					if(_optionValue == option.noneValue){
+						selectNoneValue = _optionValue;
+						selectNoneText = _optionText;
+					}
+					// set cai data vao cai thang input luon
+					if(index === 0){
+						selectSourceDefaultValue = _optionValue;
+						if(_optionValue != option.noneValue){
+							zOriginalInput.setValue(_optionValue);
+						}
+					}
+					if(optionEl.selected){
+						// @todo: need to fix later
+						if(_optionValue != option.noneValue){
+							// zOriginalInput.setValue(_optionValue);
+							zOriginalInput.setValue(_optionText);
+						}
+					}
+				});
+			}
+			else{
+				selectSourceEl = false;
+			}
+		}
 		
 		// fix option
 		var searchpropertyTemp = option.searchproperty;
@@ -181,6 +235,14 @@ zjs.require('dictionary, scrollbar', function(){
 			zWrapperEl.addClass(zautosuggestionFocusClass);
 		}).on('blur', function(){
 			zWrapperEl.removeClass(zautosuggestionFocusClass);
+
+			// support <select> element
+			if(selectSourceEl){
+				if(zInput.getValue().trim() === ''){
+					selectSourceEl.setValue(option.noneValue);
+				}
+			}
+
 		});
 		// auto focus new input?
 		if(option.autofocus)
@@ -513,6 +575,12 @@ zjs.require('dictionary, scrollbar', function(){
 					multichoiceSetValueForOriginalInput();
 				};
 			};
+
+			// change data for <select> element
+			if(selectSourceEl){
+				// console.log('right', usedvalue);
+				selectSourceEl.setValue(zItemwrapData.id);
+			}
 			
 			// trigger event
 			//zOriginalInput.trigger('ui:autosuggestion:highlight', zItemwrapData);
@@ -642,6 +710,12 @@ zjs.require('dictionary, scrollbar', function(){
 				// set value cho original
 				multichoiceSetValueForOriginalInput();
 			};
+
+			// change data for <select> element
+			if(selectSourceEl){
+				// console.log('enter', zItemwrapData);
+				selectSourceEl.setValue(zItemwrapData.id);
+			}
 			
 			// trigger event
 			zOriginalInput.trigger('ui:autosuggestion:choice',zItemwrapData);
@@ -880,6 +954,12 @@ zjs.require('dictionary, scrollbar', function(){
 				// fix multiline luon
 				if(option.multiline)fixheightmultiline();
 			};
+
+			// change data for <select> element
+			if(selectSourceEl){
+				// console.log('click', zItemwrapData);
+				selectSourceEl.setValue(zItemwrapData.id);
+			}
 			
 			// set highlight
 			currentHighlightIndex = zItemwrap.getAttr('data-highlight',0).toInt();
