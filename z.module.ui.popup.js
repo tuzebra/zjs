@@ -55,7 +55,7 @@ zjs.require('ui', function(){
 		_closehtml = '<a class="zui-popup-close">×</a>',
 		
 		// uninitialaze hide class
-		uninitclass = 'zui-uiuninithide zui-uiuninithideh',
+		uninitclass = 'zui-uiuninithide zui-uiuninithideh zpopupuninithide zpopupuninithideh',
 
 		// neu nhu element co cai class nay
 		// thi se khong cho vao trong locked-div khi show len long popup
