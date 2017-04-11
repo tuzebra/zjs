@@ -119,9 +119,11 @@ zjs.require('dictionary, scrollbar', function(){
 		if(zjs.isString(option.source)){
 			selectSourceEl = zjs(option.source);
 			if(selectSourceEl.count()>0){
+				
 				// fix option luon
 				option.multichoice = false;
 				option.usedproperty = 'id.text';
+				
 				// init data cho thang option
 				option.source = {};
 				selectSourceEl.find('option').eachElement(function(optionEl, index){
@@ -158,6 +160,9 @@ zjs.require('dictionary, scrollbar', function(){
 						}
 					}
 				});
+
+				// hide <select> element
+				selectSourceEl.hide();
 			}
 			else{
 				selectSourceEl = false;
