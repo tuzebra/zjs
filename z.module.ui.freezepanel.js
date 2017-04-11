@@ -577,6 +577,7 @@ zjs.require('ui', function(){
 		};
 		
 		var disableFreeze = function(){
+			if(!isEnable)return;
 			// disable no thoi
 			isEnable = false;
 			lastTopbtnsStt = false;
@@ -585,6 +586,7 @@ zjs.require('ui', function(){
 		};
 
 		var enableFreeze = function(){
+			if(isEnable)return;
 			// enable len lai
 			isEnable = true;
 			lastTopbtnsStt = false;
