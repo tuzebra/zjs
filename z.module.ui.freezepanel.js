@@ -6,12 +6,16 @@ zjs.require('ui', function(){
 		freezepanelparentwrap = 'zmoduleuifreezepanelparentwrap',
 		freezepaneloverflowparentwrap = 'zmoduleuifreezepaneloverflowparentwrap',
 		freezepanelbufferel = 'zmoduleuifreezepanelbufferel', 
+		freezepaneldisableshowhidekey = 'zmoduleuifreezepaneldisableshowhide', 
+		freezepaneldisablechangeheightbufferkey = 'zmoduleuifreezepaneldisablechangeheightbufferkey',
+		freezepanelalwayshowkey = 'zmoduleuifreezepanelalwayshow',
 		scrollbarIdkey = 'zmodulescrollbarid',
 		scrollbarOptionkey = 'zmodulescrollbaroption';
 	
 	// extend core mot so option
 	zjs.extendCore({
 		moduleUiFreezepanelOption: {
+			freeze: true,
 			marginTop: 0,
 			marginBottom: 0,
 			autoDisableWhenWidthLessThan: 0,
@@ -285,7 +289,8 @@ zjs.require('ui', function(){
 			parentTop = 0,
 			overflowParentTop = 0;
 		var moduleIsReady = true,
-			isEnable = true;
+			isEnable = true,
+			enableAlwayShowEffect = false;
 
 
 		if(zParentEl)
@@ -349,7 +354,7 @@ zjs.require('ui', function(){
 				lastTopbtnsStt = hasNewTopbtnsStt;
 				return;
 			}
-			
+
 			// support scrollbar = css luon
 			if(windowScrollHandler && isBodyScrollbarActive()){
 				var scrollbarOption = zBody.getData(scrollbarOptionkey);
@@ -363,8 +368,12 @@ zjs.require('ui', function(){
 			
 			// neu nhu trang thai van nhu cu thi thoi
 			if(hasNewTopbtnsStt === lastTopbtnsStt){
+
+				var _freezepanelNewTop;
+
 				// nhung truoc khi return thi se coi co phai la dang freezee khong
 				if(zFreezepanelEl.hasClass(freezingclass)){
+					
 					// check thu height cua thang cha, va thang con
 					// coi co nen thay doi top cua thang con (thang freeze) hay khong
 					var parentHeight = zParentEl ? zParentEl.height() : zDocument.height(),
@@ -382,7 +391,7 @@ zjs.require('ui', function(){
 						visibleTop = _AHWRTop;
 					}
 
-					var _freezepanelNewTop;
+					
 					// fix lai top cua freeze neu duoc
 					if(zOverflowParentEl){
 						if(windowScrollHandler){
@@ -435,6 +444,11 @@ zjs.require('ui', function(){
 							}
 						}
 					}
+
+					// neu nhu dang co lenh bat phai luon luon show
+					if(zFreezepanelEl.getData(freezepanelalwayshowkey)){
+						_freezepanelNewTop = 0;
+					}
 					
 					zFreezepanelEl.top(_freezepanelNewTop);
 				}
@@ -452,6 +466,10 @@ zjs.require('ui', function(){
 					mgTop = 0,
 					mgBottom = 0;
 
+				// truoc khi bien thanh freezing
+				// backup top cua thang freeze nay cai da
+				var _freezepanelAbsTop = zFreezepanelEl.getAbsoluteTop();
+
 				// test xem coi co can thay doi width khi resize khong?
 				// cho sai so trong vong 1px
 				// autoresize = (!zOverflowParentEl && width == zFreezepanelEl.parent().width());
@@ -464,23 +482,7 @@ zjs.require('ui', function(){
 					mgTop = zFreezepanelEl.getStyle('margin-top');
 					mgBottom = zFreezepanelEl.getStyle('margin-bottom');
 				}catch(e){}
-				
-				// sau do moi add class cho no thanh freeze
-				// luu y cai option margin top nay khong phai la margin top trong css
-				// option.marginTop co y nghia khac
-				var _freezepanelNewTop = option.marginTop + _currentViewTop;
-				if(zOverflowParentEl){
-					if(!windowScrollHandler)
-						_freezepanelNewTop+=_currentScrollTop+_currentViewTop;
-					else 
-						_freezepanelNewTop=_currentScrollTop+_currentViewTop-parentTop;
-				}
-				
-				zFreezepanelEl.addClass(freezingclass).top(_freezepanelNewTop);
 
-				// fix width chinh xac luon (vi position da thanh fixed); 
-				zFreezepanelEl.width(width);
-				
 				// show ra cai chem de giu dung chieu cao
 				zchemEl = zjs('<div>');
 				if(option.useHeightBuffer){
@@ -496,6 +498,38 @@ zjs.require('ui', function(){
 				(function(){
 					if(zchemEl)zchemEl.height(zFreezepanelEl.height());
 				}).delay(50);
+
+
+				// console.log('_freezepanelAbsTop', );
+				
+				// sau do moi add class cho no thanh freeze
+				// luu y cai option margin top nay khong phai la margin top trong css
+				// option.marginTop co y nghia khac
+				var _freezepanelNewTop = option.marginTop + _currentViewTop;
+				if(zOverflowParentEl){
+					if(!windowScrollHandler)
+						_freezepanelNewTop+=_currentScrollTop+_currentViewTop;
+					else 
+						_freezepanelNewTop=_currentScrollTop+_currentViewTop-parentTop;
+				}
+				
+				zFreezepanelEl.addClass(freezingclass);
+
+				// need effect?
+				if(enableAlwayShowEffect){
+					enableAlwayShowEffect = false;
+					zFreezepanelEl.top(_freezepanelAbsTop - _currentScrollTop);
+					(function(){
+						zFreezepanelEl.top(_freezepanelNewTop);
+					}).delay(100);
+				}
+				else{
+					zFreezepanelEl.top(_freezepanelNewTop);
+				}
+				
+
+				// fix width chinh xac luon (vi position da thanh fixed); 
+				zFreezepanelEl.width(width);
 
 				// stop handler scroll
 				if(option.pendingScrollTime > 0){
@@ -517,35 +551,66 @@ zjs.require('ui', function(){
 		
 		function stopFreeze(){
 			autoresize = false;
-			zFreezepanelEl.removeClass(freezingclass).top(null).width(null);
-			zchemEl.remove();
-		    zchemEl = null;
+
+			// need effect?
+			if(enableAlwayShowEffect && zchemEl){
+				enableAlwayShowEffect = false;
+				var _freezepanelAbsTop = zchemEl.getAbsoluteTop();
+				var _currentScrollTop = isBodyScrollbarActive() ? zBody.scrollPosition() : getWindowScrollTop();
+				zFreezepanelEl.top(_freezepanelAbsTop - _currentScrollTop);
+				(function(){
+					zFreezepanelEl.removeClass(freezingclass).top(null).width(null);
+					zchemEl.remove();
+				    zchemEl = null;
+				}).delay(300);
+			}
+			// don't need effect
+			else{
+				zFreezepanelEl.removeClass(freezingclass).top(null).width(null);
+				if(zchemEl){
+					zchemEl.remove();
+				    zchemEl = null;
+				}
+			}
+			
 		    zFreezepanelEl.setData(freezepanelbufferel, null);
 		};
 		
+		var disableFreeze = function(){
+			// disable no thoi
+			isEnable = false;
+			lastTopbtnsStt = false;
+			// neu nhu dang co class freezing thi remove thoi
+			stopFreeze();
+		};
+
+		var enableFreeze = function(){
+			// enable len lai
+			isEnable = true;
+			lastTopbtnsStt = false;
+			// hander no 1 phat
+			freezeHandler();
+		};
+
 		var refreshpanel = function(){
 			// xem coi co option auto hay khong?
 			if(option.autoDisableWhenWidthLessThan > 0){
 				// get ra cai width hien tai xem sao?
 				var width = zFreezepanelEl.width();
 				if(width <= option.autoDisableWhenWidthLessThan){
-					// disable no thoi
-					isEnable = false;
-					lastTopbtnsStt = false;
-					// neu nhu dang co class freezing thi remove thoi
-					stopFreeze();
+					disableFreeze();
 				}else{
-					// enable len lai
-					isEnable = true;
-					// hander no 1 phat
-					freezeHandler();
+					enableFreeze();
 				}
 			}
 			
 			// fix lai height cua thang chem
 			var _topChem = 0;
+			var disableChangeHeightBuffer = zFreezepanelEl.getData(freezepaneldisablechangeheightbufferkey);
 			if(zchemEl){
-				zchemEl.height(zFreezepanelEl.height());
+				if(!disableChangeHeightBuffer){
+					zchemEl.height(zFreezepanelEl.height());
+				}
 				_topChem = getAbsoluteTop(zchemEl);
 			}
 		
@@ -604,6 +669,13 @@ zjs.require('ui', function(){
 				lastScrollTop = 0;
 
 			function autoHideHandlerScroll(){
+
+				var isDisabled = zFreezepanelEl.getData(freezepaneldisableshowhidekey, false);
+				if(isDisabled){
+					// console.log('is disabled now');
+					return;
+				}
+
 				var currentScrollTop = zWindowEl.scrollTop();
 
 				var deltaY = (lastScrollTop - currentScrollTop);
@@ -687,31 +759,73 @@ zjs.require('ui', function(){
 				else{
 					autoHideHandlerScroll();
 				}
-
-
 			});
 		}
 		
-		
 		// first run de no se fix freeze ngay va luon
-		freezeHandler();
-		// trigger resize 1 phat
-		//zWindowEl.trigger('resize');
+		if(option.freeze){
+			freezeHandler();
+			// trigger resize 1 phat
+			//zWindowEl.trigger('resize');
+		}
+		// disable freeze by default?
+		else{
+			disableFreeze();
+			// bind event
+			zFreezepanelEl.on('trigger:enablefreeze', function(event){
+				enableAlwayShowEffect = (event.getData() && event.getData().effect);
+				enableFreeze();
+			});
+			zFreezepanelEl.on('trigger:disablefreeze', function(event){
+				enableAlwayShowEffect = (event.getData() && event.getData().effect);
+				disableFreeze();
+			});
+		}
 		
 		// xong het roi thi run trigger thoi
 		zFreezepanelEl.trigger('ui:freezepanel:load');
 	};
 
-	function freezepanelRefresh(element){
+	var freezepanelRefresh = function(element){
 		// var zFreezepanelEl = zjs(element);
 		zjs(element).trigger('trigger:refreshpanel');
-	}
+	};
 
-	function refreshAllfreezepanel(){
+	var refreshAllfreezepanel = function(){
 		allFreezepanelInPage.map(function(_o){
 			_o.zEl.trigger('trigger:refreshpanel');
 		});
-	}
+	};
+
+	var freezepanelDisableAutoShowHide = function(element, trueFalse){
+		zjs(element).setData(freezepaneldisableshowhidekey, trueFalse);
+	};
+
+	var freezepanelAlwayShow = function(element, trueFalse){
+		var zFreezepanelEl = zjs(element);
+		var option = zFreezepanelEl.getData(optionkey);
+		zFreezepanelEl.setData(freezepaneldisableshowhidekey, trueFalse);
+		zFreezepanelEl.setData(freezepanelalwayshowkey, trueFalse);
+		
+		// truong hop bi disable by default, thi khi muon alway show, thi phai active len truoc da
+		if(!option.freeze){
+			// console.log('option.freeze', option.freeze);
+			if(trueFalse){
+				zFreezepanelEl.trigger('trigger:enablefreeze', {effect: true});
+			}
+			else{
+				zFreezepanelEl.trigger('trigger:disablefreeze', {effect: true});
+			}
+		}
+		else{
+			// refresh luon de apply ngay
+			freezepanelRefresh(element);
+		}
+	};
+
+	var freezepanelDisableChangeHeightBuffer = function(element, trueFalse){
+		zjs(element).setData(freezepaneldisablechangeheightbufferkey, trueFalse);
+	};
 
 
 	// HANDLER METHOD
@@ -815,7 +929,16 @@ zjs.require('ui', function(){
 		},
 		freezepanelRefresh: function(){
 			return this.eachElement(function(element){freezepanelRefresh(element)});
-		}
+		},
+		freezepanelDisableAutoShowHide: function(trueFalse){
+			return this.eachElement(function(element){freezepanelDisableAutoShowHide(element, trueFalse)});
+		},
+		freezepanelAlwayShow: function(trueFalse){
+			return this.eachElement(function(element){freezepanelAlwayShow(element, trueFalse)});
+		},
+		freezepanelDisableChangeHeightBuffer: function(trueFalse){
+			return this.eachElement(function(element){freezepanelDisableChangeHeightBuffer(element, trueFalse)});
+		},
 	});
 	
 	// - - - - - -
