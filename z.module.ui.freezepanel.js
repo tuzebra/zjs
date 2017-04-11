@@ -519,9 +519,9 @@ zjs.require('ui', function(){
 				if(enableAlwayShowEffect){
 					enableAlwayShowEffect = false;
 					zFreezepanelEl.top(_freezepanelAbsTop - _currentScrollTop);
-					(function(){
+					setTimeout(function(){
 						zFreezepanelEl.top(_freezepanelNewTop);
-					}).delay(100);
+					});
 				}
 				else{
 					zFreezepanelEl.top(_freezepanelNewTop);
@@ -549,6 +549,20 @@ zjs.require('ui', function(){
 			logFreeze(element, zFreezepanelEl.hasClass(freezingclass));
 		};
 		
+		var isStopingFreeze = false;
+
+		function finishStopFreeze(){
+			// make sure ham nay chi chay 1 lan thoi
+			if(!isStopingFreeze)return;
+
+			zFreezepanelEl.removeClass(freezingclass).top(null).width(null);
+			if(zchemEl){
+				zchemEl.remove();
+			    zchemEl = null;
+			}
+			isStopingFreeze = false;
+		}
+
 		function stopFreeze(){
 			autoresize = false;
 
@@ -558,19 +572,14 @@ zjs.require('ui', function(){
 				var _freezepanelAbsTop = zchemEl.getAbsoluteTop();
 				var _currentScrollTop = isBodyScrollbarActive() ? zBody.scrollPosition() : getWindowScrollTop();
 				zFreezepanelEl.top(_freezepanelAbsTop - _currentScrollTop);
+				isStopingFreeze = true;
 				(function(){
-					zFreezepanelEl.removeClass(freezingclass).top(null).width(null);
-					zchemEl.remove();
-				    zchemEl = null;
+					finishStopFreeze();
 				}).delay(300);
 			}
 			// don't need effect
 			else{
-				zFreezepanelEl.removeClass(freezingclass).top(null).width(null);
-				if(zchemEl){
-					zchemEl.remove();
-				    zchemEl = null;
-				}
+				finishStopFreeze();
 			}
 			
 		    zFreezepanelEl.setData(freezepanelbufferel, null);
@@ -587,6 +596,11 @@ zjs.require('ui', function(){
 
 		var enableFreeze = function(){
 			if(isEnable)return;
+			// truoc khi enable thi xem coi co dang stop freeze hay khong?
+			// neu dang stop thi dut diem luon cho xong, roi moi enable len lai duoc
+			if(isStopingFreeze){
+				finishStopFreeze();
+			}
 			// enable len lai
 			isEnable = true;
 			lastTopbtnsStt = false;
