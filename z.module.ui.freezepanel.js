@@ -565,14 +565,14 @@ zjs.require('ui', function(){
 
 		function stopFreeze(){
 			autoresize = false;
-
+			isStopingFreeze = true;
+			
 			// need effect?
 			if(enableAlwayShowEffect && zchemEl){
 				enableAlwayShowEffect = false;
 				var _freezepanelAbsTop = zchemEl.getAbsoluteTop();
 				var _currentScrollTop = isBodyScrollbarActive() ? zBody.scrollPosition() : getWindowScrollTop();
 				zFreezepanelEl.top(_freezepanelAbsTop - _currentScrollTop);
-				isStopingFreeze = true;
 				(function(){
 					finishStopFreeze();
 				}).delay(300);
