@@ -19,6 +19,7 @@ zjs.require('ui', function(){
 			marginTop: 0,
 			marginBottom: 0,
 			autoDisableWhenWidthLessThan: 0,
+			autoDisableWhenWindowWidthLessThan: 0,
 			overflowParent: 'auto',
 			pendingScrollTime: 0,
 			autoHideWhenReach: false,
@@ -150,6 +151,9 @@ zjs.require('ui', function(){
 		option.autoDisableWhenWidthLessThan = parseInt(option.autoDisableWhenWidthLessThan);
 		if(option.autoDisableWhenWidthLessThan < 0)
 			option.autoDisableWhenWidthLessThan = 0;
+		option.autoDisableWhenWindowWidthLessThan = parseInt(option.autoDisableWhenWindowWidthLessThan);
+		if(option.autoDisableWhenWindowWidthLessThan < 0)
+			option.autoDisableWhenWindowWidthLessThan = 0;
 		
 		// fix handler method
 		if(!(option.handlerFreezingMethod in handlerMethods))
@@ -614,6 +618,14 @@ zjs.require('ui', function(){
 				// get ra cai width hien tai xem sao?
 				var width = zFreezepanelEl.width();
 				if(width <= option.autoDisableWhenWidthLessThan){
+					disableFreeze();
+				}else{
+					enableFreeze();
+				}
+			}
+			if(option.autoDisableWhenWindowWidthLessThan > 0){
+				// get ra cai width hien tai xem sao?
+				if(zWindowEl.width() <= option.autoDisableWhenWindowWidthLessThan){
 					disableFreeze();
 				}else{
 					enableFreeze();

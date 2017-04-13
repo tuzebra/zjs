@@ -29,3 +29,6 @@
 		+ support option "autoHideWhenReach" accept a number
 		+ add new option "autoHideSpeed" with default value is 2000
 		+ add new option "autoHideDelay" with default value is 0 (zero)
+
+13/04/2017
+		+ add new option "autoDisableWhenWindowWidthLessThan" with default value is 0
