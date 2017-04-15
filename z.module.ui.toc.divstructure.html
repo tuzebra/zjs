@@ -16,7 +16,7 @@
 				// append to content
 				zjs('<p id="lorem'+item+'"><strong>Lorem'+item+'</strong> ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>').insertBefore(this); // "this" mean this button
 				// append to navigation
-				zjs('<li><a href="#lorem'+item+'">Lorem '+item+'</a></li>').appendTo('.ztoc ul');
+				zjs('<div class="toc-level-0"><a href="#lorem'+item+'">Lorem '+item+'</a></div>').appendTo('.ztoc');
 			});
 			
 		});
@@ -28,8 +28,12 @@
 	.col-left{width:30%;float:left;}
 	.col-right{width:70%;margin-left:30%;}	
 	.tini{font-size:10px;width: 50%;}
-	ul{margin:0;}
+	
 	body .zui-freezepanel.zui-freezing{box-shadow:none;}
+
+	.toc-level-0{}
+	.toc-level-1{margin-left:20px;}
+	.toc-level-2{margin-left:40px;}
 
 	/* demo for accordion module */
 	body .zui-accordion{background:#ccc;}
@@ -43,11 +47,11 @@
 	
 </head>
 <body>
-	
+
 	<header class="zheader">
 		Header
 	</header>
-
+	
 	<div class="wrapper">
 		<h1>Toc</h1>
 		<p>User basic <code>href="#anchor"</code> to navigate.<p>
@@ -60,38 +64,24 @@
 			
 			<div class="zfreezepanel" data-option="excludeFromFreezingStack:true">
 				
-				<div class="ztoc">
-					<ul>
-						<li>
-							<a href="#lorem1">Lorem 1</a>
-							<ul>
-								<li><a href="#lorem2">Lorem 2</a></li>
-								<li><a href="#lorem3">Lorem 3</a></li>
-							</ul>
-						</li>
-						<li><a href="#lorem4">Lorem 4</a></li>
-						<li><a href="#lorem5">Lorem 5</a></li>
-						<li>
-							<a href="#lorem6">Lorem 6</a>
-							<ul>
-								<li>
-									<a href="#lorem7">Lorem 7</a>
-									<ul>
-										<li><a href="#lorem8">Lorem 8</a></li>
-									</ul>
-								</li>
-							</ul>
-						</li>
-						<li><a href="#lorem9">Lorem 9</a></li>
-						<li>
-							<a href="#support-accordion">Support Accordion</a>
-							<ul>
-								<li><a href="#lorem10">Lorem 10</a></li>
-								<li><a href="#lorem11">Lorem 11</a></li>
-								<li><a href="#lorem12">Lorem 12</a></li>
-							</ul>
-						</li>
-					</ul>
+				<div class="ztoc" data-option="autoAddlevelClass:false">
+					<div class="toc-level-0"><a href="#lorem1">Lorem 1</a></div>
+					<div class="toc-level-1"><a href="#lorem2">Lorem 2</a></div>
+					<div class="toc-level-1"><a href="#lorem3">Lorem 3</a></div>
+
+					<div class="toc-level-0"><a href="#lorem4">Lorem 4</a></div>
+					<div class="toc-level-0"><a href="#lorem5">Lorem 5</a></div>
+					
+					<div class="toc-level-0"><a href="#lorem6">Lorem 6</a></div>
+					<div class="toc-level-1"><a href="#lorem7">Lorem 7</a></div>
+					<div class="toc-level-2"><a href="#lorem8">Lorem 8</a></div>
+
+					<div class="toc-level-0"><a href="#lorem9">Lorem 9</a></div>
+
+					<div class="toc-level-0"><a href="#support-accordion">Support Accordion</a></div>
+					<div class="toc-level-1"><a href="#lorem10">Lorem 10</a></div>
+					<div class="toc-level-1"><a href="#lorem11">Lorem 11</a></div>
+					<div class="toc-level-1"><a href="#lorem12">Lorem 12</a></div>
 				</div>
 			
 				<p class="tini">The table of content (TOC) in this demo is wrapped by <code>freezepanel</code> to stick the TOC to the top, you can find the demo about freezepanel here <a href="z.module.ui.freezepanel.html" target="_blank">z.module.ui.freezepanel.html</a></p>

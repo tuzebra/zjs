@@ -2,10 +2,5 @@
 .zui-toc li ul{display:none;}
 .zui-toc li.active>ul,
 .zui-toc li.pre-active>ul{display:block;}
-.zui-toc li.active>a,
-.zui-toc li.pre-active>.zui-toc-link{font-weight:bold;}
-.zui-toc li.zui-toc-level-1{}
-.zui-toc li.zui-toc-level-2{}
-.zui-toc li.zui-toc-level-3{}
-.zui-toc li.zui-toc-level-4{}
-.zui-toc a.zui-toc-link{}
+.zui-toc .active>a,
+.zui-toc .pre-active>.zui-toc-link{font-weight:bold;}

@@ -4,16 +4,18 @@ zjs.require('ui', function(){
 
 	var optionkey = 'zmoduleuitocoption',
 		tocparentwrap = 'zmoduleuitocparentwrap',
+		tocacontainerel = 'zmoduleuitocacontainerel',
 		scrollbarIdkey = 'zmodulescrollbarid',
 		scrollbarOptionkey = 'zmodulescrollbaroption';
 	
 	// extend core mot so option
 	zjs.extendCore({
 		moduleUiTocOption: {
-			marginTop:0,
-			scrollTime:800,
-			scrollTransition:'ease',
-			allowUpdateUrl:true
+			marginTop: 15,
+			scrollTime: 800,
+			scrollTransition: 'ease',
+			allowUpdateUrl: true,
+			autoAddlevelClass: true
 		}
 	});
 	
@@ -85,6 +87,15 @@ zjs.require('ui', function(){
 				moduleIsReady = true;
 			});
 		};
+
+		// ham giup cho viec xac dinh margin top
+		function getTocMarginTop(){
+			var marginTop = option.marginTop;
+			if("freezepanelGetVisibleFreezingHeight" in zjs){
+				marginTop += zjs.freezepanelGetVisibleFreezingHeight();
+			}
+			return parseInt(marginTop);
+		}
 		
 		// ham nay co nhiem vu build lai struct cua cai thang nav, 
 		// va cung voi nhung thang element lien quan
@@ -101,32 +112,40 @@ zjs.require('ui', function(){
 			// de xac dinh cha con luon
 			// new way:
 			navitems = [];
-			getToKnowNavItem_hdnchild(zTocEl, null, 0);
-		};
+			getToKnowNavItem_hdnchild(zTocEl, null, -1);
+		}
 		function getToKnowNavItem_hdnchild(el, _prel, _level){
 			var zEl = zjs(el);
 			_prel = _prel || [];
 			if(!zjs.isArray(_prel))_prel = [];
+
+			// extend thang _prel de tiep tuc di collect thang parent element
 			var prel = zjs.extend([], _prel);
-			if(zEl.is('li')){
+
+			// test coi thang nay co bao 1 thang a hay khong?
+			// neu co bao 1 thang a la duoc, khong can phai check no la div,ul,li hay la gi ca
+			if(zEl.find('> a').count()){
+			// if(zEl.is('li')){
+			
 				// phai co tim cho ra 1 thang la <a>
 				// de ma gan vao items
-				var aEl = zEl.find('a[href^="#"], [data-target-element]');
+				var aEl = zEl.find('> a[href^="#"], > [data-target-element]');
 				if(aEl.count()>0){
 					// di kiem coi cai thang item la thang nao?
 					var itemEl = false;
 					var href = aEl.item(0).getAttr('href', '');
+					var _tmpNavEl;
 					if(href.indexOf('#')===0){
-						var _tmpNavEl = zjs(href);
+						_tmpNavEl = zjs(href);
 						if(_tmpNavEl.count()>0)
 							itemEl = _tmpNavEl;
-					};
+					}
 					var queryTargetEl = aEl.item(0).getAttr('data-target-element', '');
 					if(!itemEl){
-						var _tmpNavEl = zjs(queryTargetEl);
+						_tmpNavEl = zjs(queryTargetEl);
 						if(_tmpNavEl.count()>0)
 							itemEl = _tmpNavEl;
-					};
+					}
 					navitems.push({
 						'nav': aEl.item(0, true),
 						'item': itemEl ? itemEl.item(0, true) : false,
@@ -136,25 +155,35 @@ zjs.require('ui', function(){
 					});
 					// add them cai class
 					aEl.addClass(tocanchorclass);
+					// save this container element to <a> element
+					aEl.setData(tocacontainerel, zEl);
+
+					// va thang nay co the se la thang parent moi cua nhung thang khac
+					// nen cho thang nay vao list parent luon, nhung phai la list parent moi
 					// phai tao moi lai cho no khoi link, met ghe
 					prel = zjs.extend([], prel);
 					prel.push(aEl.item(0, true));
 				}
 				// bo sung cai level vao luon
 				_level++;
-				zEl.addClass(toclevelclass+_level);
+
+				if(option.autoAddlevelClass){
+					zEl.addClass(toclevelclass+_level);
+				}
+
 				// kiem xem coi co cai thang ul, div nao khong de tiep tuc loop
 				zEl.find('>ul,>div').each(function(cel){
 					getToKnowNavItem_hdnchild(cel, prel, _level);
 				});
-			};
-			if(zEl.is('ul') || zEl.is('div')){
+			}
+			else{
+			// if(zEl.is('ul') || zEl.is('div')){
 				zEl.child().each(function(cel){
 					getToKnowNavItem_hdnchild(cel, prel, _level);
 				});
 				return;
-			};
-		};
+			}
+		}
 		
 		// ham giup update top cua may thang item trong list nav
 		function updateTopForNavItem(){
@@ -178,7 +207,7 @@ zjs.require('ui', function(){
 			// --
 			// bay gio moi lan can xu ly thi can can loop tren cai list co san ma thoi
 			// tim ra coi cai thang nao la thang can phai set .active
-			var i=0, currentScrollTop = zWindow.scrollTop() + option.marginTop + 10;
+			var i=0, currentScrollTop = zWindow.scrollTop() + getTocMarginTop() + 10;
 			for(;i<navitems.length;i++){
 				//xem coi neu nhu ma cai thang scrolltop > item top thi chung to la kiem ra thang phu hop roi
 				if(navitems[i].itemTop > currentScrollTop)
@@ -187,12 +216,12 @@ zjs.require('ui', function(){
 			// thang phu hop phai la cai thang truoc do
 			i--;
 			// remove het current .active class
-			zTocEl.find('li').removeClass(activeclass);
+			zTocEl.find('div,ul,li').removeClass(activeclass);
 			// gio se di active ne
 			if(i<0)return;
-			zjs(navitems[i].nav).findUp('li').addClass(activeclass);
+			zjs(navitems[i].nav).getData(tocacontainerel).addClass(activeclass);
 			zjs.foreach(navitems[i].parentNavs, function(nav){
-				zjs(nav).findUp('li').addClass(activeclass);
+				zjs(nav).getData(tocacontainerel).addClass(activeclass);
 			});
 		};
 		
@@ -256,7 +285,7 @@ zjs.require('ui', function(){
 			smoothScroll = function(to){
 				//console.log('smoothScroll to', to);
 				to = to || 0;
-				to -= parseInt(option.marginTop);
+				to -= getTocMarginTop();
 				// update: 
 				// hien tai la ke, khoi can fix height lam gi cho no cuc
 				//if(to >= zBody.height())to = zBody.height();
