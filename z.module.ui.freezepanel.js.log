@@ -32,3 +32,6 @@
 
 13/04/2017
 		+ add new option "autoDisableWhenWindowWidthLessThan" with default value is 0
+
+15/04/2017
+		+ add new method for core "zjs.freezepanelGetVisibleFreezingHeight()"

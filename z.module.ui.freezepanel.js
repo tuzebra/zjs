@@ -968,6 +968,12 @@ zjs.require('ui', function(){
 			return this.eachElement(function(element){freezepanelDisableChangeHeightBuffer(element, trueFalse)});
 		},
 	});
+	// EXTEND CORE METHOD 
+	zjs.extendCore({
+		freezepanelGetVisibleFreezingHeight: function(){
+			return calVisibleFreezingHeight(window);
+		}
+	});
 	
 	// - - - - - -
 	// REG HOOK nhung khong auto enable hook
