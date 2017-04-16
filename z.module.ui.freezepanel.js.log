@@ -35,3 +35,6 @@
 
 15/04/2017
 		+ add new method for core "zjs.freezepanelGetVisibleFreezingHeight()"
+
+16/04/2017
+		+ fix sorting 2 freeze elements

@@ -280,9 +280,17 @@ zjs.require('ui', function(){
 			viewTop: 0,
 			exclude: option.excludeFromFreezingStack
 		});
+
 		// console.log('allFreezepanelInPage', allFreezepanelInPage);
 		allFreezepanelInPage.sort(function(a, b){
-			return parseInt(a.top, 10) - parseInt(b.top, 10);
+			if(a.el === b.el)return 0;
+			if(!a.el.compareDocumentPosition){
+				return a.el.sourceIndex - b.el.sourceIndex;
+			}
+			if(a.el.compareDocumentPosition(b.el) & 2){  // 2: DOCUMENT_POSITION_PRECEDING
+				return 1;
+			}
+			return -1;
 		});
 
 		// get ra top
