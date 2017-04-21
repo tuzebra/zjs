@@ -2394,18 +2394,30 @@ zjs.extendMethod({
 				
 				// neu nhu lan nay ma van khong get ra duoc
 				// thi thoi, return luon
-				if(!handlers || !handlers.length)
-					return;
+				// if(!handlers || !handlers.length)
+				//	return;
+				// update:
+				// boi vi nhieu khi trigger trong khi chua bind event nao
+				// cho nen van phai thuc hien callback
+				// nen cho nay se khong return lien
 			};
 			
 			var isDefaultPrevented = false;
 			
 			// call callback thoi (callback get ra tu event store)
-			isDefaultPrevented = callEventStoreCallback(handlers, newEvent);
+			if(handlers && handlers.length){
+				isDefaultPrevented = callEventStoreCallback(handlers, newEvent);
+			}
 			
 			// xong roi thi truyen qua cho thang callback
-			if(callback)
+			if(callback){
 				callback(newEvent, elem);
+			}
+
+			// neu nhu khong co handler thi thoi khong can lam nua
+			if(!handlers || !handlers.length){
+				return;
+			}
 			
 			// neu nhu su dung may cai tap, singletap,... linh tinh
 			// vi su dung custom event cua zjs, nen phai back len tren
@@ -3759,6 +3771,10 @@ zjs.extendMethod({
 		
 		// element
 		var thisEl = this.item(0,true);
+		if(!thisEl){
+			return this;
+		}
+		
 		if(isElement(args[0])){
 			thisEl.appendChild(args[0]);
 			if(Hook.enable('after_insertDOM'))Hook.run('after_insertDOM',args[0]);
@@ -4019,12 +4035,14 @@ zjs.extendMethod({
 			var el = this.item(0,true);
 			if('submit' in el){
 				// trigger submit event
-				//this.trigger('submit');
 				this.trigger('submit', {}, function(customEvent){
 					if(!customEvent.isDefaultPrevented){
-						//event.preventDefault();
 						// submit that su
 						// nhung truoc khi submit thi phai xem coi co bi prevent default khong cai da
+						// boi vi khi goi ham el.submit() thi se khong bi trigger event submit
+						// event submit chi duoc trigger khi user thao tac tren UI (click button submit)
+						// con khi su dung method el.submit() thi se khong trigger
+						// cho nen phai trigger truoc
 						el.submit();
 					};
 				});
