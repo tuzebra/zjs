@@ -1763,6 +1763,7 @@
 			(zjs.isTouchDevice() || option.dragSlide)
 		){
 			zElement.drag({
+				willPreventDefault: true,
 				direction: (option.transition==2 || option.transition==201 || option.transition==202 || option.transition==203 || option.transition==204 || option.transition==205) ? 'horizontal' : 'vertical',
 
 				onStart: function(event, element){

@@ -135,3 +135,7 @@
 02/03/2017
 		+ improve feature "popup slider"
 		+ improve lazyload when use with popup slider
+
+23/04/2017
+		+ fix bug related to event passive mode, https://developers.google.com/web/updates/2017/01/scrolling-intervention
+
