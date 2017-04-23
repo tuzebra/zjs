@@ -1372,6 +1372,13 @@ var version = '1.1',
 		// stop event
 		this.isDefaultPrevented = false;
 		this.preventDefault = function(){
+			this.isDefaultPrevented = true;
+
+			// https://www.chromestatus.com/features/5093566007214080
+			if(('defaultPrevented' in e) && e.defaultPrevented === true){
+				return;
+			}
+
 			if(e.preventDefault)
 				e.preventDefault();
 			else if(e.stop)
@@ -1379,7 +1386,6 @@ var version = '1.1',
 			try{
 				e.returnValue = false;
 			}catch(err){};
-			this.isDefaultPrevented = true;
 		};
 		this.stopPropagation = function(){
 			try{
@@ -2215,11 +2221,20 @@ zjs.extendMethod({
 		var args = makeArray(arguments);
 		if(args.length<2)return this;
 		// bat dau get arguments
-		var types = args[0], handler = args[1], query = '';
+		var types = args[0], handler = args[1], query = '', options = false;
 		if(!types)return this;
-		if(args.length >= 3){
-			handler = args[2];
+		if(args.length >= 3 && isFunction(args[2])){
 			query = args[1];
+			handler = args[2];
+		};
+		if(args.length >= 3 && isFunction(args[1]) && isObject(args[2])){
+			handler = args[1];
+			options = args[2];
+		};
+		if(args.length >= 4 && isFunction(args[2]) && isObject(args[3])){
+			query = args[1];
+			handler = args[2];
+			options = args[3];
 		};
 		
 		// normal event
@@ -2290,8 +2305,15 @@ zjs.extendMethod({
 						if(type=='touchmove')type='MSPointerMove';
 						if(type=='touchend')type='MSPointerUp';
 					};*/
+					// support passive event
+					// https://developers.google.com/web/updates/2017/01/scrolling-intervention
+					// if(type=='touchstart' || type=='touchmove'){
+						// elem.addEventListener(type, callback, {passive: true});
+					// }
 					// normal
-					elem.addEventListener(type, callback, false);
+					// else{
+						elem.addEventListener(type, callback, options);
+					// }
 				}
 				else if(elem.attachEvent){
 					if(type == 'scroll')type = 'mousewheel';
@@ -2666,7 +2688,8 @@ zjs.extendMethod({
 				onDrop: function(event, element, mouse, style){},
 				// mac dinh se ho tro 2 direction luon
 				// con neu nhu thiet lap direction la vertical, horizontal
-				direction: ''
+				direction: '',
+				willPreventDefault: false,
 			}, opt);
 		
 			var mouseStart = {},
@@ -2737,6 +2760,10 @@ zjs.extendMethod({
 						option.onDrop( event, currentElement, mouse, style );
 				};
 			
+			var addEventOptions = {
+				passive: !option.willPreventDefault
+			};
+
 			// bind event cho no
 			zjs(element).on(mousedownevent, function(event, element){
 						
@@ -2774,11 +2801,11 @@ zjs.extendMethod({
 				currentElement = element;
 				if( option.onStart )
 					option.onStart( event, currentElement);
-			});
+			}, addEventOptions);
 
 			// luc' nay` moi bat dau` bind event cho document
-			zjs(document).on(mousemoveevent, mousemoveHandler)
-						.on(mouseupevent, mouseupHandler);
+			zjs(document).on(mousemoveevent, mousemoveHandler, addEventOptions)
+						.on(mouseupevent, mouseupHandler, addEventOptions);
 			
 			// bind luon event click de xu ly khong cho goi onclick khi ma drag
 			zjs(element).on('click', function(event){
