@@ -577,8 +577,15 @@ zjs.regSliderTheme('linear', function(element, images, option){
 	if(!option.fullHeight)
 		zImageViewContainer.height(zImageViewElHeight);
 	// neu nhu khong co fullwidth thi set Width vao luon
-	if(!option.fullscreenWidth && !option.fullWidth && !option.usePercentWidth)
-		zImageViewContainer.width(zImageViewElWidth);
+	if(!option.fullscreenWidth && !option.fullWidth && !option.usePercentWidth){
+		// hien tai neu nhu cho nay la may cai horizontal thi khong can set width
+		// @todo: can xem lai cac truong hop khac
+		// tien toi viec khong set width cho nay luon
+		// transition: 0-none, 1-fade, 2-horizontal, 3-vertical
+		if(option.transition <= 3){
+			zImageViewContainer.width(zImageViewElWidth);
+		}
+	}
 
 	zImageViewWrap.setStyle('position','absolute');
 	if(option.imageViewClass !== ''){
@@ -1001,31 +1008,6 @@ zjs.regSliderTheme('linear', function(element, images, option){
 			_imagePerPage = parseInt((imagesliderWrapEl.width() / zImageViewElWidth)+0.1);
 		}
 
-		// truong hop dac biet (horizontal-page / horizontal-page-center) move nguyen 1 page
-		if(option.transition == 202 || option.transition == 205){
-			// xem coi co tong cong bao nhieu page (images.length)
-			// va voi cai page hien tai (index)
-			// thi phai move them (_imagePerPage) page nua moi du
-			estimatePrevIndex = index - _imagePerPage;
-			estimateNextIndex = index + _imagePerPage;
-			// nhung neu nhu index ve < 0 thi cho di lai tu dau kia
-			if(estimatePrevIndex + _imagePerPage <= 0){
-				estimatePrevIndex = images.length - _imagePerPage;
-			}
-			// con neu nhu gan ve toi, thi cho ve toi luon
-			else if(estimatePrevIndex < 0){
-				estimatePrevIndex = 0;
-			};
-			// nhung neu nhu index vuoi qua tong so page, thi cho di lai tu dau luon
-			if(estimateNextIndex>=images.length){
-				estimateNextIndex = 0;
-			}
-			// con neu nhu hoi vuot qua so so thoi, thi doi lai 1 xiu
-			else if(estimateNextIndex + _imagePerPage > images.length){
-				estimateNextIndex = images.length - _imagePerPage;
-			};
-		};
-
 		if(isNaN(_imagePerPage)){
 			_imagePerPage = 1;
 		}
@@ -1437,7 +1419,34 @@ zjs.regSliderTheme('linear', function(element, images, option){
 			// boi vi bi thang nam cuoi cung giu chan lai
 			if(estimateNextIndex + _imagePerPage > images.length)
 				estimateNextIndex = 0;
-		};
+		}
+
+		// truong hop "horizontal-page / horizontal-page-center" move nguyen 1 page
+		if(option.transition == 202 || option.transition == 205){
+			// xem coi co tong cong bao nhieu page (images.length)
+			// va voi cai page hien tai (index)
+			// thi phai move them (_imagePerPage) page nua moi du
+			estimatePrevIndex = index - _imagePerPage;
+			estimateNextIndex = index + _imagePerPage;
+			// nhung neu nhu index ve < 0 thi cho di lai tu dau kia
+			if(estimatePrevIndex + _imagePerPage <= 0){
+				estimatePrevIndex = images.length - _imagePerPage;
+			}
+			// con neu nhu gan ve toi, thi cho ve toi luon
+			else if(estimatePrevIndex < 0){
+				estimatePrevIndex = 0;
+			}
+			// nhung neu nhu index vuoi qua tong so page, thi cho di lai tu dau luon
+			// if(estimateNextIndex>=images.length){
+				// estimateNextIndex = 0;
+			// }
+			// con neu nhu hoi vuot qua so so thoi, thi doi lai 1 xiu
+			// else 
+			if(estimateNextIndex + _imagePerPage > images.length){
+				// estimateNextIndex = images.length - _imagePerPage;
+				estimateNextIndex = 0;
+			}
+		}
 
 
 		if(estimatePrevIndex<0)

@@ -8,15 +8,6 @@
 		<style>
 			body{font-family:arial;padding:40px;margin:0;}
 			.elements{font-size: 110px;text-align: center;line-height: 180px;color: rgba(137, 137, 137, 0.65);}
-
-			.bootstrap-row{
-				margin-left: -10px;
-				margin-right: -10px;
-			}
-			.bootstrap-col{
-				padding-left: 10px;
-				padding-right: 10px;
-			}
 		</style>
 		
 		<script type="text/javascript" src="z.min.js" data-debug="true"></script>
@@ -37,11 +28,20 @@
 		<pre>theme:'linear',
 transition: 'horizontal-stack',
 sequent: true,
-border: false
+border: false,
+usePercentWidth: false
 </pre>
-		<div class="zslider" data-option="theme:'linear',
+		<p>Width of one item is set to <code>210px</code></p>
+		<style>
+		/* Override width of one item */
+		#demo1.imageslider-linear.horizontal-stack.use-pixel .image-view{
+			width: 210px;
+		}
+		</style>
+
+		<div id="demo1" class="zslider" data-option="theme:'linear',
 			transition:'horizontal-stack',
-			transitionTime:1400,
+			transitionTime:500,
 			preload: false,
 			autoplay: false,
 			autoplayTime: 3000,
@@ -50,6 +50,7 @@ border: false
 			navThumb: false,
 			navDot: false,
 			showInfo: false,
+			usePercentWidth: false,
 			sequent: true">
 
 			<ul>
@@ -75,21 +76,27 @@ border: false
 		<br/>
 		<br/>
 		
-		<h3>Horizontal Stack with custom item width (item width use percent)</h3>
+		<h3>Horizontal Stack, width use percent "%" for better responsive display</h3>
 		<pre>theme:'linear',
-transition: 'horizontal-stack',
-usePercentWidth: true
+transition: 'horizontal-stack'
 </pre>
-		<div class="zslider" data-option="theme:'linear',
+		<p>Width of one item is set to <code>20%</code></p>
+		<style>
+		/* Override width of one item */
+		#demo2.imageslider-linear.horizontal-stack.use-percent .image-view{
+			width: 20%;
+		}
+		</style>
+
+		<div id="demo2" class="zslider" data-option="theme:'linear',
 			transition:'horizontal-stack',
-			transitionTime:800,
+			transitionTime:500,
 			autoplay: false,
 			autoplayTime: 3000,
 			navButton: true,
 			navThumb: false,
 			navDot: false,
-			showInfo: false,
-			usePercentWidth: true">
+			showInfo: false">
 
 			<ul>
 				<li><img src="sliderimages/1.jpg" /><div class="elements">1</div></li>
@@ -117,20 +124,40 @@ usePercentWidth: true
 		<h3>Horizontal Stack with custom item width (item width use percent) And have margin between each item</h3>
 		<pre>theme:'linear',
 transition: 'horizontal-stack',
-usePercentWidth: true,
 <b>wrapClass: 'bootstrap-row',</b>
 <b>imageHoldClass: 'bootstrap-col'</b>
 </pre>
-		<div class="zslider slider-demo-3" data-option="theme:'linear',
+		<p>Width of one item is set to <code>25%</code>, and then use class <code>row</code>, <code>col</code> (like bootstrap) to make margin between each image</p>
+		<pre>.bootstrap-row{
+  margin-left: -10px;
+  margin-right: -10px;
+}
+.bootstrap-col{
+  padding-left: 10px;
+  padding-right: 10px;
+}</pre>
+
+		<style>
+		/* Override width of one item */
+		#demo3 .bootstrap-row{
+			margin-left: -10px;
+			margin-right: -10px;
+		}
+		#demo3 .bootstrap-col{
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+		</style>
+
+		<div id="demo3" class="zslider slider-demo-3" data-option="theme:'linear',
 			transition:'horizontal-stack',
-			transitionTime:800,
+			transitionTime:500,
 			autoplay: false,
 			autoplayTime: 3000,
 			navButton: true,
 			navThumb: false,
 			navDot: false,
 			showInfo: false,
-			usePercentWidth: true,
 
 			wrapClass: 'bootstrap-row',
 			imageHoldClass: 'bootstrap-col'">
@@ -163,9 +190,9 @@ transition: 'horizontal-page',
 sequent: true,
 border: false
 </pre>
-		<div class="zslider" data-option="theme:'linear',
+		<div id="demo4" class="zslider" data-option="theme:'linear',
 			transition:'horizontal-page',
-			transitionTime:2400,
+			transitionTime:800,
 			preload: false,
 			autoplay: false,
 			autoplayTime: 3000,
@@ -174,7 +201,8 @@ border: false
 			navThumb: false,
 			navDot: false,
 			showInfo: false,
-			sequent: true">
+			sequent: true,
+			usePercentWidth: false">
 
 			<ul>
 				<li><img src="sliderimages/1.jpg" /><div class="elements">1</div></li>
@@ -200,12 +228,11 @@ border: false
 		
 		<h3>Horizontal Page with custom item width (item width use percent)</h3>
 		<pre>theme:'linear',
-transition: 'horizontal-page',
-usePercentWidth: true
+transition: 'horizontal-page'
 </pre>
 		<div class="zslider" data-option="theme:'linear',
 			transition:'horizontal-page',
-			transitionTime:2400,
+			transitionTime:800,
 			preload: false,
 			autoplay: false,
 			autoplayTime: 3000,
@@ -214,8 +241,7 @@ usePercentWidth: true
 			navThumb: false,
 			navDot: false,
 			showInfo: false,
-			sequent: true,
-			usePercentWidth: true">
+			sequent: true">
 
 			<ul>
 				<li><img src="sliderimages/1.jpg" /><div class="elements">1</div></li>
