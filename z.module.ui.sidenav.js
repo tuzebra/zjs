@@ -212,7 +212,7 @@ zjs.require('ui', function(){
 			
 			// keu goi 1 cai trigger cua thang sidenav vo thang item ma no scroll toi luon
 			var isDefaultPrevented = false;
-			zjs(navitems[i].item).trigger('ui.sidenav.out.trigger', {}, function(event){
+			zjs(navitems[i].item).trigger('ui:sidenav:out:trigger', {}, function(event){
 				// test xem coi co can phai scroll nua khong?
 				isDefaultPrevented = event.isDefaultPrevented;
 			});
