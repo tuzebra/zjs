@@ -649,6 +649,7 @@ var version = '1.1',
 			// dem' coi co' bao nhieu thang` element match
 			this.size = function(){return elements.length || 0;};
 			this.count = function(){return elements.length || 0;};
+			this.reverse = function(){elements = elements.reverse();return self;};
 			
 			// lay ra cau query de su dung sau
 			this.query = function(){return selector;};

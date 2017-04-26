@@ -542,3 +542,6 @@
 		+ improve zjs::on() method: support pass an options object when add event listener
 		+ improve zjs::drag() method: add a option "willPreventDefault" (default is false) to tell browser that this event maybe force browser to prevent default event handler, due to: https://developers.google.com/web/updates/2017/01/scrolling-intervention
 
+25/04/2017
+		+ add method zjs::reverse()
+		
