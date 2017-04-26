@@ -140,3 +140,9 @@
 		+ fix bug related to event passive mode, https://developers.google.com/web/updates/2017/01/scrolling-intervention
 		+ when disable slider, if there're some lazyimage, they'll show
 
+25/04/2017
+		+ fix bug on "horizontal-page" transition style
+
+26/04/2017
+		+ fix bug on mobile, after change slider by swipe, fire an event with direction info
+

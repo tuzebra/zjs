@@ -1762,7 +1762,7 @@ zjs.regSliderTheme('linear', function(element, images, option){
 				imageViewWrapCssTransitionTurnOn();
 
 				// neu nhu co su thay doi index thi se move slide
-				if(index!=currentIndex){showLargeImage(index)}
+				if(index!=currentIndex){showLargeImage(index, {direction:index>currentIndex ? 'next' : 'prev'})}
 				// con neu van giu nguyen index thi se move ve dung vi tri
 				else{zImageViewWrapRealElMove(-zImageViewElWidth * index)};
 			}
