@@ -6,7 +6,7 @@ zjs.require('ui.freezepanel', function(){
 	// extend core mot so option
 	zjs.extendCore({
 		moduleUiHeaderOption: {
-			freeze: 1,
+			freeze: false,
 
 			// freezepanel module options
 			autoHideWhenReach: false,
