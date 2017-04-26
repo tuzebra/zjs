@@ -115,7 +115,7 @@ zjs.require('ui', function(){
 				
 				// bind event cho thang title nay luon
 				// (nham support cho thang sidenav)
-				zEl.on('ui.sidenav.out.trigger', function(event){
+				zEl.on('ui:toc:out:trigger', function(event){
 					// neu nhu dang active thi thoi
 					if(this.hasClass('active'))return;
 					// neu nhu khong active thi moi cho phep haha
@@ -283,6 +283,9 @@ zjs.require('ui', function(){
 				//console.log('forceScroll', forceScroll, 'zHeaderEl', zHeaderEl);
 				if((forceScroll || option.autoscroll) && zHeaderEl){
 					
+					// scroll cai thang nay to bottom cua thang header dung truoc no
+					// neu day la header dau tien: scroll toi top cua cai accodion wrap 
+
 					// bay gio phai scroll cai thang nay to top
 					//console.log('zHeaderEl top', );
 					// boi vi top cua cai thang header se thay doi lien tuc
