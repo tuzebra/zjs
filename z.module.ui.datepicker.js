@@ -19,6 +19,14 @@ zjs.require('ui, ui.button, ui.slider, moment', function(){
 			orbefore: 'or before',
 			orafter: 'or after'
 		},
+		de: {
+			format:'DD.MM.YYYY',
+			calendarTitleFormat:'MMMM, YYYY',
+			timesliderLabel:{h:'hour',m:'minute',s:'second'},
+			firstOfWeek: 0,
+			orbefore: 'or before',
+			orafter: 'or after'
+		},
 		vi: {
 			format:'DD-MM-YYYY',
 			calendarTitleFormat:'MMMM, YYYY',
