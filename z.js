@@ -444,17 +444,42 @@ var version = '1.1',
 			this.isReady = (document.readyState === 'complete');
 			this.add = function(fn){fns.push(fn)};
 			this.run = function(fn){try{fn.call(this, zjs)}catch(err){}};
-			this.runall = function(){
+			this.runall = function(notClean){
+				notClean = notClean || false;
 				// call all registered functions
 				for(var i = 0;i<fns.length;i++)this.run(fns[i]);
 				// clear handlers
-				fns = [];
+				if(!notClean){
+					fns = [];
+				}
 			};
 		};
 		return new domReadyFns();
 	})(),
 	
 	domReady = (function(){
+
+		// console.log('build domReady');
+		// Support Drupal bigpipe
+		if(('Drupal' in window) && ('behaviors' in window.Drupal)){
+			// console.log(1);
+			if(!('zjs' in window.Drupal.behaviors)){
+				// console.log(2);
+				window.Drupal.behaviors.zjs = {
+					attach: function (context, settings) {
+						// console.log('Drupal.behaviors.zjs: context', context);
+						if(domReadyFns.isModuleRequired){
+							domReadyFns.runall(true);
+						}
+					}
+				};
+			}
+			return function(fn){
+				// console.log(3, 'add');
+				domReadyFns.add(fn);
+			};
+		}
+		// console.log(4);
 		
 		// Check if document already complete, and if so, just trigger page load listeners. 
 		// Latest webkit browsers also use "interactive", and will fire the onDOMContentLoaded 
