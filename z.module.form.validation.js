@@ -33,7 +33,7 @@
 			phonenumber: 'Not a phone number',
 			digits: 'Not a digits',
 			minlength: 'Value as least minlength',
-			repassword: 'Password does not match'
+			repassword: 'The specified passwords do not match'
 		},
 		de:{
 			required: 'Feld ist erforderlich',
@@ -44,7 +44,7 @@
 			phonenumber: 'Nicht eine Telefonnummer',
 			digits: 'Nicht eine Ziffern',
 			minlength: 'Wert so wenig minderlth',
-			repassword: 'Passwort stimmt nicht'
+			repassword: 'Die eingegebenen Passwörter stimmen nicht überein'
 		},
 		vi:{
 			required: 'Còn thiếu thông tin này',
@@ -372,7 +372,16 @@
 			}catch(err){};
 			
 			// tu dong focus vao cai input dau tien bi error
-			zForm.find('.'+option.errorClass).focus();
+			var firstErrorElm = zForm.find('.'+option.errorClass).item(0);
+			if(firstErrorElm.is('input') || firstErrorElm.is('textarea')){
+				firstErrorElm.focus();
+			}
+			else if(firstErrorElm.hasClass('radiogroup')){
+				// scroll toi
+				if('moduleTransition' in zjs){
+					zjs(document.body).playTransition('scrollTop', firstErrorElm.getAbsoluteTop() - 100, {time: 800})
+				}
+			};
 			
 			return false;
 		};
@@ -539,7 +548,7 @@
 		};
 		
 		// 3. thu ba la check mat khau nhap lai coi chinh xac hay khong
-		if(inputType == 'password' && (name.indexOf('repassword')>=0 || classname.indexOf('repassword')>=0 || zInput.getAttr('data-tip-repassword','')!='')){
+		if(inputType == 'password' && (name.indexOf('repassword')>=0 || name.indexOf('pass[pass2]')>=0 || classname.indexOf('repassword')>=0 || zInput.getAttr('data-tip-repassword','')!='')){
 			// xem coi trong nay co bao nhieu thang password
 			var passwordInputEls = zForm.find('input[type="password"]');
 			if(passwordInputEls.count() > 1){
