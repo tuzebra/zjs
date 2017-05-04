@@ -27,10 +27,12 @@
 		var wrapEl = zjs(element);
 				
 		// - - - 
-		// neu ma co roi thi se ghi lai option
-		// option luc nay la option cua user
+		// neu ma co roi thi se refresh thoi
 		var option = wrapEl.getData(optionkey);
-		if(option)return;
+		if(option){
+			wrapEl.trigger('ui:readmore:trigger_refresh');
+			return;
+		}
 		
 		// - - - 
 		// neu ma chua co thi se lam binh thuong
@@ -75,7 +77,8 @@
 		readmoreLinkEl.remove();
 		
 		// backup inner text
-		var innerText = wrapEl.getInnerText();
+		// var innerText = wrapEl.getInnerText();
+		var innerText = wrapEl.getInnerHTML();
 
 		// tao ra 1 cai div chua noi dung clone
 		var wrapCloneDivEl = zjs('<div></div>').appendTo(hiddenDivEl),
@@ -110,6 +113,9 @@
 		var mainHandler = function(){
 			if(isShowFull)return;
 
+			// luon disable hook khi xu ly cai nay
+			zjs.enablehook(false);
+
 			// update width 
 			wrapCloneDivEl.width(wrapEl.parent().width());
 
@@ -120,6 +126,7 @@
 			if(!isNeededToShowReadmore){
 				// console.log('dont need');
 				wrapEl.setInnerHTML(innerText);
+				zjs.enablehook(zjsHookState);
 				return;
 			}
 
@@ -127,15 +134,18 @@
 			var trimText = handlerMethod('gettrimtext', option, innerText, cloneDivEl, {readmoreText: readmoreText});
 			wrapEl.setInnerHTML(trimText);
 			wrapEl.append(readmoreLinkEl);
+			zjs.enablehook(zjsHookState);
 		};
 
 		// fix width when resize
 		zjs(window).on('resize', function(){
-			// luon disable hook khi xu ly cai nay
-			zjs.enablehook(false);
 			mainHandler();
-			zjs.enablehook(zjsHookState);
 		}).trigger('resize');
+
+		// cho phep ben ngoai bat thang nay refresh
+		wrapEl.on('ui:readmore:trigger_refresh', function(){
+			mainHandler();
+		});
 
 		// bind event cho readmore link
 		if(readmoreLinkEl.count())readmoreLinkEl.on('click', function(event){
@@ -143,6 +153,8 @@
 			readmoreLinkEl.remove();
 			isShowFull = true;
 			wrapEl.setInnerHTML(innerText);
+			// remove luon may cai div tam, cho nhe
+			wrapCloneDivEl.remove();
 		});
 		
 		
@@ -192,10 +204,12 @@
 				innerTextArr.push(' ');
 				do{
 					innerTextArr.pop();
-					reText = innerTextArr.join(' ') + option.ellipsis + ' ';
+					// double run to get "fixed" html string
+					cloneDivEl.setInnerHTML(innerTextArr.join(' '));
+					reText = cloneDivEl.getInnerHTML() + option.ellipsis + ' ';
 					cloneDivEl.setInnerHTML(reText + moreData.readmoreText);
 				}
-				while(cloneDivEl.height() > option.max);
+				while(innerTextArr.length && cloneDivEl.height() > option.max);
 
 				return reText;
 			}

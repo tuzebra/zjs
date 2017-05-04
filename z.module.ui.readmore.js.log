@@ -1,2 +1,3 @@
 04/05/2017
 		+ create the module, that support 'max-line' handler.
+		+ support html inside readmore element
