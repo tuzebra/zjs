@@ -24,6 +24,9 @@ $hiddenFiles = array(
 	'z.module.april.like.js',
 	'z.module.april.like.css',
 	'z.module.april.like.html',
+	'z.module.image.slider.theme.simpleswipe.js',
+	'z.module.image.slider.theme.simpleswipe.css',
+	'z.module.image.slider.theme.simpleswipe.html',
 	'z.module_.__autosuggestion.js',
 	'z.module_.__autosuggestion.css',
 	'z.module_.__input.date.css',
@@ -53,6 +56,7 @@ $modules = array(
 	'z.module.image.resize' => 'Resize image UI',
 	'z.module.image.loader' => 'Provide preload image method',
 	'z.module.image.slider' => 'Image slider module, provide core function to integrated',
+	'z.module.image.slider.theme.simple' => 'Simple and effective. If you need a image slider that just work, fast, responsive, touch gestures support, easy to custom animation (because it build 99% using css), this is the best option.',
 	'z.module.image.slider.theme.linear' => 'Linear theme for Image slider module, with a lot of option and easy for customization',
 	'z.module.pagepreload' => 'Pagepreload, it provide UI for splash screen show loading-percent before access website',
 	'z.module.parallax' => 'Parallax module that help build parallax website easy',
@@ -68,14 +72,15 @@ $modules = array(
 	'z.module.ui.hovercard' => 'Hovercard',
 	'z.module.ui.freezepanel' => 'Freeze panel, super smoothly and powerful sticky module',
 	'z.module.ui.imagepicker' => 'Pick and upload an image so easy with Image Picker, it base on top of button.file api',
+	'z.module.ui.textarea.autoheight' => 'Make textarea auto resize its height to fix content',
 	'z.module.ui.sizeadaptable' => 'Size-Adaptable, if you build responsive website, you will need it',
 	'z.module.ui.popup' => 'Powerful Popup, with a lot of options, easy to use api, super cool build-in animation',
 	'z.module.ui.toc' => 'Table of content',
+	'z.module.ui.readmore' => 'Readmore',
 	'z.module.ui.tabpanel' => 'Tabpanel',
 	'z.module.ui.header' => 'Header, build site header never easy like this, with mobile hambuger button supporting, beautiful animation, but still extendable.',
 	'z.module.chartist' => 'Chartist',
 	'z.module.codemirror' => 'Codemirror',
-	'z.module.input.autoheight' => 'Autoheight for textarea',
 	'z.module.transition' => 'Transition, the most important module, with it build a animation effect not a challenge anymore'
 );
 
@@ -145,6 +150,8 @@ h1{
 			<ul>
 			<?php
 			foreach($childjsFiles as $childjsFile):
+				if($childjsFile == 'z.module.image.slider.theme.simple.js')continue;
+				if($childjsFile == 'z.module.image.slider.theme.simple.min.js')continue;
 				if($childjsFile == 'z.module.image.slider.theme.linear.js')continue;
 				if($childjsFile == 'z.module.image.slider.theme.linear.min.js')continue;
 				if(!in_array($childjsFile, $showedFiles) AND !in_array($childjsFile, $hiddenFiles)):
@@ -177,11 +184,19 @@ h1{
 		// fix after sort
 		if($file == 'z')
 			$htmlFiles = array_merge(array('z.js.test.html'), $htmlFiles);
-		if($file == 'z.module.image.slider.theme.linear')
-			$htmlFiles = array_merge(array('z.module.image.slider.theme.linear.html'), $htmlFiles);
+		if($file == 'z.module.image.slider.theme.linear'){
+			$htmlFiles = array_merge(array(
+				'z.module.image.slider.theme.linear.html'
+			), $htmlFiles);
+		}
+		if($file == 'z.module.image.slider.theme.simple'){
+			$htmlFiles = array_merge(array(
+				'z.module.image.slider.theme.simple.html'
+			), $htmlFiles);
+		}
 
 		if(count($htmlFiles)):?>
-			<b>testing:</b>
+			<b>demo:</b>
 			<ul>
 			<?php
 			foreach($htmlFiles as $htmlFile):
