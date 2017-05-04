@@ -59,7 +59,7 @@
 				
 		
 				if( typeof sliderThemes[option.theme] == 'undefined' ){
-					console.log('[makeSlider]: theme "'+option.theme+'" not support!');
+					// console.log('[makeSlider]: theme "'+option.theme+'" not support!');
 					return;
 				}
 				
