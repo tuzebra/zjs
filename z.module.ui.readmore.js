@@ -110,8 +110,9 @@
 		var isShowFull = false;
 
 		// xu ly moi khi window resize, test xem coi co can phai show readmore hay khong?
-		var mainHandler = function(){
+		var mainHandler = function(firstRun){
 			if(isShowFull)return;
+			firstRun = firstRun || false;
 
 			// luon disable hook khi xu ly cai nay
 			zjs.enablehook(false);
@@ -126,6 +127,11 @@
 			if(!isNeededToShowReadmore){
 				// console.log('dont need');
 				wrapEl.setInnerHTML(innerText);
+				// neu nhu first run ma khong can thi thoi bo luon
+				if(firstRun){
+					readmoreLinkEl.remove();
+					isShowFull = true;
+				}
 				zjs.enablehook(zjsHookState);
 				return;
 			}
@@ -140,12 +146,15 @@
 		// fix width when resize
 		zjs(window).on('resize', function(){
 			mainHandler();
-		}).trigger('resize');
+		});
 
 		// cho phep ben ngoai bat thang nay refresh
 		wrapEl.on('ui:readmore:trigger_refresh', function(){
 			mainHandler();
 		});
+
+		// first handler
+		mainHandler(true);
 
 		// bind event cho readmore link
 		if(readmoreLinkEl.count())readmoreLinkEl.on('click', function(event){
