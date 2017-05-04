@@ -48,8 +48,12 @@
 		// start coding module
 		
 		// make 1 cai hidden Div neu chua
-		if(!hiddenDivEl)
-			hiddenDivEl = zjs('<div style="position:fixed;top:-5000px;left:-5000px;opacity:0;"></div>').appendTo(zjs('body'));
+		// luc lam thi disable hook keo loi
+		var zjsHookState = zjs.enablehook();
+		zjs.enablehook(false);
+		if(!hiddenDivEl){
+			hiddenDivEl = zjs('<div style="position:fixed;top:-5000px;left:-5000px;opacity:0;"></div>').appendTo(zjs(document.body));
+		}
 			
 		
 		// --
@@ -58,6 +62,9 @@
 		var divEl = zjs('<div></div>').appendTo(hiddenDivEl),
 			divDiffHeight = 0,
 			minHeight = 0;
+
+		// enable hook lai
+		zjs.enablehook(zjsHookState);
 		
 		// copy style cua text input qua div
 		var inited = false,
@@ -100,7 +107,11 @@
 		
 		var fixHeight = function(){
 			var text = textEl.getValue();if(!text)text='';
-			divEl.html(text.nl2br()+'<br>');
+			// luc lam thi disable hook keo loi
+			//
+			zjs.enablehook(false);
+			divEl.setInnerHTML(text.nl2br()+'<br>');
+			zjs.enablehook(zjsHookState);
 			var newheight = Math.max(minHeight, divEl.height())-divDiffHeight;
 			
 			// get old height
@@ -131,7 +142,7 @@
 	// EXTEND METHOD cho zjs-instance
 	zjs.extendMethod({
 		makeTextareaAutoheight: function(useroption){
-			return this.each(function(element){makeTextareaAutoheight(element, useroption)});
+			return this.eachElement(function(element){makeTextareaAutoheight(element, useroption)});
 		}
 	});
 	
