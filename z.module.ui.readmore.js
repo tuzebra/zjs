@@ -130,6 +130,7 @@
 				// neu nhu first run ma khong can thi thoi bo luon
 				if(firstRun){
 					readmoreLinkEl.remove();
+					wrapCloneDivEl.remove();
 					isShowFull = true;
 				}
 				zjs.enablehook(zjsHookState);
