@@ -21,6 +21,7 @@ zjs.require('ui', function(){
 			closebutton: true,
 			closethenremove: false,
 			pagecover: true,
+			pagecoverClass: '',
 			clickout: false,
 			pressEsc: true,
 			center: true,
@@ -184,6 +185,7 @@ zjs.require('ui', function(){
 			// co thi set cho cai thang cover luon
 			var _id = zPopupEl.getAttr('id', '');
 			if(_id!='')zPopupPCoverEl.addClass(coverclass+'-'+_id);
+			if(option.pagecoverClass)zPopupPCoverEl.addClass(option.pagecoverClass);
 			// click outside to close ?
 			if(option.clickout)
 				zPopupPCoverEl.click(function(){popupHide(element)});

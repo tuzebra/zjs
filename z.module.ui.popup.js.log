@@ -30,3 +30,6 @@
 
 02/03/2017
 		+ fix scrollPopup working with "closethenremove" option
+
+06/05/2017
+		+ add option "pagecoverClass"
