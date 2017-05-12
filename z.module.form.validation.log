@@ -41,9 +41,12 @@
 06/04/2016
 		+ fix option "checkboxClass", "radiogroupClass"
 
-28/02/2018
+28/02/2017
 		+ support German (de) language
 
-28/04/2018
+28/04/2017
 		+ fix auto scroll to "first error element"
 
+12/05/2017 
+		+ fix issue on checkbox
+		

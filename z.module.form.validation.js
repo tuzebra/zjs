@@ -189,7 +189,13 @@
 				
 				// gio se tao ra cac tips element append vao san
 				// nhung chi hide no di thoi
-				var ztipEl = zjs(tiphtml).addClass(tipclass+'-'+zInput.getAttr('name')).hide();
+				var ztipEl = zjs(tiphtml).hide();
+				var _makeTipClass = zInput.getAttr('name');
+				if(zInput.hasClass(option.checkboxClass) && !zInput.is('input')){
+					_makeTipClass = zInput.find('> input[type=checkbox]').getAttr('name');
+				}
+				ztipEl.addClass(tipclass+'-'+_makeTipClass);
+
 				// quan trong -> xac dinh coi nen append vao dau thi dep ne
 				// xem coi cai input nay co phai la 1 cai autosuggestion hay khong?
 				// neu la vay thi phai append dang sau cai wrap element moi hop ly
@@ -214,12 +220,21 @@
 						handlerTestResult(zInput, checkInput(zInput, option, zForm), option);
 					});
 				};
+				// neu nhu la checkbox thi co 2 truong hop
+				// 1: <div class="checkbox required"><input type="checkbox"></div>
+				// 2: <input type="checkbox" class="checkbox required">
 				// neu nhu la checkbox thi phai xu ly khi thang con (checkbox) cua no click
 				if(zInput.hasClass(option.checkboxClass)){
-					//zInput.find('input[type=checkbox]').live('click', function(){
-					zInput.on('click', 'input[type=checkbox]', function(){
-						handlerTestResult(zInput, checkInput(zInput, option, zForm), option);
-					});
+					if(zInput.is('input')){
+						zInput.on('click', function(){
+							handlerTestResult(zInput, checkInput(zInput, option, zForm), option);
+						});
+					}else{
+						//zInput.find('input[type=checkbox]').live('click', function(){
+						zInput.on('click', 'input[type=checkbox]', function(){
+							handlerTestResult(zInput, checkInput(zInput, option, zForm), option);
+						});
+					}
 				};
 			
 				// quan trong khong kem do la add class cho thang cha cua thang input
@@ -397,7 +412,7 @@
 		var option = zForm.getData(optionkey, false);
 		if(!option)return;
 		
-		zForm.find('input,textarea').eachElement(function(element){
+		zForm.find('input,textarea,.'+option.checkboxClass).eachElement(function(element){
 			var zInput = zjs(element);
 			
 			// xem coi thang input nay co cai tip-element nao khong
@@ -492,9 +507,15 @@
 			value = zInput.find('input[type=radio]:checked').getValue('').trim();
 		};
 		
+		// neu la checkbox thi co 2 truong hop
 		if(zInput.hasClass(option.checkboxClass)){
-			// edit value phai la value cua thang checkbox duoc check
-			value = zInput.find('input[type=checkbox]:checked').getValue('').trim();
+			if(zInput.is('input')){
+				// reset value if checkbox isn't checked
+				if(!zInput.is(':checked'))value = '';
+			}else{
+				// edit value phai la value cua thang checkbox duoc check
+				value = zInput.find('input[type=checkbox]:checked').getValue('').trim();
+			}
 		};
 		
 		if(zInput.hasClass(option.customInputClass)){
