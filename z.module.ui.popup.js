@@ -224,16 +224,21 @@ zjs.require('ui', function(){
 			popupHide(element);
 		});
 		
-		// show or hide popup
-		if(option.autoshow){
-			(function(){
-				popupShow(element);
-			}).delay(option.autoshowDelay);
-		}
-		else{zPopupEl.addClass(activeclass);popupHide(element, true, true)};
-		
 		// xong xuoi het roi thi remove di un-init class thoi
 		zPopupEl.removeClass(uninitclass);
+		
+		// show or hide popup
+		if(option.autoshow){
+			zPopupEl.addClass(hideclass);
+			(function(){
+				popupShow(element);
+			// }).delay(option.autoshowDelay);
+			}).delay(10000000);
+		}
+		else{
+			zPopupEl.addClass(activeclass);
+			popupHide(element, true, true);
+		}
 		
 		// bind event cho window khi ma resize
 		zjs(window)
