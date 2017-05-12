@@ -18,6 +18,7 @@ zjs.require('ui', function(){
 			width: 'auto',
 			height: 'auto',
 			autoshow: false,
+			autoshowDelay: 0,
 			closebutton: true,
 			closethenremove: false,
 			pagecover: true,
@@ -146,6 +147,12 @@ zjs.require('ui', function(){
 			option.scrollPopup = false;
 		}
 
+		option.autoshow = !!option.autoshow;
+		option.autoshowDelay = parseInt(option.autoshowDelay);
+		if(isNaN(option.autoshowDelay)){
+			option.autoshowDelay = 0;
+		}
+
 		// save option
 		zPopupEl.setData(optionkey, option);
 		
@@ -218,7 +225,11 @@ zjs.require('ui', function(){
 		});
 		
 		// show or hide popup
-		if(option.autoshow)popupShow(element);
+		if(option.autoshow){
+			(function(){
+				popupShow(element);
+			}).delay(option.autoshowDelay);
+		}
 		else{zPopupEl.addClass(activeclass);popupHide(element, true, true)};
 		
 		// xong xuoi het roi thi remove di un-init class thoi
