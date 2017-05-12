@@ -232,8 +232,7 @@ zjs.require('ui', function(){
 			zPopupEl.addClass(hideclass);
 			(function(){
 				popupShow(element);
-			// }).delay(option.autoshowDelay);
-			}).delay(10000000);
+			}).delay(option.autoshowDelay);
 		}
 		else{
 			zPopupEl.addClass(activeclass);
