@@ -38,3 +38,8 @@
 
 16/04/2017
 		+ fix sorting 2 freeze elements
+
+13/05/2017
+		+ fix issue when freezepanel have a parentwrap
+
+		

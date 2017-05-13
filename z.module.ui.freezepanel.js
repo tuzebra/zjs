@@ -246,7 +246,7 @@ zjs.require('ui', function(){
 		}else{
 			// hien tai chi support trong page co 1 cai panel auto hide ma thoi
 			// neu co nhieu hon 2 cai panel auto hide thi se bi loi
-			 autoHideTimer = zjs.timer({
+			autoHideTimer = zjs.timer({
 			 	from: 0,
 				to: 0,
 				time: option.autoHideSpeed, 
@@ -352,7 +352,9 @@ zjs.require('ui', function(){
 			var hasNewTopbtnsStt = handlerMethod('checkActivate', handlerElement, option, {
 				scrollTop: _currentScrollTop,
 				viewTop: _currentViewTop, 
-				orgAnchorPosition: orgAnchorPosition
+				orgAnchorPosition: orgAnchorPosition,
+				parentEl: zParentEl,
+				freezepanelEl: zFreezepanelEl
 			});
 
 			if(!isEnable){
@@ -880,6 +882,14 @@ zjs.require('ui', function(){
 			}
 
 			if(command == 'checkActivate'){
+
+				// neu nhu co thang parent, ma height cua parent qua nho
+				// thi thoi khong freezing gi ca
+				if(data.parentEl){
+					if(data.freezepanelEl.height() >= data.parentEl.height())
+						return false;
+				}
+
 				// var active = 
 				return (data.scrollTop + data.viewTop >= data.orgAnchorPosition - option.marginTop);
 				// console.log('checkActivate: data.scrollTop', data.scrollTop, 'data.orgAnchorPosition', data.orgAnchorPosition, 'option.marginTop', option.marginTop);
