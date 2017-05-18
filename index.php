@@ -96,7 +96,8 @@ h1{
 </style>
 <body>
 
-	<p>Download: <a href="src.zip">src.zip</a></p>
+	<?php /*<p>Download: <a href="src.zip">src.zip</a></p>*/ ?>
+	<p>Git: <a href="https://github.com/tuzebra/zjs">https://github.com/tuzebra/zjs</a></p>
 
 	<?php /*
 	<h1>src/</h1>
