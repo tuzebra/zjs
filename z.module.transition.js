@@ -332,8 +332,14 @@
 				// neu nhu co scrollLeft hoac scrollTop gi do
 				// thi se khong cho choi css luon
 				allkey = zjs.objectKeys(option.from).concat(zjs.objectKeys(option.to)).unique();
-				if(allkey.include('scrollLeft') || allkey.include('scrollTop'))
+				if(allkey.include('scrollLeft') || allkey.include('scrollTop')){
 					option.usecss = false;
+					// handler to stop scroll-to-top when user 
+					// manualy scroll while scroll-to-top transiton is running
+					((element === document.body || element === window) ? zjs(window) : zElement).on('mousewheel', function(){
+						zElement.stopTransition();
+					});
+				}
 
 				// save option
 				zElement.setData(optionkey, option);

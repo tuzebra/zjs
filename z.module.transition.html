@@ -16,7 +16,7 @@
 			.boxb{width:300px;height:100px;background:#82ccb9;margin-right:5px;border-radius:5px;float:left;text-align:center;line-height: 100px;font-size: 50px;color: #927f7f;}
 		</style>
 		
-		<script type="text/javascript" src="z.js" data-debug="false"></script>
+		<script type="text/javascript" src="z.js" data-debug="true"></script>
 		<script>zjs.require('transition, codeeditor')</script>
 		
 	</head>
@@ -313,8 +313,27 @@ delayreverse:1000"></div>
 			zjs('#demo11playa').click(function(){zjs('#demo11').playTransition({to: {scrollLeft: 600}})});
 			zjs('#demo11playb').click(function(){zjs('#demo11').playTransition({to: {scrollLeft: '+=200'}})});
 			zjs('#demo11playc').click(function(){zjs('#demo11').playTransition({to: {scrollLeft: '+=200'}, time:3000})});
-		</script>		
+		</script>
 		
+		
+		<br/><br/>
+
+		<h3>Scroll to top</h3>
+		
+		<textarea class="zcodeeditor" data-option="readOnly:true">
+<script>
+	zjs('#demo12play').click(function(){
+		zjs(document.body).playTransition('scrollTop', 0, 1500);
+	});
+</script>
+		</textarea></br>
+		<button id="demo12play">Scroll to top</button> <br/> 		
+		<script>
+			zjs('#demo12play').click(function(){
+				zjs(document.body).playTransition('scrollTop', 0, 1500);
+			});
+		</script>
+
 		
 		<br/><br/>
 
