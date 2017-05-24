@@ -146,3 +146,6 @@
 26/04/2017
 		+ fix bug on mobile, after change slider by swipe, fire an event with direction info
 
+24/05/2017
+		+ fix bug (adding class "active-next") when slider has 2 items.
+		
