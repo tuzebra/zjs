@@ -36,3 +36,7 @@
 
 12/05/2017
 		+ add option "autoshowDelay" with default value is zero "0"
+
+24/05/2017
+		+ add option "disableWindowScroll" with default value is "false"
+

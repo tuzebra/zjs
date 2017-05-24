@@ -34,7 +34,8 @@ zjs.require('ui', function(){
 			animateTime: 1000,
 			animateName:'',
 			longPopup: false, 		// false | true | "mobileOnly"
-			scrollPopup: false 		// false | true | "mobileOnly"
+			scrollPopup: false, 	// false | true | "mobileOnly"
+			disableWindowScroll: false,
 		}
 	});
 	
@@ -84,6 +85,7 @@ zjs.require('ui', function(){
 	
 	// cho 1 thang de luu vao last popup duoc show ra, de ma su dung duoc phim esc
 	window.zpopupelementstack = [];
+	var zWindow = zjs(window);
 
 
 	var checkIsLongPopup = function(isLongPopup){
@@ -240,7 +242,7 @@ zjs.require('ui', function(){
 		}
 		
 		// bind event cho window khi ma resize
-		zjs(window)
+		zWindow
 			.on('resize', function(){popupAlignTop(element)})
 			.on('scroll', function(){popupAlignTop(element)});
 	},
@@ -340,10 +342,13 @@ zjs.require('ui', function(){
 			zPopupEl.removeClass(longpopupclass);
 		};
 		
-		
+		var delayShownTime = 0;
 		popupRefresh(element);
 		// neu nhu fade (old version) thi se dung script de fade
-		if(option.fade)zPopupEl.fadeIn({time:option.fadeTime});
+		if(option.fade){
+			zPopupEl.fadeIn({time:option.fadeTime});
+			delayShownTime = option.fadeTime;
+		}
 		if(option.fadeCover)zPopupEl.getData(pagecoverElKey).fadeIn({time:option.fadeTime});
 		// neu nhu animate thi se add cac class phu hop de ma dung css3 animate
 		if(option.animate){
@@ -352,6 +357,7 @@ zjs.require('ui', function(){
 			zPopupEl.addClass('showing zanimate zanimate-start');
 			timer1 = (function(){zPopupEl.addClass('zanimate-end')}).delay(option.animateTime);
 			timer2 = (function(){zPopupEl.removeClass('showing zanimate zanimate-start zanimate-end')}).delay(option.animateTime + 100);
+			delayShownTime = option.animateTime;
 		};
 		// add class cho popup
 		// run trigger
@@ -368,7 +374,14 @@ zjs.require('ui', function(){
 		
 		// helper 1 xiu cho form cho vui
 		// cai nay se auto focus may cai field luon
-		(function(){zPopupEl.find('.autofocus').focus()}).delay(500);
+		(function(){
+			zPopupEl.find('.autofocus').focus();
+			if(option.disableWindowScroll){
+				if('disableScroll' in zWindow){
+					zWindow.disableScroll();
+				}
+			}
+		}).delay(delayShownTime+100);
 	},
 	
 	popupHide = function(element, notUseFade, initHide){
@@ -457,8 +470,12 @@ zjs.require('ui', function(){
 		
 		// ---
 		
+		var delayHideTime = 0;
 		// hide popup sau
-		if(!notUseFade && option.fade && !option.animate)zPopupEl.fadeOut({time:option.fadeTime, callback:_popupHide});
+		if(!notUseFade && option.fade && !option.animate){
+			zPopupEl.fadeOut({time:option.fadeTime, callback:_popupHide});
+			delayHideTime = option.fadeTime;
+		}
 
 		// neu nhu animate thi se add cac class phu hop de ma dung css3 animate
 		else if(!notUseFade && option.animate){
@@ -467,6 +484,7 @@ zjs.require('ui', function(){
 			zPopupEl.addClass('hiding zanimate zanimate-start');
 			timer1 = (function(){zPopupEl.addClass('zanimate-end')}).delay(option.animateTime);
 			timer2 = (function(){zPopupEl.removeClass('hiding zanimate zanimate-start zanimate-end');_popupHide()}).delay(option.animateTime + 100);
+			delayHideTime = option.animateTime;
 		}
 		
 		else _popupHide();
@@ -474,6 +492,15 @@ zjs.require('ui', function(){
 		
 		// xoa di thong tin show instance
 		zPopupEl.removeAttr('data-show-instance');
+
+
+		(function(){
+			if(option.disableWindowScroll){
+				if('enableScroll' in zWindow){
+					zWindow.enableScroll();
+				}
+			}
+		}).delay(delayHideTime+100);
 	},
 	
 	popupRefresh = function(element){
@@ -493,7 +520,7 @@ zjs.require('ui', function(){
 		var option = zPopupEl.getData(optionkey);
 		if(!option)return;
 		if(!zPopupEl.hasClass(centerclass))return;
-		var diffHeight = zjs(window).height() - zPopupEl.height();
+		var diffHeight = zWindow.height() - zPopupEl.height();
 		
 		// uu tien xem set de set margin theo relative popup (longPopup)
 		if(checkIsLongPopup(option.longPopup) || option.scrollPopup!==false){
