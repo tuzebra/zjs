@@ -1,11 +1,11 @@
-// MODULE UI HEADER
+// MODULE UI MENU
 zjs.require('ui.freezepanel', function(){
 	
-	var optionkey = 'zmoduleuiheaderoption';
+	var optionkey = 'zmoduleuimenuoption';
 	
 	// extend core mot so option
 	zjs.extendCore({
-		moduleUiHeaderOption: {
+		moduleUiMenuOption: {
 			freeze: false,
 
 			// freezepanel module options
@@ -13,6 +13,9 @@ zjs.require('ui.freezepanel', function(){
 			autoHideSpeed: 2000,
 			autoHideDelay: 0,
 			useHeightBuffer: true,
+
+			// option when open mobile menu
+			disableWindowScroll: true,
 
 			// mobile
 			mobileMenuStyle: 'offcanvas',
@@ -24,87 +27,88 @@ zjs.require('ui.freezepanel', function(){
 	});
 	
 	// template
-	var zheaderclass = 'zui-header',
+	var zmenuclass = 'zui-menu',
+		hamburgerButtonClass = 'zhamburger',
 		
 		// uninitialaze hide class
 		uninitclass = 'zui-uiuninithide zui-uiuninithideh';
 	
-		
+	var zWindow = zjs(window);	
 	
 	// - - - - - - - - -
 	
 	// MAIN FUNCTIONS
 	
-	var makeHeader = function(element, useroption){
+	var makeMenu = function(element, useroption){
 		
-		var zHeaderEl = zjs(element);
+		var zMenuEl = zjs(element);
 				
 		// - - - 
 		// neu ma co roi thi se ghi lai option
 		// option luc nay la option cua user
-		var option = zHeaderEl.getData(optionkey);
+		var option = zMenuEl.getData(optionkey);
 		
 		// flag y bao phai refresh lai option
 		if(option){
-			zHeaderEl.setData(optionkey, zjs.extend(option, useroption));
+			zMenuEl.setData(optionkey, zjs.extend(option, useroption));
 			return;
 		};
 		
 		// - - - 
 		// neu ma chua co thi se lam binh thuong
 		// copy option tu default option
-		option = zjs.clone(zjs.moduleUiHeaderOption);
+		option = zjs.clone(zjs.moduleUiMenuOption);
 		// extend from inline option ?
-		var inlineoption = zHeaderEl.getAttr('data-option', '');
+		var inlineoption = zMenuEl.getAttr('data-option', '');
 		if(zjs.isString(inlineoption) && inlineoption.trim()!='')
 			option = zjs.extend(option, inlineoption.jsonDecode());
 		// sau do remove di luon inline option luon, cho html ra dep
-		zHeaderEl.removeAttr('data-option');
+		zMenuEl.removeAttr('data-option');
 		// extend from user option ?
 		if(typeof useroption!='undefined')
 			option = zjs.extend(option, useroption);
 		// save option
-		zHeaderEl.setData(optionkey, option);
+		zMenuEl.setData(optionkey, option);
 		
 		// - - -
 		// start coding module
 		
-		zHeaderEl.addClass(zheaderclass);
+		zMenuEl.addClass(zmenuclass);
 		
 		// remove uninitialaze hide class
-		zHeaderEl.removeClass(uninitclass);
+		zMenuEl.removeClass(uninitclass);
 
 		// alway makt it freeze
-		zHeaderEl.makeFreezepanel(option);
+		zMenuEl.makeFreezepanel(option);
 		if(option.autoHideSpeed === 0){
-			zHeaderEl.addClass('autohide-speed-0');
+			zMenuEl.addClass('autohide-speed-0');
 		}
 
 		// save trang thai on/off cua menu
 		var isMobileMenuOpen = false;
 
 		// find hamburger button
-		var zHamburgerButton = zHeaderEl.find('.zhamburger');
+		var zHamburgerButton = zMenuEl.find('.'+hamburgerButtonClass);
 		zHamburgerButton.on(clickTapEvent(), function(event){
 			event.preventDefault();
 			if(!isMobileMenuOpen){
 				isMobileMenuOpen = true;
 				zHamburgerButton.find('.icon-menu').removeClass('icon-menu').addClass('icon-close');
-				zHeaderEl.freezepanelAlwayShow(true);
-				zHeaderEl.freezepanelDisableChangeHeightBuffer(true);
+				zMenuEl.freezepanelAlwayShow(true);
+				zMenuEl.freezepanelDisableChangeHeightBuffer(true);
 				// apply effect?
 				(function(){
 					if(option.offcanvasMenuItemEffect == 'showdelay'){
-						offcanvasMenuItemEffectShowdelay(zHeaderEl, option, 'init');
+						offcanvasMenuItemEffectShowdelay(zMenuEl, option, 'init');
 					}
 				}).delay(100);
 				(function(){
-					zHeaderEl.addClass('active-'+option.mobileMenuStyle);
+					zMenuEl.addClass('active-'+option.mobileMenuStyle);
 				}).delay(200);
 				// apply effect?
 				(function(){
 					if(option.offcanvasMenuItemEffect == 'showdelay'){
-						offcanvasMenuItemEffectShowdelay(zHeaderEl, option, 'show');
+						offcanvasMenuItemEffectShowdelay(zMenuEl, option, 'show');
 					}
 				}).delay(300);
 			}
@@ -113,12 +117,12 @@ zjs.require('ui.freezepanel', function(){
 				zHamburgerButton.find('.icon-close').removeClass('icon-close').addClass('icon-menu');
 				// apply effect?
 				if(option.offcanvasMenuItemEffect == 'showdelay'){
-					offcanvasMenuItemEffectShowdelay(zHeaderEl, option, 'hide');
+					offcanvasMenuItemEffectShowdelay(zMenuEl, option, 'hide');
 				}
-				zHeaderEl.removeClass('active-'+option.mobileMenuStyle);
+				zMenuEl.removeClass('active-'+option.mobileMenuStyle);
 				(function(){
-					zHeaderEl.freezepanelAlwayShow(false);
-					zHeaderEl.freezepanelDisableChangeHeightBuffer(false);
+					zMenuEl.freezepanelAlwayShow(false);
+					zMenuEl.freezepanelDisableChangeHeightBuffer(false);
 				}).delay(100);
 			}
 		});
@@ -135,9 +139,9 @@ zjs.require('ui.freezepanel', function(){
 	//////////// EFFECTS //////////////
 	
 	// Offcanvas Effect
-	var offcanvasMenuItemEffectShowdelay = function(zHeaderEl, option, command){
+	var offcanvasMenuItemEffectShowdelay = function(zMenuEl, option, command){
 		// get list menu item
-		var itemEls = zHeaderEl.find(option.offcanvasMenuItem);
+		var itemEls = zMenuEl.find(option.offcanvasMenuItem);
 
 		if(command == 'init'){
 			var step = 50;
@@ -152,10 +156,22 @@ zjs.require('ui.freezepanel', function(){
 
 		if(command == 'show'){
 			itemEls.addClass('effect-active');
+			
+			if(option.disableWindowScroll){
+				if('disableScroll' in zWindow){
+					zWindow.disableScroll();
+				}
+			}
 		}
 
 		if(command == 'hide'){
 			itemEls.setStyle('transition-delay', null).removeClass('offcanvas-item-show-delay effect-active');
+
+			if(option.disableWindowScroll){
+				if('enableScroll' in zWindow){
+					zWindow.enableScroll();
+				}
+			}
 		}
 	};
 
@@ -166,8 +182,8 @@ zjs.require('ui.freezepanel', function(){
 	// - - - - - - - - - 
 	// EXTEND METHOD cho zjs-instance
 	zjs.extendMethod({
-		makeHeader: function(useroption){
-			return this.eachElement(function(element){makeHeader(element, useroption)});
+		makeMenu: function(useroption){
+			return this.eachElement(function(element){makeMenu(element, useroption)});
 		},
 	});
 	
@@ -176,22 +192,22 @@ zjs.require('ui.freezepanel', function(){
 	zjs.hook({
 		after_setInnerHTML: function(el){
 			// kiem tra xem trong so cac thang con
-			// co class nao la zbutton ko, neu nhu co thi se auto makeHeader luon
-			zjs(el).find('.zheader').makeHeader();
+			// co class nao la zbutton ko, neu nhu co thi se auto makeMenu luon
+			zjs(el).find('.zmenu').makeMenu();
 		},
 		after_insertDOM: function(el){
 			// kiem tra xem trong so cac thang con, va ngay ca thang con
-			// co class nao la zbutton ko, neu nhu co thi se auto makeHeader luon
-			if(zjs(el).hasClass('zheader'))zjs(el).makeHeader();
-			zjs(el).find('.zheader').makeHeader();
+			// co class nao la zbutton ko, neu nhu co thi se auto makeMenu luon
+			if(zjs(el).hasClass('zmenu'))zjs(el).makeMenu();
+			zjs(el).find('.zmenu').makeMenu();
 		}
 	});
 	
 	// AUTO INIT
 	zjs.onready(function(){
-		zjs('.zheader').makeHeader();
+		zjs('.zmenu').makeMenu();
 	});
 	//fix de tuong thich voi zjs version 1.0
 	if('required' in zjs)
-	zjs.required('ui.header');
+	zjs.required('ui.menu');
 });
