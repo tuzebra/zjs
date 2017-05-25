@@ -15,3 +15,7 @@
 07/03/2017
 		+ add option "customCssClass"
 		+ support render custom data
+
+25/05/2017
+		+ Fix bug related to back-forward cache (BFCache).
+		+ Remove the scrollbar required.

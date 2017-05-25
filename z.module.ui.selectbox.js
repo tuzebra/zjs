@@ -119,7 +119,7 @@ zjs.require('scrollbar, ui, ui.button', function(){
 			zSelectboxPanelEl = zSelectboxWrapEl.find('.'+selectboxpanelclass);
 		
 		// bay gio se tien hanh di get ra toan bo value cua cai selectbox
-		var countTotalItem = 0, countTotalActiveItem = 0;
+		var countTotalItem = 0, countTotalActiveItem = 0, defaultSelectedIndex = 0;
 		zSelectboxEl.find('option,optgroup').eachElement(function(el){
 			var zEl = zjs(el);
 			// kiem tra xem coi type cua element de lam 
@@ -165,7 +165,10 @@ zjs.require('scrollbar, ui, ui.button', function(){
 				// thi set cho thang a 1 cai href luon
 				var href = zEl.getAttr('data-href', '');
 				if(href!='')itemEl.setAttr('href', href);
-				if(zEl.is('[selected]'))itemEl.addClass(selectboxitemselectedclass);
+				if(zEl.is('[selected]')){
+					itemEl.addClass(selectboxitemselectedclass);
+					defaultSelectedIndex = (countTotalItem - 1);
+				}
 				// san tien fix lai cau truc cua thang select goc luon
 				zEl.setAttr('value', itemEl.getAttr('data-value'));
 				// custom class
@@ -173,6 +176,10 @@ zjs.require('scrollbar, ui, ui.button', function(){
 				if(customclass!='')itemEl.addClass(customclass);
 			};
 		});
+
+		// reset lai cai selected value cho thang select
+		// because Modern browsers implement something known as back-forward cache (BFCache).
+		element.selectedIndex = defaultSelectedIndex;
 
 		// add them class de biet duong ma style
 		zSelectboxWrapEl.addClass('total-item-'+countTotalItem).addClass('total-active-item-'+countTotalActiveItem);
@@ -183,8 +190,12 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		// va sau khi makeScrollbar xong roi thi se 
 		// remove class init di va add class hide vao
 		var zSelectboxPanelHeight = zSelectboxPanelEl.height();
-		if(zSelectboxPanelHeight > option.panelmaxheight)
-			zSelectboxPanelEl.makeScrollbar({height:option.panelmaxheight});
+		if(zSelectboxPanelHeight > option.panelmaxheight){
+			// nhieu khi module scrollbar chua duoc load thi se khong can dung toi luon
+			if('makeScrollbar' in zSelectboxPanelEl){
+				zSelectboxPanelEl.makeScrollbar({height:option.panelmaxheight});
+			}
+		}
 		zSelectboxPanelWrapEl.addClass(contextualpanelwraphideclass).removeClass(selectboxpanelwrapinitclass);
 		
 		// sau cung se xem coi neu chua co cai item nao duoc selected
