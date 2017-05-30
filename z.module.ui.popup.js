@@ -394,6 +394,15 @@ zjs.require('ui', function(){
 		if(!zPopupEl.hasClass(activeclass))return;
 		if(zPopupEl.hasClass(hideclass))return;
 		
+
+		// khi hide popup thi se uu tien xu ly cai scroll truoc
+		if(option.disableWindowScroll){
+			if('enableScroll' in zWindow){
+				zWindow.enableScroll();
+			}
+		}
+
+
 		var _popupHide = function(){
 				zPopupEl.addClass(hideclass);
 				// run trigger
@@ -494,13 +503,6 @@ zjs.require('ui', function(){
 		zPopupEl.removeAttr('data-show-instance');
 
 
-		(function(){
-			if(option.disableWindowScroll){
-				if('enableScroll' in zWindow){
-					zWindow.enableScroll();
-				}
-			}
-		}).delay(delayHideTime+100);
 	},
 	
 	popupRefresh = function(element){
