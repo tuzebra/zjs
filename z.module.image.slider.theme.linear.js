@@ -1589,8 +1589,13 @@ zjs.regSliderTheme('linear', function(element, images, option){
 		// fix index truoc
 		_index = _utiFixIndexNumber(_index);
 		// truong hop dat biet can phai fix
-		if(images.length === 2 && _index === 0 && classname === 'active-next')
-			classname = 'active-back';
+		if(_index === 0){
+			if(images.length === 2 && classname === 'active-next')classname = 'active-back';
+			if(images.length === 3 && classname === 'active-next')classname = 'active-back2';
+		}
+		if(_index === 2){
+			if(images.length === 3 && classname === 'active-back')classname = 'active-next2';
+		}
 		// add class
 		zImageViewWrap.find('.image-hold.image'+_index).addClass(classname);
 	};
