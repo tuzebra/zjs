@@ -2630,6 +2630,27 @@ zjs.regSliderTheme('linear', function(element, images, option){
 
 
 
+
+	// ham lam nhiem vu lay ra thong tin
+	var getSliderInfo = function(){
+		return {
+			images: images,
+			current: {
+				index: currentIndex,
+				image: currentImageSrc,
+				title: currentTitle,
+				description: currentDes,
+				link: currentLink
+			}
+		};
+	};
+
+
+
+	// - - - -
+
+
+
 	// trigger event
 	zElement.trigger('slider:ready');
 	(function(){
@@ -2728,6 +2749,7 @@ zjs.regSliderTheme('linear', function(element, images, option){
 		slideDisable: function(){slideDisable(true)},
 		slideEnable: function(){slideEnable(true)},
 		slideFilter: slideFilter,
+		getSliderInfo: getSliderInfo,
 	};
 
 });

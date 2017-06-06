@@ -182,6 +182,17 @@
 				var themeObj = zjs(element).getData(themeobjkey);
 				if(typeof themeObj == 'object' && typeof themeObj.slideFilter =='function')themeObj.slideFilter(slideItemFilterHandler);
 			});
+		},
+		getSliderInfo: function(){
+			var zEl = this.item(0);
+			if(zEl){
+				var themeObj = zEl.getData(themeobjkey);
+				if(typeof themeObj == 'object' && typeof themeObj.getSliderInfo =='function'){
+					return themeObj.getSliderInfo();
+				}
+			}
+
+			return false;
 		}
 	});
 	
