@@ -1032,6 +1032,34 @@ var version = '1.1',
 					}, outTime*1000);
 				
 				}
+
+				// cordova local file
+				else if(
+					// is Cordova
+					((typeof cordova != 'undefined') && (typeof device != 'undefined') && device.platform != 'browser')
+					// url don't have http
+					&& url.indexOf('http') !== 0
+				){
+					resolveLocalFileSystemURL(cordova.file.applicationDirectory + 'www/' + url, function (fileEntry) {
+					    // console.log('file system open: ' + fileEntry.name);
+					    fileEntry.file(function (file) {
+						    var reader = new FileReader();
+						    reader.onloadend = function() {
+						        var result = this.result;
+						        if(option.dataType.toLowerCase() == 'json')result = result.jsonDecode();
+						        if(typeof option.onComplete == 'function')option.onComplete(result);
+						    };
+						    reader.readAsText(file);
+						}, 
+						function(err){
+							// console.log('onErrorReadFile: ', JSON.stringify(err));
+						});
+					    
+					}, function(err){
+						// console.log('error reading folder', JSON.stringify(err));
+					});
+
+				}
 			
 				// normal xhr
 				else{
