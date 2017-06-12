@@ -1040,8 +1040,10 @@ var version = '1.1',
 					// url don't have http
 					&& url.indexOf('http') !== 0
 				){
-					resolveLocalFileSystemURL(cordova.file.applicationDirectory + 'www/' + url, function (fileEntry) {
-					    // console.log('file system open: ' + fileEntry.name);
+					console.log('[zjs ajax] resolveLocalFileSystemURL start: ', url);
+					resolveLocalFileSystemURL(url, function (fileEntry) {
+					    // console.log('[zjs ajax] url: ' + url);
+					    console.log('[zjs ajax] resolveLocalFileSystemURL recieve: ' + fileEntry.name);
 					    fileEntry.file(function (file) {
 						    var reader = new FileReader();
 						    reader.onloadend = function() {
@@ -1052,11 +1054,13 @@ var version = '1.1',
 						    reader.readAsText(file);
 						}, 
 						function(err){
-							// console.log('onErrorReadFile: ', JSON.stringify(err));
+							console.log('[zjs ajax] onErrorReadFile: ', JSON.stringify(err));
+							if(typeof option.onError == 'function')option.onError();
 						});
 					    
 					}, function(err){
-						// console.log('error reading folder', JSON.stringify(err));
+						console.log('[zjs ajax] onErrorReadFolder: ', JSON.stringify(err));
+						if(typeof option.onError == 'function')option.onError();
 					});
 
 				}
