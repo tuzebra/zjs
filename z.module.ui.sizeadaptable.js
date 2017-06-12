@@ -181,12 +181,29 @@
 	        });
 		},
 	};
+
+	var sizeAdaptableRefresh = function(element){
+		
+		var zSizeAdaptableEl = zjs(element);
+				
+		// - - - 
+		// check coi phai la size adaptable hay khong?
+		var option = zSizeAdaptableEl.getData(optionkey);
+		if(!option){
+			return;
+		}
+
+		
+	};
 	
 	// - - - - - - - - - 
 	// EXTEND METHOD cho zjs-instance
 	zjs.extendMethod({
 		makeSizeAdaptable: function(useroption){
 			return this.eachElement(function(element){makeSizeAdaptable(element, useroption)});
+		},
+		sizeAdaptableRefresh: function(){
+			return this.eachElement(function(element){sizeAdaptableRefresh(element)});
 		}
 	});
 	

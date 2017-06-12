@@ -60,7 +60,7 @@ zjs.require('image.loader', function(){
 	
 	
 	// function thuc hien viec tao ra overlay va preload
-	var mainPreloadFunction = function(){
+	var mainPreloadFunction = function(option){
 	
 		// dau tien la se make 1 cai overlay
 		// (bug on IE)
@@ -175,12 +175,10 @@ zjs.require('image.loader', function(){
 		var _loadingTextEl = zPagepreloadEl.find('.loading-text-percent');
 		var _loadingPercentEl = zPagepreloadEl.find('.loading-percent');
 		// auto force to use local cache on Cordova
-		var localCache = ((typeof cordova != 'undefined') && (typeof device != 'undefined') && device.platform != 'browser');
-		// console.log('[PagePreload] localCache', localCache);
-		zjs.loadImages({
+		var _options = zjs.extend({
 			images: preloadImages,
 			delay: 1400,
-			localCache: localCache,
+			localCache: ((typeof cordova != 'undefined') && (typeof device != 'undefined') && device.platform != 'browser'),
 			onLoading: function(percent){
 				_loadingTextEl.html(percent.toString());
 				_loadingPercentEl.html('%');
@@ -193,7 +191,12 @@ zjs.require('image.loader', function(){
 				if(readyDom)
 					removeOverlay();
 			}
-		});
+		}, option);
+
+		// console.log('option', JSON.stringify(_options));
+
+		// console.log('[PagePreload] localCache', localCache);
+		zjs.loadImages(_options);
 		// console.log('[PagePreload] end loadimages');
 	
 		// kiem tra neu nhu body ma duoc gan scroll du
@@ -260,7 +263,7 @@ zjs.require('image.loader', function(){
 
 	zjs.extendCore({
 		pagepreloadAddImage: function(imageUrl){
-			// console.log('pagepreloadAddImage', imageUrl);
+			// console.log('[zjs] pagepreloadAddImage', imageUrl);
 			preloadImages.push(imageUrl);
 		},
 		pagepreloadRun: function(){
