@@ -611,11 +611,13 @@ zjs.regSliderTheme('linear', function(element, images, option){
 		// vi se sai o nhieu noi
 		imageViewWrapCssTransitionTurnOn = function(){
 			if(!flagSlideUseCssTransform)return;
-			zImageViewWrap.setStyle('transition', 'transform ' + option.transitionTime + 'ms '+cubicbezier);
+			// zImageViewWrap.setStyle('transition', 'transform ' + option.transitionTime + 'ms '+cubicbezier);
+			zImageViewWrap.setStyle('transition-duration', option.transitionTime+'ms');
 		},
 		imageViewWrapCssTransitionTurnOff = function(){
 			if(!flagSlideUseCssTransform)return;
-			zImageViewWrap.setStyle('transition', '');
+			// zImageViewWrap.setStyle('transition', '');
+			zImageViewWrap.setStyle('transition-duration', '0ms');
 		};
 	// bay gio moi di test co co su dung css3 transition khong ne
 	if(zjs.supportTransform && option.usecss){
@@ -632,7 +634,8 @@ zjs.regSliderTheme('linear', function(element, images, option){
 			cubicbezier = option.transitionTimingfunction;
 		}
 		// turn on thoi
-		imageViewWrapCssTransitionTurnOn();
+		// imageViewWrapCssTransitionTurnOn();
+		zImageViewWrap.setStyle('transition', 'transform ' + option.transitionTime + 'ms '+cubicbezier);
 	}
 
 
