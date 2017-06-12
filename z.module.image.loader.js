@@ -20,7 +20,12 @@
 			this.errorCallback = errorCallback || false;
 			var self = this;
 
-			var handlerImgLoading = function(){
+			var handlerImgLoading = function(forceLoaded){
+
+				if(forceLoaded){
+					return self.onLoad();
+				}
+
 				// console.log('handlerImgLoading', self.src);
 				if(!self.img){
 					self.img = new Image();
@@ -56,30 +61,29 @@
 				ImgCache.isCached(self.src, function(path, success) {
 					// console.log('is cache? ', path);
 					if (success) {
-						if(ImgCache.options.debug){
-							console.log('is cached! ', path);
-						}
+						ImgCache.options.debug && console.log('[img loader] is cached! ', path);
 						// already cached
 						// we'll switch to cached version
 						ImgCache.getCachedFileURL(self.src, function(src, newSrc){
+							ImgCache.options.debug && console.log('[img loader] getCachedFileURL:', src, newSrc);
 							cacheImageUrls[self.src] = newSrc;
 							self.src = newSrc;
 							// run handler
-							handlerImgLoading();
+							handlerImgLoading(true);
 						});
 					} else {
-						if(ImgCache.options.debug){
-							console.log('not cached! ', path);
-						}
+						ImgCache.options.debug && console.log('[img loader] not cached! ', path);
 						// not there, need to cache the image
 						ImgCache.cacheFile(self.src, function () {
+							ImgCache.options.debug && console.log('[img loader] cacheFile:', self.src);
 							// console.log('cache done ', path);
 							// we'll switch to cached version
 							ImgCache.getCachedFileURL(self.src, function(src, newSrc){
+								ImgCache.options.debug && console.log('[img loader] cacheFile -> getCachedFileURL:', src, newSrc);
 								cacheImageUrls[self.src] = newSrc;
 								// console.log('get cache url: ', path, src, newSrc);
 								self.src = newSrc;
-								handlerImgLoading();
+								handlerImgLoading(true);
 							});
 						});
 					}
