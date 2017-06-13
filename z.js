@@ -906,6 +906,7 @@ var version = '1.1',
 	
 		// private variable phuc vu cho jsonp
 		var requestId = 0, outTime = 20, callbackStorage = {}, timeoutStorage = {};
+		var cacheResponseStorage = {};
 	
 		// 1 cai function global de phuc vu cho viec goi jsonp
 		extend(zjs,{jsonpcallback:function(data, rid){
@@ -942,6 +943,7 @@ var version = '1.1',
 					contentType: 'application/x-www-form-urlencoded',
 					repeat: -1,
 					cache: true,
+					cacheResponse: false,
 					onBegin: false,
 					onLoading: false,
 					onComplete: false,
@@ -992,9 +994,17 @@ var version = '1.1',
 				// begin load
 				if(typeof option.onBegin == 'function')option.onBegin();
 				zjs.trigger('ajax.begin');
-			
+				
+				// cached
+				if(option.cacheResponse && (url in cacheResponseStorage)){
+					console.log('[zjs ajax] use from cache: ' + url);
+					var result = cacheResponseStorage[url];
+					if(option.dataType.toLowerCase() == 'json')result = result.jsonDecode();
+			        if(typeof option.onComplete == 'function')option.onComplete(result);
+				}
+
 				// jsonp
-				if(option.dataType.toLowerCase() == 'jsonp'){
+				else if(option.dataType.toLowerCase() == 'jsonp'){
 				
 					if(typeof option.onLoading == 'function')option.onLoading();
 				
@@ -1048,6 +1058,9 @@ var version = '1.1',
 						    var reader = new FileReader();
 						    reader.onloadend = function() {
 						        var result = this.result;
+						        if(option.cacheResponse){
+						        	cacheResponseStorage[url] = result;
+						        }
 						        if(option.dataType.toLowerCase() == 'json')result = result.jsonDecode();
 						        if(typeof option.onComplete == 'function')option.onComplete(result);
 						    };
@@ -2328,7 +2341,7 @@ zjs.extendMethod({
 				// va cai nay chi bind dung 1 lan ma thoi
 				// (can't use [].include because conflit with mootools)
 				if(['swipe', 'swipeleft', 'swiperight', 'swipeup', 'swipedown', 
-					'doubletap', 'tap', 'singletap', 'longtap'].isInclude(type)){
+					'touch', 'doubletap', 'tap', 'singletap', 'longtap'].isInclude(type)){
 					zjs.initTouchEvent();
 					return;
 				};
@@ -2456,7 +2469,7 @@ zjs.extendMethod({
 				// nhung ma trong truong hop tap/... (su dung touch vao cai thang document)
 				// cho nen neu get ra handler cua thang elem nay thi se khong chinh xac
 				// ma nen go up de tim ra cai thang chinh xac ma can event nay
-				if(['doubletap', 'tap', 'singletap', 'longtap'].include(type)){
+				if(['touch', 'doubletap', 'tap', 'singletap', 'longtap'].include(type)){
 					
 					// bay gio se co gang go up (find parent) de ma tim thoi
 					try{
@@ -2503,7 +2516,7 @@ zjs.extendMethod({
 			// vi su dung custom event cua zjs, nen phai back len tren
 			// de check coi thang cha ben tren co bind event hay khong
 			// neu nhu co thi lam luon thang ben tren
-			if(!isDefaultPrevented && ['doubletap', 'tap', 'singletap', 'longtap'].include(type)){
+			if(!isDefaultPrevented && ['touch', 'doubletap', 'tap', 'singletap', 'longtap'].include(type)){
 				// bay gio se co gang go up (find parent) de ma tim thoi
 				try{
 					elem = elem.parentElement;
@@ -4448,6 +4461,7 @@ zjs.extendMethod({
 	
 	// 1 so option cho mobile event
 	zjs.extendCore({mobileEventOption:{
+		touchDelay: 35,
 		longTapDelay: 750,
 		doubleTapDelay: 250,
 		twoNormalTapDelay: 800,
@@ -4457,7 +4471,7 @@ zjs.extendMethod({
 	
 	// cac bien se su dung
 	var justInited = false,
-	touchTimeout, tapTimeout, swipeTimeout, longTapTimeout,
+	touchTimeout, tapTimeout, doubleTapTimeout, swipeTimeout, longTapTimeout,
 	
 	// luu lai may cai thong tin cua 1 lan touch
 	touch = {
@@ -4466,6 +4480,7 @@ zjs.extendMethod({
 		y1: 0,
 		isDoubleTap: false,
 		isTap: false,
+		isTouch: false,
 		last: 0
 	},
 	
@@ -4492,9 +4507,10 @@ zjs.extendMethod({
 	cancelAll = function(){
 		if(touchTimeout)clearTimeout(touchTimeout);
 		if(tapTimeout)clearTimeout(tapTimeout);
+		if(doubleTapTimeout)clearTimeout(doubleTapTimeout);
 		if(swipeTimeout)clearTimeout(swipeTimeout);
 		if(longTapTimeout)clearTimeout(longTapTimeout);
-		touchTimeout = tapTimeout = swipeTimeout = longTapTimeout = null;
+		touchTimeout = tapTimeout = doubleTapTimeout = swipeTimeout = longTapTimeout = null;
 		touch = {};
 	},
 	
@@ -4556,8 +4572,8 @@ zjs.extendMethod({
 			touch.zEl = zjs('tagName' in firstTouch.target ? firstTouch.target : firstTouch.target.parentNode);
 			
 			// neu co timeout thi clear
-			if(touchTimeout)
-				clearTimeout(touchTimeout);
+			if(doubleTapTimeout)clearTimeout(doubleTapTimeout);
+			if(touchTimeout)clearTimeout(touchTimeout);
 				
 			touch.x1 = firstTouch.pageX;
 			touch.y1 = firstTouch.pageY;
@@ -4571,6 +4587,12 @@ zjs.extendMethod({
 			// update lai cai last time
 			if(touch.isTap)
 				touch.last = now;
+
+			// set cai timeout de ma fire cai "touch"
+			touchTimeout = setTimeout(function(){
+				touchTimeout = null;
+				if(touch.zEl)touch.zEl.trigger('touch');
+			}, zjs.mobileEventOption.touchDelay);
 			
 			// set cai timeout de ma fire cai long tap
 			longTapTimeout = setTimeout(function(){
@@ -4607,6 +4629,7 @@ zjs.extendMethod({
 			// cho neu neu kiem tra thay duoc thi fire swipe event luon cho roi 
 			// fire event: swipe
 			if((touch.x2 && deltaX > zjs.mobileEventOption.swipePoint) || (touch.y2 && deltaY > zjs.mobileEventOption.swipePoint)){
+				if(touchTimeout)clearTimeout(touchTimeout);
 				if(swipeTimeout)clearTimeout(swipeTimeout);
 				swipeTimeout = setTimeout(function(){
 					if(touch.zEl){
@@ -4677,8 +4700,8 @@ zjs.extendMethod({
 						// double tap hay khong, cho nen se delay lai 1 xiu xem thu
 						// default la cho 250ms
 						else{
-							touchTimeout = setTimeout(function(){
-								touchTimeout = null;
+							doubleTapTimeout = setTimeout(function(){
+								doubleTapTimeout = null;
 								if(touch.zEl)touch.zEl.trigger('singletap');
 								// reset cai touch, nhung ma phai giu lai cai isTap
 								//touch = {};
