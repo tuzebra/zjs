@@ -5,3 +5,7 @@
 13/03/2017
 	00:20 
 		+ add new handlerResizeMethod accepted value, slai (scale like an image)
+
+15/06/2017
+	16:20
+		+ support "object-fit" property on image tag to improve performance

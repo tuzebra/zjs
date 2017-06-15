@@ -103,11 +103,15 @@
 
 			// get handler method
 			var handlerMethod = handlerMethods[option.handlerResizeMethod];
+			
+			// init
+			handlerMethod('init', zSizeAdaptableEl, zParentEl, originalRatio, option);
+
 			// first run
-			handlerMethod(zSizeAdaptableEl, zParentEl, originalRatio, option);
+			handlerMethod('resize', zSizeAdaptableEl, zParentEl, originalRatio, option);
 
 			zjs(window).on('resize', function(){
-				handlerMethod(zSizeAdaptableEl, zParentEl, originalRatio, option);
+				handlerMethod('resize', zSizeAdaptableEl, zParentEl, originalRatio, option);
 			});
 		};
 
@@ -124,7 +128,20 @@
 
 	// HANDLER METHODs
 	var handlerMethods = {
-		'cover': function(zSizeAdaptableEl, zParentEl, originalRatio, option){
+		cover: function(command, zSizeAdaptableEl, zParentEl, originalRatio, option){
+
+			if(zSizeAdaptableEl.getData('donthandle')){
+				return;
+			}
+
+			if(command === 'init'){
+				// we'll use object-fit if browser supported it
+				if(zSizeAdaptableEl.is('img') && ('objectFit' in zSizeAdaptableEl.item(0, 1).style)){
+					zSizeAdaptableEl.setStyle({'width': '100%', 'height': '100%', 'object-fit': 'cover'}).setData('donthandle', true);
+				}
+				return;
+			}
+
 			// area ratio 
 			var areaWidth = zParentEl.width(),
 				areaHeight = zParentEl.height(),
@@ -161,8 +178,13 @@
 		},
 
 		// scale like an image
-		slai: function(zSizeAdaptableEl, zParentEl, originalRatio, option){
+		slai: function(command, zSizeAdaptableEl, zParentEl, originalRatio, option){
 			
+			if(command === 'init'){
+				// don't have anything to init
+				return;
+			}
+
 			var areaWidth = zParentEl.width(),
 				elWidth = zSizeAdaptableEl.width(),
 				elHeight = zSizeAdaptableEl.height();
