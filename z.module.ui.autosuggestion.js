@@ -107,9 +107,18 @@ zjs.require('dictionary, scrollbar', function(){
 		// sau do remove di luon inline option luon, cho html ra dep
 		zOriginalInput.removeAttr('data-option');
 		
+		// support sourceUrl option pass as an attribute of element
+		if(!option.sourceUrl){
+			var _attDataAutocompletePath = zOriginalInput.getAttr('data-autocomplete-path', '');
+			if(_attDataAutocompletePath !== ''){
+				option.sourceUrl = _attDataAutocompletePath;
+			}
+		}
+
 		// extend from user option ?
 		if(typeof useroption!='undefined')
 			option = zjs.extend(option, useroption);
+
 
 		// support source is a <select>
 		var selectSourceEl = false;

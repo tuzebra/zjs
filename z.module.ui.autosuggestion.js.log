@@ -22,3 +22,4 @@
 
 22/06/2017
 		+ better render placeholder text
+		+ support use attribute "data-autocomplete-path" as an alternative for option.sourceUrl
