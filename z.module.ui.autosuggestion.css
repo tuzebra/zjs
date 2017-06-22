@@ -8,7 +8,8 @@
 .zui-autosuggestion-wrap.focus .zui-autosuggestion-inputwrap{border-color:#4D90FE;}
 .zui-autosuggestion-wrap.error .zui-autosuggestion-inputwrap{border-color:#FF7A00;}
 
-.zui-autosuggestion-placeholder{position:absolute;font-size:14px;line-height:18px;font-weight:normal;font-family:arial,tahoma;padding:0;color:#ccc;white-space:nowrap;}
+.zui-autosuggestion-placeholder{position:absolute;font-size:14px;line-height:18px;font-weight:normal;font-family:arial,tahoma;padding:0;color:#ccc;white-space:nowrap;pointer-events:none;}
+.zui-autosuggestion-placeholder ._hide{color:transparent;}
 .zui-autosuggestion-input{display:block;position:relative;width:100%;font-size:14px;line-height: 18px;font-weight:normal;font-family:arial,tahoma;box-sizing:border-box;/*z-index:1;*/}
 textarea.zui-autosuggestion-input{height:18px;}
 .zui-autosuggestion-input,

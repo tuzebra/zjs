@@ -19,3 +19,6 @@
 
 17/01/2017
 		+ add new option: "itemLinkFormat" that support add/handler a link as a highlight-item
+
+22/06/2017
+		+ better render placeholder text

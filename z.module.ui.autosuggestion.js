@@ -361,7 +361,7 @@ zjs.require('dictionary, scrollbar', function(){
 			// realvalue that use in the result
 			usedvalue = '';
 		
-		zPlaceholder.setInnerHTML(placeholderText);
+		setPlaceholderText(zPlaceholder, placeholderText);
 		
 		// - - - -
 		// hide old input
@@ -370,7 +370,7 @@ zjs.require('dictionary, scrollbar', function(){
 		// thi se empty cai placeholder di thoi
 		if(zOriginalInput.getValue('')!=''){
 			zInput.setValue(typevalue = zOriginalInput.getValue());
-			zPlaceholder.setInnerHTML('');
+			setPlaceholderText(zPlaceholder, '');
 		};
 		
 		// - - - -
@@ -497,14 +497,14 @@ zjs.require('dictionary, scrollbar', function(){
 			var currentHighlightValue = '';
 			if(currentHighlightIndex==0){
 				currentHighlightValue = typevalue;
-				zPlaceholder.setInnerHTML(typevalueholder);
+				setPlaceholderText(zPlaceholder, typevalueholder);
 			}
 			else{
 				var zItemwrap = zPanelcontent.find('.'+__itemclass+'[data-highlight="'+currentHighlightIndex+'"]'),
 					zItemwrapData = zItemwrap.getData('searchtempdata');
 				zItemwrap.addClass(option.itemhighlightclass);
 				currentHighlightValue = zItemwrapData.text;
-				zPlaceholder.setInnerHTML('');
+				setPlaceholderText(zPlaceholder, '');
 			};
 			// set text for input
 			zInput.setValue(currentHighlightValue);
@@ -542,7 +542,7 @@ zjs.require('dictionary, scrollbar', function(){
 			zInput.setValue(typevalue=typevalueholder);
 			
 			// hide placeholder
-			zPlaceholder.setInnerHTML(typevalueholder='');
+			setPlaceholderText(zPlaceholder, typevalueholder = '');
 			// set highlight
 			// neu nhu dang co highlight san thi thoi, boi vi highlight uu tien cao hon
 			if(currentHighlightIndex<=0)
@@ -608,7 +608,7 @@ zjs.require('dictionary, scrollbar', function(){
 			zOriginalInput.setValue(option.usedproperty == 'text' ? typevalue : '');
 			
 			// hide placeholder
-			zPlaceholder.setInnerHTML(typevalueholder='');
+			setPlaceholderText(zPlaceholder, typevalueholder = '');
 			
 			// hide panel
 			zPanel.addClass('zui-panel-hide');
@@ -667,7 +667,7 @@ zjs.require('dictionary, scrollbar', function(){
 			// enter roi thi se khong co can cai placeholder lam gi nua
 			// nhung ma trong truong hop input empty thi thoi
 			if(typevalue!='')
-				zPlaceholder.setInnerHTML(typevalueholder='');
+				setPlaceholderText(zPlaceholder, typevalueholder = '');
 			
 			// hide panel
 			zPanel.addClass('zui-panel-hide');
@@ -680,7 +680,7 @@ zjs.require('dictionary, scrollbar', function(){
 			if(!option.multichoice){
 				if(zItemwrapData){
 					// hide placeholder
-					zPlaceholder.setInnerHTML(typevalueholder='');
+					setPlaceholderText(zPlaceholder, typevalueholder = '');
 					// hide panel
 					zPanel.addClass('zui-panel-hide');
 					// set text for input
@@ -756,7 +756,8 @@ zjs.require('dictionary, scrollbar', function(){
 				typevalueholder = '';
 				// delay 1 xiu de ma kip update top va left
 				(function(){
-					zPlaceholder.top(zInput.top()).left(zInput.left()).show().setInnerHTML(placeholderText);
+					zPlaceholder.top(zInput.top()).left(zInput.left()).show();
+					setPlaceholderText(zPlaceholder, placeholderText);
 				}).delay(80);
 			};
 		},
@@ -784,8 +785,8 @@ zjs.require('dictionary, scrollbar', function(){
 				// show placeholder and stop
 				if(rawvalue=='' || rawvalue.length<option.minlength){
 					typevalueholder = '';
-					if(rawvalue!='')zPlaceholder.setInnerHTML('');
-					else zPlaceholder.setInnerHTML(placeholderText);
+					if(rawvalue!='')setPlaceholderText(zPlaceholder, '');
+					else setPlaceholderText(zPlaceholder, placeholderText, rawvalue);
 					zPanel.addClass('zui-panel-hide');
 					return;
 				};
@@ -805,14 +806,14 @@ zjs.require('dictionary, scrollbar', function(){
 				if(rawvalue==''){ /* khong nhap gi ne */
 					// va dong thoi thang original (thang dich) cung empty thi return ve defautl placeholder thoi
 					if(zOriginalInput.getValue()=='') 
-						zPlaceholder.show().setInnerHTML(placeholderText);
+						setPlaceholderText(zPlaceholder.show(), placeholderText);
 					// con neu nhu thang dich khong co empty thi thoi, se hide di cho roi
 					else 
 						zPlaceholder.hide();
 					
 					// neu nhu rawvalue empty thi gio neu dang co cai thang highlight nao thi cung phai empty luon
 					typevalueholder = '';
-					zPlaceholder.setInnerHTML(placeholderText);
+					setPlaceholderText(zPlaceholder, placeholderText);
 					zPanel.addClass('zui-panel-hide');
 					return;
 				}
@@ -827,7 +828,7 @@ zjs.require('dictionary, scrollbar', function(){
 				//if(rawvalue=='' && zOriginalInput.getValue()=='')
 				// khong lien quan gio thoi cai thang zOriginalInput het tron
 				//if(rawvalue=='')
-				//	zPlaceholder.show().setInnerHTML(placeholderText);
+				//	setPlaceholderText(zPlaceholder.show(), placeholderText);
 				//else 
 				//	zPlaceholder.hide();
 				// @todo:
@@ -853,7 +854,7 @@ zjs.require('dictionary, scrollbar', function(){
 				// nhung ma ajax return data cham hon
 				// cho nen phai check input xem coi co can thiet show suggestion ra khong?
 				if(result.length==0 || zInput.getValue()==''){
-					zPlaceholder.setInnerHTML('');
+					setPlaceholderText(zPlaceholder, '');
 					zPanel.addClass('zui-panel-hide');
 					return;
 				};
@@ -903,7 +904,7 @@ zjs.require('dictionary, scrollbar', function(){
 				});
 			
 				// set placeholder
-				zPlaceholder.setInnerHTML(typevalueholder);
+				setPlaceholderText(zPlaceholder, typevalueholder, rawvalue);
 			
 				//sau do se thay doi height cua panel
 				changePanelHeight(allItemHeight);
@@ -969,7 +970,7 @@ zjs.require('dictionary, scrollbar', function(){
 			// set highlight
 			currentHighlightIndex = zItemwrap.getAttr('data-highlight',0).toInt();
 			// hide placeholder
-			zPlaceholder.setInnerHTML(typevalueholder='');
+			setPlaceholderText(zPlaceholder, typevalueholder = '');
 			// hide panel
 			zPanel.addClass('zui-panel-hide');
 			// input focus
@@ -1124,7 +1125,7 @@ zjs.require('dictionary, scrollbar', function(){
 					// thi gio show ra default placeholder text thoi
 					if(typevalue == ''){
 						typevalueholder = '';
-						zPlaceholder.setInnerHTML(placeholderText);
+						setPlaceholderText(zPlaceholder, placeholderText);
 					};
 				};
 				
@@ -1261,8 +1262,19 @@ zjs.require('dictionary, scrollbar', function(){
 		// chi can trigger event click cua thang wrapper
 		// la thang input se tu dong focus thoi
 		zWrapperInput.trigger('click');
-	};
+	},
 	
+
+	// help function to render to placeholder element
+	setPlaceholderText = function(pelm, text, hidetext){
+		text = text || '';
+		hidetext = hidetext || '';
+		if(hidetext && text){
+			text = text.replace(hidetext, '<span class="_hide">'+hidetext+'</span>');
+		}
+		pelm.setInnerHTML(text);
+	};
+
 	
 	// - - - -
 	// extend method cho zjs-instance
