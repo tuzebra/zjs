@@ -34,6 +34,7 @@
 		// tat nhien local khong the luu giu nhieu data duoc
 		// cho nen se can den 1 data source 
 		// va khi can thi dictionary se get more data (via ajax) 
+		this.cacheResponse = true;
 		this.usedCacheDataSource = false;
 		this.dataSourceUrl = '';
 		this.dataSourceDataStructure = '';
@@ -45,6 +46,9 @@
 		return this;
 	};
 	
+	zDictionary.prototype.setCacheResponse = function(bool){
+		this.cacheResponse = bool;
+	};
 	zDictionary.prototype.useCacheDataSource = function(bool){
 		this.usedCacheDataSource = bool;
 	};
@@ -91,9 +95,15 @@
 		
 		// kiem tra neu nhu cai data nay co id
 		// thi se dam bao la id khong bi trung
-		if(typeof data == 'object' && 'id' in data){
-			if(this.getItemById(data.id))
+		// trong truong hop khong co id
+		// thi se coi nhu id la cai searchproperty luon
+		if(typeof data == 'object'){
+			if(!('id' in data) && text !== ''){
+				data.id = text;
+			}
+			if(this.getItemById(data.id)){
 				return;
+			}
 		}
 		
 		// luu vao instance object
@@ -152,10 +162,10 @@
 	};
 	
 	zDictionary.prototype.search = function(rawquery){
-	
+		
 		// xem coi neu nhu co data source thi se uu tien get tren data source
-		if(this.dataSourceUrl != '')
-			this.getDataFromDataSource(rawquery, false);
+		// if(this.dataSourceUrl != '')
+			// this.getDataFromDataSource(rawquery, false);
 	
 		// dau tien la xoa dau Tieng Viet trong query
 		var query = rawquery.removeVietnameseCharacter().toLowerCase();
@@ -221,10 +231,11 @@
 
 		zjs.ajax({
 			url:this.dataSourceUrl,
-			data: {f:'text',q:rawquery},
+			data: {f:'text',q:(rawquery||'')},
 			type: 'json', 
 			method: 'get', 
-			cache: false,
+			cache: this.cacheResponse,
+			cacheResponse: this.cacheResponse,
 			onBegin: false,
 			onLoading: false,
 			onComplete: function(rawdata){

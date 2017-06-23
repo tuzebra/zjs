@@ -23,11 +23,13 @@ zjs.require('dictionary, scrollbar', function(){
 			mentionmode: false,
 			usedproperty: 'text',
 			searchproperty: 'text',
+			usedpropertytext: false,
 			noneValue: '',
 			source: [],
 			sourceUrl: '',
 			initSourceUrl: '',
 			sourceDataStructure: '',
+			cacheResponse: true,
 			itemtemplate: '<div class="item">${text}</div>',
 			itemLinkFormat: '',
 			itemhighlightclass: 'highlight'
@@ -67,6 +69,8 @@ zjs.require('dictionary, scrollbar', function(){
 		__htmlitemtpl = '<div class="'+__itemclass+'"></div>',
 		__htmlitemlinktpl = '<a class="'+__itemclass+'"></a>';
 	
+	var _supportOnInputEvent = ('oninput' in document.createElement('input'));
+
 	// - - - - - - - - -
 		
 	
@@ -239,14 +243,20 @@ zjs.require('dictionary, scrollbar', function(){
 		}else
 			zWrapperEl.find('.zui-estimate-height-wrap').remove();
 		
+		var _fakeFocus = false;
+
 		// redirect input focus
 		zOriginalInput.on('focus', function(){
-			zInput.focus();
+			if(!_fakeFocus)zInput.focus();
 		});
 		
 		// bind event focus de add css vao
 		zInput.on('focus', function(){
 			zWrapperEl.addClass(zautosuggestionFocusClass);
+
+			_fakeFocus = true;
+			zOriginalInput.trigger('focus');
+			_fakeFocus = false;
 		}).on('blur', function(){
 			zWrapperEl.removeClass(zautosuggestionFocusClass);
 
@@ -257,6 +267,7 @@ zjs.require('dictionary, scrollbar', function(){
 				}
 			}
 
+			zOriginalInput.trigger('blur');
 		});
 		// auto focus new input?
 		if(option.autofocus)
@@ -386,15 +397,22 @@ zjs.require('dictionary, scrollbar', function(){
 		// index data source to search
 		var dictionary = new zjs.dictionary(option.source, searchpropertyTemp);
 		
-		if(option.sourceUrl != '')
+		if(!option.cacheResponse){
+			dictionary.setCacheResponse(false);
+		}
+		if(option.sourceUrl != ''){
 			dictionary.setDataSourceUrl(option.sourceUrl);
+		}
 		if(option.initSourceUrl != ''){
 			dictionary.setDataSourceUrl(option.initSourceUrl);
-			dictionary.useCacheDataSource(true);
+			if(option.sourceUrl === ''){
+				dictionary.useCacheDataSource(true);
+			}
 			dictionary.getDataFromDataSource();
 		}
-		if(option.sourceDataStructure != '')
+		if(option.sourceDataStructure != ''){
 			dictionary.setDataSourceDataStructure(option.sourceDataStructure);
+		}
 			
 		// >>> test
 		zOriginalInput.setData(dictionarykey, dictionary);
@@ -490,7 +508,12 @@ zjs.require('dictionary, scrollbar', function(){
 			if(keycode==8){onkeybackspacehandler();return;};
 			
 			// other keycode (type something....)
-			onkeytypehandler(eventname=='keyup'||eventname=='input');
+			// if we have "input" event name, just wait for it
+			if(_supportOnInputEvent && eventname=='input'){
+				onkeytypehandler(true);
+			}else if(eventname=='keyup'){
+				onkeytypehandler(true);
+			}
 		},
 		
 		onkeyupdownhandler = function(event, keycode){
@@ -504,9 +527,9 @@ zjs.require('dictionary, scrollbar', function(){
 			if(currentHighlightIndex < 0)currentHighlightIndex=currentResultLength;
 			// - -
 			var currentHighlightValue = '';
-			if(currentHighlightIndex==0){
+			if(currentHighlightIndex===0){
 				currentHighlightValue = typevalue;
-				setPlaceholderText(zPlaceholder, typevalueholder);
+				setPlaceholderText(zPlaceholder, typevalueholder, typevalue);
 			}
 			else{
 				var zItemwrap = zPanelcontent.find('.'+__itemclass+'[data-highlight="'+currentHighlightIndex+'"]'),
@@ -527,8 +550,11 @@ zjs.require('dictionary, scrollbar', function(){
 			};
 			
 			// xem coi nen lay property nao 
-			if(zItemwrapData && option.usedproperty in zItemwrapData)
-			zOriginalInput.setValue(zItemwrapData[option.usedproperty]);
+			if(zItemwrapData && option.usedproperty in zItemwrapData){
+				zOriginalInput.setValue(zItemwrapData[option.usedproperty]);
+			}else if(option.usedproperty == 'text' || option.usedpropertytext){
+				zOriginalInput.setValue(typevalue);
+			}
 			
 			// cuoi cung la fix height cho multiline
 			if(option.multiline)fixheightmultiline();
@@ -574,6 +600,7 @@ zjs.require('dictionary, scrollbar', function(){
 					// set text for input lai 1 lan nua cho dung luon
 					usedvalue = zItemwrapData[option.usedproperty];
 					typevalue = zItemwrapData[option.searchproperty];
+					zInput.setValue(typevalue);
 					zOriginalInput.setValue(usedvalue);
 				}
 			}
@@ -614,10 +641,14 @@ zjs.require('dictionary, scrollbar', function(){
 			
 			// xem coi nen lay property nao, neu nhu su dung text
 			// thi se tra lai luon cai value cho original input, con khong thi thoi
-			zOriginalInput.setValue(option.usedproperty == 'text' ? typevalue : '');
-			
-			// hide placeholder
-			setPlaceholderText(zPlaceholder, typevalueholder = '');
+			if(option.usedproperty === 'text' || option.usedpropertytext){
+				zOriginalInput.setValue(typevalue);
+				if(typevalue === '')setPlaceholderText(zPlaceholder, placeholderText);
+				else setPlaceholderText(zPlaceholder, typevalueholder = '');
+			}
+			else{
+				zOriginalInput.setValue('');
+			}
 			
 			// hide panel
 			zPanel.addClass('zui-panel-hide');
@@ -786,16 +817,22 @@ zjs.require('dictionary, scrollbar', function(){
 				if(option.multiline)
 					fixheightmultiline();
 				
-				// pass value for old input
+				// pass value for old input dong thoi hide placeholder
 				// xem coi nen lay property nao, neu nhu su dung text
 				// thi se set luon cai value cho original input, con khong thi thoi
-				zOriginalInput.setValue(option.usedproperty == 'text' ? rawvalue : '');
-				
+				if(option.usedproperty == 'text' || option.usedpropertytext){
+					zOriginalInput.setValue(rawvalue);
+					setPlaceholderText(zPlaceholder, '');
+				}
+				else{
+					zOriginalInput.setValue('');
+				}
+
 				// show placeholder and stop
-				if(rawvalue=='' || rawvalue.length<option.minlength){
+				if(rawvalue=='' || (search && rawvalue.length<option.minlength)) {
 					typevalueholder = '';
-					if(rawvalue!='')setPlaceholderText(zPlaceholder, '');
-					else setPlaceholderText(zPlaceholder, placeholderText, rawvalue);
+					if(rawvalue!='')setPlaceholderText(zPlaceholder, '', rawvalue);
+					else setPlaceholderText(zPlaceholder, placeholderText);
 					zPanel.addClass('zui-panel-hide');
 					return;
 				};
@@ -862,8 +899,11 @@ zjs.require('dictionary, scrollbar', function(){
 				// hoac nhieu khi search ajax tuc la da type xong tu khoa ra token
 				// nhung ma ajax return data cham hon
 				// cho nen phai check input xem coi co can thiet show suggestion ra khong?
-				if(result.length==0 || zInput.getValue()==''){
-					setPlaceholderText(zPlaceholder, '');
+				typevalue = zInput.getValue();
+				if(typevalue===''){
+					setPlaceholderText(zPlaceholder, placeholderText);
+				}
+				if(result.length===0 || typevalue===''){
 					zPanel.addClass('zui-panel-hide');
 					return;
 				};
@@ -1023,7 +1063,7 @@ zjs.require('dictionary, scrollbar', function(){
 		// xong het roi thi bind event vao luon
 		// html5 da ho tro oninput, nen chi can test
 		// neu trinh duyet da support thi chi can oninput la du
-		if('oninput' in document.createElement('input'))
+		if(_supportOnInputEvent)
 			zInput.on('keydown',function(event,element){onkeyhandler(event, 'keydown')})
 					.on('input',function(event,element){onkeyhandler(event, 'input')});
 		else
@@ -1266,7 +1306,10 @@ zjs.require('dictionary, scrollbar', function(){
 			
 		// neu nhu khong co zWrapperInput thi 
 		// chung to day khong phai la mot autosuggestion
-		if(!zWrapperInput)return;
+		if(!zWrapperInput){
+			zOriginalInput.focus();
+			return;
+		}
 		
 		// chi can trigger event click cua thang wrapper
 		// la thang input se tu dong focus thoi
@@ -1304,18 +1347,22 @@ zjs.require('dictionary, scrollbar', function(){
 		},
 		
 		// make lai phuong thuc setValue mac dinh cua zjs
-		autosuggestionSetValue: function(val){
-			if(typeof val == 'undefined')val='';
+		autosuggestionSetValue: function(val, autosearch){
+			val = val || '';
 			return this.eachElement(function(element){
 				// xem coi day co phai la 1 autosuggest input hay khong
 				var inputEl = zjs(element).getData(newinputkey);
-				if(inputEl)try{
-					inputEl.value = val;
-					var onkeytypehandler = zjs(element).getData(keytypehandlerkey);
-					// bat dau search luon;
-					onkeytypehandler(true);
-				}catch(er){};
-
+				if(inputEl){
+					try{
+						inputEl.value = val;
+						// bat dau search luon;
+						zjs(element).getData(keytypehandlerkey)(autosearch || false);
+					}catch(er){};
+				}
+				// fallback to default input
+				else{
+					zjs(element).setValue(val);
+				}
 			});
 		},
 		autosuggestionDisable: function(surehuh){

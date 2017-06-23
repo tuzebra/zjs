@@ -995,9 +995,28 @@ var version = '1.1',
 				if(typeof option.onBegin == 'function')option.onBegin();
 				zjs.trigger('ajax.begin');
 				
+				
+
+				// BUILD URL FIRST
+				// jsonp
+				if(option.dataType.toLowerCase() == 'jsonp'){
+					// donothing
+				}
+				// normal xhr
+				else{
+					// method get?
+					if(option.method.toLowerCase() == 'get'){
+						if(isString(data) && data != '')url += (url.indexOf('?')+1 ? '&':'?') + data;
+						data = null;
+					};
+				};
+				if(option.debug && console)console.log('url', url);
+
+
+				// RUN AJAX
 				// cached
 				if(option.cacheResponse && (url in cacheResponseStorage)){
-					console.log('[zjs ajax] use from cache: ' + url);
+					if(option.debug && console)console.log('[zjs ajax] use from cache: ' + url);
 					var result = cacheResponseStorage[url];
 					if(option.dataType.toLowerCase() == 'json')result = result.jsonDecode();
 			        if(typeof option.onComplete == 'function')option.onComplete(result);
@@ -1050,10 +1069,10 @@ var version = '1.1',
 					// url don't have http
 					&& url.indexOf('http') !== 0
 				){
-					console.log('[zjs ajax] resolveLocalFileSystemURL start: ', url);
+					if(option.debug && console)console.log('[zjs ajax] resolveLocalFileSystemURL start: ', url);
 					resolveLocalFileSystemURL(url, function (fileEntry) {
 					    // console.log('[zjs ajax] url: ' + url);
-					    console.log('[zjs ajax] resolveLocalFileSystemURL recieve: ' + fileEntry.name);
+					    if(option.debug && console)console.log('[zjs ajax] resolveLocalFileSystemURL recieve: ' + fileEntry.name);
 					    fileEntry.file(function (file) {
 						    var reader = new FileReader();
 						    reader.onloadend = function() {
@@ -1067,12 +1086,12 @@ var version = '1.1',
 						    reader.readAsText(file);
 						}, 
 						function(err){
-							console.log('[zjs ajax] onErrorReadFile: ', JSON.stringify(err));
+							if(option.debug && console)console.log('[zjs ajax] onErrorReadFile: ', JSON.stringify(err));
 							if(typeof option.onError == 'function')option.onError();
 						});
 					    
 					}, function(err){
-						console.log('[zjs ajax] onErrorReadFolder: ', JSON.stringify(err));
+						if(option.debug && console)console.log('[zjs ajax] onErrorReadFolder: ', JSON.stringify(err));
 						if(typeof option.onError == 'function')option.onError();
 					});
 
@@ -1111,6 +1130,9 @@ var version = '1.1',
 							var result = '';
 							if(option.debug && console)console.log('response: ' + xhr.responseText);
 							if(xhr.responseText)result = xhr.responseText.replace(/[\n\r]/g,'');
+							if(option.cacheResponse){
+					        	cacheResponseStorage[url] = result;
+					        }
 							if(option.dataType.toLowerCase() == 'json')result = result.jsonDecode();
 							//if(xhr.status == 200){
 							if(xhr.status >= 200 && xhr.status < 300 || xhr.status === 304 || xhr.status === 0){
@@ -1124,12 +1146,6 @@ var version = '1.1',
 							if(typeof option.onResponse == 'function')option.onResponse(result);
 							zjs.trigger('ajax.response', result);
 						}
-					};
-				
-					// get?
-					if(option.method.toLowerCase() == 'get'){
-						if(isString(data) && data != '')url += (url.indexOf('?')+1 ? '&':'?') + data;
-						data = null;
 					};
 				
 					// view log ?
