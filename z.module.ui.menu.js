@@ -15,7 +15,7 @@ zjs.require('ui.freezepanel', function(){
 			useHeightBuffer: true,
 
 			// option when open mobile menu
-			disableWindowScroll: true,
+			disableWindowScroll: true,			// true | false | "mobileOnly"
 
 			// mobile
 			mobileMenuStyle: 'offcanvas',
@@ -157,8 +157,12 @@ zjs.require('ui.freezepanel', function(){
 		if(command == 'show'){
 			itemEls.addClass('effect-active');
 			
-			if(option.disableWindowScroll){
-				if('disableScroll' in zWindow){
+			if(option.disableWindowScroll && ('disableScroll' in zWindow)){
+				if(option.disableWindowScroll === 'mobileOnly'){
+					if(zjs.isMobileDevice())
+						zWindow.disableScroll();
+				}
+				else{
 					zWindow.disableScroll();
 				}
 			}
@@ -167,8 +171,12 @@ zjs.require('ui.freezepanel', function(){
 		if(command == 'hide'){
 			itemEls.setStyle('transition-delay', null).removeClass('offcanvas-item-show-delay effect-active');
 
-			if(option.disableWindowScroll){
-				if('enableScroll' in zWindow){
+			if(option.disableWindowScroll && ('enableScroll' in zWindow)){
+				if(option.disableWindowScroll === 'mobileOnly'){
+					if(zjs.isMobileDevice())
+						zWindow.enableScroll();
+				}
+				else{
 					zWindow.enableScroll();
 				}
 			}

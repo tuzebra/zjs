@@ -40,3 +40,7 @@
 24/05/2017
 		+ add option "disableWindowScroll" with default value is "false"
 
+24/06/2017
+		+ option "disableWindowScroll" now accept true/false/"mobileOnly"
+
+		

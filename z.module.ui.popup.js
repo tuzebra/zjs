@@ -33,9 +33,9 @@ zjs.require('ui', function(){
 			animate: false,
 			animateTime: 1000,
 			animateName:'',
-			longPopup: false, 		// false | true | "mobileOnly"
-			scrollPopup: false, 	// false | true | "mobileOnly"
-			disableWindowScroll: false,
+			longPopup: false, 				// false | true | "mobileOnly"
+			scrollPopup: false, 			// false | true | "mobileOnly"
+			disableWindowScroll: false,		// false | true | "mobileOnly"
 		}
 	});
 	
@@ -376,8 +376,12 @@ zjs.require('ui', function(){
 		// cai nay se auto focus may cai field luon
 		(function(){
 			zPopupEl.find('.autofocus').focus();
-			if(option.disableWindowScroll){
-				if('disableScroll' in zWindow){
+			if(option.disableWindowScroll && ('disableScroll' in zWindow)){
+				if(option.disableWindowScroll === 'mobileOnly'){
+					if(zjs.isMobileDevice())
+						zWindow.disableScroll();
+				}
+				else{
 					zWindow.disableScroll();
 				}
 			}
@@ -396,8 +400,12 @@ zjs.require('ui', function(){
 		
 
 		// khi hide popup thi se uu tien xu ly cai scroll truoc
-		if(option.disableWindowScroll){
-			if('enableScroll' in zWindow){
+		if(option.disableWindowScroll && ('enableScroll' in zWindow)){
+			if(option.disableWindowScroll === 'mobileOnly'){
+				if(zjs.isMobileDevice())
+					zWindow.enableScroll();
+			}
+			else{
 				zWindow.enableScroll();
 			}
 		}
