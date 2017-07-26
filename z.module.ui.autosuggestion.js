@@ -351,7 +351,7 @@ zjs.require('dictionary, scrollbar', function(){
 		// set height panel
 		zPanel.height(option.panelmaxheight);
 		// make scrollbar xong moi hide
-		zPanelscroll.makeScrollbar({bounce:false,usecss:false,usekey:false,customCssClass:'zui-autosuggestion-panel'});
+		zPanelscroll.makeScrollbar({bounce:false,usecss:false,usekey:false,customCssClass:'zui-autosuggestion-panel',autoUseDefaultWithMobile:true});
 		zPanel.addClass('zui-panel-hide');
 		
 		// function giup thay doi height cua panel
@@ -514,6 +514,9 @@ zjs.require('dictionary, scrollbar', function(){
 			}else if(eventname=='keyup'){
 				onkeytypehandler(true);
 			}
+
+			// trigger event
+			zOriginalInput.trigger('input');
 		},
 		
 		onkeyupdownhandler = function(event, keycode){
