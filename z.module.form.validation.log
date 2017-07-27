@@ -50,3 +50,5 @@
 12/05/2017 
 		+ fix issue on checkbox
 		
+26/06/2017
+		+ add new option "autoCheckWhenInput" with default value is FALSE

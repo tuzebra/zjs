@@ -87,6 +87,7 @@
 			
 			// auto check right after blur
 			autoCheckWhenBlur: true,
+			autoCheckWhenInput: false,
 			
 			// Only show error on the first error-field
 			onlyone: false
@@ -209,6 +210,12 @@
 				// bind event cho input
 				if(option.autoCheckWhenBlur){
 					zInput.on('blur, ui:autosuggestion:blur, ui:datepicker:blur', function(){
+						//console.log('on ui.datepicker.blur');
+						handlerTestResult(this, checkInput(this, option, zForm), option);
+					});
+				};
+				if(option.autoCheckWhenInput){
+					zInput.on('input, ui:autosuggestion:input', function(){
 						//console.log('on ui.datepicker.blur');
 						handlerTestResult(this, checkInput(this, option, zForm), option);
 					});
