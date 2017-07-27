@@ -229,9 +229,13 @@
 		if(self.usedCacheDataSource)
 			self.dataSourceUrlIsLoaded = true;
 
+		var _srq = (rawquery||'');
+		if(zjs.isString(_srq))
+			_srq = _srq.toLowerCase();
+
 		zjs.ajax({
 			url:this.dataSourceUrl,
-			data: {f:'text',q:(rawquery||'')},
+			data: {f:'text',q:_srq},
 			type: 'json', 
 			method: 'get', 
 			cache: this.cacheResponse,
