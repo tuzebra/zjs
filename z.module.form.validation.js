@@ -395,8 +395,12 @@
 			
 			// tu dong focus vao cai input dau tien bi error
 			var firstErrorElm = zForm.find('.'+option.errorClass).item(0);
+			
 			if(firstErrorElm.is('input') || firstErrorElm.is('textarea')){
 				firstErrorElm.focus();
+			}
+			else if(firstErrorElm.isAutosuggestion()){
+				firstErrorElm.autosuggestionFocus();
 			}
 			else if(firstErrorElm.hasClass('radiogroup')){
 				// scroll toi

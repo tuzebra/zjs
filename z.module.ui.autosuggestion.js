@@ -176,6 +176,10 @@ zjs.require('dictionary, scrollbar', function(){
 
 				// hide <select> element
 				selectSourceEl.hide();
+				// and because now this autosuggestion will take over the select
+				// so it don't need to be handler the required case anymore
+				// to prevent focusable issue
+				selectSourceEl.removeAttr('required').removeClass('required');
 			}
 			else{
 				selectSourceEl = false;
@@ -1263,6 +1267,10 @@ zjs.require('dictionary, scrollbar', function(){
 		return zItemwrap;
 	},
 
+	isAutosuggestion = function(element){
+		return !!zjs(element).getData(dictionarykey);
+	},
+
 	// ham giup add index vao trong suggestion
 	autosuggestionAddindex = function(element, raw){
 		
@@ -1334,6 +1342,9 @@ zjs.require('dictionary, scrollbar', function(){
 	// - - - -
 	// extend method cho zjs-instance
 	zjs.extendMethod({
+		isAutosuggestion: function(){
+			return isAutosuggestion(this.item(0,1));
+		},
 		makeAutosuggestion: function(useroption){
 			return this.eachElement(function(element){makeAutosuggestion(element, useroption)});
 		},
