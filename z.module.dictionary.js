@@ -224,7 +224,7 @@
 		
 		// sort 
 		resultIndexs.sort(function(a, b){
-			if(a.idof !== 0 && b.idof !== 0)
+			if((a.idof === 0 && b.idof === 0) || (a.idof !== 0 && b.idof !== 0))
 				return b.strong - a.strong;
 			if(a.idof === 0)return -1;
 			return 1;
