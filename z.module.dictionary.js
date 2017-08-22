@@ -177,9 +177,11 @@
 		var words = query.split(' ');
 		
 		var i,j,k,word,keywords,resultIndexsTemp,resultIndexsMerge,indextemp;
+		var _idofk = -1;
 		
 		// gio se tien hanh search tren tung thang
-		for(i=0;i<words.length;i++){
+		var wl = words.length;
+		for(i=0;i<wl;i++){
 			
 			// reset temp variable
 			word = words[i];
@@ -188,30 +190,56 @@
 			
 			// gio se thu thap cac keyword thoa man word nay
 			keywords = [];
-			for(j=0;j<this.indexWord.length;j++)if(this.indexWord[j].indexOf(word)>=0)keywords.push(this.indexWord[j]);
+			for(j=0;j<this.indexWord.length;j++){
+				_idofk = this.indexWord[j].indexOf(word);
+				if(_idofk>=0){
+					// tang trong so them 10% neu nhu index = 0 luon
+					keywords.push({
+						keyword: this.indexWord[j],
+						strong: (word.length / this.indexWord[j].length) + (_idofk === 0 ? 0.2 * (wl-i) : 0)
+					});
+				}
+			}
 			
 			// sau khi thu thap keyword xong thi se di search tren keyword
 			for(j=0;j<keywords.length;j++)
-				for(k=0;k<this.indexDictionary[keywords[j]].length;k++)
-					resultIndexsTemp[this.indexDictionary[keywords[j]][k].toString()] = true;
+				for(k=0;k<this.indexDictionary[keywords[j].keyword].length;k++)
+					resultIndexsTemp[this.indexDictionary[keywords[j].keyword][k].toString()] = keywords[j].strong;
+			
 			
 			// sau khi co index temp thi minh se merge voi index
-			for(var index in resultIndexsTemp)
-				if((i==0 || index in resultIndexs) && typeof resultIndexsTemp[index] != 'function')
-					resultIndexsMerge[index] = true;
-			
+			for(var index in resultIndexsTemp){
+				if((i==0 || index in resultIndexs) && typeof resultIndexsTemp[index] != 'function' && index in this.datas && this.datas[index] != null)
+					resultIndexsMerge[index] = {
+						index: index, 
+						idof: (typeof this.datas[index].text === 'string') ? this.datas[index].text.removeVietnameseCharacter().toLowerCase().indexOf(query) : -1,
+						strong: resultIndexsTemp[index]
+					};
+			}
 			// merge xong se ghi de
 			resultIndexs = resultIndexsMerge;
 			
 		};
 		// end search 1 word
 		
+		// sort 
+		resultIndexs.sort(function(a, b){
+			if(a.idof !== 0 && b.idof !== 0)
+				return b.strong - a.strong;
+			if(a.idof === 0)return -1;
+			return 1;
+		});
 		// reset last search index
 		this.lastSearchIndexs = [];
 		
 		// convert to return
 		var returnIndexs = [];
-		for(index in resultIndexs)if(resultIndexs[index]===true && index in this.datas && this.datas[index] != null){returnIndexs.push(this.datas[index]);this.lastSearchIndexs.push(index);};
+		for(i=0;i<resultIndexs.length;i++){
+			if(typeof resultIndexs[i] === 'object'){
+				returnIndexs.push(this.datas[resultIndexs[i].index]);
+				this.lastSearchIndexs.push(resultIndexs[i].index);
+			}
+		}
 		
 		// done!
 		return returnIndexs;
