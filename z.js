@@ -3973,7 +3973,7 @@ zjs.extendMethod({
 		
 		// string
 		if(isString(args[0]))return this.eachElement(function(el){
-			zjs(args[0]).eachElement(function(cel){
+			zjs('<div>').setInnerHTML(args[0]).child().eachElement(function(cel){
 				el.appendChild(cel);
 				if(Hook.enable('after_insertDOM'))Hook.run('after_insertDOM',cel);
 			});
@@ -4011,7 +4011,7 @@ zjs.extendMethod({
 		
 		// string
 		if(isString(args[0]))return this.eachElement(function(el){
-			zjs(args[0]).eachElement(function(cel){
+			zjs('<div>').setInnerHTML(args[0]).child().eachElement(function(cel){
 				prependElement(el, cel);
 				if(Hook.enable('after_insertDOM'))Hook.run('after_insertDOM',cel);
 			});
