@@ -139,6 +139,9 @@
 				if(zSizeAdaptableEl.is('img') && ('objectFit' in zSizeAdaptableEl.item(0, 1).style)){
 					zSizeAdaptableEl.setStyle({'width': '100%', 'height': '100%', 'object-fit': 'cover'}).setData('donthandle', true);
 				}
+				else{
+					zSizeAdaptableEl.addClass('zui-size-adaptable-use-js');
+				}
 				return;
 			}
 
