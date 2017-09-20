@@ -33,39 +33,8 @@
 	<form>
 		<div class="wrapper">
 			<p><b>field1</b> single choice</p>
-			<input class="zautosuggestion" name="field1" type="text" value="" placeholder="type something to search..." data-option="source:source, focusshowsuggestion:1"/>
+			<input class="zautosuggestion" name="field1" type="text" value="" data-placeholder="type something to search..." data-option="source:source, focusshowsuggestion:1"/>
 		</div>
-		
-		<div class="wrapper">
-			<p><b>field2</b> multi choice (source: array string)</p>
-			<input class="zautosuggestion" name="field2" type="text" value="" placeholder="type something to search..." data-option="multichoice:true, focusshowsuggestion: 1, source:source1"/>
-		</div>
-		
-		<div class="wrapper">
-			<p><b>field3</b> multi choice (source: array object)</p>
-			<input class="zautosuggestion" name="field3" type="text" value="" placeholder="type something to search..." data-option="multichoice:true, focusshowsuggestion: 1, source:source2"/>
-		</div>
-		
-		<div class="wrapper">
-			<p><b>field4</b> multi choice (source: array object 2, usedproperty:id)</p>
-			<input class="zautosuggestion" name="field4" type="text" value="8371633,507121153" placeholder="type something to search..." data-option="multichoice:true, focusshowsuggestion: 1, usedproperty:'id', source:source"/>
-		</div>
-		
-		<div class="wrapper">
-			<p><b>field5</b> multi choice (source: object key=>value, searchproperty:id.text)</p>
-			<input class="zautosuggestion" name="field5" type="text" value="tuanluonghoang,lacsu" placeholder="type something to search..." data-option="multichoice:true, focusshowsuggestion: 1, usedproperty:'id.text', source:source3"/>
-		</div>
-		
-		<div class="wrapper">
-			<p><b>field6</b> custom init by js -> multi choice (source: array object, usedproperty:id)</p>
-			<input class="autosuggestion" name="field6" type="text" value="8371633,507121153" placeholder="type something to search..." data-option="multichoice:true, focusshowsuggestion: 1, usedproperty:'id', source:source"/>
-		</div>
-		
-		<div class="wrapper">
-			<p><b>field7</b> multi choice (source: object key=>value, searchproperty:text, use data source)</p>
-			<input class="zautosuggestion" name="field7" type="text" value="8371633,509941729" placeholder="type something to search..." data-option="multichoice:true, focusshowsuggestion: 1, usedproperty:'id', sourceUrl:'z.module.dictionary.datasource.php'"/>
-		</div>
-		
 		
 		<div class="wrapper">
 			<button type="submit">Submit</button>
@@ -79,23 +48,23 @@
 zjs(function(){
 	
 	// init auto suggestion
-	zjs('.autosuggestion').makeAutosuggestion({
-		minlength: 1,
-		customcss: true,
-		panelmaxheight: 200,
-		source: source,
-		itemtemplate: '<div class="item">${text} (<i>${id}</i>)</div>',
-		itemhighlightclass: 'highlight'
-	});
+	// zjs('.autosuggestion').makeAutosuggestion({
+	// 	minlength: 1,
+	// 	customcss: true,
+	// 	panelmaxheight: 200,
+	// 	source: source,
+	// 	itemtemplate: '<div class="item">${text} (<i>${id}</i>)</div>',
+	// 	itemhighlightclass: 'highlight'
+	// });
 	
 	// add more data
-	zjs('.autosuggestion').autosuggestionAddindex('phan dang huy');
-	zjs('.autosuggestion').autosuggestionAddindex({text:'phan dang huy', name:'huy', link:'keke'});
-	zjs('.autosuggestion').autosuggestionAddindex(['phan dang huy', 'tuzebra']);
-	zjs('.autosuggestion').autosuggestionAddindex([{text:'phan dang huy', id:1}, {text:'tuzebra', id:2}]);
+	// zjs('.autosuggestion').autosuggestionAddindex('phan dang huy');
+	// zjs('.autosuggestion').autosuggestionAddindex({text:'phan dang huy', name:'huy', link:'keke'});
+	// zjs('.autosuggestion').autosuggestionAddindex(['phan dang huy', 'tuzebra']);
+	// zjs('.autosuggestion').autosuggestionAddindex([{text:'phan dang huy', id:1}, {text:'tuzebra', id:2}]);
 	
 	// remove data
-	zjs('.autosuggestion').autosuggestionRemoveindex('phan dang huy', function(data){return typeof data.id == 'undefined'});
+	// zjs('.autosuggestion').autosuggestionRemoveindex('phan dang huy', function(data){return typeof data.id == 'undefined'});
 	
 	
 });

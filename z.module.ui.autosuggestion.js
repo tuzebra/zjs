@@ -373,7 +373,7 @@ zjs.require('dictionary, scrollbar', function(){
 	
 		// - - - -
 		// set placeholder text
-		var placeholderText = zOriginalInput.getAttr('placeholder'),
+		var placeholderText = zOriginalInput.getAttr('data-placeholder', zOriginalInput.getAttr('placeholder', '')),
 			// luu lai coi dang chon thang nao
 			currentHighlightIndex = 0, 
 			currentResultLength = 0, 

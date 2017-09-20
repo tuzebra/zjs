@@ -24,3 +24,7 @@
 		+ better render placeholder text
 		+ support use attribute "data-autocomplete-path" as an alternative for option.sourceUrl
 		+ trigger "input" event
+
+20/09/2017
+		+ support "data-placeholder" attribute on input to prevent issue on IE 11
+		
