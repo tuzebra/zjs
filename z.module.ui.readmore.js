@@ -42,6 +42,7 @@
 		var inlineoption = wrapEl.getAttr('data-option', '');
 		if(zjs.isString(inlineoption) && inlineoption.trim()!='')
 			option = zjs.extend(option, inlineoption.jsonDecode());
+		wrapEl.removeAttr('data-option');
 		// extend from user option ?
 		if(typeof useroption!='undefined')
 			option = zjs.extend(option, useroption);
@@ -74,7 +75,7 @@
 		// get readmore link
 		var readmoreLinkEl = wrapEl.find('.zreadmorelink'),
 			readmoreText = readmoreLinkEl.getInnerText();
-		readmoreLinkEl.remove();
+		readmoreLinkEl.appendTo(hiddenDivEl);
 		
 		// backup inner text
 		// var innerText = wrapEl.getInnerText();
@@ -126,6 +127,7 @@
 			// neu khong can show readmore thi tra ve nhu cu
 			if(!isNeededToShowReadmore){
 				// console.log('dont need');
+				readmoreLinkEl.appendTo(hiddenDivEl);
 				wrapEl.setInnerHTML(innerText);
 				// neu nhu first run ma khong can thi thoi bo luon
 				if(firstRun){
@@ -139,6 +141,7 @@
 
 			// neu nhu can show readmore thi xem coi show nhu the nao thi vua?
 			var trimText = handlerMethod('gettrimtext', option, innerText, cloneDivEl, {readmoreText: readmoreText});
+			readmoreLinkEl.appendTo(hiddenDivEl);
 			wrapEl.setInnerHTML(trimText);
 			wrapEl.append(readmoreLinkEl);
 			zjs.enablehook(zjsHookState);
@@ -160,11 +163,17 @@
 		// bind event cho readmore link
 		if(readmoreLinkEl.count())readmoreLinkEl.on('click', function(event){
 			event.preventDefault();
+
+			// luon disable hook khi xu ly cai nay
+			zjs.enablehook(false);
+
 			readmoreLinkEl.remove();
 			isShowFull = true;
 			wrapEl.setInnerHTML(innerText);
 			// remove luon may cai div tam, cho nhe
 			wrapCloneDivEl.remove();
+
+			zjs.enablehook(zjsHookState);
 		});
 		
 		
