@@ -100,6 +100,7 @@
 				'font': wrapEl.getStyle('font'),
 				'border': wrapEl.getStyle('border'),
 				'box-sizing': wrapEl.getStyle('box-sizing'),
+				'line-height': wrapEl.getStyle('line-height'),
 			});
 
 		// fix style
