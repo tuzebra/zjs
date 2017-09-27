@@ -33,7 +33,7 @@ zjs.require('ui', function(){
 	var accordionclass = 'zui-accordion',
 		wrapclass = 'zui-accordion-wrap',
 		titleclass = 'zui-accordion-title',
-		sessionclass = 'zui-accordion-session';
+		sessionclass = 'zui-accordion-session',
 		contentclass = 'zui-accordion-content';
 	
 		
