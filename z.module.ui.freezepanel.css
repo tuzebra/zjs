@@ -1,4 +1,4 @@
-.zui-freezepanel{box-sizing:border-box;-moz-box-sizing:border-box;-o-box-sizing:border-box;will-change:top;}
+.zui-freezepanel{box-sizing:border-box;-moz-box-sizing:border-box;-o-box-sizing:border-box;will-change:top;will-change:position;transform:translate3d(0,0,0);}
 .zui-freezepanel.zui-freeze-absolute{}
 .zui-freezepanel.zui-freezing{position:fixed;top:0px;margin-top:0;z-index:1;box-shadow:0 10px 10px -10px rgba(0, 0, 0, 0.5);}
 .zui-freezepanel.zui-freeze-absolute.zui-freezing{position:absolute;}
