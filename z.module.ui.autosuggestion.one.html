@@ -33,7 +33,16 @@
 	<form>
 		<div class="wrapper">
 			<p><b>field1</b> single choice</p>
-			<input class="zautosuggestion" name="field1" type="text" value="" data-placeholder="type something to search..." data-option="source:source, focusshowsuggestion:1"/>
+			<input class="zautosuggestion" name="field1" type="text" value="" data-placeholder="type something to search..." data-option="
+				focusshowsuggestion:true,
+				itemLinkFormat:'${homeUrl}',
+				sourceUrl:'/z.module.ui.autosuggestion.datasource.php',
+				initSourceUrl:'/z.module.ui.autosuggestion.datasource.php',
+				sourceDataStructure:'.data',
+				usedproperty: 'name',
+                searchproperty: 'name',
+                itemtemplate: '<div>${name}</div>'
+			"/>
 		</div>
 		
 		<div class="wrapper">

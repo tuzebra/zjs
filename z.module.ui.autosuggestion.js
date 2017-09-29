@@ -815,6 +815,8 @@ zjs.require('dictionary, scrollbar', function(){
 			var rawvalue = zInput.getValue('');
 			// save type value
 			typevalue = rawvalue;
+			// hide cai place holder truoc cho chac
+			setPlaceholderText(zPlaceholder, '');
 			
 			
 			// day la truong hop cho single choice
@@ -829,7 +831,6 @@ zjs.require('dictionary, scrollbar', function(){
 				// thi se set luon cai value cho original input, con khong thi thoi
 				if(option.usedproperty == 'text' || option.usedpropertytext){
 					zOriginalInput.setValue(rawvalue);
-					setPlaceholderText(zPlaceholder, '');
 				}
 				else{
 					zOriginalInput.setValue('');
