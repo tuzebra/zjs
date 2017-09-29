@@ -2,272 +2,150 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-	<title>zjs UI - popup</title>
+	<title>zjs UI - popup - very long popup</title>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	
-	<script type="text/javascript" src="z.js" data-debug="true"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+
+	<script type="text/javascript" src="./z.js" data-debug="true"></script>
 	<script>
-		zjs.requireOption.timeout = 1000;
-		zjs.onready('ui.button, scrollbar, ui.tabpanel, ui.popup, image.slider.theme.linear', function(){
-			zjs('.zbutton[data-popup]').click(function(){
-				zjs('#'+this.attr('data-popup')).popupShow();
+		zjs.onready('ui.button, ui.popup', function(){
+			zjs('#btn1').click(function(){
+				zjs('#popup1').popupShow();
 			});
-			zjs('#buttonclone').click(function(){
-				var oldEl = zjs('#popup5 p:last-child'),
-					newEl = oldEl.clone(true);
-				newEl.insertAfter(oldEl);
-			});
-			zjs('#buttonhook').click(function(){
-				if(!zjs.enablehook(true))return;
-				this.addClass('disabled').find('span').html('hook enabled');
+			zjs('#btn2').click(function(){
+				zjs('#popup2').popupShow();
 			});
 		});
 	</script>
 	
+	<link rel="stylesheet" type="text/css" href="./3th/animate.min.css">
+
 	<style>
 	body{font-family:arial,tahomal;padding:0;margin:0;font-size:14px;line-height:1.4;color:#444;}
-	.wrapper{width:960px;margin:0 auto;padding:100px 0;}
+	.wrapper{width:80%;margin:0 auto;padding:100px 0;}
 	.footer{}
-	p{}
+	p{font-size:18px;}
+	.zpopup{width:70%;}
 	</style>
 	
 </head>
 <body>
 	<div class="wrapper">
+	
+		<h1>Demo popup</h1>
+
+		<p>Lorem sadan htsnais oasp dayun qayuu asjk32 iosau 3 iaos83 aksjhao9 saio</p>
+		<p>Ua su8a  uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
+		<p>Kashy ash6 ajhgsa wq97 xag7 zksoa ajash6 bbak81 adskia8 m,jgsuwpe</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, </p>
+		<p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+		<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris </p>
+		<p>Nisi ut aliquip ex ea commodo consequat. </p>
+		<p>Duis aute irure dolor in reprehenderit in </p>
+		<p>Voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
+		<p>Excepteur sint occaecat cupidatat non proident, </p>
+		<p>Sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+		<br/>
+		<br/>
+		<a class="zbutton" id="btn1">click to show long popup</a>
+		<br/>
+		<br/>
+		<p>Lorem sadan htsnais oasp dayun qayuu asjk32 iosau 3 iaos83 aksjhao9 saio</p>
+		<p>Ua su8a  uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
+		<p>Kashy ash6 ajhgsa wq97 xag7 zksoa ajash6 bbak81 adskia8 m,jgsuwpe</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, </p>
+		<p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+		<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris </p>
+		<p>Nisi ut aliquip ex ea commodo consequat. </p>
+		<p>Duis aute irure dolor in reprehenderit in </p>
+		<p>Voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
+		<p>Excepteur sint occaecat cupidatat non proident, </p>
+		<p>Sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+		<p>Lorem sadan htsnais oasp dayun qayuu asjk32 iosau 3 iaos83 aksjhao9 saio</p>
+		<p>Ua su8a  uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
+		<p>Kashy ash6 ajhgsa wq97 xag7 zksoa ajash6 bbak81 adskia8 m,jgsuwpe</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, </p>
+		<p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+		<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris </p>
+		<p>Nisi ut aliquip ex ea commodo consequat. </p>
+		<p>Duis aute irure dolor in reprehenderit in </p>
+		<p>Voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
+		<p>Excepteur sint occaecat cupidatat non proident, </p>
+		<p>Sunt in culpa qui officia deserunt mollit anim id est laborum. </p><br/>
+		<br/>
+		<a class="zbutton" id="btn2">click to show popup</a>
+		<br/>
+		<br/>
+		<p>Lorem sadan htsnais oasp dayun qayuu asjk32 iosau 3 iaos83 aksjhao9 saio</p>
+		<p>Ua su8a  uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
+		<p>Kashy ash6 ajhgsa wq97 xag7 zksoa ajash6 bbak81 adskia8 m,jgsuwpe</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, </p>
+		<p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+		<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris </p>
+		<p>Nisi ut aliquip ex ea commodo consequat. </p>
+		<p>Duis aute irure dolor in reprehenderit in </p>
+		<p>Voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
+		<p>Excepteur sint occaecat cupidatat non proident, </p>
+		<p>Sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+		<p>Lorem sadan htsnais oasp dayun qayuu asjk32 iosau 3 iaos83 aksjhao9 saio</p>
+		<p>Ua su8a  uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
+		<p>Kashy ash6 ajhgsa wq97 xag7 zksoa ajash6 bbak81 adskia8 m,jgsuwpe</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, </p>
+		<p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+		<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris </p>
+		<p>Nisi ut aliquip ex ea commodo consequat. </p>
+		<p>Duis aute irure dolor in reprehenderit in </p>
+		<p>Voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
+		<p>Excepteur sint occaecat cupidatat non proident, </p>
+		<p>Sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
 		
-		<div>
-			<a class="zbutton" data-popup="popup1">popup auto show</a>
-			<a class="zbutton" data-popup="popup2">popup with custom close button</a>
-			<a class="zbutton" data-popup="popup3">popup don't include any close button</a>
-			<a class="zbutton" data-popup="popup4">popup without page cover</a>
-			<a class="zbutton" data-popup="popup5">popup show in center window</a>
+	</div>	
+	
+	
+	<div id="popup1" class="zpopup bounceInUp bounceOutDown" data-option="animate:true,clickout:true">
+		<h3>Popup with very long content</h3>
+		<p>Lorem sadan htsnais oasp dayun qayuu asjk32 iosau 3 iaos83 aksjhao9 saio</p>
+		<p>Ua su8a  uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
+		<p>Kashy ash6 ajhgsa wq97 xag7 zksoa ajash6 bbak81 adskia8 m,jgsuwpe</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, </p>
+		<p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+		<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris </p>
+		<p>Nisi ut aliquip ex ea commodo consequat. </p>
+		<p>Duis aute irure dolor in reprehenderit in </p>
+		<p>Voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
+		<p>Excepteur sint occaecat cupidatat non proident, </p>
+		<p>Sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+		<p>Lorem sadan htsnais oasp dayun qayuu asjk32 iosau 3 iaos83 aksjhao9 saio</p>
+		<p>Ua su8a  uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
+		<p>Kashy ash6 ajhgsa wq97 xag7 zksoa ajash6 bbak81 adskia8 m,jgsuwpe</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, </p>
+		<p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+		<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris </p>
+		<p>Nisi ut aliquip ex ea commodo consequat. </p>
+		<p>Duis aute irure dolor in reprehenderit in </p>
+		<p>Voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
+		<p>Excepteur sint occaecat cupidatat non proident, </p>
+		<p>Sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+		<p>Lorem sadan htsnais oasp dayun qayuu asjk32 iosau 3 iaos83 aksjhao9 saio</p>
+		<p>Ua su8a  uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
+		<p>Kashy ash6 ajhgsa wq97 xag7 zksoa ajash6 bbak81 adskia8 m,jgsuwpe</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, </p>
+		<p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+		<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris </p>
+		<p>Nisi ut aliquip ex ea commodo consequat. </p>
+		<p>Duis aute irure dolor in reprehenderit in </p>
+		<p>Voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
+		<p>Excepteur sint occaecat cupidatat non proident, </p>
+		<p>Sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+	</div>	
 
-			<a class="zbutton" data-popup="popup6">Popup include tabpanel, scrollbar, image slider</a>
+	<div id="popup2" class="zpopup bounceInUp bounceOutDown" data-option="animate:true,clickout:true">
+		<h3>Popup with less content</h3>
+		<p>Ua su8a  uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
+		<p>Kashy ash6 ajhgsa wq97 xag7 zksoa ajash6 bbak81 adskia8 m,jgsuwpe</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, </p>
+		<p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+	</div>	
 
-			<a class="zbutton zbuttonpopup" href="z.module.ui.button.html">popup use ajax get content from href</a>
-		</div>
-		
-		<div class="zpopup" id="popup1" data-option="autoshow:true,center:false">
-			<h3>Popup auto show</h3>
-			<p>Lorem sadan htsnais oasp dayun qayuu asjk32 iosau 3 iaos83 aksjhao9 saio</p>
-			<p>Ua su8a  uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
-			<p>Kashy ash6 ajhgsa wq97 xag7 zksoa ajash6 bbak81 adskia8 m,jgsuwpe</p>
-		</div>
-		
-		<div class="zpopup" id="popup2">
-			<h3>Popup with custom close button</h3>
-			<p>Lorem sadan htsnais oasp dayun qayuu asjk32 iosau 3 iaos83 aksjhao9 saio</p>
-			<p>Ua su8a  uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
-			<p>Kashy ash6 ajhgsa wq97 xag7 zksoa ajash6 bbak81 adskia8 m,jgsuwpe</p>
-			<p>Just include a class name <code>zpopupclose</code> to any element, to make a popup's close button</p>
-			<a class="zbutton zpopupclose">close</a>
-		</div>
-		
-		<div class="zpopup" id="popup3" data-option="closebutton:false, clickout:true">
-			<h3>Popup don't include close button, but can click outside to close</h3>
-			<p>Lorem sadan htsnais oasp dayun qayuu asjk32 iosau 3 iaos83 aksjhao9 saio</p>
-			<p>Ua su8a  uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
-			<p>Kashy ash6 ajhgsa wq97 xag7 zksoa ajash6 bbak81 adskia8 m,jgsuwpe</p>
-		</div>
-		
-		<div class="zpopup" id="popup4" data-option="pagecover:false">
-			<h3>Popup without page cover</h3>
-			<p>Lorem sadan htsnais oasp dayun qayuu asjk32 iosau 3 iaos83 aksjhao9 saio</p>
-			<p>Ua su8a  uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
-			<p>Kashy ash6 ajhgsa wq97 xag7 zksoa ajash6 bbak81 adskia8 m,jgsuwpe</p>
-		</div>
-		
-		<div class="zpopup" id="popup5" data-option="center:true,animate:true,animateName:'fadeInDown fadeOutUp'">
-			<h3>Popup show in center window</h3>
-			<p><i>If enable hook, popup will auto change position when content inside it change</i></p>
-			<a class="zbutton" id="buttonclone">append more content</a>
-			<a class="zbutton" id="buttonhook">zjs.enablehook(true)</a>
-			<p>Lorem sadan htsnais oasp dayun qayuu asjk32 iosau 3 iaos83 aksjhao9 saio</p>
-		</div>
-
-		<div class="zpopup" id="popup6" style="width:80%">
-			<h3>Popup include tabpanel, scrollbar, image slider</h3>
-			<div class="ztabpanel" data-option="autoheight:true">
-				<ul>
-					<li class="coming">Scrollbar</li>
-					<li class="notifi">Image slider</li>
-				</ul>
-
-				<div class="zscroll" data-option="autohide:false" style="height:200px;padding:1px 0 1px 0;">
-					<div style="">
-						<p>Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
-						<p>zaasdas dsa d sds ad sd ad Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
-						<p>zaasdas dsa d sds ad sd ad Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
-						<p>zaasdas dsa d sds ad sd ad Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
-						<p>zaasdas dsa d sds ad sd ad Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
-						<p>zaasdas dsa d sds ad sd ad</p>
-						<p>zaasdas dsa d sds ad sd ad Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
-						<p>zaasdas dsa d sds ad sd ad Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
-						<p>zaasdas dsa d Ua su8a uat oas satia o w ga g da auysay asuat kashg9 0wq zhiasy7w as</p>
-					</div>
-				</div>
-
-				<div class="zslider" data-option="theme:'linear',
-					slideitem: '.slideitem',
-					transition:'horizontal-stack',
-					transitionTime:2400,
-					autoplay: false,
-					autoplayTime: 3000,
-					navButton: true,
-					navThumb: false,
-					navDot: false,
-					contentSlide: true,
-					usePercentWidth: true,
-					autoHeight: true">
-
-					<div class="slideitem">
-						<div class="content">
-							<h3>1</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
-						</div>
-					</div>
-
-					<div class="slideitem">
-						<div class="content">
-							<h3>2</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
-						</div>
-					</div>
-
-					<div class="slideitem">
-						<div class="content">
-							<h3>3</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
-						</div>
-					</div>
-
-					<div class="slideitem">
-						<div class="content">
-							<h3>4</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
-						</div>
-					</div>
-
-					<div class="slideitem">
-						<div class="content">
-							<h3>5</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
-						</div>
-					</div>
-
-					<div class="slideitem">
-						<div class="content">
-							<h3>6</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
-						</div>
-					</div>
-
-					<div class="slideitem">
-						<div class="content">
-							<h3>7</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
-						</div>
-					</div>
-
-					<div class="slideitem">
-						<div class="content">
-							<h3>8</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
-						</div>
-					</div>
-
-					<div class="slideitem">
-						<div class="content">
-							<h3>9</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
-						</div>
-					</div>
-
-					<div class="slideitem">
-						<div class="content">
-							<h3>10</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
-						</div>
-					</div>
-
-					<div class="slideitem">
-						<div class="content">
-							<h3>11</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
-						</div>
-					</div>
-
-					<div class="slideitem">
-						<div class="content">
-							<h3>12</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
-						</div>
-					</div>
-
-				</div>
-
-			</div>
-		</div>
-		
-		<script type="text/javascript">
-			var zButtonPopup = zjs('a.zbuttonpopup');
-			if( zButtonPopup.count()>0 ){
-				zPopupAjax = zjs('<div class="zpopup" style="width:800px;" id="zpopup" data-option="center:true,clickout:true"><div class="zpopup-content"></div><a class="zpopupclose">&times;</a></div>');
-				zjs('body').append(zPopupAjax);
-				zjs.onready('ui.popup', function(){
-					zButtonPopup.each(function(element,index){
-						//console.log(index,element);
-						
-						element.content = '';
-						
-						var zElement = zjs(element).click(function(event){
-							if( zElement.hasClass('nopopup') ){
-								return true;
-							}
-							event.preventDefault();
-							
-							if( element.content != '' ){
-								zButtonPopup.showPopupContent(element.content);
-							} else if( element.content != '' ){
-								zButtonPopup.showPopupContent(element.content);
-							} else if( (/(\S+\.(?:jpg|gif|png|JPG|GIF|PNG))/mg).test(element.href) ){
-								element.content = '<img src="'+element.href+'" alt="'+element.title+'" style="max-width:100%;margin:0 auto;" />';
-								zButtonPopup.showPopupContent(element.content);
-							} else {
-								zjs.ajax({
-									url: element.href,
-									data: {},
-									type: 'raw',
-									method: 'get',
-									cache: true,
-									onBegin: false,
-									onLoading: false,
-									onComplete: function(data){
-										//console.log(data);
-										
-										var temp = zjs('<div></div>');
-											temp.html(data);
-										var content = temp.find('div');
-										
-										if( content.count()>0 ){
-											element.content = content.item(0).html();
-											zButtonPopup.showPopupContent(element.content);
-										}
-									},
-									onError: false,
-									debug: false
-								});
-							}
-						});
-					});
-					
-					zButtonPopup.showPopupContent = function(content){
-						zPopupAjax.find('.zpopup-content').html(content);
-						zPopupAjax.popupShow();
-					};
-				});
-			}
-		</script>
-	</div>
 </body>
 </html>

@@ -33,8 +33,8 @@ zjs.require('ui', function(){
 			animate: false,
 			animateTime: 1000,
 			animateName:'',
-			longPopup: false, 				// false | true | "mobileOnly"
-			scrollPopup: false, 			// false | true | "mobileOnly"
+			longPopup: 'mobileOnly', 		// false | true | "mobileOnly"
+			scrollPopup: true, 				// false | true | "mobileOnly"
 			disableWindowScroll: false,		// false | true | "mobileOnly"
 		}
 	});
@@ -87,14 +87,6 @@ zjs.require('ui', function(){
 	window.zpopupelementstack = [];
 	var zWindow = zjs(window);
 
-
-	var checkIsLongPopup = function(isLongPopup){
-		if(isLongPopup === 'mobileOnly')
-			return zjs.isMobileDevice();
-		return isLongPopup;
-	};
-
-
 	// - - - - - - - - -
 	// MAIN FUNCTIONS
 	var makePopup = function(element, useroption){
@@ -133,21 +125,22 @@ zjs.require('ui', function(){
 		option.animateTime = parseInt(option.animateTime);
 		option.animateCoverTime = parseInt(option.animateCoverTime);
 
-		// neu nhu su dung longpopup thi se khong co vu centerY, vi top se duoc set trong css
-		// boi vi longPopup bay gio se ho tro value 'mobileOnly' nen check ky 1 xiu
-		if(option.longPopup !== 'mobileOnly')
-			option.longPopup = !(!option.longPopup);
-		if(option.longPopup)
-			option.centerY = false;
-
 		// scrollPopup cung giong nhu long popup
 		// nhung khong phai su dung co che wrap all content into fixed div
 		// thay vao do de su dung 1 div rieng de scroll cai popup
 		// neu nhu su dung mobileOnly thi se fallback ve long popup cho khoe
-		if(option.scrollPopup == 'mobileOnly'){
+		if(option.scrollPopup === 'mobileOnly'){
 			option.longPopup = 'mobileOnly';
 			option.scrollPopup = false;
 		}
+
+		// neu nhu su dung longpopup thi se khong co vu centerY, vi top se duoc set trong css
+		// boi vi longPopup bay gio se ho tro value 'mobileOnly' nen check ky 1 xiu
+		if(option.longPopup === 'mobileOnly')
+			option.longPopup = zjs.isMobileDevice();
+		if(option.longPopup === true)
+			option.centerY = option.scrollPopup = false;
+
 
 		option.autoshow = !!option.autoshow;
 		option.autoshowDelay = parseInt(option.autoshowDelay);
@@ -269,13 +262,12 @@ zjs.require('ui', function(){
 		
 		// save lai current scrolltop cua body
 		// de co gi thi dung lai
-		var _scrollTop = !isInUsedBodyScrollbarModule ? document.body.scrollTop : zjs(document.body).scrollPosition();
+		var _scrollTop = !isInUsedBodyScrollbarModule ? zjs(document.body).scrollTop() : zjs(document.body).scrollPosition();
 		zPopupEl.setData(showedScrolltopkey, _scrollTop);
 		
 		// neu nhu la longpopup
 		// thi cho nay phai can thiep 1 xiu vao thang body
-		if(checkIsLongPopup(option.longPopup)){
-
+		if(option.longPopup){
 			// dau tien la add cho no cai class, neu dung la no
 			zPopupEl.addClass(longpopupclass);
 
@@ -307,7 +299,8 @@ zjs.require('ui', function(){
 				zPopupEl.setData(fixedBodyElKey, fixedBodyEl);
 
 				// add class to body
-				zjs(document.body).addClass(bodyclasswhenlongpopup);
+				// cho scroll ve vi tri 0 luon
+				zjs(document.body).setStyle('scrollTop', 0).addClass(bodyclasswhenlongpopup);
 			};
 
 			// va cuoi cung la phai loai bo ra nhung thang ma duoc "preventlongpopup"
@@ -322,8 +315,8 @@ zjs.require('ui', function(){
 			zPopupEl.setData('zlongpopuplistelswap', listElsHasSwap);
 		}
 		// neu nhu la scroll popup
-		else if(option.scrollPopup!==false){
-			zPopupEl.addClass(longpopupclass).getData(scrollwrapElKey).show();
+		else if(option.scrollPopup){
+			zPopupEl.addClass(longpopupclass).getData(scrollwrapElKey).show().setStyle('scrollTop', 0);
 			zjs(document.body).addClass(bodyclasswhenscrollpopup);
 			// get scroll width
 			var scrw = getScrollbarWidth();
@@ -437,8 +430,9 @@ zjs.require('ui', function(){
 					fixedBodyEl.remove();
 					
 					// reset current scroll position
-					if(!isInUsedBodyScrollbarModule)document.body.scrollTop = zPopupEl.getData(showedScrolltopkey, 0);
-					else zjs(document.body).refreshScroll().scrollTo(zPopupEl.getData(showedScrolltopkey, 0), true);//notSmooth = true
+					var _showedScrollTop = zPopupEl.getData(showedScrolltopkey, 0);
+					if(!isInUsedBodyScrollbarModule)zjs(document.body).setStyle('scrollTop', _showedScrollTop);
+					else zjs(document.body).refreshScroll().scrollTo(_showedScrollTop, true);//notSmooth = true
 
 					// remove class out of body
 					zjs(document.body).removeClass(bodyclasswhenlongpopup);
@@ -533,7 +527,7 @@ zjs.require('ui', function(){
 		var diffHeight = zWindow.height() - zPopupEl.height();
 		
 		// uu tien xem set de set margin theo relative popup (longPopup)
-		if(checkIsLongPopup(option.longPopup) || option.scrollPopup!==false){
+		if(option.longPopup || option.scrollPopup){
 			// neu nhu winheight > popup height thi moi can thiet
 			// con neu nhu khong thi thoi, cho tu xu trong css luon cho don gian
 			if(diffHeight > 0)zPopupEl.setStyle('margin-top', diffHeight/2);
@@ -624,6 +618,9 @@ zjs.require('ui', function(){
 		},
 		popupRefresh: function(){
 			return this.eachElement(function(element){popupRefresh(element)});
+		},
+		popupBackdrop: function(){
+			return this.getData(pagecoverElKey);
 		}
 	});
 	
