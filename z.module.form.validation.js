@@ -46,6 +46,17 @@
 			minlength: 'Wert so wenig minderlth',
 			repassword: 'Die eingegebenen Passwörter stimmen nicht überein'
 		},
+		it:{
+			required: 'Campo è richiesto',
+			email: 'Non è un\'e-mail valida',
+			url: 'Non un URL valido',
+			date: 'Non è una data valida',
+			number: 'non un numero',
+			phonenumber: 'Non un numero di telefono',
+			digits: 'Non una cifra',
+			minlength: 'Valore minima di lunghezza minima',
+			repassword: 'Le password specificate non corrispondono'
+		},
 		vi:{
 			required: 'Còn thiếu thông tin này',
 			email: 'Sai định dạng email',
@@ -149,6 +160,7 @@
 			option = zjs.extend(option, useroption);
 		
 		// gio set them phan tips
+		if(!option.language in defaulttips)option.language = 'en';
 		option.tips = zjs.extend(defaulttips[option.language], option.tips);
 		
 		// fix option
