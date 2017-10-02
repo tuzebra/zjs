@@ -22,6 +22,7 @@ zjs.require('ui', function(){
 			closebutton: true,
 			closethenremove: false,
 			pagecover: true,
+			hidePagecoverWhenWindowWidthLessThan: 0,
 			pagecoverClass: '',
 			clickout: false,
 			pressEsc: true,
@@ -40,6 +41,7 @@ zjs.require('ui', function(){
 	});
 	
 	// trigger
+	//ui:popup:beforehide
 	//ui:popup:hide
 	//ui:popup:show
 	//ui:popup:refresh
@@ -62,7 +64,11 @@ zjs.require('ui', function(){
 
 		// neu nhu element co cai class nay
 		// thi se khong cho vao trong locked-div khi show len long popup
-		zpreventlongpopup = 'zpreventlongpopup';
+		zpreventlongpopup = 'zpreventlongpopup',
+
+		// zui-freezepanel zui-freezing
+		zfreezepanelfreezingclass = 'zui-freezing';
+
 	
 	// static variable
 	// luu vao top frame luon cho chac
@@ -148,6 +154,10 @@ zjs.require('ui', function(){
 			option.autoshowDelay = 0;
 		}
 
+		option.hidePagecoverWhenWindowWidthLessThan = parseInt(option.hidePagecoverWhenWindowWidthLessThan);
+		if(option.hidePagecoverWhenWindowWidthLessThan < 0)
+			option.hidePagecoverWhenWindowWidthLessThan = 0;
+
 		// save option
 		zPopupEl.setData(optionkey, option);
 		
@@ -182,6 +192,9 @@ zjs.require('ui', function(){
 		// popup page cover
 		var zPopupPCoverEl = zjs();
 		if(option.pagecover){
+			//if(option.pagecoverOnlyOnDesktop && zjs.isMobileDevice()){
+			//@todo:
+			//}
 			zPopupPCoverEl = zjs('<div>').addClass(coverclass);
 			// xem coi cai popup element co cai id nao ko?
 			// co thi set cho cai thang cover luon
@@ -253,7 +266,17 @@ zjs.require('ui', function(){
 		// xem coi neu nhu popup chua active thi moi can phai show
 		if(zPopupEl.hasClass(activeclass))return;
 
-		zPopupEl.getData(pagecoverElKey).insertBefore(zPopupEl).setStyle('z-index', getPopuplastindex());
+		// co can thiet show page cover hay khong?
+		var needShowPagecover = true;
+		if(option.hidePagecoverWhenWindowWidthLessThan > 0){
+			if(zWindow.width() <= option.hidePagecoverWhenWindowWidthLessThan){
+				needShowPagecover = false;
+			}
+		}
+
+		if(needShowPagecover)
+			zPopupEl.getData(pagecoverElKey).insertBefore(zPopupEl).setStyle('z-index', getPopuplastindex());
+
 		zPopupEl.removeClass(hideclass).setStyle('z-index', getPopuplastindex());
 		
 		// xem coi dang su dung default scroll hay la custom scrollbar
@@ -268,12 +291,17 @@ zjs.require('ui', function(){
 		// neu nhu la longpopup
 		// thi cho nay phai can thiep 1 xiu vao thang body
 		if(option.longPopup){
+			var bakHookStatus = zjs.enablehook();
+			zjs.enablehook(false);
+
 			// dau tien la add cho no cai class, neu dung la no
 			zPopupEl.addClass(longpopupclass);
 
 			// tao ra 1 cai fix element de co dinh body lai
 			var fixedBodyEl = zjs('<div></div>');
 			
+			var listElsHasSwap = [];
+
 			var _topContentEl = !isInUsedBodyScrollbarModule ? zjs(document.body) : zjs(document.body).getData(scrollbarContentElkey, false);
 			if(_topContentEl){
 				_topContentEl.child().eachElement(function(el){
@@ -282,15 +310,27 @@ zjs.require('ui', function(){
 					|| zjs(el).hasClass(popupclass) 
 					|| zjs(el).hasClass(coverclass) 
 					|| zjs(el).hasClass(zpreventlongpopup)
+					|| zjs(el).hasClass(zfreezepanelfreezingclass)
 					|| zjs(el).getAttr('id') == 'fb-root'
-					)return;
+					){
+						// swap luon neu can thiet
+						if(zjs(el).hasClass(zfreezepanelfreezingclass)){
+							// stop handler freezing function
+							zjs(el).freezepanelDisableHandler(true);
+							var swapEl = zjs('<span></span>').appendTo(fixedBodyEl);
+							zjs(el).setData('zlongpopupswapel', swapEl);
+							listElsHasSwap.push(el);
+						};
+						return;
+					}
 					fixedBodyEl.append(el);
 				});
 				// luon luon prepend vao cai body that
 				//_bodyEl.prepend(fixedBodyEl);
 				zjs(document.body).prepend(fixedBodyEl);
 				
-				fixedBodyEl.setStyle({position:'fixed',width:'100%',height:'100%'});
+				fixedBodyEl.addClass('zui-long-popup-fixed-content-wrap');
+				fixedBodyEl.setStyle({position:'fixed',width:'100%',overflow:'hidden'});
 				fixedBodyEl.top(-_scrollTop);
 				
 				if(!isInUsedBodyScrollbarModule)document.body.scrollTop = 0;
@@ -298,14 +338,17 @@ zjs.require('ui', function(){
 				
 				zPopupEl.setData(fixedBodyElKey, fixedBodyEl);
 
+				// move cai pagecover luon
+				if(needShowPagecover)
+					zPopupEl.getData(pagecoverElKey).appendTo(fixedBodyEl);
+
 				// add class to body
 				// cho scroll ve vi tri 0 luon
 				zjs(document.body).setStyle('scrollTop', 0).addClass(bodyclasswhenlongpopup);
 			};
 
 			// va cuoi cung la phai loai bo ra nhung thang ma duoc "preventlongpopup"
-			var listElsHasSwap = [];
-			fixedBodyEl.find('.'+zpreventlongpopup).eachElement(function(el){
+			fixedBodyEl.find('.'+zpreventlongpopup+',.'+zfreezepanelfreezingclass).eachElement(function(el){
 				// tao cho no 1 thang the chan (giu cho)
 				var swapEl = zjs('<span></span>').insertBefore(el);
 				zjs(el).setData('zlongpopupswapel', swapEl).insertBefore(fixedBodyEl);
@@ -313,10 +356,12 @@ zjs.require('ui', function(){
 			});
 			// save lai luon
 			zPopupEl.setData('zlongpopuplistelswap', listElsHasSwap);
+
+			zjs.enablehook(bakHookStatus);
 		}
 		// neu nhu la scroll popup
 		else if(option.scrollPopup){
-			zPopupEl.addClass(longpopupclass).getData(scrollwrapElKey).show().setStyle('scrollTop', 0);
+			zPopupEl.addClass(longpopupclass).getData(scrollwrapElKey).show().setStyle('scrollTop', 0).setStyle('z-index', getPopuplastindex());
 			zjs(document.body).addClass(bodyclasswhenscrollpopup);
 			// get scroll width
 			var scrw = getScrollbarWidth();
@@ -390,7 +435,10 @@ zjs.require('ui', function(){
 		// xem coi neu nhu popup phai active roi thi moi can phai hide
 		if(!zPopupEl.hasClass(activeclass))return;
 		if(zPopupEl.hasClass(hideclass))return;
-		
+
+
+		zPopupEl.trigger('ui:popup:beforehide');
+
 
 		// khi hide popup thi se uu tien xu ly cai scroll truoc
 		if(option.disableWindowScroll && ('enableScroll' in zWindow)){
@@ -439,10 +487,13 @@ zjs.require('ui', function(){
 
 					// cuoi cung la phai tra ve vi tri dung cho may cai element bi swap
 					var listElsHasSwap = zPopupEl.getData('zlongpopuplistelswap', []);
-					if(listElsHasSwap.length>0)listElsHasSwap.eachElement(function(el){
+					if(listElsHasSwap.length>0)listElsHasSwap.eachItem(function(el){
 						var swapEl = zjs(el).getData('zlongpopupswapel', false);
 						if(swapEl)zjs(el).insertBefore(swapEl);
 						swapEl.remove();
+						if(zjs(el).hasClass(zfreezepanelfreezingclass)){
+							zjs(el).freezepanelDisableHandler(false);
+						}
 					});
 				}
 				
