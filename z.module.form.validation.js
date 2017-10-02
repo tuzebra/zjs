@@ -35,6 +35,17 @@
 			minlength: 'Value as least minlength',
 			repassword: 'The specified passwords do not match'
 		},
+		es:{
+			required: 'Se requiere campo',
+			email: 'No es un correo electrónico válido',
+			url: 'No es una URL válida',
+			date: 'No es una fecha válida',
+			number: 'No un número',
+			phonenumber: 'No es un número de teléfono',
+			digits: 'No un dígito',
+			minlength: 'Valor como mínimo minlength',
+			repassword: 'Las contraseñas especificadas no coinciden'
+		},
 		de:{
 			required: 'Feld ist erforderlich',
 			email: 'Keine gültige E-Mail',
