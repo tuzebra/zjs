@@ -42,4 +42,6 @@
 13/05/2017
 		+ fix issue when freezepanel have a parentwrap
 
+01/10/2017
+		+ add option "disableOnDesktop", add method "freezepanelDisableHandler"		
 		

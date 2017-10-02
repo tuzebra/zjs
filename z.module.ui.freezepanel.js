@@ -8,6 +8,7 @@ zjs.require('ui', function(){
 		freezepanelbufferel = 'zmoduleuifreezepanelbufferel', 
 		freezepaneldisableshowhidekey = 'zmoduleuifreezepaneldisableshowhide', 
 		freezepaneldisablechangeheightbufferkey = 'zmoduleuifreezepaneldisablechangeheightbufferkey',
+		freezepaneldisablehandlerkey = 'zmoduleuifreezepaneldisablehandlerkey',
 		freezepanelalwayshowkey = 'zmoduleuifreezepanelalwayshow',
 		scrollbarIdkey = 'zmodulescrollbarid',
 		scrollbarOptionkey = 'zmodulescrollbaroption';
@@ -18,6 +19,7 @@ zjs.require('ui', function(){
 			freeze: true,
 			marginTop: 0,
 			marginBottom: 0,
+			disableOnDesktop: false,
 			autoDisableWhenWidthLessThan: 0,
 			autoDisableWhenWindowWidthLessThan: 0,
 			overflowParent: 'auto',
@@ -86,6 +88,7 @@ zjs.require('ui', function(){
 
 	// calculate total height of all "freezing" panel
 	calVisibleFreezingHeight = function(element){
+		// console.log('calVisibleFreezingHeight', allFreezepanelInPage);
 		var totalFreezingHeight = 0, i, tempVisibleHeight = 0;
 		for(i=0;i<allFreezepanelInPage.length;i++){
 			// fix index
@@ -146,6 +149,12 @@ zjs.require('ui', function(){
 		// extend from user option ?
 		if(typeof useroption!='undefined')
 			option = zjs.extend(option, useroption);
+
+		// check option disable 
+		if(option.disableOnDesktop && !zjs.isMobileDevice()){
+			zFreezepanelEl.setData(optionkey, option);
+			return this;
+		}
 		
 		// fix option
 		option.autoDisableWhenWidthLessThan = parseInt(option.autoDisableWhenWidthLessThan);
@@ -335,6 +344,10 @@ zjs.require('ui', function(){
 		function freezeHandler(){
 
 			if(!moduleIsReady)return;
+
+			if(zFreezepanelEl.getData(freezepaneldisablehandlerkey)){
+				return;
+			}
 			
 			var _currentScrollTop;
 			
@@ -865,6 +878,10 @@ zjs.require('ui', function(){
 		zjs(element).setData(freezepaneldisablechangeheightbufferkey, trueFalse);
 	};
 
+	var freezepanelDisableHandler = function(element, trueFalse){
+		zjs(element).setData(freezepaneldisablehandlerkey, trueFalse);
+	};
+
 
 	// HANDLER METHOD
 	// >>>>>>>>>>>>>>>>>>>>>>>
@@ -985,6 +1002,9 @@ zjs.require('ui', function(){
 		freezepanelDisableChangeHeightBuffer: function(trueFalse){
 			return this.eachElement(function(element){freezepanelDisableChangeHeightBuffer(element, trueFalse)});
 		},
+		freezepanelDisableHandler: function(trueFalse){
+			return this.eachElement(function(element){freezepanelDisableHandler(element, trueFalse)});
+		}
 	});
 	// EXTEND CORE METHOD 
 	zjs.extendCore({
