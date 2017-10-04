@@ -41,6 +41,8 @@ zjs.require('dictionary, scrollbar', function(){
 	//ui:autosuggestion:choice
 	//ui:autosuggestion:input
 	//ui:autosuggestion:blur
+	//ui:autosuggestion:beforesearch
+	//ui:autosuggestion:searchresult
 	
 	// template
 	var zautosuggestionClass = 'zui-autosuggestion-wrap',
@@ -901,8 +903,11 @@ zjs.require('dictionary, scrollbar', function(){
 			currentValueholderIndex = 0;
 			
 			// start asynchronies search
+			zOriginalInput.trigger('ui:autosuggestion:beforesearch', {'value': rawvalue});
 			zOriginalInput.getData(dictionarykey).asyncSearch(rawvalue, function(result){
 				
+				zOriginalInput.trigger('ui:autosuggestion:searchresult', {'value': rawvalue, result: result});
+
 				// neu nhu khong tim ra ket qua, 
 				// hoac nhieu khi search ajax tuc la da type xong tu khoa ra token
 				// nhung ma ajax return data cham hon
