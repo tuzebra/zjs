@@ -6,7 +6,8 @@ zjs.require('ui', function(){
 		pagecoverElKey = 'zmoduleuipopupcoverel',
 		scrollwrapElKey = 'zmoduleuipopupscrollwrapel',
 		showedScrolltopkey = 'zmoduleuipopupscrolltop',
-		fixedBodyElKey = 'zmoduleuipopupfixedbodyel';	
+		fixedBodyElKey = 'zmoduleuipopupfixedbodyel',
+		wrapFixedBodyElKey = 'zmoduleuipopupwrapfixedbodyel';
 	
 	// support scrollbar module
 	var scrollbaroptionkey = 'zmodulescrollbaroption',
@@ -53,6 +54,7 @@ zjs.require('ui', function(){
 		longpopupclass = 'zui-long-popup',
 		bodyclasswhenlongpopup = 'zui-long-popup-is-open',
 		bodyclasswhenscrollpopup = 'zui-scroll-popup-is-open',
+		fixedcontentwrapclass = 'zui-long-popup-fixed-content-wrap',
 		scrollwrapclass = 'zui-popup-scrollwrap',
 		coverclass = 'zui-popup-page-cover',
 		wrapclass = 'zui-popup-wrapper',
@@ -91,9 +93,12 @@ zjs.require('ui', function(){
 	})();
 	
 	// cho 1 thang de luu vao last popup duoc show ra, de ma su dung duoc phim esc
-	window.zpopupelementstackesc = [];
-	window.zpopupelementstackpull = [];
+	var zpopupelementstackesc = [];
+	var zpopupelementstackpull = [];
+	var countlongpopupinpage = [];
+	var countscrollpopupinpage = 0;
 	var zWindow = zjs(window);
+	var wrapFixedBodyEl = false;
 
 	// - - - - - - - - -
 	// MAIN FUNCTIONS
@@ -257,9 +262,14 @@ zjs.require('ui', function(){
 		// Support pullDown to hide popup
 		if(option.pullDown)bindPullDown();
 		// Support click outside to hide popup
-		if(option.clickout)zPopupEl.clickout(function(){
-			if(this.getData('popupreadyclickout'))popupHide(this);
-		});
+		if(option.clickout){
+			zPopupPCoverEl.click(function(){popupHide(element)});
+			if(option.scrollPopup!==false){
+				zPopupScrollwrapEl.click(function(event){
+					if(event.target() === this.item(0,1))popupHide(element);
+				});
+			}
+		}
 	},
 	
 	// luu lai 1 so timer cho chac
@@ -296,6 +306,10 @@ zjs.require('ui', function(){
 		// de co gi thi dung lai
 		var _scrollTop = !isInUsedBodyScrollbarModule ? zjs(document.body).scrollTop() : zjs(document.body).scrollPosition();
 		zPopupEl.setData(showedScrolltopkey, _scrollTop);
+
+		// save lai cai instance id
+		var popupShowInstanceId = zjs.getUniqueId();
+		zPopupEl.setAttr('data-show-instance', popupShowInstanceId);
 		
 		// neu nhu la longpopup
 		// thi cho nay phai can thiep 1 xiu vao thang body
@@ -306,65 +320,85 @@ zjs.require('ui', function(){
 			// dau tien la add cho no cai class, neu dung la no
 			zPopupEl.addClass(longpopupclass);
 
-			// tao ra 1 cai fix element de co dinh body lai
-			var fixedBodyEl = zjs('<div></div>');
-			
-			var listElsHasSwap = [];
+			// neu day la long popup dau tien
+			if(countlongpopupinpage.length === 0){
 
-			var _topContentEl = !isInUsedBodyScrollbarModule ? zjs(document.body) : zjs(document.body).getData(scrollbarContentElkey, false);
-			if(_topContentEl){
-				_topContentEl.child().eachElement(function(el){
-					if(el.tagName == 'SCRIPT' 
-					|| el.tagName == 'LINK' 
-					|| zjs(el).hasClass(popupclass) 
-					|| zjs(el).hasClass(coverclass) 
-					|| zjs(el).hasClass(zpreventlongpopup)
-					|| zjs(el).hasClass(zfreezepanelfreezingclass)
-					|| zjs(el).getAttr('id') == 'fb-root'
-					){
-						// swap luon neu can thiet
-						if(zjs(el).hasClass(zfreezepanelfreezingclass)){
-							// stop handler freezing function
-							zjs(el).freezepanelDisableHandler(true);
-							var swapEl = zjs('<span></span>').appendTo(fixedBodyEl);
-							zjs(el).setData('zlongpopupswapel', swapEl);
-							listElsHasSwap.push(el);
-						};
-						return;
-					}
-					fixedBodyEl.append(el);
+				// tao ra 1 cai fix element de co dinh body lai
+				var fixedBodyEl = zjs('<div></div>');
+				
+				var listElsHasSwap = [];
+
+				var _topContentEl = !isInUsedBodyScrollbarModule ? zjs(document.body) : zjs(document.body).getData(scrollbarContentElkey, false);
+				if(_topContentEl){
+					_topContentEl.child().eachElement(function(el){
+						if(el.tagName == 'SCRIPT' 
+						|| el.tagName == 'LINK' 
+						|| zjs(el).hasClass(popupclass) 
+						|| zjs(el).hasClass(coverclass) 
+						|| zjs(el).hasClass(zpreventlongpopup)
+						|| zjs(el).hasClass(zfreezepanelfreezingclass)
+						|| zjs(el).getAttr('id') == 'fb-root'
+						){
+							// swap luon neu can thiet
+							if(zjs(el).hasClass(zfreezepanelfreezingclass)){
+								// stop handler freezing function
+								zjs(el).freezepanelDisableHandler(true);
+								var swapEl = zjs('<span></span>').appendTo(fixedBodyEl);
+								zjs(el).setData('zlongpopupswapel', swapEl);
+								listElsHasSwap.push(el);
+							};
+							return;
+						}
+						fixedBodyEl.append(el);
+					});
+					// tao ra 1 thang wrap cai thang nay luon
+					if(!wrapFixedBodyEl)
+						wrapFixedBodyEl = zjs('<div></div>').setStyle({
+							position:'fixed',width:'100%',height:'100%',overflow:'hidden',top:0,
+						});
+
+					// luon luon prepend vao cai body that
+					//_bodyEl.prepend(fixedBodyEl);
+					zjs(document.body).prepend(wrapFixedBodyEl);
+					fixedBodyEl.addClass(fixedcontentwrapclass).setStyle({position:'absolute',width:'100%'}).top(-_scrollTop).appendTo(wrapFixedBodyEl);
+					
+					if(!isInUsedBodyScrollbarModule)document.body.scrollTop = 0;
+					else zjs(document.body).refreshScroll().scrollTo(0, true);//notSmooth = true
+					
+					zPopupEl.setData(fixedBodyElKey, fixedBodyEl);
+
+					// add class to body
+					// cho scroll ve vi tri 0 luon
+					zjs(document.body).setStyle('scrollTop', 0).addClass(bodyclasswhenlongpopup);
+				};
+
+				// va cuoi cung la phai loai bo ra nhung thang ma duoc "preventlongpopup"
+				fixedBodyEl.find('.'+zpreventlongpopup+',.'+zfreezepanelfreezingclass).eachElement(function(el){
+					// tao cho no 1 thang the chan (giu cho)
+					var swapEl = zjs('<span></span>').insertBefore(el);
+					zjs(el).setData('zlongpopupswapel', swapEl).insertBefore(wrapFixedBodyEl);
+					listElsHasSwap.push(el);
 				});
-				// luon luon prepend vao cai body that
-				//_bodyEl.prepend(fixedBodyEl);
-				zjs(document.body).prepend(fixedBodyEl);
-				
-				fixedBodyEl.addClass('zui-long-popup-fixed-content-wrap');
-				fixedBodyEl.setStyle({position:'fixed',width:'100%',overflow:'hidden'});
-				fixedBodyEl.top(-_scrollTop);
-				
-				if(!isInUsedBodyScrollbarModule)document.body.scrollTop = 0;
-				else zjs(document.body).refreshScroll().scrollTo(0, true);//notSmooth = true
-				
+				// save lai luon
+				zPopupEl.setData('zlongpopuplistelswap', listElsHasSwap);
+
+			}
+			// cac long popup tiep theo thi don gian hon
+			// chi can move thang long popup truoc do thoi la duoc
+			else{
+				// tao ra 1 cai fix element de co dinh long popup truoc lai
+				var fixedBodyEl = zjs('<div></div>');
+				var lastLongPopupEl = zjs('.zui-long-popup[data-show-instance="'+countlongpopupinpage.last()+'"]');
+				fixedBodyEl.append(lastLongPopupEl.getData(pagecoverElKey));
+				fixedBodyEl.append(lastLongPopupEl);
+				fixedBodyEl.setStyle({position:'absolute',width:'100%'}).top(-_scrollTop).appendTo(wrapFixedBodyEl);
+
 				zPopupEl.setData(fixedBodyElKey, fixedBodyEl);
-
-				// move cai pagecover luon
-				//if(needShowPagecover)
-				//	pagecoverEl.appendTo(fixedBodyEl);
-
-				// add class to body
 				// cho scroll ve vi tri 0 luon
-				zjs(document.body).setStyle('scrollTop', 0).addClass(bodyclasswhenlongpopup);
-			};
+				zjs(document.body).setStyle('scrollTop', 0);
+			}
 
-			// va cuoi cung la phai loai bo ra nhung thang ma duoc "preventlongpopup"
-			fixedBodyEl.find('.'+zpreventlongpopup+',.'+zfreezepanelfreezingclass).eachElement(function(el){
-				// tao cho no 1 thang the chan (giu cho)
-				var swapEl = zjs('<span></span>').insertBefore(el);
-				zjs(el).setData('zlongpopupswapel', swapEl).insertBefore(fixedBodyEl);
-				listElsHasSwap.push(el);
-			});
-			// save lai luon
-			zPopupEl.setData('zlongpopuplistelswap', listElsHasSwap);
+			countlongpopupinpage.push(popupShowInstanceId);
 
 			zjs.enablehook(bakHookStatus);
 		}
@@ -374,17 +408,23 @@ zjs.require('ui', function(){
 			// move cai pagecover luon
 			if(needShowPagecover)
 				pagecoverEl.insertBefore(scrollwrapEl);
-			zjs(document.body).addClass(bodyclasswhenscrollpopup);
-			// get scroll width
-			var scrw = getScrollbarWidth();
-			if(scrw > 0){
-				var currentBodyPaddingRight = zjs(document.body).getStyle('padding-right').toInt();
-				if(currentBodyPaddingRight > 0){
-					zjs(document.body).setData('data-bakpdr', currentBodyPaddingRight);
-					scrw += currentBodyPaddingRight;
+
+			if(countscrollpopupinpage === 0){
+				zjs(document.body).addClass(bodyclasswhenscrollpopup);
+
+				// get scroll width
+				var scrw = getScrollbarWidth();
+				if(scrw > 0){
+					var currentBodyPaddingRight = zjs(document.body).getStyle('padding-right').toInt();
+					if(currentBodyPaddingRight > 0){
+						zjs(document.body).setData('data-bakpdr', currentBodyPaddingRight);
+						scrw += currentBodyPaddingRight;
+					}
+					zjs(document.body).setStyle('padding-right', scrw);
 				}
-				zjs(document.body).setStyle('padding-right', scrw);
 			}
+
+			countscrollpopupinpage++;
 		}
 		// neu nhu lam binh thuong
 		else{
@@ -415,18 +455,12 @@ zjs.require('ui', function(){
 		zPopupEl.addClass(activeclass).trigger('ui:popup:show');
 		if(zPopupEl.hasClass(centerclass))popupAlignTop(element);
 		
-		// sau do se set 1 cai instant de ma co gi con dung esc duoc
-		if(option.pressEsc){
-			var popupShowInstanceId = zjs.getUniqueId();
-			zPopupEl.setAttr('data-show-instance', popupShowInstanceId);
-			window.zpopupelementstackesc.push(popupShowInstanceId);
-		};
+		// support press esc
+		if(option.pressEsc)
+			zpopupelementstackesc.push(popupShowInstanceId)
 		// support pull down on mobile only
-		if(option.pullDown && option.longPopup && zjs.isMobileDevice()){
-			var popupShowInstanceId = zjs.getUniqueId();
-			zPopupEl.setAttr('data-show-instance', popupShowInstanceId);
-			window.zpopupelementstackpull.push(popupShowInstanceId);
-		}
+		if(option.pullDown && option.longPopup && zjs.isMobileDevice())
+			zpopupelementstackpull.push(popupShowInstanceId);
 		
 		// helper 1 xiu cho form cho vui
 		// cai nay se auto focus may cai field luon
@@ -443,10 +477,6 @@ zjs.require('ui', function(){
 			}
 		}).delay(delayShownTime+100);
 
-		// support clickout
-		if(option.clickout)(function(){
-			zPopupEl.setData('popupreadyclickout', true);
-		}).delay(1);
 	},
 	
 	popupHide = function(element, notUseFade, initHide){
@@ -475,17 +505,25 @@ zjs.require('ui', function(){
 
 
 		var _popupHide = function(){
-				zPopupEl.addClass(hideclass);
-				// run trigger
-				zPopupEl.removeClass(activeclass).trigger('ui:popup:hide');
-				
-				// longPopup or have fixedBodyElement?
-				var fixedBodyEl = zPopupEl.getData(fixedBodyElKey, false);
-				if(fixedBodyEl){
-					
-					// xem coi dang su dung default scroll hay la custom scrollbar
-					// de biet ma xu ly cho phu hop
-					var isInUsedBodyScrollbarModule = !!zjs(document.body).getData(scrollbaroptionkey, false);
+			zPopupEl.addClass(hideclass);
+			// run trigger
+			zPopupEl.removeClass(activeclass).trigger('ui:popup:hide');
+			
+			// longPopup or have fixedBodyElement?
+			var fixedBodyEl = zPopupEl.getData(fixedBodyElKey, false);
+			if(fixedBodyEl){
+
+				// xem coi dang su dung default scroll hay la custom scrollbar
+				// de biet ma xu ly cho phu hop
+				var isInUsedBodyScrollbarModule = !!zjs(document.body).getData(scrollbaroptionkey, false);
+				var _showedScrollTop = zPopupEl.getData(showedScrolltopkey, 0);
+
+				if(countlongpopupinpage.length)
+					countlongpopupinpage.pop();
+
+				// neu day la long popup cuoi cung
+				// thi se restore ve body
+				if(countlongpopupinpage.length === 0){
 					
 					zPopupEl.setData(fixedBodyElKey, false);
 					
@@ -494,20 +532,20 @@ zjs.require('ui', function(){
 						topContentEl.prepend(fixedBodyEl);
 					};
 					fixedBodyEl.child().eachElement(function(el){
-						zjs(el).insertBefore(fixedBodyEl)
+						zjs(el).insertBefore(wrapFixedBodyEl)
 					});
 						
 					fixedBodyEl.remove();
+					wrapFixedBodyEl.remove();
 					
 					// reset current scroll position
-					var _showedScrollTop = zPopupEl.getData(showedScrolltopkey, 0);
 					if(!isInUsedBodyScrollbarModule)zjs(document.body).setStyle('scrollTop', _showedScrollTop);
 					else zjs(document.body).refreshScroll().scrollTo(_showedScrollTop, true);//notSmooth = true
 
 					// remove class out of body
 					zjs(document.body).removeClass(bodyclasswhenlongpopup);
 
-					// cuoi cung la phai tra ve vi tri dung cho may cai element bi swap
+					// tra ve vi tri dung cho may cai element bi swap
 					var listElsHasSwap = zPopupEl.getData('zlongpopuplistelswap', []);
 					if(listElsHasSwap.length>0)listElsHasSwap.eachItem(function(el){
 						var swapEl = zjs(el).getData('zlongpopupswapel', false);
@@ -518,28 +556,48 @@ zjs.require('ui', function(){
 						}
 					});
 				}
-				
-				// closethenremove ?
-				if(!initHide && option.closethenremove){
-					if(option.scrollPopup!==false){
-						zPopupEl.getData(scrollwrapElKey).remove();
-					}else{
-						zPopupEl.remove();
-					}
-				}
-			},
-			_popupCoverHide = function(){
-				if(zPopupEl){
-					var _coverEl = zPopupEl.getData(pagecoverElKey);
-					if(_coverEl)_coverEl.remove(false);
+				// cac long popup truoc do thi don gian hon
+				// chi can move thang long popup truoc do thoi la duoc
+				else{
+					// tao ra 1 cai fix element de co dinh long popup truoc lai
+					var lastLongPopupEl = zjs('.zui-long-popup[data-show-instance="'+countlongpopupinpage.last()+'"]');
+					// var fixedBodyEl = zjs('<div></div>');
+					
+					zjs(document.body).append(lastLongPopupEl.getData(pagecoverElKey));
+					zjs(document.body).append(lastLongPopupEl);
+					zPopupEl.getData(fixedBodyElKey).remove();
 
-					// neu nhu la scroll popup, thi hide luon scrollwrap
-					if(option.scrollPopup!==false){
-						zPopupEl.getData(scrollwrapElKey).hide();
-						zjs(document.body).removeClass(bodyclasswhenscrollpopup).setStyle('padding-right', '');
-					}
+					// reset current scroll position
+					zjs(document.body).setStyle('scrollTop', 0);
+					if(!isInUsedBodyScrollbarModule)zjs(document.body).setStyle('scrollTop', _showedScrollTop);
 				}
-			};
+
+			}
+			
+			// closethenremove ?
+			if(!initHide && option.closethenremove){
+				if(option.scrollPopup!==false){
+					zPopupEl.getData(scrollwrapElKey).remove();
+				}else{
+					zPopupEl.remove();
+				}
+			}
+
+		},
+		_popupCoverHide = function(){
+			if(zPopupEl){
+				var _coverEl = zPopupEl.getData(pagecoverElKey);
+				if(_coverEl)_coverEl.remove(false);
+
+				// neu nhu la scroll popup, thi hide luon scrollwrap
+				if(option.scrollPopup!==false){
+					zPopupEl.getData(scrollwrapElKey).hide();
+					if(countscrollpopupinpage > 0)countscrollpopupinpage--;
+					if(countscrollpopupinpage === 0)
+						zjs(document.body).removeClass(bodyclasswhenscrollpopup).setStyle('padding-right', '');
+				}
+			}
+		};
 		
 		notUseFade = notUseFade || false;
 		
@@ -575,9 +633,7 @@ zjs.require('ui', function(){
 		
 		
 		// xoa di thong tin show instance
-		zPopupEl
-			.removeAttr('data-show-instance')
-			.setData('popupreadyclickout', false);
+		zPopupEl.removeAttr('data-show-instance');
 
 	},
 	
@@ -661,7 +717,7 @@ zjs.require('ui', function(){
 		isBindPressEsc = true;
 		zjs(document).on('keyup', function(event){
 			if(event.getKeyCode() != 27)return;
-			hideTheTopPopup(window.zpopupelementstackesc);
+			hideTheTopPopup(zpopupelementstackesc);
 		});
 	}
 
@@ -675,7 +731,7 @@ zjs.require('ui', function(){
 		}).on('touchend', function(event){
 			if(tssy < 100 && window.scrollY < -50){
 				tssy = 9999;
-				hideTheTopPopup(window.zpopupelementstackpull);
+				hideTheTopPopup(zpopupelementstackpull);
 			}
 		});
 		
