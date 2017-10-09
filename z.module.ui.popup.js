@@ -26,6 +26,7 @@ zjs.require('ui', function(){
 			pagecoverClass: '',
 			clickout: false,
 			pressEsc: true,
+			pullDown: false,
 			center: true,
 			centerY: false, 
 			fade: true,
@@ -90,7 +91,8 @@ zjs.require('ui', function(){
 	})();
 	
 	// cho 1 thang de luu vao last popup duoc show ra, de ma su dung duoc phim esc
-	window.zpopupelementstack = [];
+	window.zpopupelementstackesc = [];
+	window.zpopupelementstackpull = [];
 	var zWindow = zjs(window);
 
 	// - - - - - - - - -
@@ -201,9 +203,6 @@ zjs.require('ui', function(){
 			var _id = zPopupEl.getAttr('id', '');
 			if(_id!='')zPopupPCoverEl.addClass(coverclass+'-'+_id);
 			if(option.pagecoverClass)zPopupPCoverEl.addClass(option.pagecoverClass);
-			// click outside to close ?
-			if(option.clickout)
-				zPopupPCoverEl.click(function(){popupHide(element)});
 		}
 		zPopupEl.setData(pagecoverElKey, zPopupPCoverEl);
 		
@@ -251,6 +250,16 @@ zjs.require('ui', function(){
 		zWindow
 			.on('resize', function(){popupAlignTop(element)})
 			.on('scroll', function(){popupAlignTop(element)});
+
+
+		// Support pressEsc to hide popup
+		if(option.pressEsc)bindPressEsc();
+		// Support pullDown to hide popup
+		if(option.pullDown)bindPullDown();
+		// Support click outside to hide popup
+		if(option.clickout)zPopupEl.clickout(function(){
+			if(this.getData('popupreadyclickout'))popupHide(this);
+		});
 	},
 	
 	// luu lai 1 so timer cho chac
@@ -275,7 +284,7 @@ zjs.require('ui', function(){
 		}
 
 		if(needShowPagecover)
-			zPopupEl.getData(pagecoverElKey).insertBefore(zPopupEl).setStyle('z-index', getPopuplastindex());
+			var pagecoverEl = zPopupEl.getData(pagecoverElKey).insertBefore(zPopupEl).hide().setStyle('z-index', getPopuplastindex());
 
 		zPopupEl.removeClass(hideclass).setStyle('z-index', getPopuplastindex());
 		
@@ -339,8 +348,8 @@ zjs.require('ui', function(){
 				zPopupEl.setData(fixedBodyElKey, fixedBodyEl);
 
 				// move cai pagecover luon
-				if(needShowPagecover)
-					zPopupEl.getData(pagecoverElKey).appendTo(fixedBodyEl);
+				//if(needShowPagecover)
+				//	pagecoverEl.appendTo(fixedBodyEl);
 
 				// add class to body
 				// cho scroll ve vi tri 0 luon
@@ -361,7 +370,10 @@ zjs.require('ui', function(){
 		}
 		// neu nhu la scroll popup
 		else if(option.scrollPopup){
-			zPopupEl.addClass(longpopupclass).getData(scrollwrapElKey).show().setStyle('scrollTop', 0).setStyle('z-index', getPopuplastindex());
+			var scrollwrapEl = zPopupEl.addClass(longpopupclass).getData(scrollwrapElKey).show().setStyle('scrollTop', 0).setStyle('z-index', getPopuplastindex());
+			// move cai pagecover luon
+			if(needShowPagecover)
+				pagecoverEl.insertBefore(scrollwrapEl);
 			zjs(document.body).addClass(bodyclasswhenscrollpopup);
 			// get scroll width
 			var scrw = getScrollbarWidth();
@@ -388,6 +400,7 @@ zjs.require('ui', function(){
 			delayShownTime = option.fadeTime;
 		}
 		if(option.fadeCover)zPopupEl.getData(pagecoverElKey).fadeIn({time:option.fadeTime});
+		else zPopupEl.getData(pagecoverElKey).show();
 		// neu nhu animate thi se add cac class phu hop de ma dung css3 animate
 		if(option.animate){
 			// stop timer truoc do cho chac an
@@ -406,9 +419,14 @@ zjs.require('ui', function(){
 		if(option.pressEsc){
 			var popupShowInstanceId = zjs.getUniqueId();
 			zPopupEl.setAttr('data-show-instance', popupShowInstanceId);
-			// quang cai nay vao array thoi
-			window.zpopupelementstack.push(popupShowInstanceId);
+			window.zpopupelementstackesc.push(popupShowInstanceId);
 		};
+		// support pull down on mobile only
+		if(option.pullDown && option.longPopup && zjs.isMobileDevice()){
+			var popupShowInstanceId = zjs.getUniqueId();
+			zPopupEl.setAttr('data-show-instance', popupShowInstanceId);
+			window.zpopupelementstackpull.push(popupShowInstanceId);
+		}
 		
 		// helper 1 xiu cho form cho vui
 		// cai nay se auto focus may cai field luon
@@ -424,6 +442,11 @@ zjs.require('ui', function(){
 				}
 			}
 		}).delay(delayShownTime+100);
+
+		// support clickout
+		if(option.clickout)(function(){
+			zPopupEl.setData('popupreadyclickout', true);
+		}).delay(1);
 	},
 	
 	popupHide = function(element, notUseFade, initHide){
@@ -438,7 +461,6 @@ zjs.require('ui', function(){
 
 
 		zPopupEl.trigger('ui:popup:beforehide');
-
 
 		// khi hide popup thi se uu tien xu ly cai scroll truoc
 		if(option.disableWindowScroll && ('enableScroll' in zWindow)){
@@ -553,8 +575,9 @@ zjs.require('ui', function(){
 		
 		
 		// xoa di thong tin show instance
-		zPopupEl.removeAttr('data-show-instance');
-
+		zPopupEl
+			.removeAttr('data-show-instance')
+			.setData('popupreadyclickout', false);
 
 	},
 	
@@ -630,15 +653,39 @@ zjs.require('ui', function(){
 	    return (w1 - w2); 
 	};
 	
-	
-	// bind event cho document
-	zjs(document).on('keyup', function(event){
-		if(event.getKeyCode() != 27)return;
 		
+	// bind event cho document
+	var isBindPressEsc = false;
+	function bindPressEsc(){
+		if(isBindPressEsc)return;
+		isBindPressEsc = true;
+		zjs(document).on('keyup', function(event){
+			if(event.getKeyCode() != 27)return;
+			hideTheTopPopup(window.zpopupelementstackesc);
+		});
+	}
+
+	var isBindPullDown = false;
+	function bindPullDown(){
+		if(isBindPullDown)return;
+		isBindPullDown = true;
+		var tssy;
+		zjs(document).on('touchstart', function(event){
+			tssy = window.scrollY;
+		}).on('touchend', function(event){
+			if(tssy < 100 && window.scrollY < -50){
+				tssy = 9999;
+				hideTheTopPopup(window.zpopupelementstackpull);
+			}
+		});
+		
+	}	
+
+	function hideTheTopPopup(elmstack){
 		// bay gio se la qua trinh di tim cai thang can phai remove nha
 		var popupShowInstanceEl = false;
-		while(window.zpopupelementstack.length > 0){
-			var _id = window.zpopupelementstack.pop();
+		while(elmstack.length > 0){
+			var _id = elmstack.pop();
 			popupShowInstanceEl = zjs('.zui-popup[data-show-instance="'+_id+'"]');
 			if(popupShowInstanceEl.count()>0)break;
 			else popupShowInstanceEl = false;
@@ -652,7 +699,7 @@ zjs.require('ui', function(){
 		
 		// hide thoi
 		popupShowInstanceEl.popupHide();
-	});
+	};
 	
 	
 	// - - - - - - - - - 

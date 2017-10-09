@@ -46,3 +46,6 @@
 01/10/2017
 		+ add event "ui:popup:beforehide"
 		+ better handler longPopup with freezepanel
+
+08/10/2017
+		+ add option "pullDown"
