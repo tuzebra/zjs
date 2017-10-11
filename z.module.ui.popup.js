@@ -46,6 +46,7 @@ zjs.require('ui', function(){
 	//ui:popup:beforehide
 	//ui:popup:hide
 	//ui:popup:show
+	//ui:popup:aftershow
 	//ui:popup:refresh
 	
 	// template
@@ -114,6 +115,8 @@ zjs.require('ui', function(){
 		// flag y bao phai refresh lai option
 		if(option){
 			zPopupEl.setData(optionkey, zjs.extend(option, useroption));
+			if(option.animate && option.animateTime)
+				zPopupEl.setStyle('animation-duration', option.animateTime+'ms');
 			return;
 		}
 		
@@ -257,10 +260,6 @@ zjs.require('ui', function(){
 			.on('scroll', function(){popupAlignTop(element)});
 
 
-		// Support pressEsc to hide popup
-		if(option.pressEsc)bindPressEsc();
-		// Support pullDown to hide popup
-		if(option.pullDown)bindPullDown();
 		// Support click outside to hide popup
 		if(option.clickout){
 			zPopupPCoverEl.click(function(){popupHide(element)});
@@ -276,7 +275,7 @@ zjs.require('ui', function(){
 	timer1 = false,
 	timer2 = false,
 	
-	popupShow = function(element){
+	popupShow = function(element, showOption){
 		// check coi co phai la popup hay khong
 		var zPopupEl = zjs(element);
 		var option = zPopupEl.getData(optionkey);
@@ -456,11 +455,15 @@ zjs.require('ui', function(){
 		if(zPopupEl.hasClass(centerclass))popupAlignTop(element);
 		
 		// support press esc
-		if(option.pressEsc)
+		if(option.pressEsc){
+			bindPressEsc();
 			zpopupelementstackesc.push(popupShowInstanceId)
+		}
 		// support pull down on mobile only
-		if(option.pullDown && option.longPopup && zjs.isMobileDevice())
+		if(option.pullDown && option.longPopup && zjs.isMobileDevice()){
+			bindPullDown();
 			zpopupelementstackpull.push(popupShowInstanceId);
+		}
 		
 		// helper 1 xiu cho form cho vui
 		// cai nay se auto focus may cai field luon
@@ -475,6 +478,11 @@ zjs.require('ui', function(){
 					zWindow.disableScroll();
 				}
 			}
+			// call callback
+			if(showOption && zjs.isFunction(showOption.callback)){
+				showOption.callback.call(zPopupEl, element);
+			}
+			zPopupEl.trigger('ui:popup:aftershow');
 		}).delay(delayShownTime+100);
 
 	},
@@ -764,8 +772,8 @@ zjs.require('ui', function(){
 		makePopup: function(useroption){
 			return this.eachElement(function(element){makePopup(element, useroption)});
 		},
-		popupShow: function(){
-			return this.eachElement(function(element){popupShow(element)});
+		popupShow: function(showOption){
+			return this.eachElement(function(element){popupShow(element, showOption)});
 		},
 		popupHide: function(){
 			return this.eachElement(function(element){popupHide(element)});
