@@ -185,7 +185,7 @@
 		zForm.setData(optionkey, option);
 		
 		// set lai cai query
-		inputsQuery = 'input[type=text], input[type=email], input[type=password], input.zimagepicker, textarea, .'+option.radiogroupClass+', .'+option.checkboxClass;
+		inputsQuery = 'input[type=text], input[type=email], input[type=password], input.zimagepicker, textarea, select, .'+option.radiogroupClass+', .'+option.checkboxClass;
 		
 		// - - -
 		// start coding your module
@@ -369,7 +369,7 @@
 		
 		//var inputsQuery = 'input[type=text], input[type=email], textarea, .radiogroup';	
 		//zForm.find('input,textarea').eachElement(function(element){
-		zForm.find('input,textarea,.'+option.radiogroupClass+',.'+option.checkboxClass+',.'+option.customInputClass).eachElement(function(element){
+		zForm.find('input,textarea,select,.'+option.radiogroupClass+',.'+option.checkboxClass+',.'+option.customInputClass).eachElement(function(element){
 			var zInput = zjs(element);
 			
 			//console.log('before', element);
@@ -419,7 +419,7 @@
 			// tu dong focus vao cai input dau tien bi error
 			var firstErrorElm = zForm.find('.'+option.errorClass).item(0);
 			
-			if(firstErrorElm.is('input') || firstErrorElm.is('textarea')){
+			if(firstErrorElm.is('input') || firstErrorElm.is('textarea') || firstErrorElm.is('select')){
 				firstErrorElm.focus();
 			}
 			else if(firstErrorElm.isAutosuggestion()){
@@ -446,7 +446,7 @@
 		var option = zForm.getData(optionkey, false);
 		if(!option)return;
 		
-		zForm.find('input,textarea,.'+option.checkboxClass).eachElement(function(element){
+		zForm.find('input,textarea,select,.'+option.checkboxClass).eachElement(function(element){
 			var zInput = zjs(element);
 			
 			// xem coi thang input nay co cai tip-element nao khong
