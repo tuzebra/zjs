@@ -478,6 +478,8 @@ zjs.require('ui', function(){
 					zWindow.disableScroll();
 				}
 			}
+			// set cai class cho page cover
+			zPopupEl.getData(pagecoverElKey).addClass(activeclass);
 			// call callback
 			if(showOption && zjs.isFunction(showOption.callback)){
 				showOption.callback.call(zPopupEl, element);
@@ -499,6 +501,9 @@ zjs.require('ui', function(){
 
 
 		zPopupEl.trigger('ui:popup:beforehide');
+
+		// remove cai class cho page cover
+		zPopupEl.getData(pagecoverElKey).removeClass(activeclass);
 
 		// khi hide popup thi se uu tien xu ly cai scroll truoc
 		if(option.disableWindowScroll && ('enableScroll' in zWindow)){

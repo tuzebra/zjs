@@ -422,7 +422,7 @@
 			if(firstErrorElm.is('input') || firstErrorElm.is('textarea') || firstErrorElm.is('select')){
 				firstErrorElm.focus();
 			}
-			else if(firstErrorElm.isAutosuggestion()){
+			else if('isAutosuggestion' in firstErrorElm && firstErrorElm.isAutosuggestion()){
 				firstErrorElm.autosuggestionFocus();
 			}
 			else if(firstErrorElm.hasClass('radiogroup')){
@@ -591,6 +591,13 @@
 			else if(name.indexOf('digits')>=0 || classname.indexOf('digits')>=0 || zInput.getAttr('data-tip-digits','')!='')testType = 'digits';
 			else if(name.indexOf('date')>=0 /*|| classname.indexOf('date')>=0*/ || zInput.getAttr('data-tip-date','')!='' || inputType == 'date')testType = 'date';
 			
+			// doi khi field name co ten la "number"
+			// nhung luc su dung van cho phep nhap vao ky tu
+			// nen se check them 1 xiu nua
+			if(testType == 'number' && zInput.hasClass('allow-alphabet')){
+				testType = '';
+			}
+
 			// test thoi
 			if(testType != '' && !testMethods[testType](value, element))return {pass:false, type:testType};
 		};

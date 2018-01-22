@@ -155,6 +155,18 @@
 		// done!
 		return this;
 	};
+
+	zDictionary.prototype.resetIndex = function(){
+		
+		this.datas = [];
+		this.lastSearchIndexs = [];
+		this.indexDictionary = [];
+		this.indexId = [];
+		this.indexWord = [];
+
+		// done!
+		return this;
+	};
 	
 	zDictionary.prototype.getItemById = function(id){
 		if(!id in this.indexId)return false;

@@ -27,4 +27,8 @@
 
 20/09/2017
 		+ support "data-placeholder" attribute on input to prevent issue on IE 11
+
+22/01/2018
+		+ support watch attribute "data-autocomplete-path" changed
+		+ add new method zjs::autosuggestionResetIndex()
 		

@@ -52,3 +52,6 @@
 		
 26/06/2017
 		+ add new option "autoCheckWhenInput" with default value is FALSE
+		
+21/12/2017
+		+ support number field that has class "allow-alphabet" prevent number test

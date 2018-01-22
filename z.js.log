@@ -544,4 +544,7 @@
 
 25/04/2017
 		+ add method zjs::reverse()
+
+22/01/2018
+		+ add 2 new hooks: "after_setAttr", "after_removeAttr"
 		

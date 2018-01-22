@@ -3100,6 +3100,8 @@ zjs.extendMethod({
 			// other	
 			if(!done)try{e.setAttribute(att, val);}catch(e){};
 			
+			// run hook
+			if(Hook.enable('after_setAttr'))Hook.run('after_setAttr', e, att, val);
 		});
 		return this;
 	},
@@ -3107,6 +3109,9 @@ zjs.extendMethod({
 		return this.eachElement(function(el){
 			if(typeof el.removeAttribute == 'function')
 				el.removeAttribute(att);
+
+			// run hook
+			if(Hook.enable('after_removeAttr'))Hook.run('after_removeAttr', el, att);
 		});
 	},
 	getValue: function(defaultVal){

@@ -100,6 +100,8 @@ zjs.require('dictionary, scrollbar', function(){
 			option = zOriginalInput.getData(optionkey);
 			refreshOption = false;
 		};
+
+		var IS_ENABLE_AUTOSUGGESTION = true;
 		
 		// - - - 
 		// neu ma chua co thi se lam binh thuong
@@ -120,6 +122,26 @@ zjs.require('dictionary, scrollbar', function(){
 				option.sourceUrl = _attDataAutocompletePath;
 			}
 		}
+		
+		// check coi need to watch autocomplete path change hay khong?
+		// add luon cai hook vo luon
+		// boi vi khi da chay module autosugess len roi, ma sau do lai thay doi attribute
+		// thi chung to la muon thay doi suggest path that
+		zjs.hook({after_setAttr: function(el, att, val){
+			if(el !== element || att !== 'data-autocomplete-path')return;
+			var _attDataAutocompletePath = zOriginalInput.getAttr('data-autocomplete-path', '');
+			// neu nhu empty thi disable autosuggess luon
+			if(_attDataAutocompletePath == ''){
+				// console.log('disable autosugges luon!');
+				IS_ENABLE_AUTOSUGGESTION = false;
+			}else{
+				// console.log('enable autosugges, change path!');
+				IS_ENABLE_AUTOSUGGESTION = true;
+				option.sourceUrl = _attDataAutocompletePath;
+				//set sourceUrl vao cho thang dictionary
+				dictionary.setDataSourceUrl(option.sourceUrl);
+			}
+		}});
 
 		// extend from user option ?
 		if(typeof useroption!='undefined')
@@ -249,35 +271,7 @@ zjs.require('dictionary, scrollbar', function(){
 		}else
 			zWrapperEl.find('.zui-estimate-height-wrap').remove();
 		
-		var _fakeFocus = false;
-
-		// redirect input focus
-		zOriginalInput.on('focus', function(){
-			if(!_fakeFocus)zInput.focus();
-		});
 		
-		// bind event focus de add css vao
-		zInput.on('focus', function(){
-			zWrapperEl.addClass(zautosuggestionFocusClass);
-
-			_fakeFocus = true;
-			zOriginalInput.trigger('focus');
-			_fakeFocus = false;
-		}).on('blur', function(){
-			zWrapperEl.removeClass(zautosuggestionFocusClass);
-
-			// support <select> element
-			if(selectSourceEl){
-				if(zInput.getValue().trim() === ''){
-					selectSourceEl.setValue(option.noneValue);
-				}
-			}
-
-			zOriginalInput.trigger('blur');
-		});
-		// auto focus new input?
-		if(option.autofocus)
-			zInput.focus();
 		
 		// neu nhu khong tu custom css thi phai auto set thoi
 		if(!option.customcss){
@@ -375,9 +369,12 @@ zjs.require('dictionary, scrollbar', function(){
 	
 		// - - - -
 		// set placeholder text
-		var placeholderText = zOriginalInput.getAttr('data-placeholder', zOriginalInput.getAttr('placeholder', '')),
-			// luu lai coi dang chon thang nao
-			currentHighlightIndex = 0, 
+		var placeholderText = function(){
+				return zOriginalInput.getAttr('data-placeholder', zOriginalInput.getAttr('placeholder', ''));
+			};
+
+		// luu lai coi dang chon thang nao
+		var currentHighlightIndex = 0, 
 			currentResultLength = 0, 
 			typevalue = '',
 			typevalueholder = '',
@@ -387,7 +384,7 @@ zjs.require('dictionary, scrollbar', function(){
 			// realvalue that use in the result
 			usedvalue = '';
 		
-		setPlaceholderText(zPlaceholder, placeholderText);
+		setPlaceholderText(zPlaceholder, placeholderText());
 		
 		// - - - -
 		// hide old input
@@ -652,7 +649,7 @@ zjs.require('dictionary, scrollbar', function(){
 			// thi se tra lai luon cai value cho original input, con khong thi thoi
 			if(option.usedproperty === 'text' || option.usedpropertytext){
 				zOriginalInput.setValue(typevalue);
-				if(typevalue === '')setPlaceholderText(zPlaceholder, placeholderText);
+				if(typevalue === '')setPlaceholderText(zPlaceholder, placeholderText());
 				else setPlaceholderText(zPlaceholder, typevalueholder = '');
 			}
 			else{
@@ -806,7 +803,7 @@ zjs.require('dictionary, scrollbar', function(){
 				// delay 1 xiu de ma kip update top va left
 				(function(){
 					zPlaceholder.top(zInput.top()).left(zInput.left()).show();
-					setPlaceholderText(zPlaceholder, placeholderText);
+					setPlaceholderText(zPlaceholder, placeholderText());
 				}).delay(80);
 			};
 		},
@@ -842,7 +839,7 @@ zjs.require('dictionary, scrollbar', function(){
 				if(rawvalue=='' || (search && rawvalue.length<option.minlength)) {
 					typevalueholder = '';
 					if(rawvalue!='')setPlaceholderText(zPlaceholder, '', rawvalue);
-					else setPlaceholderText(zPlaceholder, placeholderText);
+					else setPlaceholderText(zPlaceholder, placeholderText());
 					zPanel.addClass('zui-panel-hide');
 					return;
 				};
@@ -862,14 +859,14 @@ zjs.require('dictionary, scrollbar', function(){
 				if(rawvalue==''){ /* khong nhap gi ne */
 					// va dong thoi thang original (thang dich) cung empty thi return ve defautl placeholder thoi
 					if(zOriginalInput.getValue()=='') 
-						setPlaceholderText(zPlaceholder.show(), placeholderText);
+						setPlaceholderText(zPlaceholder.show(), placeholderText());
 					// con neu nhu thang dich khong co empty thi thoi, se hide di cho roi
 					else 
 						zPlaceholder.hide();
 					
 					// neu nhu rawvalue empty thi gio neu dang co cai thang highlight nao thi cung phai empty luon
 					typevalueholder = '';
-					setPlaceholderText(zPlaceholder, placeholderText);
+					setPlaceholderText(zPlaceholder, placeholderText());
 					zPanel.addClass('zui-panel-hide');
 					return;
 				}
@@ -884,7 +881,7 @@ zjs.require('dictionary, scrollbar', function(){
 				//if(rawvalue=='' && zOriginalInput.getValue()=='')
 				// khong lien quan gio thoi cai thang zOriginalInput het tron
 				//if(rawvalue=='')
-				//	setPlaceholderText(zPlaceholder.show(), placeholderText);
+				//	setPlaceholderText(zPlaceholder.show(), placeholderText());
 				//else 
 				//	zPlaceholder.hide();
 				// @todo:
@@ -895,6 +892,9 @@ zjs.require('dictionary, scrollbar', function(){
 			
 			// start search
 			if(!search)return;
+
+			// neu nhu dang khong enable autosuggest thi thoi
+			if(!IS_ENABLE_AUTOSUGGESTION)return;
 			
 			// reset highlight
 			currentHighlightIndex = 0;
@@ -914,7 +914,7 @@ zjs.require('dictionary, scrollbar', function(){
 				// cho nen phai check input xem coi co can thiet show suggestion ra khong?
 				typevalue = zInput.getValue();
 				if(typevalue===''){
-					setPlaceholderText(zPlaceholder, placeholderText);
+					setPlaceholderText(zPlaceholder, placeholderText());
 				}
 				if(result.length===0 || typevalue===''){
 					zPanel.addClass('zui-panel-hide');
@@ -1091,6 +1091,45 @@ zjs.require('dictionary, scrollbar', function(){
 		zWrapperInput.on('click', function(){
 			zInput.focus();
 		});
+
+
+
+		// FORWARD EVENT
+		// -------------
+		// qua cho thang original input
+		var _fakeFocus = false;
+
+		// redirect input focus
+		zOriginalInput.on('focus', function(){
+			if(!_fakeFocus)zInput.focus();
+		});
+		
+		// bind event focus de add css vao
+		zInput.on('focus', function(){
+			zWrapperEl.addClass(zautosuggestionFocusClass);
+
+			_fakeFocus = true;
+			zOriginalInput.trigger('focus');
+			_fakeFocus = false;
+		}).on('blur', function(){
+			zWrapperEl.removeClass(zautosuggestionFocusClass);
+
+			// support <select> element
+			if(selectSourceEl){
+				if(zInput.getValue().trim() === ''){
+					selectSourceEl.setValue(option.noneValue);
+				}
+			}
+
+			zOriginalInput.trigger('blur');
+		}).on('keyup', function(){
+			zOriginalInput.trigger('keyup');
+		});
+		// auto focus new input?
+		if(option.autofocus)
+			zInput.focus();
+
+		// END Forward
 		
 		
 		// xem coi co option cho chon khi focus vao thi se show ra luon suggestion khong
@@ -1187,7 +1226,7 @@ zjs.require('dictionary, scrollbar', function(){
 					// thi gio show ra default placeholder text thoi
 					if(typevalue == ''){
 						typevalueholder = '';
-						setPlaceholderText(zPlaceholder, placeholderText);
+						setPlaceholderText(zPlaceholder, placeholderText());
 					};
 				};
 				
@@ -1314,6 +1353,18 @@ zjs.require('dictionary, scrollbar', function(){
 		// remove
 		dictionary.removeIndex(query, confirmdel);
 	},
+	autosuggestionResetIndex = function(element){
+		
+		var zOriginalInput = zjs(element),
+			dictionary = zOriginalInput.getData(dictionarykey);
+			
+		// neu nhu khong co dictionary thi 
+		// chung to day khong phai la mot autosuggestion
+		if(!dictionary)return;
+		
+		// remove
+		dictionary.resetIndex();
+	},
 	
 	// ham giup focus
 	autosuggestionFocus = function(element){
@@ -1361,6 +1412,9 @@ zjs.require('dictionary, scrollbar', function(){
 		},
 		autosuggestionRemoveindex: function(query, confirmdel){
 			return this.eachElement(function(element){autosuggestionRemoveindex(element, query, confirmdel)});
+		},
+		autosuggestionResetIndex: function(){
+			return this.eachElement(function(element){autosuggestionResetIndex(element)});
 		},
 		autosuggestionFocus: function(){
 			return this.eachElement(function(element){autosuggestionFocus(element)});
