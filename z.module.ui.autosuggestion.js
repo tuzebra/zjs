@@ -695,7 +695,8 @@ zjs.require('dictionary, scrollbar', function(){
 				// uu tien so 3:
 				// thang dau tien trong list suggestion
 				// nhung ma cai nay ko co choi voi text, chi choi voi id thoi
-				}else if(option.usedproperty != 'text'){
+				// }else if(option.usedproperty != 'text'){
+				}else if(option.usedproperty == 'id'){
 					var _highlightItemEls = zPanelcontent.find('.'+__itemclass);
 					if(_highlightItemEls.count()>0)
 						_highlightItemEl = _highlightItemEls.item(0);
@@ -1285,10 +1286,14 @@ zjs.require('dictionary, scrollbar', function(){
 	createHighlightItem = function(option, zPanelcontent, item, i){
 		// tao ra 1 itemwrap moi
 		var zItemwrap;
-		if(option.itemLinkFormat != '')
-			zItemwrap = zjs(__htmlitemlinktpl).setAttr('href', option.itemLinkFormat.format(item));
-		else 
+		if(option.itemLinkFormat != ''){
+			// option itemLinkFormat support "function"
+			var _itemLinkFormat = zjs.isFunction(option.itemLinkFormat) ? option.itemLinkFormat(item) : option.itemLinkFormat;
+			zItemwrap = zjs(__htmlitemlinktpl).setAttr('href', _itemLinkFormat.format(item));
+		}
+		else{
 			zItemwrap = zjs(__htmlitemtpl);
+		}
 		zItemwrap.appendTo(zPanelcontent);
 
 		// save item data vao luon
