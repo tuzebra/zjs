@@ -19,7 +19,10 @@
 		if(!zHtml)zHtml = zjs('html');
 		if(!zBody)zBody = zjs(document.body);
 
-		zHtml.setStyle({overflow: 'hidden', height: '100%'});
+		zHtml.setStyle({
+			overflow: 'hidden', 
+			// height: '100%'
+		});
 		
 		if(zjs.browser.safari && zjs.browser.isIPhone){
 			rememberLastScroll = zBody.scrollTop();
@@ -36,11 +39,13 @@
 		if(!zHtml)zHtml = zjs('html');
 		if(!zBody)zBody = zjs(document.body);
 
-		zHtml.setStyle({overflow: null, height: null});
+		zHtml.setStyle({
+			overflow: null, 
+			// height: null
+		});
 
 		if(zjs.browser.safari && zjs.browser.isIPhone){
-			zBody.setStyle({overflow: null, height: null});
-			zBody.scrollTop(rememberLastScroll);
+			zBody.setStyle({overflow: null, height: null, scrollTop: rememberLastScroll});
 		}
 
 	};

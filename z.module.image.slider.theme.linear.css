@@ -117,8 +117,8 @@ body.imageslider-popup-show{}
 
 /* gallery UL */
 .imageslider-gallery{}
-.imageslider-gallery li{display: inline-block;width: 130px;height: 170px;padding: 10px;background: #F5EAEA;vertical-align: top;cursor: pointer;}
-.imageslider-gallery li:hover{background: #E9DCDC;}
+.imageslider-gallery .imageslider-gallery-item{display: inline-block;width: 130px;height: 170px;padding: 10px;background: #F5EAEA;vertical-align: top;cursor: pointer;}
+.imageslider-gallery .imageslider-gallery-item:hover{background: #E9DCDC;}
 
 /* horizontal stack & page */
 .imageslider-linear.horizontal-stack{width:100%;}

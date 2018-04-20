@@ -9,10 +9,11 @@
 			body{font-family:arial;}
 			.hide{display:none;}
 		</style>
-		
+		<link rel="stylesheet" type="text/css" href="./3th/animate.min.css">
+
 		<script type="text/javascript" src="z.js" data-debug="true"></script>
 		<script>
-			zjs.onready('image.slider.theme.linear', function(){
+			zjs.onready('ui.popup, image.slider.theme.linear', function(){
 				
 				// bind event
 				//zjs('.zslider').on('slider.change', function(event){console.log(event.data)});
@@ -74,6 +75,7 @@ popupFullscreenWidth: false,
 popupLinkTitle: true
 </pre>
 		<div class="zslider" data-option="theme:'linear',
+			slideitem: '.imageslider-gallery-item',
 			transition:'horizontal',
 			transitionTime:1000,
 			transitionTimingfunction:4,
@@ -85,6 +87,7 @@ popupLinkTitle: true
 			popupHideOnClickOut: true,
 			popupCloseButton: true,
 			
+			popup: true,
 			popupAnimate: true,
 			popupAnimateTime: 800,
 			//popupAnimateName: 'fadeInDown fadeOutUp',
@@ -108,37 +111,58 @@ popupLinkTitle: true
 			
 			popupLinkTitle: true">
 
-			<ul class="imageslider-gallery">
-				<li>
-					<h3><a href="http://www.google.com/search?q=IU">IU</a></h3>
+			<div class="imageslider-gallery">
+
+				<p>Rerum aurea nisi semina pontus illas. Inmensa lapidosos circumfuso duas fulminibus. Uno spectent praecipites locavit membra tonitrua. Septemque iuga reparabat? Phoebe quisque nam orbem agitabilis. Caesa videre diversa mundi traxit carmen campos. Terras terrae nec semina nubibus ripis animalibus. Nullus qui deerat flamma.</p>
+
+				<div class="imageslider-gallery-item">
+					<h3><a href="http://www.google.com/search?q=IU">Image 1</a></h3>
 					<img src="sliderimages/1thumb.jpg" largesrc="sliderimages/1.jpg" />
 					<p class="hide">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu eleifend purus. Nulla in diam quam, sed aliquam ligula. Aenean volutpat euismod leo, non malesuada est euismod in.</p>
-				</li>
-				<li>
-					<h3>IU</h3>
+				</div>
+
+				<p>Spisso flamina. Nebulas natus toto arce. Altae recens undae hanc. Primaque quicquam fronde tractu obliquis aurea? Terris tractu ignotas pronaque orbem deducite. Terra sed aera. Imagine onerosior praebebat legebantur bene ensis innabilis horrifer orba. Iapeto vindice aeris pontus invasit litem pontus litem fossae.</p>
+
+				<div class="imageslider-gallery-item">
+					<h3>Image 2</h3>
 					<img src="sliderimages/2thumb.jpg" largesrc="sliderimages/2.jpg" />
 					<p class="hide">Quisque id lorem ultricies erat venenatis aliquam in in nunc. Nunc rutrum sapien vitae augue rutrum vel pulvinar est ullamcorper.</p>
-				</li>
-				<li>
-					<h3>IU</h3>
+				</div>
+
+				<p>Temperiemque fratrum proximus. Litem principio inclusum pace quae sine caeca pulsant. Matutinis perpetuum distinxit! Pugnabant deus formaeque hominum regio humanas gentes. Speciem valles tegi! Cinxit meis motura caligine inmensa. Sui totidem pontus. Horrifer convexi caelum coeperunt umor. Frigore siccis cepit animalia rectumque tellure.</p>
+
+				<div class="imageslider-gallery-item">
+					<h3>Image 3</h3>
 					<img src="sliderimages/3thumb.jpg" largesrc="sliderimages/3.jpg" />
 					<p class="hide">Quisque orci metus, congue laoreet dapibus eu, vehicula fringilla arcu. Curabitur pulvinar mattis euismod.</p>
-				</li>
-				<li>
-					<img src="sliderimages/4thumb.jpg" data-src="sliderimages/4.jpg" title="Jessica" alt="Aliquam eu tortor tempus eros tempor pharetra vitae laoreet dolor. Fusce id pretium erat. Phasellus et est a ante blandit semper quis eu turpis." />
+				</div>
+
+				<p>Duae ambitae premuntur origo freta pontus rectumque congeriem egens. Titan fuerant mea. Usu ventis proxima iapeto austro. Illas acervo coeperunt. Nulli lege eurus est. Ad titan caecoque flexi sorbentur tanto porrexerat. Secuit egens! Caeleste caesa valles piscibus parte silvas ardentior dissaepserat mentisque congestaque.</p>
+
+				<p>Effigiem deerat manebat meis. Ut erant sunt vultus diu tenent glomeravit. Diremit coercuit cetera densior mundi in. Dissaepserat terrae tollere turba foret abscidit. Orbem tuba norant lanient orba pontus diffundi duae. Cognati undas undas rapidisque foret dixere crescendo. Sine duas adhuc his boreas.</p>
+
+				<div class="imageslider-gallery-item">
+					<img src="sliderimages/4thumb.jpg" data-src="sliderimages/4.jpg" title="Image 4" alt="Aliquam eu tortor tempus eros tempor pharetra vitae laoreet dolor. Fusce id pretium erat. Phasellus et est a ante blandit semper quis eu turpis." />
 					<div class="hide">Lorem ipsum dolor sit amet</div>
-				</li>
-				<li>
-					<img src="sliderimages/5thumb.jpg" data-src="sliderimages/5.jpg" title="Jessica" />
+				</div>
+
+				<p>Titan coercuit deducite norant frigore tum natus. Formaeque habitandae diremit feras praecipites aeris terrarum nisi. Modo his. Formas convexi tuba fulminibus fidem. Capacius recepta. Fulgura moles recepta. Fidem praebebat circumfuso? Poena legebantur congeriem fulminibus tum. Tumescere speciem vindice glomeravit mollia quicquam coegit spisso.</p>
+
+				<div class="imageslider-gallery-item">
+					<img src="sliderimages/5thumb.jpg" data-src="sliderimages/5.jpg" title="Image 5" />
 					<p class="hide">Phasellus fermentum orci consequat enim laoreet vel sodales leo consectetur. Pellentesque luctus est at neque dictum sit amet suscipit magna eleifend.</p>
-				</li>
-				<li>
+				</div>
+
+				<p>Congeriem caelumque consistere. Innabilis pondere astra iudicis mixta modo liquidum tuba. Otia tuti usu. Conversa vesper liquidum quicquam spectent alta ripis chaos: scythiam. Terris sata animal limitibus coeperunt erat:. Viseret pondere pondere cesserunt animalibus? Vix calidis iudicis calidis origo speciem animal toto inposuit.</p>
+
+				<div class="imageslider-gallery-item">
 					<img src="sliderimages/6thumb.jpg" />
 					<img class="hide large" src="sliderimages/6.jpg" />
-					<p class="title">Jessica</p>
+					<p class="title">Image 6</p>
 					<p class="hide">Cras adipiscing semper erat, quis consectetur lacus eleifend cursus. Donec ac nisl quis nibh elementum molestie ut vitae mi.</p>
-				</li>
-			</ul>
+				</div>
+
+			</div>
 
 		</div>
 
