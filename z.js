@@ -875,14 +875,14 @@ var version = '1.1',
 			return this;
 		};
 		
-		this.stop = function(){
+		this.stop = function(options){
 			window.clearTimeout(handler);
 			// reset lai. moi. thu'
 			handler = false;
 			onStarted = false;
 			x = 0;
 			// goi. onStop
-			if(onStop)onStop(from, to);
+			if(onStop)onStop(from, to, options);
 			return this;
 		};
 
@@ -1188,8 +1188,8 @@ var version = '1.1',
 			// kieu nhu the nay:
 			// eventTypes = {
 			// 		click: {
-			// 			el1: [[handler,query,el], [handler,query,el]], 
-			// 			el2: [[handler,query,el]]
+			// 			el1: [[handler,query,el,options], [handler,query,el,options]], 
+			// 			el2: [[handler,query,el,options]]
 			// 		}
 			// }	
 			// trong do el1,el2,el3,.. la cac unique id 
@@ -1232,7 +1232,7 @@ var version = '1.1',
 			};
 			
 			// method co nhiem vu add them handler vao luu tru
-			this.addEventHandler = function(type, element, handler, query){
+			this.addEventHandler = function(type, element, handler, query, options){
 				// fix agruments
 				if(!type || !element)return;
 				handler = handler || false;if(handler===false)handler = function(){return false};
@@ -1248,7 +1248,7 @@ var version = '1.1',
 				if(typeof eventTypes[type] == 'undefined')eventTypes[type] = {};
 				// set den elid
 				if(typeof eventTypes[type]['el'+eventid] == 'undefined')eventTypes[type]['el'+eventid] = [];
-				eventTypes[type]['el'+eventid].push([handler, query, element]);
+				eventTypes[type]['el'+eventid].push([handler, query, element, options]);
 			};
 			
 			// method co nhiem vu remove tat ca cac handler cua 1 element
@@ -1280,6 +1280,14 @@ var version = '1.1',
 				if(typeof eventTypes[type]['el'+eventid] == 'undefined')return false;
 				// gio se check cac handler return
 				var handlers = [];
+				// handlers = [
+				// 	 [
+				// 	   handler, 
+				// 	   eventElement, 
+				// 	   options (pass at "on()" method)
+				// 	 ],
+				// 	 ...
+				// ];
 				for(var i=0,len=eventTypes[type]['el'+eventid].length;i<len;i++){
 					// kiem tra query that can than
 					var query = eventTypes[type]['el'+eventid][i][1];
@@ -1313,7 +1321,11 @@ var version = '1.1',
 						// neu nhu khong on thi thoi
 						if(!ok)continue;
 					};
-					handlers.push([eventTypes[type]['el'+eventid][i][0], eventElement]);
+					handlers.push([
+						eventTypes[type]['el'+eventid][i][0], 
+						eventElement,
+						eventTypes[type]['el'+eventid][i][3]
+					]);
 				};
 				return handlers;
 			};
@@ -1333,7 +1345,7 @@ var version = '1.1',
 				for(var i=0,len=elids.length;i<len;i++){
 					var elHandlers = eventTypes[type][elids[i]];
 					for(var j=0,l2=elHandlers.length;j<l2;j++)
-						handlers.push([elHandlers[j][0],elHandlers[j][2]]);
+						handlers.push([elHandlers[j][0],elHandlers[j][2],elHandlers[j][3]]);
 				};
 				return handlers;
 			};
@@ -1396,6 +1408,8 @@ var version = '1.1',
 		this.getData = function(){
 			return this.data;
 		}
+		// just a interface
+		this.setPassiveMode = function(passive){}
 	},
 	
 	// EVENT OBJECT for default browser event
@@ -1405,6 +1419,8 @@ var version = '1.1',
 		
 		var ePageX = e.pageX ? e.pageX : 0,
 			ePageY = e.pageY ? e.pageY : 0;
+
+		var passiveMode = false;
 		
 		// may' method co ban
 		this.x = function(){ return this.xy().x; };
@@ -1456,10 +1472,18 @@ var version = '1.1',
 		this.ctrlKey = function(){return e.ctrlKey};
 		this.metaKey = function(){return e.metaKey};
 		
+		this.setPassiveMode = function(passive){
+			passiveMode = passive;
+		};
+
 		// stop event
 		this.isDefaultPrevented = false;
 		this.preventDefault = function(){
 			this.isDefaultPrevented = true;
+
+			// fix issue 
+			// "Unable to preventDefault inside passive event listener invocation."
+			if(passiveMode)return;
 
 			// https://www.chromestatus.com/features/5093566007214080
 			if(('defaultPrevented' in e) && e.defaultPrevented === true){
@@ -1475,12 +1499,14 @@ var version = '1.1',
 			}catch(err){};
 		};
 		this.stopPropagation = function(){
+			if(passiveMode)return;
 			try{
 				if(browser.msie)e.cancelBubble = true;
 				else if(e.stopPropagation)e.stopPropagation();
 			}catch(err){};
 		};
 		this.stop = function(){
+			if(passiveMode)return;
 			return this.stopPropagation();
 		};
 		
@@ -2437,7 +2463,7 @@ zjs.extendMethod({
 				var callback = !EventStore.typeExist(type, elem);
 				
 				// bind handler vao eventStore
-				EventStore.addEventHandler(type, elem, handler, query);
+				EventStore.addEventHandler(type, elem, handler, query, options);
 			
 				// neu nhu khong co callback thi thoi out luon
 				// noi chung cho nay return tuc la 
@@ -2541,6 +2567,9 @@ zjs.extendMethod({
 			
 			var isDefaultPrevented = false;
 			for(var i=0;i<handlers.length;i++){
+
+				// coi coi cai handler co options passive mode hay khong?
+				newEvent.setPassiveMode(isObject(handlers[i][2]) && handlers[i][2].passive);
 				
 				// bay gio khong biet la event nay se tac dong len dau
 				// nen phai get ra distract element thu

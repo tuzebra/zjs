@@ -524,8 +524,18 @@
 			// run callback & trigger a event
 			if(!option.nonui)option.onScroll(-to, containerWidth, containerHeight);
 			if(option.nonui)contentElement.trigger('scrollbar:scroll', {scrollTop:-to});
-			else if(isBodyScroll)bodyElement.trigger('scrollbar:scroll', {scrollTop:-to, scrollBottom:contentWidth-containerWidth+to, width:containerWidth, height:containerHeight});
-			else contentElement.trigger('scrollbar:scroll', {scrollTop:-to, scrollBottom:contentWidth-containerWidth+to, width:containerWidth, height:containerHeight});
+			else if(isBodyScroll)bodyElement.trigger('scrollbar:scroll', {
+				scrollTop:-to, 
+				scrollBottom:option.horizontal?(contentWidth-containerWidth+to):(contentHeight-containerHeight+to), 
+				width:containerWidth, 
+				height:containerHeight
+			});
+			else contentElement.trigger('scrollbar:scroll', {
+				scrollTop:-to, 
+				scrollBottom:option.horizontal?(contentWidth-containerWidth+to):(contentHeight-containerHeight+to), 
+				width:containerWidth, 
+				height:containerHeight
+			});
 		};
 		
 		// ham thuc su di chuyen content element
@@ -966,6 +976,7 @@
 		var _scrollbarElementPosition = 0;
 		if(!option.alwayshide)
 			scrollbarElement.drag({
+				// willPreventDefault: true,
 				onStart: function (event) {
 					event.preventDefault();
 					event.stopPropagation();
