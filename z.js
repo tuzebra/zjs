@@ -1702,6 +1702,7 @@ extend(String.prototype, {
 					s = s.format(value, _prefix+key+'\\.');
 			}
 			else if(typeof value == 'string' || typeof value == 'number'){
+				if(typeof key === 'string')key = key.replace('[', '\\[').replace(']', '\\]');
 				s = s.replace(new RegExp('(\\$|#){'+_prefix+key+'\\}', 'g'), value);
 				s = s.replace(new RegExp('(\\$|#){'+_prefix+key+'\\+1\\}', 'g'), parseInt(value)+1);
 			};

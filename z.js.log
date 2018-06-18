@@ -548,3 +548,5 @@
 22/01/2018
 		+ add 2 new hooks: "after_setAttr", "after_removeAttr"
 		
+15/06/2018
+		+ fix method string::format()
