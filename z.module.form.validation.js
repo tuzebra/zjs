@@ -259,6 +259,13 @@
 						handlerTestResult(this, checkInput(this, option, zForm), option);
 					});
 				};
+				// neu nhu day la select 
+				if(zInput.is('select')){
+					// console.log('is select here', zInput.item(0,1));
+					zInput.on('change, ui:selectbox:change, ui:selectbox:blur', function(){
+						handlerTestResult(zInput, checkInput(zInput, option, zForm), option);
+					});
+				};
 				// neu nhu day la radiogroup thi phai xu ly khi cac thang con (radio) cua no click
 				if(zInput.hasClass(option.radiogroupClass)){
 					//zInput.find('input[type=radio]').live('click', function(){
@@ -584,7 +591,7 @@
 			inputType = zInput.getAttr('type', '').trim().toLowerCase(),
 			classname = zInput.getAttr('class', '').trim().toLowerCase(),
 			value = zInput.getValue('').trim();
-		
+			
 		// 0. trong truong hop dac biet
 		// check required cua groupradio
 		if(zInput.hasClass(option.radiogroupClass)){
@@ -641,8 +648,6 @@
 		};
 			
 		
-		//console.log('element', element, 'value', value);
-		// >>>>>
 		
 		// 1. dau tien la check required
 		// neu nhu khong dap ung duoc la thoi ngay

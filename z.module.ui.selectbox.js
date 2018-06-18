@@ -271,8 +271,22 @@ zjs.require('scrollbar, ui, ui.button', function(){
 	
 	// bind event cho document luon
 	zjs(document).on('click', function(){
-		zjs('.'+selectboxbuttonclass).removeClass(zbuttonactiveclass);
-		zjs('.'+selectboxpanelwrapclass).addClass(contextualpanelwraphideclass);
+		zjs('.zselectbox').eachElement(function(selectEl){
+
+			var zSelectboxWrapEl = zjs(selectEl).getData(wrapelkey);
+			if(!zSelectboxWrapEl)return;
+
+			var buttonEl = zSelectboxWrapEl.find('.'+selectboxbuttonclass),
+				panelEl  = zSelectboxWrapEl.find('.'+selectboxpanelwrapclass);
+
+			var isOpen = buttonEl.hasClass(zbuttonactiveclass);
+			if(isOpen){
+				buttonEl.removeClass(zbuttonactiveclass);
+				panelEl.addClass(contextualpanelwraphideclass);
+
+				zjs(selectEl).trigger('ui:selectbox:blur');
+			}
+		});
 	});
 	
 	// ham giup select 1 item nao do
@@ -307,6 +321,9 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		// sau do se change thang <option selected> trong cai <select> goc
 		zSelectboxEl.find('option[selected]').selected(false);
 		zSelectboxEl.find('option[value="'+value+'"]').selected(true);
+
+		// update 1 cai attr cua selectbox de co gi con style
+		zSelectboxWrapEl.setAttr('data-selected-value', value);
 		
 		// run trigger
 		if(typeof click != 'undefined' && click == 'click')
