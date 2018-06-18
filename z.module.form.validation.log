@@ -55,3 +55,9 @@
 		
 21/12/2017
 		+ support number field that has class "allow-alphabet" prevent number test
+
+18/06/2018
+		+ add class "success" when success checking
+		+ support validate a "date group" of 3 inputs
+		+ add new method ::formValidationCheckInSilent()
+

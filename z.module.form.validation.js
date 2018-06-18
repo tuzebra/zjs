@@ -85,6 +85,7 @@
 	zjs.extendCore({
 		moduleFormValidationOption:{
 			errorClass: 'error',
+			successClass: 'success',
 			// set default lang dua vao ngon ngu cua trang
 			language: pageLang,
 			// default tips la empty
@@ -100,8 +101,9 @@
 			
 			// prevent check class
 			preventClass: 'prevent',
-			radiogroupClass: 'radiogroup',
 			checkboxClass: 'checkbox',
+			radiogroupClass: 'radiogroup',
+			dategroupClass: 'dategroup',
 			customInputClass: 'zvalidation-custom-input',
 			
 			// prevent enter to submit
@@ -185,7 +187,13 @@
 		zForm.setData(optionkey, option);
 		
 		// set lai cai query
-		inputsQuery = 'input[type=text], input[type=email], input[type=password], input.zimagepicker, textarea, select, .'+option.radiogroupClass+', .'+option.checkboxClass;
+		inputsQuery = 'input[type=text], input[type=email], input[type=password], input.zimagepicker, textarea, select'
+					// ho tro check box group
+					+', .'+option.checkboxClass
+					// ho tro radio group
+					+', .'+option.radiogroupClass
+					// ho tro date group
+					+', .'+option.dategroupClass;
 		
 		// - - -
 		// start coding your module
@@ -206,6 +214,14 @@
 				// xem coi neu nhu thang input nay la thang input dac biet thi thoi, ko ho tro
 				if(zInput.hasClass(autosuggestionchildinputclass))return;
 				if(zInput.hasClass(datepickerchildinputclass))return;
+
+				// tuong tu cho dategroup
+				// neu nhu cai input nay nam ben trong 1 cai dategroup thi cung khong check no rieng le
+				if(zInput.hasClass('js-dategroup-item'))return;
+				if(zInput.findUp('.'+option.dategroupClass).count()){
+					zInput.addClass('js-dategroup-item');
+					return;
+				}
 			
 				// xem coi neu nhu thang input nay duoc xu ly 1 lan dau tien roi thi thoi
 				if(zInput.getData(isvalidinputkey, false))return;
@@ -266,6 +282,20 @@
 						});
 					}
 				};
+				// neu nhu day la dategroup thi phai xu ly cac thang con (input) cua no
+				if(zInput.hasClass(option.dategroupClass)){
+					// bind event cho cac thang input con
+					if(option.autoCheckWhenBlur){
+						zInput.find('input').on('blur', function(){
+							handlerTestResult(zInput, checkInput(zInput, option, zForm), option);
+						});
+					};
+					if(option.autoCheckWhenInput){
+						zInput.find('input').on('input', function(){
+							handlerTestResult(zInput, checkInput(zInput, option, zForm), option);
+						});
+					};
+				}
 			
 				// quan trong khong kem do la add class cho thang cha cua thang input
 				// de co gi con css cho de
@@ -349,8 +379,10 @@
 	
 	
 	// ham nay giup xu ly khi submit
-	var formCheck = function(element, event){
+	var formCheck = function(element, event, workInSilent){
 		
+		workInSilent = workInSilent || false;
+
 		// get ra form
 		var zForm = zjs(element);
 		
@@ -369,7 +401,7 @@
 		
 		//var inputsQuery = 'input[type=text], input[type=email], textarea, .radiogroup';	
 		//zForm.find('input,textarea').eachElement(function(element){
-		zForm.find('input,textarea,select,.'+option.radiogroupClass+',.'+option.checkboxClass+',.'+option.customInputClass).eachElement(function(element){
+		zForm.find('input,textarea,select,.'+option.checkboxClass+',.'+option.radiogroupClass+',.'+option.dategroupClass+',.'+option.customInputClass).eachElement(function(element){
 			var zInput = zjs(element);
 			
 			//console.log('before', element);
@@ -381,15 +413,23 @@
 			if(!zInput.is(inputsQuery+', .'+option.customInputClass) && 
 				!zInput.getData(autosuggestionwrapelkey, false)
 			)return;
+
+			// neu nhu cai input nay nam ben trong 1 cai dategroup thi cung khong check no rieng le
+			if(zInput.hasClass('js-dategroup-item'))return;
+			if(zInput.findUp('.'+option.dategroupClass).count()){
+				zInput.addClass('js-dategroup-item');
+				return;
+			}
 			
+			// va tuong tu cho auto suggestion
+			// tuong tu cho datepicker luon
 			// neu la truong hop cac input dat biet thi cung khong cho phep
 			if(zInput.hasClass(autosuggestionchildinputclass))return;
 			if(zInput.hasClass(datepickerchildinputclass))return;
 		
-			//console.log('after', element);
+			// console.log('handlerTestResult', element);
 			// >>>>>>>
-		
-			handlerTestResult(element, test = checkInput(element, option, zForm), option);
+			handlerTestResult(element, test = checkInput(element, option, zForm), option, workInSilent);
 			
 			// track lai thong tin
 			var elName = zInput.getAttr('name', '');
@@ -468,12 +508,16 @@
 	};
 	
 	// ham nay se thuc hien viec khi ma 1 input bi error
-	var handlerTestResult = function(element, test, option){
-		//console.log(element, element.value, test.pass);
+	var handlerTestResult = function(element, test, option, workInSilent){
+		// console.log('handlerTestResult', element);
 		var zInput = zjs(element);
 		// neu nhu test pass thi don gian la cho qua
 		if(test.pass){
-			zInput.removeClass(option.errorClass);
+
+			// neu nhu work in silent thi se khong can add class success lam gi
+			var successClass = (workInSilent || false) ? '' : option.successClass;
+
+			zInput.removeClass(option.errorClass).addClass(successClass);
 			
 			// hide tip key
 			var ztipEl = zInput.getData(tipelkey);
@@ -482,19 +526,26 @@
 			// kiem tra coi day co phai la 1 datepicker khong
 			// neu nhu phai thi se remove errorclass tren cai picker luon
 			var zDatepickerWrapEl = zInput.getData(datepickerwrapelkey, false);
-			if(zDatepickerWrapEl)zDatepickerWrapEl.removeClass(option.errorClass);
+			if(zDatepickerWrapEl)zDatepickerWrapEl.removeClass(option.errorClass).addClass(successClass);
 			// neu nhu la imagepicker
 			var zImagepickerWrapEl = zInput.getData(imagepickerwrapelkey, false);
-			if(zImagepickerWrapEl)zImagepickerWrapEl.removeClass(option.errorClass);
+			if(zImagepickerWrapEl)zImagepickerWrapEl.removeClass(option.errorClass).addClass(successClass);
 			// kiem tra autosuggest
 			var zAutosuggestWrapEl =  zInput.getData(autosuggestionwrapelkey, false);
-			if(zAutosuggestWrapEl)zAutosuggestWrapEl.removeClass(option.errorClass);
+			if(zAutosuggestWrapEl)zAutosuggestWrapEl.removeClass(option.errorClass).addClass(successClass);
 			
 			return;
 		};
+
+		// neu nhu work in silent thi se khong can phai add class error va ko can show checktip
+		if(workInSilent || false){
+			return;
+		}
+
+
 		// con neu nhu khong pass qua thi phai set 1 tip html
 		// get ra tip dua vao type cua test
-		zInput.addClass(option.errorClass)
+		zInput.addClass(option.errorClass).removeClass(option.successClass);
 		
 		// show tip key
 		var ztipEl = zInput.getData(tipelkey);
@@ -504,19 +555,19 @@
 			var tipText = option.tips[test.type];
 			if(zInput.getAttr('data-tip-'+test.type, '') != '')
 				tipText = zInput.getAttr('data-tip-'+test.type, '');
-			ztipEl.show().find('.'+tiptextclass).setInnerHTML(tipText);
+			ztipEl.show().find('.'+tiptextclass).setInnerHTML(tipText).setAttr('data-type', test.type);
 		};
 		
 		// kiem tra coi day co phai la 1 datepicker khong
 		// neu nhu phai thi se add errorclass tren cai picker luon
 		var zDatepickerWrapEl = zInput.getData(datepickerwrapelkey, false);
-		if(zDatepickerWrapEl)zDatepickerWrapEl.addClass(option.errorClass);
+		if(zDatepickerWrapEl)zDatepickerWrapEl.addClass(option.errorClass).removeClass(option.successClass);
 		// neu la imagepicker
 		var zImagepickerWrapEl = zInput.getData(imagepickerwrapelkey, false);
-		if(zImagepickerWrapEl)zImagepickerWrapEl.addClass(option.errorClass);
+		if(zImagepickerWrapEl)zImagepickerWrapEl.addClass(option.errorClass).removeClass(option.successClass);
 		// kiem tra autosuggest
 		var zAutosuggestWrapEl =  zInput.getData(autosuggestionwrapelkey, false);
-		if(zAutosuggestWrapEl)zAutosuggestWrapEl.addClass(option.errorClass);
+		if(zAutosuggestWrapEl)zAutosuggestWrapEl.addClass(option.errorClass).removeClass(option.successClass);
 	};
 	
 	// ham giup cho viec kiem tra tung input element
@@ -551,6 +602,27 @@
 				value = zInput.find('input[type=checkbox]:checked').getValue('').trim();
 			}
 		};
+
+		// neu nhu la date group
+		if(zInput.hasClass(option.dategroupClass)){
+			// edit value phai la value cua 1 trong so nhung thang radio duoc check
+			// value = zInput.find('input[type=radio]:checked').getValue('').trim();
+			
+			// tim ra value la tong hop cua 3 cai input con
+			var dayInput = null, monthInput = null, yearInput = null;
+			zInput.find('input').eachElement(function(inputElm){
+				var _datePartName = z(inputElm).getAttr('name', '').trim().toLowerCase();
+				if(_datePartName.indexOf('year')>=0)yearInput = z(inputElm);
+				else if(_datePartName.indexOf('month')>=0)monthInput = z(inputElm);
+				else if(_datePartName.indexOf('day')>=0)dayInput = z(inputElm);
+			});
+			
+			var _values = [];
+			if(yearInput && yearInput.getValue())_values.push(yearInput.getValue());
+			if(monthInput && monthInput.getValue())_values.push(monthInput.getValue());
+			if(dayInput && dayInput.getValue())_values.push(dayInput.getValue());
+			value = _values.length > 2 ? _values.join('-') : '';
+		};
 		
 		if(zInput.hasClass(option.customInputClass)){
 			value = zInput.getAttr('data-value', '');
@@ -583,6 +655,14 @@
 		
 		// 2. thu nhi la check type
 		if(value != ''){
+
+			// check truong hop dat biet la cai thang dategroup truoc
+			if(zInput.hasClass(option.dategroupClass)){
+				if(!testMethods.yearmonthday(value, element))
+					return {pass:false, type:'date'};
+			}
+
+			// gio moi di check cac truong hop khac
 			var testType = '';
 			if(name.indexOf('email')>=0 || classname.indexOf('email')>=0 || zInput.getAttr('data-tip-email','')!='' || inputType == 'email')testType = 'email';
 			else if(name.indexOf('url')>=0 || classname.indexOf('url')>=0 || zInput.getAttr('data-tip-url','')!='')testType = 'url';
@@ -656,6 +736,19 @@
 		},
 		date: function(value, element){
 			return !/Invalid|NaN/.test(new Date(value).toString());
+		},
+		yearmonthday: function(valueYearMonthDay, element){
+			// dau tien la check neu nhu sai dinh dang ngay thi thoi, thua
+			if(!testMethods.dateISO(valueYearMonthDay))return false;
+
+			var ss = valueYearMonthDay.split('-');
+			var dd = [parseInt(ss[0]), parseInt(ss[1]).toPaddedString(2), parseInt(ss[2]).toPaddedString(2)].join('-');
+			var a = new Date(dd+'T00:00:00Z');
+			
+			// neu nhu khong dung ngay thi thoi
+			if(isNaN(a.getDate()))return false;
+
+			return dd === a.toISOString().slice(0,10);
 		},
 		dateISO: function(value, element){
 			return /^\d{4}[\/\-]\d{1,2}[\/\-]\d{1,2}$/.test(value);
@@ -757,13 +850,16 @@
 		formValidationReset: function(){
 			return this.eachElement(function(element){formErrorReset(element)});
 		},
-		formValidationCheck: function(){
+		formValidationCheck: function(workInSilent){
 			// ket qua cuoi cung
 			var result = false;
 			this.eachElement(function(element){
-				result = formCheck(element, false);
+				result = formCheck(element, false, workInSilent);
 			});
 			return result;
+		},
+		formValidationCheckInSilent: function(){
+			return this.formValidationCheck(true);
 		}
 	});
 	
