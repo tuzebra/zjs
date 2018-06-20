@@ -30,9 +30,11 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		contextualpanelwraphideclass = 'zui-hide',
 		selectboxpanelinnerclass = 'zui-selectbox__panel-inner',
 		selectboxpanelclass = 'zui-selectbox__panel',
+		selectboxplaceholderclass = 'zui-selectbox__placeholder',
 		selectboxwraphtml = '<div class="'+selectboxclass+'">'+
 								'<div class="'+selectboxbuttonwrapclass+'">'+
 									'<a class="'+contextualbuttonclass+' '+selectboxbuttonclass+'"></a>'+
+									'<div class="'+selectboxplaceholderclass+'"></div>'+
 								'</div>'+
 								'<div class="'+contextualpanelwrapclass+' '+selectboxpanelwrapclass+' '+selectboxpanelwrapinitclass+'">'+
 									'<div class="'+selectboxpanelinnerclass+'">'+
@@ -108,6 +110,17 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		// sau do luu lai luon de sau nay truy xuat
 		zSelectboxEl.setData(wrapelkey, zSelectboxWrapEl);
 		
+		// xem coi co placeholder khong?
+		var placeholderText = zSelectboxEl.getAttr('placeholder', '');
+		if(placeholderText !== ''){
+			zSelectboxWrapEl.find('.'+selectboxbuttonclass).addClass('label-placeholder');
+			zSelectboxWrapEl.find('.'+selectboxplaceholderclass).html(placeholderText).hide();
+		}
+		else{
+			zSelectboxWrapEl.find('.'+selectboxplaceholderclass).remove();	
+		} 
+
+
 		// gio moi insert vao thoi
 		zSelectboxWrapEl.insertAfter(zSelectboxEl);
 		

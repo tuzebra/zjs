@@ -19,3 +19,7 @@
 25/05/2017
 		+ Fix bug related to back-forward cache (BFCache).
 		+ Remove the scrollbar required.
+
+19/06/2018
+		+ update selectbox work well with form validation
+		+ add placeholder supported
