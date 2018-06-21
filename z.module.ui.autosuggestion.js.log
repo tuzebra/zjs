@@ -40,4 +40,5 @@
 
 21/06/2018
 		+ add option "limit"
+		+ add option "searchMatchStartWith"
 		+ better support for select element

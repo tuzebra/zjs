@@ -24,6 +24,7 @@ zjs.require('dictionary, scrollbar', function(){
 			mentionmode: false,
 			usedproperty: 'text',
 			searchproperty: 'text',
+			searchMatchStartWith: false,
 			usedpropertytext: false,
 			limit: 0,
 			noneValue: '',
@@ -34,7 +35,8 @@ zjs.require('dictionary, scrollbar', function(){
 			cacheResponse: true,
 			itemtemplate: '<div class="item">${text}</div>',
 			itemLinkFormat: '',
-			itemhighlightclass: 'highlight'
+			itemhighlightclass: 'highlight',
+			defaultPanelHeight: 0
 		}
 	});
 	
@@ -254,7 +256,9 @@ zjs.require('dictionary, scrollbar', function(){
 		// fix option limit can la number
 		option.limit = parseInt(option.limit);
 		if(isNaN(option.limit))option.limit = 0;
-
+		// tuong tu
+		option.defaultPanelHeight = parseInt(option.defaultPanelHeight);
+		if(isNaN(option.defaultPanelHeight))option.defaultPanelHeight = 0;
 
 		// save option
 		zOriginalInput.setData(optionkey, option);
@@ -460,6 +464,9 @@ zjs.require('dictionary, scrollbar', function(){
 		if(option.limit > 0){
 			dictionary.setDefaultSearchResultLimit(option.limit);
 		}
+		if(option.searchMatchStartWith){
+			dictionary.setSearchMatchStartWith(true);
+		}
 			
 		// >>> test
 		zOriginalInput.setData(dictionarykey, dictionary);
@@ -472,6 +479,7 @@ zjs.require('dictionary, scrollbar', function(){
 			// neu nhu autosuggestion nay la 1 cai select
 			// thi bat buoc phai set duoc data, neu khong set duoc data thi se reset
 			if(IS_SELECT_BASE){
+
 				if(zOriginalInput.getValue() === ''){
 
 					// reset type value luon 
@@ -483,6 +491,9 @@ zjs.require('dictionary, scrollbar', function(){
 					zInput.setValue('');
 					// zWrapperInput.removeClass('has-value');
 					zWrapperEl.removeClass('has-value');
+				}
+				else{
+					zWrapperEl.addClass('has-value');
 				}
 			}
 
@@ -1236,11 +1247,17 @@ zjs.require('dictionary, scrollbar', function(){
 		
 		var showDefaultSelectListItems = function(){
 
+			// coi coi can tinh lai height ko?
+			var needCalHeight = (option.defaultPanelHeight > 0);
+
+
 			// console.log('showDefaultSelectListItems');
 
 			// @update: thay vi search, thi se show ra list default item cho le
 			// var result = zOriginalInput.getData(dictionarykey).search('');
 			var result = zOriginalInput.getData(dictionarykey).getItemsLimit();
+			// console.log('here', result);
+
 			if(result.length==0)
 				return;
 	
@@ -1282,7 +1299,7 @@ zjs.require('dictionary, scrollbar', function(){
 			});
 	
 			//sau do se thay doi height cua panel
-			changePanelHeight(allItemHeight);
+			changePanelHeight(option.defaultPanelHeight > 0 ? option.defaultPanelHeight : allItemHeight);
 		};
 
 		
@@ -1302,18 +1319,31 @@ zjs.require('dictionary, scrollbar', function(){
 				if(zjs(_targetClickEl).hasClass('zui-autosuggestion-token'))
 					return;
 				
-				// tot nhat la phai delay 1 chut
-				(function(){
-					//console.log('focus');
-					
-					showDefaultSelectListItems();
-					
-				}).delay(100);
+				if(option.defaultPanelHeight > 0){
+					showDefaultSelectListItems(option.defaultPanelHeight);
+				}else{
+					// tot nhat la phai delay 1 chut
+					(function(){
+						//console.log('focus');
+						
+						showDefaultSelectListItems();
+						
+					}).delay(100);
+				}
 			});
 		};
 		
 		
 		zjs(document).on('click', function(event){
+			var zTargetEl = zjs(event.target());
+			var _wrap = zTargetEl.findUp('.zui-autosuggestion-wrap');
+			if(_wrap.count() > 0){
+				var _panel = _wrap.find('.zui-autosuggestion-panel-wrap');
+				if(_panel.count() > 0 && _panel.item(0, true) === zPanel.item(0, true)){
+					return;
+				}
+			}
+
 			// hide panel
 			zPanel.addClass('zui-panel-hide');
 		});
