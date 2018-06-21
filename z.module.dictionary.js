@@ -44,11 +44,16 @@
 		// limit
 		this.searchResultLimit = 0;
 
+		this.searchMatchStartWith = false;
+
 		this.dataSourceUrlIsLoaded = false;
 		
 		return this;
 	};
-	
+
+	zDictionary.prototype.setSearchMatchStartWith = function(bool){
+		this.searchMatchStartWith = true;
+	};
 	zDictionary.prototype.setDefaultSearchResultLimit = function(number){
 		this.searchResultLimit = number;
 	};
@@ -267,12 +272,27 @@
 		var _limit = this.searchResultLimit;
 		for(i=0;i<resultIndexs.length;i++){
 			if(typeof resultIndexs[i] === 'object'){
-				returnIndexs.push(this.datas[resultIndexs[i].index]);
-				this.lastSearchIndexs.push(resultIndexs[i].index);
-				// se breck ra neu nhu dat duoc limit roi
-				if(this.searchResultLimit > 0){
-					_limit--;
-					if(_limit <= 0)break;
+
+				var startWithFilter = true;
+
+				if(this.searchMatchStartWith){
+					var _rawqueryLowerCase = rawquery.toLowerCase();
+					var _textLowerCase = this.datas[resultIndexs[i].index];
+					_textLowerCase = _textLowerCase.text.toLowerCase();
+
+					if(_textLowerCase.indexOf(_rawqueryLowerCase) !== 0){
+						startWithFilter = false;
+					}
+				}
+
+				if(startWithFilter){
+					returnIndexs.push(this.datas[resultIndexs[i].index]);
+					this.lastSearchIndexs.push(resultIndexs[i].index);
+					// se breck ra neu nhu dat duoc limit roi
+					if(this.searchResultLimit > 0){
+						_limit--;
+						if(_limit <= 0)break;
+					}
 				}
 			}
 		}

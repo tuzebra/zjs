@@ -11,4 +11,5 @@
 
 21/06/2018 
 		+ add method zDictionary::setDefaultSearchResultLimit()
+		+ add method zDictionary::setSearchMatchStartWith()
 		+ add method zDictionary::getItemsLimit()
