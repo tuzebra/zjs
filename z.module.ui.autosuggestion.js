@@ -25,6 +25,7 @@ zjs.require('dictionary, scrollbar', function(){
 			usedproperty: 'text',
 			searchproperty: 'text',
 			usedpropertytext: false,
+			limit: 0,
 			noneValue: '',
 			source: [],
 			sourceUrl: '',
@@ -103,7 +104,8 @@ zjs.require('dictionary, scrollbar', function(){
 		};
 
 		var IS_ENABLE_AUTOSUGGESTION = true;
-		
+		var IS_SELECT_BASE = false;
+
 		// - - - 
 		// neu ma chua co thi se lam binh thuong
 		// copy option tu default option
@@ -149,6 +151,9 @@ zjs.require('dictionary, scrollbar', function(){
 			option = zjs.extend(option, useroption);
 
 
+		var originalInputText = zOriginalInput.getValue('');
+
+
 		// support source is a <select>
 		var selectSourceEl = false;
 		var selectSourceDefaultValue = false;
@@ -157,6 +162,8 @@ zjs.require('dictionary, scrollbar', function(){
 		if(zjs.isString(option.source) || zOriginalInput.is('select')){
 			selectSourceEl = zjs.isString(option.source) ? zjs(option.source) : zOriginalInput;
 			if(selectSourceEl.count()>0){
+
+				IS_SELECT_BASE = zOriginalInput.is('select');
 				
 				// fix option luon
 				option.multichoice = false;
@@ -191,10 +198,18 @@ zjs.require('dictionary, scrollbar', function(){
 						}
 					}
 					if(optionEl.selected){
+						// console.log('optionEl.selected', optionEl, _optionValue);
 						// @todo: need to fix later
 						if(_optionValue != option.noneValue){
+							// console.log('optionEl.selected', optionEl);
 							// zOriginalInput.setValue(_optionValue);
-							zOriginalInput.setValue(_optionText);
+							originalInputText = _optionText;
+							if(IS_SELECT_BASE){
+								selectSourceEl.setValue(_optionValue);
+							}
+							else{
+								zOriginalInput.setValue(_optionText);
+							}
 						}
 					}
 				});
@@ -205,7 +220,7 @@ zjs.require('dictionary, scrollbar', function(){
 				// so it don't need to be handler the required case anymore
 				// to prevent focusable issue
 				// important: this select source element != original input
-				if(zjs.isString(option.source)){
+				if(!IS_SELECT_BASE){
 					selectSourceEl.removeAttr('required').removeClass('required');
 				}
 			}
@@ -215,7 +230,7 @@ zjs.require('dictionary, scrollbar', function(){
 		}
 
 		// fix option khi original input la select
-		if(zOriginalInput.is('select')){
+		if(IS_SELECT_BASE){
 			option.focusshowsuggestion = true;
 		}
 		
@@ -236,7 +251,11 @@ zjs.require('dictionary, scrollbar', function(){
 		if(option.multichoice){
 			option.multiline = false;
 		}
-		
+		// fix option limit can la number
+		option.limit = parseInt(option.limit);
+		if(isNaN(option.limit))option.limit = 0;
+
+
 		// save option
 		zOriginalInput.setData(optionkey, option);
 		
@@ -411,9 +430,11 @@ zjs.require('dictionary, scrollbar', function(){
 		zOriginalInput.hide();
 		// neu nhu thang input hien tai dang co value
 		// thi se empty cai placeholder di thoi
-		if(zOriginalInput.getValue('')!=''){
-			zInput.setValue(typevalue = zOriginalInput.getValue());
+		// if(zOriginalInput.getValue('')!==''){
+		if(originalInputText !==''){
+			zInput.setValue(typevalue = originalInputText);
 			setPlaceholderText(zPlaceholder, '');
+			zWrapperEl.addClass('has-value');
 		};
 		
 		// - - - -
@@ -436,6 +457,9 @@ zjs.require('dictionary, scrollbar', function(){
 		if(option.sourceDataStructure != ''){
 			dictionary.setDataSourceDataStructure(option.sourceDataStructure);
 		}
+		if(option.limit > 0){
+			dictionary.setDefaultSearchResultLimit(option.limit);
+		}
 			
 		// >>> test
 		zOriginalInput.setData(dictionarykey, dictionary);
@@ -447,8 +471,12 @@ zjs.require('dictionary, scrollbar', function(){
 
 			// neu nhu autosuggestion nay la 1 cai select
 			// thi bat buoc phai set duoc data, neu khong set duoc data thi se reset
-			if(zOriginalInput.is('select')){
+			if(IS_SELECT_BASE){
 				if(zOriginalInput.getValue() === ''){
+
+					// reset type value luon 
+					typevalue = '';
+
 					// zOriginalInput.addClass('empty');
 					// currentHighlightValue = '';
 					setPlaceholderText(zPlaceholder, '');
@@ -878,8 +906,18 @@ zjs.require('dictionary, scrollbar', function(){
 					zOriginalInput.setValue('');
 				}
 
+
+				// cho nay xu ly dac biet 1 xiu cho truong hop select
+				if(rawvalue=='' && IS_SELECT_BASE){
+					showDefaultSelectListItems();
+					return;
+				}
+
 				// show placeholder and stop
 				if(rawvalue=='' || (search && rawvalue.length<option.minlength)) {
+
+					// console.log('here empty');
+
 					typevalueholder = '';
 					if(rawvalue!='')setPlaceholderText(zPlaceholder, '', rawvalue);
 					else setPlaceholderText(zPlaceholder, placeholderText());
@@ -1001,10 +1039,31 @@ zjs.require('dictionary, scrollbar', function(){
 					zItemwrap.click(onmouseclickitemhandler);
 				
 					// test placeholder
-					if(typevalueholder=='' && item.text.indexOf(rawvalue)==0){
-						typevalueholder = item.text;
-						currentValueholderIndex = i+1;
+					if(typevalueholder==''){
+
+						// cach cu: match het
+						// if(item.text.indexOf(rawvalue)==0){
+						// 	typevalueholder = item.text;
+						// 	currentValueholderIndex = i+1;
+						// 	console.log('here typevalueholder', typevalueholder);
+						// }
+
+						// update cach test placeholder
+						// neu nhu value chu dau tien viet "Hoa"
+						// thi cung coi nhu la match luon
+						// cach moi: chi match tu ky tu thu 2 tro di la duoc
+						var _itemTextLowerCase = item.text.toLowerCase();
+						var _rawvalueLowerCase = rawvalue.toLowerCase();
+						if(_itemTextLowerCase.indexOf(_rawvalueLowerCase)===0){
+							typevalueholder = rawvalue + item.text.substr(rawvalue.length);
+							currentValueholderIndex = i+1;
+							// console.log('here typevalueholder', typevalueholder);
+						}
+
 					};
+
+					
+					
 				
 				});
 			
@@ -1175,6 +1234,57 @@ zjs.require('dictionary, scrollbar', function(){
 
 		// END Forward
 		
+		var showDefaultSelectListItems = function(){
+
+			// console.log('showDefaultSelectListItems');
+
+			// @update: thay vi search, thi se show ra list default item cho le
+			// var result = zOriginalInput.getData(dictionarykey).search('');
+			var result = zOriginalInput.getData(dictionarykey).getItemsLimit();
+			if(result.length==0)
+				return;
+	
+			// get current result length
+			currentResultLength = result.length;
+	
+			// set panel top va sau do show len
+			zPanel.removeClass('zui-panel-hide').top(zWrapperInput.height());
+	
+			// clean all item
+			zPanelcontent.setInnerHTML('');
+	
+			// count 
+			var allItemHeight = 0;
+			
+			zjs.eachItem(result, function(item, i){
+		
+				// tao ra 1 itemwrap moi
+				// var zItemwrap = zjs(__htmlitemtpl).appendTo(zPanelcontent);
+				// save item data vao luon
+				// zItemwrap.setData('searchtempdata', item);
+				// zItemwrap.setAttr('data-highlight', i+1);
+		
+				// sau do se format data va cho vao luon
+				// var iteminnerhtml = '';
+				// if(typeof option.itemtemplate == 'function')iteminnerhtml = option.itemtemplate(item);
+				// if(typeof option.itemtemplate == 'string')iteminnerhtml = option.itemtemplate;
+				// if(typeof iteminnerhtml == 'string')iteminnerhtml = iteminnerhtml.format(item);
+		
+				// var zItem = zjs(iteminnerhtml).appendTo(zItemwrap);
+				
+				var zItemwrap = createHighlightItem(option, zPanelcontent, item, i);
+		
+				allItemHeight+= zItemwrap.height();
+		
+				// bind event cho thang nho nay luon
+				zItemwrap.hover(onmousehoveritemhandler);
+				zItemwrap.click(onmouseclickitemhandler);
+			});
+	
+			//sau do se thay doi height cua panel
+			changePanelHeight(allItemHeight);
+		};
+
 		
 		// xem coi co option cho chon khi focus vao thi se show ra luon suggestion khong
 		// neu co thi gio phai bind event
@@ -1182,7 +1292,7 @@ zjs.require('dictionary, scrollbar', function(){
 			//zInput.on('focus', function(event){
 			zWrapperInput.on('click', function(event){
 				
-				// xem coi neu nhu dang co type cai gi do roi thi se khong show suggestino nua
+				// xem coi neu nhu dang co type cai gi do roi thi se khong show suggestion nua
 				if(typevalue != '')
 					return;
 				
@@ -1196,49 +1306,7 @@ zjs.require('dictionary, scrollbar', function(){
 				(function(){
 					//console.log('focus');
 					
-					var result = zOriginalInput.getData(dictionarykey).search('');
-					if(result.length==0)
-						return;
-			
-					// get current result length
-					currentResultLength = result.length;
-			
-					// set panel top va sau do show len
-					zPanel.removeClass('zui-panel-hide').top(zWrapperInput.height());
-			
-					// clean all item
-					zPanelcontent.setInnerHTML('');
-			
-					// count 
-					var allItemHeight = 0;
-					
-					zjs.eachItem(result, function(item, i){
-				
-						// tao ra 1 itemwrap moi
-						// var zItemwrap = zjs(__htmlitemtpl).appendTo(zPanelcontent);
-						// save item data vao luon
-						// zItemwrap.setData('searchtempdata', item);
-						// zItemwrap.setAttr('data-highlight', i+1);
-				
-						// sau do se format data va cho vao luon
-						// var iteminnerhtml = '';
-						// if(typeof option.itemtemplate == 'function')iteminnerhtml = option.itemtemplate(item);
-						// if(typeof option.itemtemplate == 'string')iteminnerhtml = option.itemtemplate;
-						// if(typeof iteminnerhtml == 'string')iteminnerhtml = iteminnerhtml.format(item);
-				
-						// var zItem = zjs(iteminnerhtml).appendTo(zItemwrap);
-						
-						var zItemwrap = createHighlightItem(option, zPanelcontent, item, i);
-				
-						allItemHeight+= zItemwrap.height();
-				
-						// bind event cho thang nho nay luon
-						zItemwrap.hover(onmousehoveritemhandler);
-						zItemwrap.click(onmouseclickitemhandler);
-					});
-			
-					//sau do se thay doi height cua panel
-					changePanelHeight(allItemHeight);
+					showDefaultSelectListItems();
 					
 				}).delay(100);
 			});
@@ -1438,7 +1506,9 @@ zjs.require('dictionary, scrollbar', function(){
 		text = text || '';
 		hidetext = hidetext || '';
 		if(hidetext && text){
-			text = text.replace(hidetext, '<span class="_hide">'+hidetext+'</span>');
+			// text = text.replace(hidetext, '<span class="_hide">'+hidetext+'</span>');
+			text = '<span class="_hide">' + text.substr(0, hidetext.length) + '</span>'
+				 + text.substr(hidetext.length);
 		}
 		pelm.setInnerHTML(text);
 	};

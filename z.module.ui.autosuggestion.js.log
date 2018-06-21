@@ -37,3 +37,7 @@
 
 20/06/2018
 		+ support make autosuggestion base on a select element
+
+21/06/2018
+		+ add option "limit"
+		+ better support for select element
