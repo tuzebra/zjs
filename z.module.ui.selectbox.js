@@ -132,7 +132,7 @@ zjs.require('scrollbar, ui, ui.button', function(){
 			zSelectboxPanelEl = zSelectboxWrapEl.find('.'+selectboxpanelclass);
 		
 		// bay gio se tien hanh di get ra toan bo value cua cai selectbox
-		var countTotalItem = 0, countTotalActiveItem = 0, defaultSelectedIndex = 0;
+		var countTotalItem = 0, countTotalActiveItem = 0, defaultSelectedIndex = 0, defaultSelectedValue = null;
 		zSelectboxEl.find('option,optgroup').eachElement(function(el){
 			var zEl = zjs(el);
 			// kiem tra xem coi type cua element de lam 
@@ -147,6 +147,10 @@ zjs.require('scrollbar, ui, ui.button', function(){
 				var itemEl = zjs(selectboxitemhtml).appendTo(zSelectboxPanelEl);
 				var itemValue = zEl.is('[value]') ? zEl.getAttr('value','') : zEl.getInnerHTML();
 				itemEl.setAttr('data-value', itemValue);
+
+				// lan dau tien vao day thi se set selected value mac dinh
+				if(defaultSelectedValue === null)defaultSelectedValue = itemValue;
+
 				// set custom html
 				var customhtml = zEl.getAttr('data-html', '');
 				if(customhtml==''){
@@ -181,6 +185,7 @@ zjs.require('scrollbar, ui, ui.button', function(){
 				if(zEl.is('[selected]')){
 					itemEl.addClass(selectboxitemselectedclass);
 					defaultSelectedIndex = (countTotalItem - 1);
+					defaultSelectedValue = itemValue;
 				}
 				// san tien fix lai cau truc cua thang select goc luon
 				zEl.setAttr('value', itemEl.getAttr('data-value'));
@@ -196,6 +201,8 @@ zjs.require('scrollbar, ui, ui.button', function(){
 
 		// add them class de biet duong ma style
 		zSelectboxWrapEl.addClass('total-item-'+countTotalItem).addClass('total-active-item-'+countTotalActiveItem);
+		if(defaultSelectedValue !== '')
+			zSelectboxWrapEl.setAttr('data-selected-value', defaultSelectedValue);
 		
 		// boi vi can makeScrollbar cho panel (width, height)
 		// nen trong luc init phai set visibility cua 

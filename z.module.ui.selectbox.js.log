@@ -23,3 +23,6 @@
 19/06/2018
 		+ update selectbox work well with form validation
 		+ add placeholder supported
+
+21/06/2018
+		+ better handler placeholder
