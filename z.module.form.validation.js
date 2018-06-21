@@ -262,7 +262,7 @@
 				// neu nhu day la select 
 				if(zInput.is('select')){
 					// console.log('is select here', zInput.item(0,1));
-					zInput.on('change, ui:selectbox:change, ui:selectbox:blur', function(){
+					zInput.on('change, ui:selectbox:change, ui:selectbox:blur, ui:autosuggestion:choice, ui:autosuggestion:blur', function(){
 						handlerTestResult(zInput, checkInput(zInput, option, zForm), option);
 					});
 				};
@@ -463,6 +463,10 @@
 					event.preventDefault();
 			}catch(err){};
 			
+			// neu nhu lam trong im lang thi return luon cho roi
+			if(workInSilent)
+				return false;
+
 			// tu dong focus vao cai input dau tien bi error
 			var firstErrorElm = zForm.find('.'+option.errorClass).item(0);
 			

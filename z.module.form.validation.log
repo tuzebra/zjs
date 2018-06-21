@@ -61,3 +61,5 @@
 		+ support validate a "date group" of 3 inputs
 		+ add new method ::formValidationCheckInSilent()
 
+20/06/2018
+		+ support autosuggestion base on select element
