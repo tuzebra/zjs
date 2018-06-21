@@ -8,3 +8,7 @@
 
 22/01/2018 
 		+ add method zDictionary::resetIndex()
+
+21/06/2018 
+		+ add method zDictionary::setDefaultSearchResultLimit()
+		+ add method zDictionary::getItemsLimit()

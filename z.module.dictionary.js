@@ -41,11 +41,17 @@
 		this.defaultSearchProperty = searchproperty || 'text';
 		this.lastRawquery = '';
 
+		// limit
+		this.searchResultLimit = 0;
+
 		this.dataSourceUrlIsLoaded = false;
 		
 		return this;
 	};
 	
+	zDictionary.prototype.setDefaultSearchResultLimit = function(number){
+		this.searchResultLimit = number;
+	};
 	zDictionary.prototype.setCacheResponse = function(bool){
 		this.cacheResponse = bool;
 	};
@@ -173,9 +179,21 @@
 		return this.datas[this.indexId[id]];
 	};
 	
+	zDictionary.prototype.getItemsLimit = function(limit){
+		limit = limit || this.searchResultLimit;
+
+		// neu nhu limit = 0, thi return toan bo
+		if(limit<=0)return this.datas;
+
+		return this.datas.slice(0, limit);
+	};
+
 	zDictionary.prototype.search = function(rawquery){
 		
 		// xem coi neu nhu co data source thi se uu tien get tren data source
+		// @update:
+		// khong can lam cho nay, khi muon search bang data source url
+		// thi phai su dung asyn search
 		// if(this.dataSourceUrl != '')
 			// this.getDataFromDataSource(rawquery, false);
 	
@@ -246,10 +264,16 @@
 		
 		// convert to return
 		var returnIndexs = [];
+		var _limit = this.searchResultLimit;
 		for(i=0;i<resultIndexs.length;i++){
 			if(typeof resultIndexs[i] === 'object'){
 				returnIndexs.push(this.datas[resultIndexs[i].index]);
 				this.lastSearchIndexs.push(resultIndexs[i].index);
+				// se breck ra neu nhu dat duoc limit roi
+				if(this.searchResultLimit > 0){
+					_limit--;
+					if(_limit <= 0)break;
+				}
 			}
 		}
 		
@@ -273,9 +297,12 @@
 		if(zjs.isString(_srq))
 			_srq = _srq.toLowerCase();
 
+		var _queryData = {f:'text',q:_srq};
+		if(this.searchResultLimit > 0)_queryData.limit = this.searchResultLimit;
+
 		zjs.ajax({
 			url:this.dataSourceUrl,
-			data: {f:'text',q:_srq},
+			data: _queryData,
 			type: 'json', 
 			method: 'get', 
 			cache: this.cacheResponse,
