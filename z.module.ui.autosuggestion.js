@@ -15,6 +15,7 @@ zjs.require('dictionary, scrollbar', function(){
 			minlength: 1,
 			minheight: 18,
 			customcss: true,
+			labelPlaceholder: false,
 			focusshowsuggestion: false,
 			autofocus: false,
 			panelmaxheight: 200,
@@ -153,8 +154,8 @@ zjs.require('dictionary, scrollbar', function(){
 		var selectSourceDefaultValue = false;
 		var selectNoneValue = '';
 		var selectNoneText = '';
-		if(zjs.isString(option.source)){
-			selectSourceEl = zjs(option.source);
+		if(zjs.isString(option.source) || zOriginalInput.is('select')){
+			selectSourceEl = zjs.isString(option.source) ? zjs(option.source) : zOriginalInput;
 			if(selectSourceEl.count()>0){
 				
 				// fix option luon
@@ -203,11 +204,19 @@ zjs.require('dictionary, scrollbar', function(){
 				// and because now this autosuggestion will take over the select
 				// so it don't need to be handler the required case anymore
 				// to prevent focusable issue
-				selectSourceEl.removeAttr('required').removeClass('required');
+				// important: this select source element != original input
+				if(zjs.isString(option.source)){
+					selectSourceEl.removeAttr('required').removeClass('required');
+				}
 			}
 			else{
 				selectSourceEl = false;
 			}
+		}
+
+		// fix option khi original input la select
+		if(zOriginalInput.is('select')){
+			option.focusshowsuggestion = true;
 		}
 		
 		// fix option
@@ -260,6 +269,9 @@ zjs.require('dictionary, scrollbar', function(){
 			zPanelcontent = zWrapperEl.find('.zui-autosuggestion-panel-content'),
 			zEstimateHeightEl = false;
 		
+		// fix van de autocomplete
+		zInput.setAttr('autocomplete', Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10));
+
 		// save new input && wrapper input
 		zOriginalInput.setData(wrapinputelkey, zWrapperInput);
 		zOriginalInput.setData(newinputkey, zInput.item(0,true));
@@ -271,8 +283,7 @@ zjs.require('dictionary, scrollbar', function(){
 		}else
 			zWrapperEl.find('.zui-estimate-height-wrap').remove();
 		
-		
-		
+
 		// neu nhu khong tu custom css thi phai auto set thoi
 		if(!option.customcss){
 		
@@ -384,11 +395,20 @@ zjs.require('dictionary, scrollbar', function(){
 			// realvalue that use in the result
 			usedvalue = '';
 		
+		var _defaultPlaceholder = placeholderText();
+
+		// Ho tro show placeholder nhu 1 cai label
+		if(option.labelPlaceholder && _defaultPlaceholder !== ''){
+		    zjs('<span>').addClass('placeholder').html(_defaultPlaceholder).insertAfter(zWrapperInput);
+		    zWrapperInput.addClass('label-placeholder');
+		}
+
 		setPlaceholderText(zPlaceholder, placeholderText());
 		
 		// - - - -
 		// hide old input
-		zOriginalInput.setAttr({type:'hidden', autocomplete:'off'});
+		// zOriginalInput.setAttr({type:'hidden', autocomplete:'off'});
+		zOriginalInput.hide();
 		// neu nhu thang input hien tai dang co value
 		// thi se empty cai placeholder di thoi
 		if(zOriginalInput.getValue('')!=''){
@@ -423,6 +443,24 @@ zjs.require('dictionary, scrollbar', function(){
 		// - - - -
 		// HANDLER EVENT FUNCTION
 		
+		var blurhandler = function(){
+
+			// neu nhu autosuggestion nay la 1 cai select
+			// thi bat buoc phai set duoc data, neu khong set duoc data thi se reset
+			if(zOriginalInput.is('select')){
+				if(zOriginalInput.getValue() === ''){
+					// zOriginalInput.addClass('empty');
+					// currentHighlightValue = '';
+					setPlaceholderText(zPlaceholder, '');
+					zInput.setValue('');
+					// zWrapperInput.removeClass('has-value');
+					zWrapperEl.removeClass('has-value');
+				}
+			}
+
+			zOriginalInput.trigger('ui:autosuggestion:blur');
+		};
+		
 		// handler onkey make change
 		var onkeyhandler = function(event, eventname){
 			// refresh option truoc khi lam
@@ -440,7 +478,7 @@ zjs.require('dictionary, scrollbar', function(){
 				// neu nhu an tab thi se goi su kien blur luon
 				if(keycode==9){
 					zPanel.addClass('zui-panel-hide');
-					zOriginalInput.trigger('ui:autosuggestion:blur');
+					blurhandler();
 				}
 				return;
 			}
@@ -817,6 +855,10 @@ zjs.require('dictionary, scrollbar', function(){
 			typevalue = rawvalue;
 			// hide cai place holder truoc cho chac
 			setPlaceholderText(zPlaceholder, '');
+
+			// phuc vu cho css cai label placeholder
+			if(rawvalue !== '')zWrapperEl.addClass('has-value');
+			else zWrapperEl.removeClass('has-value');
 			
 			
 			// day la truong hop cho single choice
@@ -1004,6 +1046,7 @@ zjs.require('dictionary, scrollbar', function(){
 			typevalue = zItemwrapData.text;
 			// set text for input
 			zInput.setValue(typevalue);
+			zWrapperEl.addClass('has-value');
 			
 			// neu nhu la multichoice thi se append vao 1 cai token
 			if(option.multichoice){
@@ -1086,7 +1129,7 @@ zjs.require('dictionary, scrollbar', function(){
 					.on('keyup',function(event,element){onkeyhandler(event, 'keyup')})
 					.on('mouseup',function(event,element){onkeyhandler(event, 'keyup')});
 		// 
-		zInput.on('blur', function(event){zOriginalInput.trigger('ui:autosuggestion:blur')});
+		zInput.on('blur', function(event){blurhandler()});
 		
 		// khi cai thang wrapper input click vao thi se auto focus cai thang input luon
 		zWrapperInput.on('click', function(){

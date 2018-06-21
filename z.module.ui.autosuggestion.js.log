@@ -32,5 +32,8 @@
 		+ support watch attribute "data-autocomplete-path" changed
 		+ add new method zjs::autosuggestionResetIndex()
 
-24/01/2019
+24/01/2018
 		+ option itemLinkFormat support "function"
+
+20/06/2018
+		+ support make autosuggestion base on a select element
