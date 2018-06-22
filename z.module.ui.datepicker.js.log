@@ -16,3 +16,8 @@
 
 28/04/2017
 		+ Add "de" language
+
+22/06/2018
+		+ add option "panel" to decide to show/notshow panel 
+		+ add option "strictInput" to allow suggestion/fix when user typing
+		+ add option "labelPlaceholder" to show a field lable like a placeholder
