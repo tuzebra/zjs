@@ -122,6 +122,7 @@
 	//form:validation:success
 	//form:validation:failed
 	//form:validation:checking
+	//form:validation:error
 	
 	// template
 	var formclass = 'z-form-validation',
@@ -239,9 +240,11 @@
 				// quan trong -> xac dinh coi nen append vao dau thi dep ne
 				// xem coi cai input nay co phai la 1 cai autosuggestion hay khong?
 				// neu la vay thi phai append dang sau cai wrap element moi hop ly
+				ztipEl.insertAfter(zInput);
 				var _temp_AutoSGWrapEl = zInput.getData(autosuggestionwrapelkey);
 				if(_temp_AutoSGWrapEl)ztipEl.insertAfter(_temp_AutoSGWrapEl);
-				else ztipEl.insertAfter(zInput);
+				var _temp_DatepickerWrapEl = zInput.getData(datepickerwrapelkey);
+				if(_temp_DatepickerWrapEl)ztipEl.insertAfter(_temp_DatepickerWrapEl);
 				
 				// dong thoi se luu lai cai input nay luon, sau nay truy xuat moi dc
 				zInput.setData(tipelkey, ztipEl);
@@ -528,7 +531,10 @@
 			// neu nhu work in silent thi se khong can add class success lam gi
 			var successClass = (workInSilent || false) ? '' : option.successClass;
 
-			zInput.removeClass(option.errorClass).addClass(successClass);
+			zInput.removeClass(option.errorClass);
+			// neu nhu co required thi moi can add class success 
+			if(zInput.hasClass('required'))
+				zInput.addClass(successClass);
 			
 			// hide tip key
 			var ztipEl = zInput.getData(tipelkey);
@@ -563,9 +569,9 @@
 		if(ztipEl){
 			// xem coi cai tip element nay co set san cai tip khong
 			// neu co thi su dung thoi
-			var tipText = option.tips[test.type];
-			if(zInput.getAttr('data-tip-'+test.type, '') != '')
-				tipText = zInput.getAttr('data-tip-'+test.type, '');
+			var tipText = '';
+			if(zInput.getAttr('data-tip-'+test.type, '') != '')tipText = zInput.getAttr('data-tip-'+test.type, '');
+			else if(typeof option.tips[test.type] != 'undefined')tipText = option.tips[test.type];
 			ztipEl.show().find('.'+tiptextclass).setInnerHTML(tipText).setAttr('data-type', test.type);
 		};
 		
@@ -579,6 +585,10 @@
 		// kiem tra autosuggest
 		var zAutosuggestWrapEl =  zInput.getData(autosuggestionwrapelkey, false);
 		if(zAutosuggestWrapEl)zAutosuggestWrapEl.addClass(option.errorClass).removeClass(option.successClass);
+
+
+		// trigger cai event luon
+		zInput.trigger('form:validation:error', {type: test.type});
 	};
 	
 	// ham giup cho viec kiem tra tung input element
@@ -678,7 +688,7 @@
 			else if(name.indexOf('phonenumber')>=0 || classname.indexOf('phonenumber')>=0 || zInput.getAttr('data-tip-phonenumber','')!='')testType = 'phonenumber';
 			else if(name.indexOf('number')>=0 || classname.indexOf('number')>=0 || zInput.getAttr('data-tip-number','')!='' || inputType == 'number')testType = 'number';
 			else if(name.indexOf('digits')>=0 || classname.indexOf('digits')>=0 || zInput.getAttr('data-tip-digits','')!='')testType = 'digits';
-			else if(name.indexOf('date')>=0 /*|| classname.indexOf('date')>=0*/ || zInput.getAttr('data-tip-date','')!='' || inputType == 'date')testType = 'date';
+			else if(name.indexOf('date')>=0 /*|| classname.indexOf('date')>=0*/ || classname.indexOf('zdatepicker')>=0 || zInput.getAttr('data-tip-date','')!='' || inputType == 'date')testType = 'date';
 			
 			// doi khi field name co ten la "number"
 			// nhung luc su dung van cho phep nhap vao ky tu
@@ -722,8 +732,24 @@
 				
 			};
 		};
+
+		// 4. thu check trong list custom test type da register truoc do
+		if(value != '')for(var i = 0;i<customTestMethodTypes.length;i++){
+
+			var customTestType = customTestMethodTypes[i];
+
+			// khong co tin hieu check thi bo qua
+			if(!zInput.is('[data-'+customTestType+']'))continue;
+
+			var param = zInput.getAttr('data-'+customTestType, '');
+
+			// test
+			if(!testMethods[customTestType](value, element, param))
+				return {pass:false, type:customTestType};
+		}
 		
-		// n. custom check 
+		
+		// n. trigger event to a custom check 
 		zForm.trigger('form:validation:checking', {element:element, option:option}, function(customEvent){
 			//if(customEvent.isDefaultPrevented)
 			//	event.preventDefault();
@@ -744,6 +770,9 @@
 			return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
 		},
 		date: function(value, element){
+
+			// console.log('date', value);
+
 			return !/Invalid|NaN/.test(new Date(value).toString());
 		},
 		yearmonthday: function(valueYearMonthDay, element){
@@ -849,6 +878,27 @@
 		}
 	};
 	
+	var customTestMethodTypes = [];
+
+
+	function formAddTestType(element, testType, handler, errorMessage){
+		// thuc ra la cho nay lam chung luon
+		// chu khong phai la lam rieng cho tung element
+		testMethods[testType] = handler;
+		customTestMethodTypes.push(testType);
+
+		// @todo: implement errorMessage later
+		// it should be:
+		//  - a function to return a json 
+		//  - a raw json itselt 
+		// like this:
+		// {
+		// 	  en: "error message",
+		// 	  de: "Fehlermeldung",
+		// 	  ...
+		// }
+	};
+	
 	
 	// - - - - - - - - - 
 	// EXTEND METHOD cho zjs-instance
@@ -869,6 +919,17 @@
 		},
 		formValidationCheckInSilent: function(){
 			return this.formValidationCheck(true);
+		},
+		/**
+		 * [formValidationAddTestType description]
+		 * @param  {string} testType 	name of this test
+		 * @param  {function} handler  	function(value, element, param){return bool}
+		 * @return {this}          		this
+		 */
+		formValidationAddTestType: function(testType, handler, errorMessage){
+			return this.eachElement(function(element){
+				formAddTestType(element, testType, handler, errorMessage);
+			});
 		}
 	});
 	

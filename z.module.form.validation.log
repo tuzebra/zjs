@@ -63,3 +63,6 @@
 
 20/06/2018
 		+ support autosuggestion base on select element
+
+22/06/2018
+		+ add method ::formValidationAddTestType() to help register custom test type
