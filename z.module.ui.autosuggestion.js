@@ -36,7 +36,8 @@ zjs.require('dictionary, scrollbar', function(){
 			itemtemplate: '<div class="item">${text}</div>',
 			itemLinkFormat: '',
 			itemhighlightclass: 'highlight',
-			defaultPanelHeight: 0
+			defaultPanelHeight: 0,
+			selectLikeInput: false
 		}
 	});
 	
@@ -222,7 +223,9 @@ zjs.require('dictionary, scrollbar', function(){
 				// so it don't need to be handler the required case anymore
 				// to prevent focusable issue
 				// important: this select source element != original input
-				if(!IS_SELECT_BASE){
+				if(IS_SELECT_BASE){
+					if(option.selectLikeInput)selectSourceEl.addClass('select-like-input');
+				}else{
 					selectSourceEl.removeAttr('required').removeClass('required');
 				}
 			}
@@ -232,7 +235,9 @@ zjs.require('dictionary, scrollbar', function(){
 		}
 
 		// fix option khi original input la select
-		if(IS_SELECT_BASE){
+		// va khong co set option select like input
+		// thi vay thi can phai show ra suggestion nhu la 1 cai select that
+		if(IS_SELECT_BASE && !option.selectLikeInput){
 			option.focusshowsuggestion = true;
 		}
 		
@@ -497,6 +502,9 @@ zjs.require('dictionary, scrollbar', function(){
 				}
 			}
 
+			// hide panel
+			zPanel.addClass('zui-panel-hide');
+			
 			zOriginalInput.trigger('ui:autosuggestion:blur');
 		};
 		
@@ -1199,7 +1207,9 @@ zjs.require('dictionary, scrollbar', function(){
 					.on('keyup',function(event,element){onkeyhandler(event, 'keyup')})
 					.on('mouseup',function(event,element){onkeyhandler(event, 'keyup')});
 		// 
-		zInput.on('blur', function(event){blurhandler()});
+		zInput.on('blur', function(event){
+			blurhandler.delay(100);
+		});
 		
 		// khi cai thang wrapper input click vao thi se auto focus cai thang input luon
 		zWrapperInput.on('click', function(){
