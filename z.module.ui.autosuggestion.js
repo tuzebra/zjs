@@ -1355,7 +1355,9 @@ zjs.require('dictionary, scrollbar', function(){
 			}
 
 			// hide panel
-			zPanel.addClass('zui-panel-hide');
+			(function(){
+				zPanel.addClass('zui-panel-hide');
+			}).delay(1);
 		});
 		
 		

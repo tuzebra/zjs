@@ -430,6 +430,7 @@ zjs.require('ui, ui.button, moment', function(){
 			// truoc khi set value thi phai check coi co bi disable hay khong da
 			if(!option.disabledDate || !option.disabledDate(selectdatetime.format('YYYY-MM-DD'))){
 				zDatepickerEl.setAttr('value', valueForOrgInput).setValue(valueForOrgInput);
+				zDatepickerWrapEl.addClass('has-value');
 				// run trigger
 				zDatepickerEl.trigger('ui:datepicker:change', {value:valueForOrgInput});
 			};
