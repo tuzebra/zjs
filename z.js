@@ -3158,10 +3158,15 @@ zjs.extendMethod({
 	setValue: function(val){
 		if(typeof val == 'undefined')val='';
 		this.eachElement(function(el){
-			try{el.value = val;
+			try{
+				var oldVal = el.value;
+				el.value = val;
 			
 			// run hook
 			if(Hook.enable('after_setValue'))Hook.run('after_setValue',el);
+
+			// trigger event
+			if(oldVal !== el.value)zjs(el).trigger('change');
 			
 			}catch(err){};
 		});

@@ -36,7 +36,8 @@
 			repassword: 'The specified passwords do not match'
 		},
 		es:{
-			required: 'Se requiere campo',
+			//required: 'Se requiere campo',
+			required: 'Campo obligatorio',
 			email: 'No es un correo electrónico válido',
 			url: 'No es una URL válida',
 			date: 'No es una fecha válida',
@@ -58,7 +59,7 @@
 			repassword: 'Die eingegebenen Passwörter stimmen nicht überein'
 		},
 		it:{
-			required: 'Campo è richiesto',
+			required: 'Campo obbligatorio',
 			email: 'Non è un\'e-mail valida',
 			url: 'Non un URL valido',
 			date: 'Non è una data valida',

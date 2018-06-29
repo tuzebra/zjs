@@ -37,7 +37,8 @@ zjs.require('dictionary, scrollbar', function(){
 			itemLinkFormat: '',
 			itemhighlightclass: 'highlight',
 			defaultPanelHeight: 0,
-			selectLikeInput: false
+			selectLikeInput: false,
+			defaultSuggestionMoreText: ''
 		}
 	});
 	
@@ -397,7 +398,9 @@ zjs.require('dictionary, scrollbar', function(){
 		var changePanelHeight = function(height){
 			var toheight = Math.min(height, option.panelmaxheight);
 			zPanel.height(toheight);
-			zPanelscroll.scrollHeight(toheight).scrollToTop();
+			zPanelscroll.scrollHeight(toheight).refreshScroll().scrollToTop();
+			// toto: need to fix it in scrollbar module
+			zPanel.find('.zui-scrollbar').top(0);
 		};
 
 		// check lai cai last link de co gi con redirect
@@ -1055,7 +1058,8 @@ zjs.require('dictionary, scrollbar', function(){
 				
 					// bind event cho thang nho nay luon
 					zItemwrap.hover(onmousehoveritemhandler);
-					zItemwrap.click(onmouseclickitemhandler);
+					// zItemwrap.click(onmouseclickitemhandler);
+					zItemwrap.on('mousedown', onmouseclickitemhandler);
 				
 					// test placeholder
 					if(typevalueholder==''){
@@ -1115,6 +1119,9 @@ zjs.require('dictionary, scrollbar', function(){
 		},
 		
 		onmouseclickitemhandler = function(event){
+
+			// console.log('onmouseclickitemhandler '+ zOriginalInput.getAttr('id'));
+
 			var zItemwrap = zjs(this),
 				zItemwrapData = zItemwrap.getData('searchtempdata');
 				
@@ -1256,11 +1263,6 @@ zjs.require('dictionary, scrollbar', function(){
 		// END Forward
 		
 		var showDefaultSelectListItems = function(){
-
-			// coi coi can tinh lai height ko?
-			var needCalHeight = (option.defaultPanelHeight > 0);
-
-
 			// console.log('showDefaultSelectListItems');
 
 			// @update: thay vi search, thi se show ra list default item cho le
@@ -1305,8 +1307,14 @@ zjs.require('dictionary, scrollbar', function(){
 		
 				// bind event cho thang nho nay luon
 				zItemwrap.hover(onmousehoveritemhandler);
-				zItemwrap.click(onmouseclickitemhandler);
+				// zItemwrap.click(onmouseclickitemhandler);
+				zItemwrap.on('mousedown', onmouseclickitemhandler);
 			});
+			
+			// xem coi co can them vao 1 cai description gi do ko?
+			if(option.defaultSuggestionMoreText !== ''){
+				allItemHeight += zjs('<div>').addClass(__itemclass).addClass('more-text').html(option.defaultSuggestionMoreText).appendTo(zPanelcontent).height();
+			}
 	
 			//sau do se thay doi height cua panel
 			changePanelHeight(option.defaultPanelHeight > 0 ? option.defaultPanelHeight : allItemHeight);
@@ -1316,18 +1324,31 @@ zjs.require('dictionary, scrollbar', function(){
 		// xem coi co option cho chon khi focus vao thi se show ra luon suggestion khong
 		// neu co thi gio phai bind event
 		if(option.focusshowsuggestion){
-			//zInput.on('focus', function(event){
-			zWrapperInput.on('click', function(event){
+			zInput.on('focus', function(event){
+			// zWrapperInput.on('click', function(event){
 				
 				// xem coi neu nhu dang co type cai gi do roi thi se khong show suggestion nua
-				if(typevalue != '')
+				// Update: nhung neu day la 1 cai select
+				// thi user expect la se phai show ra cai list de user chon
+				// nen can phai luon luon show neu la select
+				if(!IS_SELECT_BASE && typevalue != '')
 					return;
 				
 				// xem coi la click vao cai thang nao trong day?
 				// neu nhu ma click vao may cai token thi thoi, bo qua
-				var _targetClickEl = event.getTarget();
-				if(zjs(_targetClickEl).hasClass('zui-autosuggestion-token'))
-					return;
+				// check cho chac, vi co the day la event gia
+				if(event && event.getTarget){
+					var _targetClickEl = event.getTarget();
+					if(_targetClickEl){
+						if(zjs(_targetClickEl).hasClass('zui-autosuggestion-token'))
+							return;
+
+						// co the la click chon tu cai item (trong cai panel list item)
+						// thi se khong can phai xu ly cho nay, vi luc do thi da lost focus mat roi
+						if(zjs(_targetClickEl).hasClass(__itemclass))
+							return;
+					}
+				}
 				
 				if(option.defaultPanelHeight > 0){
 					showDefaultSelectListItems(option.defaultPanelHeight);
@@ -1356,6 +1377,7 @@ zjs.require('dictionary, scrollbar', function(){
 
 			// hide panel
 			(function(){
+				// console.log('hide panel '+zOriginalInput.getAttr('id'));
 				zPanel.addClass('zui-panel-hide');
 			}).delay(1);
 		});
@@ -1540,6 +1562,7 @@ zjs.require('dictionary, scrollbar', function(){
 		// chi can trigger event click cua thang wrapper
 		// la thang input se tu dong focus thoi
 		zWrapperInput.trigger('click');
+		// zInput.focus();
 	},
 	
 
