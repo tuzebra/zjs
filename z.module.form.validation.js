@@ -704,7 +704,7 @@
 		
 		// 2.1 check type co the mix voi nhau
 		if(value != ''){
-			if(name.indexOf('minlength')>=0 || classname.indexOf('minlength')>=0 || zInput.getAttr('data-tip-minlength','')!='')testType = 'minlength';
+			if(name.indexOf('minlength')>=0 || classname.indexOf('minlength')>=0 || zInput.getAttr('data-tip-minlength','')!='' || zInput.getAttr('minlength', null) !== null || zInput.getAttr('data-minlength', null) !== null)testType = 'minlength';
 			// test thoi
 			if(testType != '' && !testMethods[testType](value, element))return {pass:false, type:testType};
 		};
@@ -796,6 +796,10 @@
 			return /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(value);
 		},
 		phonenumber: function(value, element){
+
+			// first: value should have minimum 3 character
+			if((value + ' ').trim().length < 3)return false;
+
 			//return /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/.test(value);
 			//return /^[\s()+-]*([0-9][\s()+-]*){6,20}$/.test(value);
 			return /^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/.test(value);
@@ -840,7 +844,12 @@
 		},
 		minlength: function(value, element){
 			// get ra min length trong element
-			var ml = zjs(element).getAttr('data-minlength', 0).toInt();
+			var ml = zjs(element).getAttr('data-minlength', null);
+			if(ml ===  null)ml = zjs(element).getAttr('minlength', null);
+			if(ml === null)ml = 0;
+			ml = parseInt(ml);
+			if(isNaN(ml))return false;
+
 			return (value + ' ').trim().length >= ml;
 		},
 		maxlength: function(value, element, param){
