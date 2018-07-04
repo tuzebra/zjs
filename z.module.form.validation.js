@@ -17,7 +17,10 @@
 		
 		// ho tro autosuggestion
 		autosuggestionwrapelkey = 'zmoduleautosuggestionwrapel',
-		autosuggestionchildinputclass = 'zui-autosuggestion-input';
+		autosuggestionchildinputclass = 'zui-autosuggestion-input',
+
+		// ho tro ckeditor
+		ckeditorinstancekey = 'ckeditorinstance';
 		
 	
 	var pageLang = zjs('html').getAttr('lang', 'en').split('-');
@@ -141,6 +144,12 @@
 	
 	// - - - - - - - - -
 	
+	var isCKE = function(zInput, element){
+		return (zInput.tagName() === 'TEXTAREA' && ('CKEDITOR' in window) && zInput.getAttr('id', '') !== '' && 
+					zInput.getAttr('id') in window.CKEDITOR.instances && 
+					window.CKEDITOR.instances[zInput.getAttr('id')].element.$ === element);
+	};
+	
 	// MAIN FUNCTIONS
 	
 	var formValidation = function(element, useroption){
@@ -246,6 +255,14 @@
 				if(_temp_AutoSGWrapEl)ztipEl.insertAfter(_temp_AutoSGWrapEl);
 				var _temp_DatepickerWrapEl = zInput.getData(datepickerwrapelkey);
 				if(_temp_DatepickerWrapEl)ztipEl.insertAfter(_temp_DatepickerWrapEl);
+
+				// Support cho CKEditor
+				var ckeInstance = false;
+				if(isCKE(zInput, element)){
+					ckeInstance = window.CKEDITOR.instances[zInput.getAttr('id')];
+					// set vao lan sau cho de truy xuat
+					zInput.setData(ckeditorinstancekey, ckeInstance);
+				}
 				
 				// dong thoi se luu lai cai input nay luon, sau nay truy xuat moi dc
 				zInput.setData(tipelkey, ztipEl);
@@ -260,7 +277,7 @@
 				if(option.autoCheckWhenInput){
 					zInput.on('input, ui:autosuggestion:input', function(){
 						//console.log('on ui.datepicker.blur');
-						handlerTestResult(this, checkInput(this, option, zForm), option);
+						handlerTestResult(zInput, checkInput(zInput, option, zForm), option);
 					});
 				};
 				// neu nhu day la select 
@@ -437,6 +454,34 @@
 			// neu la truong hop cac input dat biet thi cung khong cho phep
 			if(zInput.hasClass(autosuggestionchildinputclass))return;
 			if(zInput.hasClass(datepickerchildinputclass))return;
+
+
+			// Support cho CKEditor
+			if(!zInput.getData(ckeditorinstancekey, false) && isCKE(zInput, element))
+			{	
+				var ckeInstance = window.CKEDITOR.instances[zInput.getAttr('id')];
+				// set vao lan sau cho de truy xuat
+				zInput.setData(ckeditorinstancekey, ckeInstance);
+				
+				// boi vi lan dau, cho nen bind event luon
+				if(option.autoCheckWhenInput){
+					ckeInstance.on('change', function( evt ) {
+						evt.editor.updateElement();
+						handlerTestResult(zInput, checkInput(zInput, option, zForm), option);
+					});
+				}
+				if(option.autoCheckWhenBlur){
+					ckeInstance.on('blur', function( evt ) {
+						evt.editor.updateElement();
+						handlerTestResult(zInput, checkInput(zInput, option, zForm), option);
+					});
+				}
+			}
+
+			if(zInput.getData(ckeditorinstancekey, false)){
+				zInput.getData(ckeditorinstancekey).updateElement();
+			}
+
 		
 			// console.log('handlerTestResult', element);
 			// >>>>>>>
@@ -474,11 +519,14 @@
 			// tu dong focus vao cai input dau tien bi error
 			var firstErrorElm = zForm.find('.'+option.errorClass).item(0);
 			
-			if(firstErrorElm.is('input') || firstErrorElm.is('textarea') || firstErrorElm.is('select')){
-				firstErrorElm.focus();
+			if(firstErrorElm.getData(ckeditorinstancekey, false)){
+				firstErrorElm.getData(ckeditorinstancekey).focus();
 			}
 			else if('isAutosuggestion' in firstErrorElm && firstErrorElm.isAutosuggestion()){
 				firstErrorElm.autosuggestionFocus();
+			}
+			else if(firstErrorElm.is('input') || firstErrorElm.is('textarea') || firstErrorElm.is('select')){
+				firstErrorElm.focus();
 			}
 			else if(firstErrorElm.hasClass('radiogroup')){
 				// scroll toi
@@ -519,6 +567,10 @@
 			if(zImagepickerWrapEl)zImagepickerWrapEl.removeClass(option.errorClass);
 			var zAutosuggestWrapEl =  zInput.getData(autosuggestionwrapelkey, false);
 			if(zAutosuggestWrapEl)zAutosuggestWrapEl.removeClass(option.errorClass);
+
+			// support ckeditor
+			var ckeInstance = zInput.getData(ckeditorinstancekey, false);
+			if(ckeInstance)zjs(ckeInstance.container.$).removeClass(option.errorClass);
 		});
 	};
 	
@@ -551,6 +603,9 @@
 			// kiem tra autosuggest
 			var zAutosuggestWrapEl =  zInput.getData(autosuggestionwrapelkey, false);
 			if(zAutosuggestWrapEl)zAutosuggestWrapEl.removeClass(option.errorClass).addClass(successClass);
+			// support ckeditor luon
+			var ckeInstance = zInput.getData(ckeditorinstancekey, false);
+			if(ckeInstance)zjs(ckeInstance.container.$).removeClass(option.errorClass).addClass(option.successClass);
 			
 			return;
 		};
@@ -587,6 +642,18 @@
 		var zAutosuggestWrapEl =  zInput.getData(autosuggestionwrapelkey, false);
 		if(zAutosuggestWrapEl)zAutosuggestWrapEl.addClass(option.errorClass).removeClass(option.successClass);
 
+		// support ckeditor luon
+		var ckeInstance = zInput.getData(ckeditorinstancekey, false);
+		if(ckeInstance){
+			zjs(ckeInstance.container.$).addClass(option.errorClass).removeClass(option.successClass);
+
+			// neu nhu la test require ma ko pass
+			// thi se reset html cai editor luon
+			if(test.type === 'required'){
+				ckeInstance.document.getBody().setHtml('');
+			}
+
+		}
 
 		// trigger cai event luon
 		zInput.trigger('form:validation:error', {type: test.type});
@@ -606,6 +673,15 @@
 			inputType = zInput.getAttr('type', '').trim().toLowerCase(),
 			classname = zInput.getAttr('class', '').trim().toLowerCase(),
 			value = zInput.getValue('').trim();
+
+		// ok neu nhu cho nay la ckeditor, thi check them 1 xiu
+		if(zInput.getData(ckeditorinstancekey, false)){
+			// console.log('value', value);
+			// value = value.replace(/&nbsp;/g, '').stripTags().trim();
+			// console.log('value after', value);
+			value = zInput.getData(ckeditorinstancekey).document.getBody().getText().trim();
+			// console.log('plainValue', plainValue);
+		}
 			
 		// 0. trong truong hop dac biet
 		// check required cua groupradio
