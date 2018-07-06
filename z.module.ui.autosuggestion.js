@@ -21,9 +21,11 @@ zjs.require('dictionary, scrollbar', function(){
 			panelmaxheight: 200,
 			multiline: true,
 			multichoice: false,
+			delimiter: ',',
 			mentionmode: false,
 			usedproperty: 'text',
 			searchproperty: 'text',
+			usedSearchRegExp: null,
 			searchMatchStartWith: false,
 			usedpropertytext: false,
 			limit: 0,
@@ -38,7 +40,8 @@ zjs.require('dictionary, scrollbar', function(){
 			itemhighlightclass: 'highlight',
 			defaultPanelHeight: 0,
 			selectLikeInput: false,
-			defaultSuggestionMoreText: ''
+			defaultSuggestionMoreText: '',
+			suggestIconRight: ' →',
 		}
 	});
 	
@@ -266,6 +269,28 @@ zjs.require('dictionary, scrollbar', function(){
 		option.defaultPanelHeight = parseInt(option.defaultPanelHeight);
 		if(isNaN(option.defaultPanelHeight))option.defaultPanelHeight = 0;
 
+
+		// fix option usedSearchRegExp phai luon la RegExp
+		if(option.usedSearchRegExp && zjs.isObject(option.usedSearchRegExp)){
+
+			var usedSearchRegExp = {
+				used:   /^(.+\(\d{1,}\))$/,
+				search: /^(.+)\s\(\d{1,}\)$/
+			};
+
+			if(option.usedSearchRegExp.used){
+				if(zjs.isString(option.usedSearchRegExp.used))  option.usedSearchRegExp.used = new RegExp(option.usedSearchRegExp.used);
+				if(zjs.isRegExp(option.usedSearchRegExp.used))  usedSearchRegExp.used = option.usedSearchRegExp.used;
+			}
+			if(option.usedSearchRegExp.search){
+				if(zjs.isString(option.usedSearchRegExp.search))option.usedSearchRegExp.search = new RegExp(option.usedSearchRegExp.search);
+				if(zjs.isRegExp(option.usedSearchRegExp.search))usedSearchRegExp.search = option.usedSearchRegExp.search;
+			}
+
+			// override luon
+			option.usedSearchRegExp = usedSearchRegExp;
+		};
+
 		// save option
 		zOriginalInput.setData(optionkey, option);
 		
@@ -312,6 +337,11 @@ zjs.require('dictionary, scrollbar', function(){
 		}else
 			zWrapperEl.find('.zui-estimate-height-wrap').remove();
 		
+		// add luon cai data icon right vao zPlaceholder luon
+		if(option.suggestIconRight){
+			zPlaceholder.setData('suggestIconRight', option.suggestIconRight);
+		}
+
 
 		// neu nhu khong tu custom css thi phai auto set thoi
 		if(!option.customcss){
@@ -475,10 +505,33 @@ zjs.require('dictionary, scrollbar', function(){
 		if(option.searchMatchStartWith){
 			dictionary.setSearchMatchStartWith(true);
 		}
-			
-		// >>> test
+		
 		zOriginalInput.setData(dictionarykey, dictionary);
 		
+
+		// function help get ra object {used, search}
+		var getUsedSearchFromString = function(_str){
+
+			// tim ra dau la used, dau la search value thoi
+			var testUsed = null;
+			var testSearch = null;
+			var _t = _str.match(option.usedSearchRegExp.used);
+			if(_t && _t.length >= 2 && _t[1])testUsed = _t[1];
+			_t = _str.match(option.usedSearchRegExp.search);
+			if(_t && _t.length >= 2 && _t[1])testSearch = _t[1];
+
+			if(!testUsed || !testSearch)
+				return false;
+
+			return {
+				used:   testUsed,
+				search: testSearch
+			};
+
+		};
+
+
+
 		// - - - -
 		// HANDLER EVENT FUNCTION
 		
@@ -1180,7 +1233,7 @@ zjs.require('dictionary, scrollbar', function(){
 			zWrapperEl.find('.zui-autosuggestion-token').eachElement(function(elem){
 				values.push(zjs(elem).getAttr('data-value',''));
 			});
-			zOriginalInput.setValue(values.join(','));
+			zOriginalInput.setValue(values.join(option.delimiter));
 		};
 		
 		
@@ -1421,9 +1474,36 @@ zjs.require('dictionary, scrollbar', function(){
 		
 		// show ra nhung cai token default
 		// va phai use cai property la id hoac la text thi moi duoc
-		if(option.multichoice && typevalue!='' && (option.usedproperty=='id' || option.usedproperty=='text')){
-			if(option.usedproperty=='id'){
-				zjs.eachItem(typevalue.split(/\s*,\s*/), function(_dataid){
+		// if(option.multichoice && typevalue!='' && (option.usedproperty=='id' || option.usedproperty=='text')){
+		if(option.multichoice && typevalue!=''){
+
+			var needSetValue = true;
+
+			// better support for drupal
+			// if(option.searchproperty === 'label' && option.usedproperty === 'value'){
+			if(option.usedSearchRegExp){
+				zjs.eachItem(typevalue.split(new RegExp('\\s*'+option.delimiter+'\\s*')), function(_dataid){
+
+					var usedSearchData = getUsedSearchFromString(_dataid.trim());
+
+					// da co ket qua
+					if(usedSearchData){
+						// quang vao trong dictionary luôn
+						dictionary.addIndex({
+							[option.usedproperty]:   usedSearchData.used,
+							[option.searchproperty]: usedSearchData.search,
+						}, option.searchproperty);
+						// add token luon
+						zjs('<div class="zui-autosuggestion-token"></div>').setInnerHTML(usedSearchData.search).setAttr('data-value', usedSearchData.used).insertBefore(zInput);
+					}
+				});
+
+				// set value cho original 
+				// boi vi ko phai async nen lam o day luon
+				multichoiceSetValueForOriginalInput();
+			}
+			else if(option.usedproperty=='id'){
+				zjs.eachItem(typevalue.split(new RegExp('\\s*'+option.delimiter+'\\s*')), function(_dataid){
 					dictionary.asyncGetItemById(_dataid, function(zItemwrapData){
 						if(!zItemwrapData)return;
 						zjs('<div class="zui-autosuggestion-token"></div>').setInnerHTML(zItemwrapData.text).setAttr('data-value', zItemwrapData[option.usedproperty]).insertBefore(zInput);
@@ -1431,8 +1511,9 @@ zjs.require('dictionary, scrollbar', function(){
 						multichoiceSetValueForOriginalInput();
 					});
 				});
-			}else if(option.usedproperty=='text'){
-				zjs.eachItem(typevalue.split(/\s*,\s*/), function(_text){
+			}
+			else if(option.usedproperty=='text'){
+				zjs.eachItem(typevalue.split(new RegExp('\\s*'+option.delimiter+'\\s*')), function(_text){
 					// thu co gang search 
 					dictionary.asyncSearch(_text, function(_itemsdata){
 						// lay thang ket qua dau tien
@@ -1443,14 +1524,46 @@ zjs.require('dictionary, scrollbar', function(){
 						multichoiceSetValueForOriginalInput();
 					});
 				});
+			}
+			else{
+				needSetValue = false;
+			}
+
+
+			// ok, chuan bi vai thu
+			if(needSetValue){
+				// fix height cho nguyen thang input
+				zWrapperEl.addClass(zautosuggestionWithTokenClass);
+				// sau do phai empty het cai current input
+				zInput.setValue(typevalue = '');
+				// hide placeholder
+				zPlaceholder.hide();
 			};
-			// fix height cho nguyen thang input
-			zWrapperEl.addClass(zautosuggestionWithTokenClass);
-			// sau do phai empty het cai current input
-			zInput.setValue(typevalue = '');
-			// hide placeholder
-			zPlaceholder.hide();
 		};
+
+
+		// ------------------------------------------------------------------------------------------------
+		// FOR SINGLE CHOICE MODE
+		// ------------------------------------------------------------------------------------------------
+		// try to show ra cai value default
+		// tam thoi chi support thang nao co defined usedSearchRegExp thoi
+		if(!option.multichoice && typevalue!='' && option.usedSearchRegExp){
+			var usedSearchData = getUsedSearchFromString(typevalue.trim());
+			// da co ket qua
+			if(usedSearchData){
+				// quang vao trong dictionary luôn
+				dictionary.addIndex({
+					[option.usedproperty]:   usedSearchData.used,
+					[option.searchproperty]: usedSearchData.search,
+				}, option.searchproperty);
+
+				// set lai value 1 phat cho chuan
+				zOriginalInput.setValue(usedSearchData.used);
+				zInput.setValue(typevalue = usedSearchData.search);
+			}
+		}
+
+
 		
 		// DONE!
 		
@@ -1570,12 +1683,18 @@ zjs.require('dictionary, scrollbar', function(){
 	setPlaceholderText = function(pelm, text, hidetext){
 		text = text || '';
 		hidetext = hidetext || '';
+		var _setedtext = text;
 		if(hidetext && text){
 			// text = text.replace(hidetext, '<span class="_hide">'+hidetext+'</span>');
-			text = '<span class="_hide">' + text.substr(0, hidetext.length) + '</span>'
+			_setedtext = '<span class="_hide">' + text.substr(0, hidetext.length) + '</span>'
 				 + text.substr(hidetext.length);
+
+			// neu nhu cai hidetext no < nguyen cai doan text, thi show them cai mui ten cho no vui
+			if(text.length > hidetext.length && pelm.getData('suggestIconRight')){
+				_setedtext += '<i class="_arrow">' + pelm.getData('suggestIconRight') + '</i>';
+			}
 		}
-		pelm.setInnerHTML(text);
+		pelm.setInnerHTML(_setedtext);
 	};
 
 	
