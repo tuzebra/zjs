@@ -21,6 +21,7 @@ zjs.require('dictionary, scrollbar', function(){
 			panelmaxheight: 200,
 			multiline: true,
 			multichoice: false,
+			create: false,
 			delimiter: ',',
 			mentionmode: false,
 			usedproperty: 'text',
@@ -41,7 +42,9 @@ zjs.require('dictionary, scrollbar', function(){
 			defaultPanelHeight: 0,
 			selectLikeInput: false,
 			defaultSuggestionMoreText: '',
-			suggestIconRight: ' →',
+			suggestIconRightChoose:  ' <b>&rarr;</b> press Right to choose', // →
+			suggestIconEnterChoose:  ' <sub><b>&crarr;</b></sub> press Return to choose', // →
+			suggestIconEnterCreate:  ' <sub><b>&crarr;</b></sub> press Return to add this keyword', // ↵
 		}
 	});
 	
@@ -338,9 +341,9 @@ zjs.require('dictionary, scrollbar', function(){
 			zWrapperEl.find('.zui-estimate-height-wrap').remove();
 		
 		// add luon cai data icon right vao zPlaceholder luon
-		if(option.suggestIconRight){
-			zPlaceholder.setData('suggestIconRight', option.suggestIconRight);
-		}
+		if(option.suggestIconRightChoose)zPlaceholder.setData('suggestIconRightChoose', option.suggestIconRightChoose);
+		if(option.suggestIconEnterChoose)zPlaceholder.setData('suggestIconEnterChoose', option.suggestIconEnterChoose);
+		if(option.suggestIconEnterCreate)zPlaceholder.setData('suggestIconEnterCreate', option.suggestIconEnterCreate);
 
 
 		// neu nhu khong tu custom css thi phai auto set thoi
@@ -587,7 +590,6 @@ zjs.require('dictionary, scrollbar', function(){
 			}
 			// enter
 			if(keycode==13){
-				//console.log('>>> 13');
 				
 				// cai quan trong la:
 				// neu nhu single choice (khong phai multichoi) 
@@ -634,8 +636,6 @@ zjs.require('dictionary, scrollbar', function(){
 				// nen phai check ky giong nhu thang enter
 				// khong lam khoi khoi nhu vay duoc
 				//onkeyeschandler();
-				
-				//console.log('>>> 27');
 
 				if(!option.multichoice){
 					// moi thu dien ra binh thuong
@@ -766,7 +766,6 @@ zjs.require('dictionary, scrollbar', function(){
 
 			// change data for <select> element
 			if(selectSourceEl){
-				// console.log('right', usedvalue);
 				selectSourceEl.setValue(zItemwrapData.id);
 			}
 			
@@ -777,8 +776,6 @@ zjs.require('dictionary, scrollbar', function(){
 		},
 		
 		onkeyeschandler = function(){
-			
-			//console.log('>>>27 typevalue: '+typevalue);
 			
 			// set text for input
 			// muc dich o day la set text go back ve voi text user go vao khi ma no show suggest panel
@@ -804,6 +801,11 @@ zjs.require('dictionary, scrollbar', function(){
 			// reset something
 			currentHighlightIndex = 0;
 			currentValueholderIndex = 0;
+
+			// support cho create luon
+			if(typevalue !== '' && option.create && option.suggestIconEnterCreate){
+				setPlaceholderText(zPlaceholder, typevalue, typevalue, /*isSuggestCreate = */ true);
+			}
 			
 			// cuoi cung la fix height cho multiline
 			if(option.multiline)fixheightmultiline();
@@ -813,8 +815,6 @@ zjs.require('dictionary, scrollbar', function(){
 			// save type value
 			typevalue = zInput.getValue('');
 			
-			//console.log('typevalue', typevalue);
-			
 			// defailt
 			var zItemwrapData = {text:typevalue};
 			var _highlightItemEl = false;
@@ -823,7 +823,8 @@ zjs.require('dictionary, scrollbar', function(){
 			//if(!zPanel.hasClass('zui-panel-hide') && typevalue!=''){
 			// update la khong phai la dang phai show panel thi moi lam
 			// ma la dang highligh hoac dang placeholder
-			if((currentValueholderIndex || currentHighlightIndex || !zPanel.hasClass('zui-panel-hide')) && typevalue!=''){
+			if((currentValueholderIndex || currentHighlightIndex || !zPanel.hasClass('zui-panel-hide') || option.create) && typevalue!=''){
+
 				// uu tien so 1:
 				// neu nhu dang co highlight cai item nao do
 				// thi cai item nay se duoc chon
@@ -841,6 +842,21 @@ zjs.require('dictionary, scrollbar', function(){
 					var _highlightItemEls = zPanelcontent.find('.'+__itemclass);
 					if(_highlightItemEls.count()>0)
 						_highlightItemEl = _highlightItemEls.item(0);
+				}
+				// uu tien so 4:
+				// support cho truong hop cho phep "create" new item luon
+				else if(option.create){
+					// quang vao trong dictionary luôn
+					dictionary.addIndex({
+						[option.usedproperty]:   typevalue,
+						[option.searchproperty]: typevalue,
+					}, option.searchproperty);
+
+					zItemwrapData = {
+						'text': 			     typevalue,
+						[option.usedproperty]:   typevalue,
+						[option.searchproperty]: typevalue
+					};
 				};
 				
 				// okie, neu nhu co tim ra duoc highlight Item thi moi lay ra
@@ -991,8 +1007,6 @@ zjs.require('dictionary, scrollbar', function(){
 				// show placeholder and stop
 				if(rawvalue=='' || (search && rawvalue.length<option.minlength)) {
 
-					// console.log('here empty');
-
 					typevalueholder = '';
 					if(rawvalue!='')setPlaceholderText(zPlaceholder, '', rawvalue);
 					else setPlaceholderText(zPlaceholder, placeholderText());
@@ -1058,22 +1072,35 @@ zjs.require('dictionary, scrollbar', function(){
 			typevalueholder = '';
 			currentValueholderIndex = 0;
 			
+			var _rawValueSearch = rawvalue;
+
 			// start asynchronies search
-			zOriginalInput.trigger('ui:autosuggestion:beforesearch', {'value': rawvalue});
-			zOriginalInput.getData(dictionarykey).asyncSearch(rawvalue, function(result){
+			zOriginalInput.trigger('ui:autosuggestion:beforesearch', {'value': _rawValueSearch});
+			zOriginalInput.getData(dictionarykey).asyncSearch(_rawValueSearch, function(result){
 				
-				zOriginalInput.trigger('ui:autosuggestion:searchresult', {'value': rawvalue, result: result});
+				zOriginalInput.trigger('ui:autosuggestion:searchresult', {'value': _rawValueSearch, result: result});
 
 				// neu nhu khong tim ra ket qua, 
 				// hoac nhieu khi search ajax tuc la da type xong tu khoa ra token
 				// nhung ma ajax return data cham hon
 				// cho nen phai check input xem coi co can thiet show suggestion ra khong?
 				typevalue = zInput.getValue();
-				if(typevalue===''){
-					setPlaceholderText(zPlaceholder, placeholderText());
-				}
+
+				// noi chung la hide cai panel cai da
 				if(result.length===0 || typevalue===''){
 					zPanel.addClass('zui-panel-hide');
+				};
+
+				if(typevalue===''){
+					setPlaceholderText(zPlaceholder, placeholderText());
+					return;
+				}
+				if(result.length===0){
+
+					// support show ra suggest create luon
+					if(typevalue === _rawValueSearch && option.create && option.suggestIconEnterCreate)
+						setPlaceholderText(zPlaceholder, typevalue, typevalue, /*isSuggestCreate = */ true);
+
 					return;
 				};
 			
@@ -1680,9 +1707,10 @@ zjs.require('dictionary, scrollbar', function(){
 	
 
 	// help function to render to placeholder element
-	setPlaceholderText = function(pelm, text, hidetext){
+	setPlaceholderText = function(pelm, text, hidetext, isSuggestCreate){
 		text = text || '';
 		hidetext = hidetext || '';
+		isSuggestCreate = isSuggestCreate || false;
 		var _setedtext = text;
 		if(hidetext && text){
 			// text = text.replace(hidetext, '<span class="_hide">'+hidetext+'</span>');
@@ -1690,8 +1718,18 @@ zjs.require('dictionary, scrollbar', function(){
 				 + text.substr(hidetext.length);
 
 			// neu nhu cai hidetext no < nguyen cai doan text, thi show them cai mui ten cho no vui
-			if(text.length > hidetext.length && pelm.getData('suggestIconRight')){
-				_setedtext += '<i class="_arrow">' + pelm.getData('suggestIconRight') + '</i>';
+			if(text.length > hidetext.length && pelm.getData('suggestIconRightChoose')){
+				_setedtext += '<i class="_suggest-msg _right-choose">' + pelm.getData('suggestIconRightChoose') + '</i>';
+			}
+
+			// support show ra cai suggest create luon
+			else if(isSuggestCreate && text.length === hidetext.length && pelm.getData('suggestIconEnterCreate')){
+				_setedtext += '<i class="_suggest-msg _enter-create">' + pelm.getData('suggestIconEnterCreate') + '</i>';
+			}
+
+			// support show ra cai suggest choose
+			else if(!isSuggestCreate && text.length === hidetext.length && pelm.getData('suggestIconEnterChoose')){
+				_setedtext += '<i class="_suggest-msg _enter-choose">' + pelm.getData('suggestIconEnterChoose') + '</i>';
 			}
 		}
 		pelm.setInnerHTML(_setedtext);
@@ -1708,8 +1746,6 @@ zjs.require('dictionary, scrollbar', function(){
 			return this.eachElement(function(element){makeAutosuggestion(element, useroption)});
 		},
 		autosuggestionAddindex: function(raw){
-			// >>> test
-			//console.log('autosuggestionAddindex: ', raw);
 			return this.eachElement(function(element){autosuggestionAddindex(element, raw)});
 		},
 		autosuggestionRemoveindex: function(query, confirmdel){

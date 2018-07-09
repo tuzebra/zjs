@@ -48,3 +48,7 @@
 
 06/07/2018
 		+ add option "delimiter", "usedSearchRegExp", "suggestIconRight"
+
+09/07/2018
+		+ add option "suggestIconRightChoose", "suggestIconEnterChoose", "suggestIconEnterCreate"		
+
