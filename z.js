@@ -403,6 +403,20 @@ var version = '1.1',
 			return setTimeout(function(){callback(timeCurrent + timeDelta);}, timeDelta);
 		};
 	})(),
+
+	// RIC
+	requestIdleCallback = window.requestIdleCallback || function(handler) {
+		let startTime = Date.now();
+
+		return setTimeout(function() {
+			handler({
+				didTimeout: false,
+				timeRemaining: function() {
+					return Math.max(0, 50.0 - (Date.now() - startTime));
+				}
+			});
+		}, 1);
+	},
 	
 	
 	// - - - - -
@@ -2115,6 +2129,7 @@ extend(zjs, {
 	stylePropertyNames: stylePropertyNames,
 	matchMedia: function(q){return matchMedia.call(window, q)},
 	requestAnimationFrame: function(c){return requestAnimationFrame.call(window, c)},
+	requestIdleCallback: function(c){return requestIdleCallback.call(window, c)},
 	extendCore: function(name, fn){
 		if(isString(name) && isFunction(fn)){var fns={};fns[name]=fn;return extend(zjs, fns);};
 		if(isObject(name))return extend(zjs, name);
@@ -3155,22 +3170,36 @@ zjs.extendMethod({
 		if(!val||val==null)val=defaultVal;
 		return val;
 	},
-	setValue: function(val){
+	setValue: function(val, noCustom){
 		if(typeof val == 'undefined')val='';
-		this.eachElement(function(el){
-			try{
-				var oldVal = el.value;
-				el.value = val;
-			
-			// run hook
-			if(Hook.enable('after_setValue'))Hook.run('after_setValue',el);
 
-			// trigger event
-			if(oldVal !== el.value)zjs(el).trigger('change');
-			
-			}catch(err){};
+		noCustom = noCustom || false;
+
+		return this.eachElement(function(el){
+
+			// xem coi co module nao dang ky cai ham set value hay khong
+			// neu co thi se su dung
+			var setValueCustomMethod = zjs(el).getData('setValueCustomMethod', '');
+
+			if(!noCustom && setValueCustomMethod !== ''){
+				zjs(el)[setValueCustomMethod](val);
+			}
+			else{
+				try{
+					var oldVal = el.value;el.value = val;
+
+					if(zjs(el).tagName() === 'SELECT'){
+						zjs(el).find('option').removeAttr('selected').selected(false);
+						zjs(el).find('option[value="'+val+'"]').setAttr('selected', 'selected').selected(true);
+					}
+
+					// run hook
+					if(Hook.enable('after_setValue'))Hook.run('after_setValue',el);
+					// trigger event
+					if(oldVal !== el.value)zjs(el).trigger('change');
+				}catch(err){};
+			}
 		});
-		return this;
 	},
 	getCss: function(){
 		var element = this.item(0,true),
@@ -4280,6 +4309,28 @@ zjs.extendMethod({
 		
 		return data;
 	},
+
+	setFormData: function(data){
+		return this.eachElement(function(formEl){
+			for (var key in data) {
+	            if (data.hasOwnProperty(key)) {
+	                var zInputEl = zjs(formEl).find('[name="' + key + '"]');
+
+	                switch(zInputEl.getAttr('type', '')){
+	                	case 'radio':
+	                	case 'checkbox':
+	                		zInputEl.check(data[key]);
+	                		break;
+
+	                	default:
+	                		zInputEl.setValue(data[key]);
+	                }
+
+	            }
+	        }
+		});
+	},
+
 	submit: function(){
 		if(this.is('form')){
 			var el = this.item(0,true);
