@@ -287,6 +287,8 @@ zjs.require('scrollbar, ui, ui.button', function(){
 			var func = new Function('event', 'return '+inlineJsFunctionName+'.call(this, event)');
 			zSelectboxEl.on('ui:selectbox:change', func);
 		}
+
+		zSelectboxEl.setData('setValueCustomMethod', 'selectboxSelectValue');
 	};
 	
 	// bind event cho document luon
@@ -339,8 +341,8 @@ zjs.require('scrollbar, ui, ui.button', function(){
 		zSelectboxButtonLabelEl.setInnerHTML(zSelectboxItemEl.getInnerHTML());
 		
 		// sau do se change thang <option selected> trong cai <select> goc
-		zSelectboxEl.find('option[selected]').selected(false);
-		zSelectboxEl.find('option[value="'+value+'"]').selected(true);
+		zSelectboxEl.find('option[selected]').removeAttr('selected').selected(false);
+		zSelectboxEl.find('option[value="'+value+'"]').setAttr('selected', 'selected').selected(true);
 
 		// update 1 cai attr cua selectbox de co gi con style
 		zSelectboxWrapEl.setAttr('data-selected-value', value);
