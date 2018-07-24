@@ -4248,6 +4248,8 @@ zjs.extendMethod({
 				else if(!isArray(data[name]))data[name]=[data[name]];
 			};
 			if(name=='')return;
+			// neu name nay la cai random sinh ra boi module khac thi bo qua
+			if(name.indexOf('_ztmpname_') === 0)return;
 			try{
 				if(inputEl.is('[type=checkbox]') || inputEl.is('[type=radio]')){
 					// get cai ten cai da

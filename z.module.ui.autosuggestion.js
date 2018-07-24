@@ -43,7 +43,7 @@ zjs.require('dictionary, scrollbar', function(){
 			selectLikeInput: false,
 			defaultSuggestionMoreText: '',
 			suggestIconRightChoose:  ' <b>&rarr;</b> press Right to choose', // →
-			suggestIconEnterChoose:  ' <sub><b>&crarr;</b></sub> press Return to choose', // →
+			suggestIconEnterChoose:  ' <sub><b>&crarr;</b></sub> press Return to choose', // ↵
 			suggestIconEnterCreate:  ' <sub><b>&crarr;</b></sub> press Return to add this keyword', // ↵
 		}
 	});
@@ -327,7 +327,8 @@ zjs.require('dictionary, scrollbar', function(){
 			zEstimateHeightEl = false;
 		
 		// fix van de autocomplete
-		zInput.setAttr('autocomplete', Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10));
+		// zInput.setAttr('autocomplete', Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10));
+		zInput.findUp('form').setAttr('autocomplete', 'off');
 
 		// save new input && wrapper input
 		zOriginalInput.setData(wrapinputelkey, zWrapperInput);

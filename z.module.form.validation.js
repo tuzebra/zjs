@@ -269,9 +269,8 @@
 				
 				// bind event cho input
 				if(option.autoCheckWhenBlur){
-					zInput.on('blur, ui:autosuggestion:blur, ui:datepicker:blur', function(){
-						//console.log('on ui.datepicker.blur');
-						handlerTestResult(this, checkInput(this, option, zForm), option);
+					zInput.on('blur, ui:autosuggestion:blur, ui:datepicker:blur', function(event){
+						handlerTestResult(zInput, checkInput(zInput, option, zForm), option);
 					});
 				};
 				if(option.autoCheckWhenInput){
@@ -365,6 +364,9 @@
 					event.preventDefault();
 					// boi vi khong cho submit
 					// nen khong cho lam gi tiep theo
+					// zjs nen la thang cuoi cung dc handler submit
+					// nen se stop luon
+					event.stopPropagation();
 					return;
 				};
 				this.trigger('form:validation:success', {}, function(customEvent){
@@ -429,10 +431,10 @@
 		
 		//var inputsQuery = 'input[type=text], input[type=email], textarea, .radiogroup';	
 		//zForm.find('input,textarea').eachElement(function(element){
-		zForm.find('input,textarea,select,.'+option.checkboxClass+',.'+option.radiogroupClass+',.'+option.dategroupClass+',.'+option.customInputClass).eachElement(function(element){
-			var zInput = zjs(element);
+		zForm.find('input,textarea,select,.'+option.checkboxClass+',.'+option.radiogroupClass+',.'+option.dategroupClass+',.'+option.customInputClass).eachElement(function(inputelm){
+			var zInput = zjs(inputelm);
 			
-			//console.log('before', element);
+			//console.log('before', inputelm);
 			// >>>>>>
 			
 			// neu nhu khong phai la input can thiet,
@@ -457,7 +459,7 @@
 
 
 			// Support cho CKEditor
-			if(!zInput.getData(ckeditorinstancekey, false) && isCKE(zInput, element))
+			if(!zInput.getData(ckeditorinstancekey, false) && isCKE(zInput, inputelm))
 			{	
 				var ckeInstance = window.CKEDITOR.instances[zInput.getAttr('id')];
 				// set vao lan sau cho de truy xuat
@@ -483,13 +485,13 @@
 			}
 
 		
-			// console.log('handlerTestResult', element);
+			// console.log('handlerTestResult', inputelm);
 			// >>>>>>>
-			handlerTestResult(element, test = checkInput(element, option, zForm), option, workInSilent);
+			handlerTestResult(inputelm, test = checkInput(inputelm, option, zForm), option, workInSilent);
 			
 			// track lai thong tin
 			var elName = zInput.getAttr('name', '');
-			if(elName != ''){
+			if(elName !== ''){
 				// track lai ly do luon
 				passStatus[elName] = test;
 			};
@@ -576,7 +578,6 @@
 	
 	// ham nay se thuc hien viec khi ma 1 input bi error
 	var handlerTestResult = function(element, test, option, workInSilent){
-		// console.log('handlerTestResult', element);
 		var zInput = zjs(element);
 		// neu nhu test pass thi don gian la cho qua
 		if(test.pass){
