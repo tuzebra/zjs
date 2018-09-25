@@ -41,6 +41,8 @@ body .zui-popup,.zui-popup.zanimate.zanimate-end{-webkit-animation-name:none;-mo
 .zui-popup.zanimate.zanimate-start.showing.bounceInLeft{-webkit-animation-name:bounceInLeft;-moz-animation-name:bounceInLeft;animation-name:bounceInLeft;}
 .zui-popup.zanimate.zanimate-start.showing.bounceInRight{-webkit-animation-name:bounceInRight;-moz-animation-name:bounceInRight;animation-name:bounceInRight;}
 
+.zui-popup.zanimate.zanimate-start.showing.scaleInUp{-webkit-animation-name: scaleInUp;-moz-animation-name: scaleInUp;animation-name: scaleInUp;}
+
 .zui-popup.zanimate.zanimate-start.showing.flip{-webkit-animation-name:flip;-moz-animation-name:flip;animation-name:flip;}
 .zui-popup.zanimate.zanimate-start.showing.flipInX{-webkit-animation-name:flipInX;-moz-animation-name:flipInX;animation-name:flipInX;}
 .zui-popup.zanimate.zanimate-start.showing.flipInY{-webkit-animation-name:flipInY;-moz-animation-name:flipInY;animation-name:flipInY;}
@@ -92,6 +94,8 @@ body .zui-popup,.zui-popup.zanimate.zanimate-end{-webkit-animation-name:none;-mo
 .zui-popup.zanimate.zanimate-start.hiding.bounceOutDown{-webkit-animation-name:bounceOutDown;-moz-animation-name:bounceOutDown;animation-name:bounceOutDown;}
 .zui-popup.zanimate.zanimate-start.hiding.bounceOutLeft{-webkit-animation-name:bounceOutLeft;-moz-animation-name:bounceOutLeft;animation-name:bounceOutLeft;}
 .zui-popup.zanimate.zanimate-start.hiding.bounceOutRight{-webkit-animation-name:bounceOutRight;-moz-animation-name:bounceOutRight;animation-name:bounceOutRight;}
+
+.zui-popup.zanimate.zanimate-start.hiding.scaleOutDown{-webkit-animation-name: scaleOutDown;-moz-animation-name: scaleOutDown;animation-name: scaleOutDown;}
 
 .zui-popup.zanimate.zanimate-start.hiding.flipOutX{-webkit-animation-name:flipOutX;-moz-animation-name:flipOutX;animation-name:flipOutX;}
 .zui-popup.zanimate.zanimate-start.hiding.flipOutY{-webkit-animation-name:flipOutY;-moz-animation-name:flipOutY;animation-name:flipOutY;}

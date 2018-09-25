@@ -406,7 +406,7 @@ var version = '1.1',
 
 	// RIC
 	requestIdleCallback = window.requestIdleCallback || function(handler) {
-		let startTime = Date.now();
+		var startTime = Date.now();
 
 		return setTimeout(function() {
 			handler({
@@ -3191,6 +3191,9 @@ zjs.extendMethod({
 					if(zjs(el).tagName() === 'SELECT'){
 						zjs(el).find('option').removeAttr('selected').selected(false);
 						zjs(el).find('option[value="'+val+'"]').setAttr('selected', 'selected').selected(true);
+						try {
+							el.value = val;
+						} catch (Error) {}
 					}
 
 					// run hook
