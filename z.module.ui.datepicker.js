@@ -663,8 +663,8 @@ zjs.require('ui, ui.button, moment', function () {
 				var isDotEnd = userRawInput.substr(userRawInput.length - 1) === '.';
 				var isFullDot = userRawInput.split('.').length >= 3;
 
-				if (rawvalueBefore !== null && rawvalueBefore !== '' && 
-					!isFullDot && 
+				if (rawvalueBefore !== null && rawvalueBefore !== '' &&
+					!isFullDot &&
 					rawvalueBefore.substr(rawvalueBefore.length - 1) !== '.'
 				) {
 					if (keyCode === 191 /* /  */ ||
@@ -908,7 +908,6 @@ zjs.require('ui, ui.button, moment', function () {
 
 			// >>>>>>>>>>>>>>>>>>
 			zDatepickerInputEl.on('keydown', function (event) {
-
 				var rawvalue = this.getValue().trim();
 				var keyCode = event.getKeyCode();
 
@@ -952,7 +951,7 @@ zjs.require('ui, ui.button, moment', function () {
 				if (option.strictInput) {
 					(function () {
 						formatInputBehide(rawvalue, keyCode);
-					}).delay(1);
+					}).delay(40);
 				}
 
 				if (prevent) {
