@@ -36,6 +36,7 @@ zjs.require('dictionary, scrollbar', function(){
 			initSourceUrl: '',
 			sourceDataStructure: '',
 			cacheResponse: true,
+			useSuggestedValueWhenEnter: true,
 			itemtemplate: '<div class="item">${text}</div>',
 			itemLinkFormat: '',
 			itemhighlightclass: 'highlight',
@@ -831,15 +832,17 @@ zjs.require('dictionary, scrollbar', function(){
 				// thi cai item nay se duoc chon
 				if(currentHighlightIndex>0){
 					_highlightItemEl = zPanelcontent.find('.'+__itemclass+'[data-highlight="'+currentHighlightIndex+'"]');
+				}
 				// uu tien so 2:
 				// thang nao ma dang la holder value luon, thi se chon thang do
-				}else if(currentValueholderIndex>0){
+				else if (currentValueholderIndex > 0 && option.useSuggestedValueWhenEnter) {
 					_highlightItemEl = zPanelcontent.find('.'+__itemclass+'[data-highlight="'+currentValueholderIndex+'"]');
+				}
 				// uu tien so 3:
 				// thang dau tien trong list suggestion
 				// nhung ma cai nay ko co choi voi text, chi choi voi id thoi
-				// }else if(option.usedproperty != 'text'){
-				}else if(option.usedproperty == 'id'){
+				// else if(option.usedproperty != 'text'){
+				else if(option.usedproperty == 'id'){
 					var _highlightItemEls = zPanelcontent.find('.'+__itemclass);
 					if(_highlightItemEls.count()>0)
 						_highlightItemEl = _highlightItemEls.item(0);
