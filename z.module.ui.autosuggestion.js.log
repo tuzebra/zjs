@@ -52,3 +52,5 @@
 09/07/2018
 		+ add option "suggestIconRightChoose", "suggestIconEnterChoose", "suggestIconEnterCreate"		
 
+07/12/2018
+		+ add method zjs::autosuggestionTurnOn(), zjs::autosuggestionTurnOff()

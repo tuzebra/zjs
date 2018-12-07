@@ -7,7 +7,8 @@ zjs.require('dictionary, scrollbar', function(){
 		wrapinputelkey = 'zmoduleautosuggestionwrapinputel',
 		newinputkey = 'zjsmoduleautosuggestionnewinput',
 		dictionarykey = 'zjsmoduleautosuggestiondictionary',
-		keytypehandlerkey = 'zjsmoduleautosuggestionkeytype';
+		keytypehandlerkey = 'zjsmoduleautosuggestionkeytype',
+		functurnonoffkey = 'zjsmoduleautosuggestionfuncturnonoffkey';
 	
 	// extend core option cho de dieu chinh
 	zjs.extendCore({
@@ -539,7 +540,8 @@ zjs.require('dictionary, scrollbar', function(){
 
 		// - - - -
 		// HANDLER EVENT FUNCTION
-		
+		var _suggestionIsOn = true;
+
 		var blurhandler = function(){
 
 			// neu nhu autosuggestion nay la 1 cai select
@@ -667,6 +669,8 @@ zjs.require('dictionary, scrollbar', function(){
 		
 		onkeyupdownhandler = function(event, keycode){
 			event.preventDefault();
+			if(!_suggestionIsOn)return;
+
 			// turn off current highlight
 			zPanelcontent.find('.'+__itemclass).removeClass(option.itemhighlightclass);
 			// fix index
@@ -721,7 +725,9 @@ zjs.require('dictionary, scrollbar', function(){
 		},
 		
 		onkeyrighthandler = function(){
+			if(!_suggestionIsOn)return;
 			if(typevalueholder=='')return;
+
 			// set text for input
 			zInput.setValue(typevalue=typevalueholder, true);
 			
@@ -778,7 +784,8 @@ zjs.require('dictionary, scrollbar', function(){
 		},
 		
 		onkeyeschandler = function(){
-			
+			if(!_suggestionIsOn)return;
+
 			// set text for input
 			// muc dich o day la set text go back ve voi text user go vao khi ma no show suggest panel
 			// nen neu nhu ko show panel thi se khong set gi het
@@ -816,7 +823,9 @@ zjs.require('dictionary, scrollbar', function(){
 		onkeyenterhandler = function(){
 			// save type value
 			typevalue = zInput.getValue('');
-			
+
+			if(!_suggestionIsOn)return;
+
 			// defailt
 			var zItemwrapData = {text:typevalue};
 			var _highlightItemEl = false;
@@ -945,6 +954,7 @@ zjs.require('dictionary, scrollbar', function(){
 		onkeybackspacehandler = function(){
 			// chi co tac dung neu nhu dung multi
 			if(!option.multichoice)return;
+			if(!_suggestionIsOn)return;
 			
 			// neu nhu zInput chua empty thi xu ly rieng
 			if(zInput.getValue('')!=''){
@@ -976,14 +986,20 @@ zjs.require('dictionary, scrollbar', function(){
 			var rawvalue = zInput.getValue('');
 			// save type value
 			typevalue = rawvalue;
-			// hide cai place holder truoc cho chac
-			setPlaceholderText(zPlaceholder, '');
 
 			// phuc vu cho css cai label placeholder
 			if(rawvalue !== '')zWrapperEl.addClass('has-value');
 			else zWrapperEl.removeClass('has-value');
-			
-			
+
+			// vay la du roi
+			if(!_suggestionIsOn){
+				zOriginalInput.setValue(rawvalue, true);
+				return;
+			}
+
+			// hide cai place holder truoc cho chac
+			setPlaceholderText(zPlaceholder, '');
+
 			// day la truong hop cho single choice
 			if(!option.multichoice){
 				
@@ -1277,6 +1293,19 @@ zjs.require('dictionary, scrollbar', function(){
 		// end handler
 		// --------------------
 		
+
+		// ham giup set cai flag on/off
+		var turnOnOff = function(onOrOff){
+			onOrOff = onOrOff || false;
+      _suggestionIsOn = onOrOff;
+      
+      if(!_suggestionIsOn){
+        // hide cai place holder truoc cho chac
+        setPlaceholderText(zPlaceholder, '');
+      }
+		};
+		// save function nay luon
+		zOriginalInput.setData(functurnonoffkey, turnOnOff);
 		
 		// ham giup get ra value cua original input
 		// khi su dung multichoice
@@ -1745,6 +1774,15 @@ zjs.require('dictionary, scrollbar', function(){
 		zWrapperInput.trigger('click');
 		// zInput.focus();
 	},
+
+	autosuggestionTurnOnOff = function(element, onOrOff){
+		var zOriginalInput = zjs(element),
+			turnOnOff = zOriginalInput.getData(functurnonoffkey, false);
+		if (!turnOnOff)
+			return;
+
+		turnOnOff(onOrOff);
+	},
 	
 
 	// help function to render to placeholder element
@@ -1797,6 +1835,13 @@ zjs.require('dictionary, scrollbar', function(){
 		},
 		autosuggestionFocus: function(){
 			return this.eachElement(function(element){autosuggestionFocus(element)});
+		},
+
+		autosuggestionTurnOff: function(){
+			return this.eachElement(function(element){autosuggestionTurnOnOff(element, false)});
+		},
+		autosuggestionTurnOn: function(){
+			return this.eachElement(function(element){autosuggestionTurnOnOff(element, true)});
 		},
 		
 		// make lai phuong thuc setValue mac dinh cua zjs
