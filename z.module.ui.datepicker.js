@@ -896,6 +896,8 @@ zjs.require('ui, ui.button, moment', function () {
 					zDatepickerPanelWrapEl.removeClass(contextualpanelwraphideclass);
 				}
 				//}).delay(100);
+
+				zDatepickerEl.trigger('ui:datepicker:focus', {});
 			});
 
 			zDatepickerInputEl.on('click', function (event) {
