@@ -13,7 +13,8 @@ zjs.require('ui', function () {
 			indicator: false,
 			indicatorAsSelectList: false,
 			referer: false,
-			valueArray: false
+			valueArray: false,
+			checkMobileDevice: zjs.isMobileDevice
 		}
 	});
 
@@ -137,7 +138,7 @@ zjs.require('ui', function () {
 		// neu nhu su dung select 
 		var zSliderSelectWrapEl = false;
 		var zSliderSelectEl = false;
-		if (option.indicatorAsSelectList && option.step > 0 && zjs.isTouchDevice()) {
+		if (option.indicatorAsSelectList && option.step > 0 && option.checkMobileDevice()) {
 			zSliderSelectWrapEl = zjs('<div class="select-wrapper">').appendTo(zSliderWrapEl);
 			var selectElId = '_uisliderselect' + zjs.getUniqueId();
 			zSliderSelectEl = zjs('<select>').appendTo(zSliderSelectWrapEl).setAttr('id', selectElId).addClass('prevent'); // to prevent form-validation module
@@ -159,7 +160,7 @@ zjs.require('ui', function () {
 		zSliderEl.setData(wrapelkey, zSliderWrapEl);
 
 		// neu nhu la touch thi se thay css 1 chut
-		if (zjs.isTouchDevice())
+		if (option.checkMobileDevice())
 			zSliderWrapEl.addClass(slidertouchclass);
 
 		// bind event de ngan khong cho select text trong cai slider nay

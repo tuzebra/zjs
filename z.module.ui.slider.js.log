@@ -7,3 +7,9 @@
 
 16/01/2017
 		+ support Zepto
+
+12/11/2018
+		+ add option "indicator" & "indicatorAsSelectList"
+
+20/12/2018
+		+ add option "checkMobileDevice" to provide ability to change a way how to detect mobile device
