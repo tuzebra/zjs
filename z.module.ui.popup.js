@@ -13,6 +13,8 @@ zjs.require('ui', function(){
 	var scrollbaroptionkey = 'zmodulescrollbaroption',
 		scrollbarContentElkey = 'zmodulescrollbarcontentel';
 		
+	var DEFAULTLASTZINDEX = 9000;
+
 	// extend core mot so option
 	zjs.extendCore({
 		moduleUiPopupOption: {
@@ -84,8 +86,8 @@ zjs.require('ui', function(){
 		topWindowAccess = true;
 		}catch(er){}
 		
-		if(topWindowAccess){if(isNaN(top.popuplastindex))top.popuplastindex = 10000;}
-		else{if(isNaN(window.popuplastindex))window.popuplastindex = 10000;}
+		if(topWindowAccess){if(isNaN(top.popuplastindex))top.popuplastindex = DEFAULTLASTZINDEX;}
+		else{if(isNaN(window.popuplastindex))window.popuplastindex = DEFAULTLASTZINDEX;}
 		
 		return function(){
 			if(topWindowAccess)return top.popuplastindex++;
