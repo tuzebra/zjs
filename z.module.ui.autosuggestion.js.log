@@ -54,3 +54,6 @@
 
 07/12/2018
 		+ add method zjs::autosuggestionTurnOn(), zjs::autosuggestionTurnOff()
+
+26/04/2019
+		+ add option "generateTopItemText" to help to create a custom suggestion item appear in the top of the suggestion list
