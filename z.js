@@ -954,7 +954,7 @@ var version = '1.1',
 					// type: 'raw', // html, json, jsonp
 					dataType: 'html', // json, jsonp
 					method: 'get',
-					contentType: 'application/x-www-form-urlencoded',
+					contentType: 'application/x-www-form-urlencoded;charset=UTF-8;',
 					repeat: -1,
 					cache: true,
 					cacheResponse: false,
@@ -1132,8 +1132,6 @@ var version = '1.1',
 				
 					if(xhr === false)return;
 				
-					if(xhr.overrideMimeType)xhr.overrideMimeType('text/xml');
-				
 					// bind callback event
 					xhr.onreadystatechange = function(){
 						if(xhr.readyState == 2){
@@ -1170,7 +1168,11 @@ var version = '1.1',
 								
 					// open connect
 					xhr.open(option.method.toUpperCase(), url, true);
-					xhr.setRequestHeader('Content-type', option.contentType + ';charset=UTF-8;');
+					if (option.contentType)
+						xhr.setRequestHeader('Content-type', option.contentType);
+					if (option.dataType === 'json')
+						if (xhr.overrideMimeType) xhr.overrideMimeType('application/json');
+
 					// set custom headers
 					if(typeof option.headers == 'object'){
 						var keys = objectKeys(option.headers), n=keys.length;
@@ -1178,7 +1180,8 @@ var version = '1.1',
 							xhr.setRequestHeader(keys[i], option.headers[keys[i]]);
 					};
 					// send
-					xhr.send(data);
+					if (option.method.toUpperCase() === 'GET') xhr.send();
+					else xhr.send(data);
 			
 				};
 				// end normal xhr
@@ -4458,10 +4461,10 @@ zjs.extendMethod({
 		root: '',
 		listFile: 'modules.js',
 		useHttps: false,
-		loadCss: true,
+		loadCss: (typeof module === 'undefined'),
 		cssFolder: '',
 		prefix: 'z.module.',
-		autoLoadJs: true,
+		autoLoadJs: (typeof module === 'undefined'),
 		timeout: 10000,
 		debug: false
 	}});
