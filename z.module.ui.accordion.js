@@ -8,7 +8,7 @@ zjs.require('ui', function(){
 	
 	var fixTopTimer = false;
 	//var fixTopTimerAlowEvent = true;
-	zjs(window).on('mousewheel',function(event){
+	zjs(window).on('mousewheel{passive}',function(event){
 		if(fixTopTimer)fixTopTimer.stop();
 	});
 	

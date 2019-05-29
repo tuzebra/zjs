@@ -1177,7 +1177,7 @@ zjs.require('dictionary, scrollbar', function(){
 					// bind event cho thang nho nay luon
 					zItemwrap.hover(onmousehoveritemhandler);
 					// zItemwrap.click(onmouseclickitemhandler);
-					zItemwrap.on('mousedown', onmouseclickitemhandler);
+					zItemwrap.on('mousedown', onmouseclickitemhandler, {passive: true});
 				
 					// test placeholder
 					if(typevalueholder==''){
@@ -1478,7 +1478,7 @@ zjs.require('dictionary, scrollbar', function(){
 				// bind event cho thang nho nay luon
 				zItemwrap.hover(onmousehoveritemhandler);
 				// zItemwrap.click(onmouseclickitemhandler);
-				zItemwrap.on('mousedown', onmouseclickitemhandler);
+				zItemwrap.on('mousedown', onmouseclickitemhandler, {passive: true});
 			});
 			
 			// xem coi co can them vao 1 cai description gi do ko?
