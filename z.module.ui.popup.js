@@ -258,8 +258,8 @@ zjs.require('ui', function(){
 		
 		// bind event cho window khi ma resize
 		zWindow
-			.on('resize', function(){popupAlignTop(element)})
-			.on('scroll', function(){popupAlignTop(element)});
+			.on('resize{passive}', function(){popupAlignTop(element)})
+			.on('scroll{passive}', function(){popupAlignTop(element)});
 
 
 		// Support click outside to hide popup
@@ -741,9 +741,9 @@ zjs.require('ui', function(){
 		if(isBindPullDown)return;
 		isBindPullDown = true;
 		var tssy;
-		zjs(document).on('touchstart', function(event){
+		zjs(document).on('touchstart{passive}', function(event){
 			tssy = window.scrollY;
-		}).on('touchend', function(event){
+		}).on('touchend{passive}', function(event){
 			if(tssy < 100 && window.scrollY < -50){
 				tssy = 9999;
 				hideTheTopPopup(zpopupelementstackpull);
