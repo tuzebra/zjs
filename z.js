@@ -346,7 +346,20 @@ var version = '1.1',
 		
 		return false;
 	})(),
-	
+
+	supportsPassive = (function(){
+		var spp = false;
+		try {
+			var opts = Object.defineProperty({}, 'passive', {
+				get: function () {
+					spp = true;
+				}
+			});
+			window.addEventListener("testPassive", null, opts);
+			window.removeEventListener("testPassive", null, opts);
+		} catch (e) {}
+	})(),
+
 	// POLYFILL ...
 	
 	// matchMedia() Test a CSS media type/query in JS. 
@@ -2464,6 +2477,11 @@ zjs.extendMethod({
 			handler = args[2];
 			options = args[3];
 		};
+
+		// fix options for browser don't support passive
+		if (!supportsPassive && isObject(options)){
+			options = false;
+		}
 		
 		// normal event
 		var self = this;
@@ -2517,16 +2535,33 @@ zjs.extendMethod({
 				// bay gio moi bat dau di bind event mac dinh cho browser
 				// cho nen se di tao ra 1 cai function callback
 				// tao ra 1 callback cho event theo cach mac dinh cua browser
-				callback = function(event){
-					// don gian la chi can trigger event thoi
-					return zjs(elem).trigger(type, event);
-				};
-				
+				// define special callback for mousewheel
+				if(type === 'mousewheel'){
+					var supportsWheel = false;
+					// override callback
+					callback = function (event) {
+						// Check whether the wheel event is supported.
+						if (event.type == "wheel") supportsWheel = true;
+						else if (supportsWheel) return;
+						return zjs(elem).trigger(type, event);
+					};
+				}else{
+					callback = function (event) {
+					  return zjs(elem).trigger(type, event);
+					};
+				}
+
 				// tiep theo se thu listen 
 				if(elem.addEventListener){
-					// fix mousewheel
-					if(type == 'scroll' || type == 'mousewheel')
-						elem.addEventListener('DOMMouseScroll', callback, false);
+					// fix mousewheel, so if type is "scroll" => then add both "scroll" & DomMouseScroll
+					// if(type == 'scroll' || type == 'mousewheel')
+						// elem.addEventListener('DOMMouseScroll', callback, options);
+					// So in "mousewheel" case, will bind event for 3
+					if (type === 'mousewheel'){
+						elem.addEventListener('wheel', callback, options);
+						// elem.addEventListener('mousewheel', callback, options);
+						elem.addEventListener('DOMMouseScroll', callback, options);
+					}
 					// fix touch event
 					/*if(window.navigator.msPointerEnabled){
 						if(type=='touchstart')type='MSPointerDown';
@@ -2538,10 +2573,15 @@ zjs.extendMethod({
 					// if(type=='touchstart' || type=='touchmove'){
 						// elem.addEventListener(type, callback, {passive: true});
 					// }
-					// normal
-					// else{
+					// because if type === scroll, & zjs only bind native event only one,
+					// then it can't bind another scroll with passive option,
+					// so now we'll support to add option direct to the type
+					else if (/\{passive\}/.test(type)) {
+						elem.addEventListener(type.replace('{passive}', ''), callback, supportsPassive ? {passive:true} : false);
+					}
+					else{
 						elem.addEventListener(type, callback, options);
-					// }
+					}
 				}
 				else if(elem.attachEvent){
 					if(type == 'scroll')type = 'mousewheel';

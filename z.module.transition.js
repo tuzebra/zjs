@@ -338,7 +338,7 @@
 					// manualy scroll while scroll-to-top transiton is running
 					((element === document.body || element === window) ? zjs(window) : zElement).on('mousewheel', function(){
 						zElement.stopTransition();
-					});
+					}, {passive: true});
 				}
 
 				// save option
@@ -476,6 +476,7 @@
 						zElement.setData('ztransp',-1);
 						return;
 						// khong nen lam gi het, qua mat cong
+						/*
 						if(option.fillmode=='backwards' || option.fillmode=='forwards'){
 							if(!(transitionTimer instanceof CSSTimer))
 								runtimeFromProps = zElement.getStyle(
@@ -493,6 +494,7 @@
 							}
 						}
 						zElement.setData('ztransp',-1);
+						*/
 					},
 					onFinish: function(from, to){
 						if(zElement.isExistsKeyframes(transitionKeyframename))

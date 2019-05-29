@@ -881,7 +881,7 @@
 					e.stopPropagation();
 				};
 				
-			});
+			}, {passive: false});
 		};
 		
 		// bind event to use keyboard to move content element
