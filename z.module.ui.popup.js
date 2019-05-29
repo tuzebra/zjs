@@ -259,7 +259,7 @@ zjs.require('ui', function(){
 		// bind event cho window khi ma resize
 		zWindow
 			.on('resize{passive}', function(){popupAlignTop(element)})
-			.on('wheel{passive}', function(){popupAlignTop(element)});
+			.on('mousewheel{passive}', function(){popupAlignTop(element)});
 
 
 		// Support click outside to hide popup
