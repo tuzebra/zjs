@@ -963,7 +963,7 @@
 				else moveScrollbarEl(event.y() - scrollbarHeight / 2);
 				event.preventDefault();
 				event.stopPropagation();
-			}).hover(function (event) {
+			}, {passive: false}).hover(function (event) {
 				if (!canUseScroll()) return;
 				scrollbarHideTimer.stop();
 				scrollbarWrapElement.setStyle('opacity',1);

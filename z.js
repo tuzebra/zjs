@@ -358,6 +358,7 @@ var version = '1.1',
 			window.addEventListener("testPassive", null, opts);
 			window.removeEventListener("testPassive", null, opts);
 		} catch (e) {}
+		return spp;
 	})(),
 
 	// POLYFILL ...
