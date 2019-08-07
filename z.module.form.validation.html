@@ -9,14 +9,15 @@
 	<script>
 		zjs.onready('ui.button, ui.datepicker, ui.autosuggestion, ui.imagepicker, form.validation', function(){
 			
-			zjs('form').on('form:validation:success', function(event){
-				
-				// neu muon ngan khong cho submit luon thi lam nhu the nay:
-				event.preventDefault();
-				
-				alert('form validation success');
-				
-			});
+			zjs('form')
+				.formValidationAddTestType('equal-with', function(value, element, param, form){
+					return form.getFormData()[param] === value;
+				})
+				.on('form:validation:success', function(event){
+					// neu muon ngan khong cho submit luon thi lam nhu the nay:
+					event.preventDefault();
+					alert('form validation success');
+				});
 			
 		});
 	</script>
@@ -46,8 +47,15 @@
 			<input type="text" name="birthday2" placeholder="birthday" class="zdatepicker required" data-option="button:false,format:'DD/MM/YYYY'" />
 			<input type="text" name="birthday3" class="zdatepicker required" data-option="button:false,format:'DD/MM/YYYY'" />
 			
+			<h2>Group of Year/Month/Day inputs</h2>
+			<div style="border:1px solid #aaa;padding: 10px 20px;">
+				<input type="text" name="day" class="required" placeholder="DD" />
+				<input type="text" name="month" class="required" placeholder="MM" />
+				<input type="text" name="year" class="required" placeholder="YYYY" />
+			</div>
+
 			<h2>email</h2>
-			<input type="email" name="email" class="required" />
+			<input type="text" name="email" class="required" />
 			
 			<h2>number</h2>
 			<input type="text" name="number" class="required" />
@@ -108,17 +116,30 @@
 			
 			<h2>image picker</h2>
 			<input class="zimagepicker r-equired" type="hidden" name="imageid" data-option="autouploadUrl:'http://app.april.com.vn/zmvc/test/uploadimage'" />
-			
+
 			
 			<h2>custom (any dom element)</h2>
 			<div class="zvalidation-custom-input required" id="div1">
 				This is just a custom input! <a onclick="zjs('#div1').setAttr('data-value', 'lorem isolu derm...');zjs('form').formValidationCheck();return false;">click here to set data, and prevent error</a>
 			</div>
+
+
+			<h2>confirm email</h2>
+			<h4>custom validation type (self defined)</h4>
+			<p>This added validation named "equal-with", it will check the equalition of this field's value with one specific field in the form</p>
+			<input type="text" name="confirm-email" class="required"
+				data-equal-with="email" data-tip-equal-with="Email not match"
+			/>
 			
 			
 			<h2>require and prevent</h2>
+			<p>Although this field has class "required" but it still exclusive out of the checking process, because it has class "prevent" also.</p>
 			<input type="text" name="prevent" class="required prevent" />
 			
+			<br/>
+			<br/>
+			<br/>
+			<br/>
 			<p>
 				<button class="zbutton blue">submit</button>
 			</p>

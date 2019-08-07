@@ -820,9 +820,9 @@
 			if(!zInput.is('[data-'+customTestType+']'))continue;
 
 			var param = zInput.getAttr('data-'+customTestType, '');
-
+		
 			// test
-			if(!testMethods[customTestType](value, element, param))
+			if(!testMethods[customTestType](value, element, param, zForm))
 				return {pass:false, type:customTestType};
 		}
 		
@@ -970,7 +970,7 @@
 
 	function formAddTestType(element, testType, handler, errorMessage){
 		// thuc ra la cho nay lam chung luon
-		// chu khong phai la lam rieng cho tung element
+		// chu khong phai la lam rieng cho tung element (form) nao ca
 		testMethods[testType] = handler;
 		customTestMethodTypes.push(testType);
 
