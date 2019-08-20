@@ -18,6 +18,11 @@
 					event.preventDefault();
 					alert('form validation success');
 				});
+
+			zjs('#button-set-error').on('click', function(event){
+				zjs('form').formValidationSetError('phonenumber', 'available'); // simple show the error by type, error message need to define in option when initialize form
+				zjs('form').formValidationSetError('email', 'available', 'This email was used by another user!'); // provide error with custom message
+			});
 			
 		});
 	</script>
@@ -28,7 +33,7 @@
 		p{margin:10px 0 2px;}
 		h2{margin:20px 0 5px;}
 		a[onclick]{color:blue;text-decoration:underline;cursor:pointer;}
-		form{width:300px;}
+		form{width:340px;}
 		input,textarea{margin: 0;width: 100%;resize:none;text-indent:0 !important;padding:0 4px;box-sizing:border-box;}
 		.zvalidation-custom-input.error{border:1px solid red;padding:10px;}
 	</style>
@@ -37,7 +42,7 @@
 <body>
 	<div class="wrapper">
 		
-		<form class="zvalidation" method="POST" data-option="tips:{email:'Email email email please!'}">
+		<form class="zvalidation" method="POST" data-option="tips:{email:'Email email email please!',available:'It isn\'t available.'}">
 			
 			<h2>name</h2>
 			<input type="text" name="name" />
@@ -142,6 +147,21 @@
 			<br/>
 			<p>
 				<button class="zbutton blue">submit</button>
+			</p>
+
+			<br/>
+			<br/>
+			<hr/>
+			<br/>
+			<br/>
+			<p>
+				Custom set an error message for any field. <br/>
+				It was useful when we want to show the error message that depend on checking at server. <br/>
+				For example: check email & phonenumber when new user register an account. <br/>
+				<br/>
+				<a class="zbutton" id="button-set-error">Click here to set error</a>
+				<br/>
+				Click to set error message on the `Email` & `Phonenumber` field.
 			</p>
 			
 		</form>

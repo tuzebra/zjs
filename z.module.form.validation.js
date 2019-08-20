@@ -519,7 +519,21 @@
 				return false;
 
 			// tu dong focus vao cai input dau tien bi error
-			var firstErrorElm = zForm.find('.'+option.errorClass).item(0);
+			focusFirstErrorField(false, zForm, option);
+			
+			return false;
+		};
+		
+		return true;
+	};
+
+	// ham nay giup focus vao first error form
+	// phai delay chu chi can focus thi cai form se bi reset error state
+	var _focusFirstErrorFieldTimeOut = null;
+	var focusFirstErrorField = function(firstErrorElm, zForm, option){
+		if(_focusFirstErrorFieldTimeOut)clearTimeout(_focusFirstErrorFieldTimeOut);
+		_focusFirstErrorFieldTimeOut = setTimeout(function(){
+			firstErrorElm = firstErrorElm || zForm.find('.'+option.errorClass).item(0);
 			
 			if(firstErrorElm.getData(ckeditorinstancekey, false)){
 				firstErrorElm.getData(ckeditorinstancekey).focus();
@@ -536,11 +550,7 @@
 					zjs(document.body).playTransition('scrollTop', firstErrorElm.getAbsoluteTop() - 100, {time: 800})
 				}
 			};
-			
-			return false;
-		};
-		
-		return true;
+		}, 100);
 	};
 	
 	
@@ -835,6 +845,42 @@
 		
 		return {pass:true};
 	};
+
+	// ham giup cho viec manual force set error cho tung form field
+	function formSetError(element, field, testType, errorMessage, workInSilent){
+		var zForm = zjs(element);
+		// neu nhu la validation form thi moi lam tiep
+		var option = zForm.getData(optionkey, false);
+		if(!option)return;
+
+		// fix option
+		testType = testType || 'manual';
+		errorMessage = errorMessage || null;
+		workInSilent = workInSilent || false;
+
+		// tim ra cai field
+		var zField = (typeof field === 'string')
+			? zForm.find('[name="'+field+'"]')
+			: field;
+
+		// neu co set error message thi se di set attribute luon cho field
+		if(errorMessage !== null){
+			zField.setAttr('data-tip-'+testType, errorMessage);
+		}
+		
+		// handler test thoi
+		handlerTestResult(zField, {
+			pass: false,
+			type: testType,
+		}, option);
+			
+		// neu nhu lam trong im lang thi return luon cho roi
+		if(workInSilent)
+			return false;
+
+		// tu dong focus vao cai input bi set error
+		focusFirstErrorField(zField, zForm, option);
+	};
 	
 	// duoi day la 1 loat cac ham dung de test
 	// http://jquery.bassistance.de/validate/jquery.validate.js
@@ -1017,7 +1063,12 @@
 			return this.eachElement(function(element){
 				formAddTestType(element, testType, handler, errorMessage);
 			});
-		}
+		},
+		formValidationSetError: function(field, testType, errorMessage){
+			return this.eachElement(function(element){
+				formSetError(element, field, testType, errorMessage);
+			});
+		},
 	});
 	
 	// - - - - - -
