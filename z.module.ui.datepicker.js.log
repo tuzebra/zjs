@@ -21,3 +21,6 @@
 		+ add option "panel" to decide to show/notshow panel 
 		+ add option "strictInput" to allow suggestion/fix when user typing
 		+ add option "labelPlaceholder" to show a field lable like a placeholder
+
+23/10/2019
+		+ support to use numpad to type to datetime input field

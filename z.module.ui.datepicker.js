@@ -667,7 +667,8 @@ zjs.require('ui, ui.button, moment', function () {
 					!isFullDot &&
 					rawvalueBefore.substr(rawvalueBefore.length - 1) !== '.'
 				) {
-					if (keyCode === 191 /* /  */ ||
+					if (keyCode === 191 || keyCode === 111 /* / */ ||
+					  keyCode === 190 || keyCode === 110 /* . */ ||
 						keyCode === 39 /* -> */
 					) {
 						userRawInput = userRawInput + '.';
@@ -920,12 +921,13 @@ zjs.require('ui, ui.button, moment', function () {
 					option.format != 'DD.MM.YYYY'
 				) return;
 
-				var prevent = false;
+        var prevent = false;
 
 				// neu nhu khong nhap dung, thi thoi se khong cho nhap nua
 				if ([
 					/*number*/
-					48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+          48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+          96, 97, 98, 99, 100,101,102,103,104,105,
 					/*left right*/
 					37, 39,
 					/*backspace tab enter */
@@ -938,13 +940,13 @@ zjs.require('ui, ui.button, moment', function () {
 					prevent = true;
 				}
 
-				/* dau / */
-				if (keyCode === 191 && option.format !== 'DD/MM/YYYY') prevent = true;
+				/* dau / normal & numpad */
+				if ((keyCode === 191 || keyCode === 111) && option.format !== 'DD/MM/YYYY') prevent = true;
 
 				/* dau . */
-				if (keyCode === 190 && option.format !== 'DD.MM.YYYY') prevent = true;
-				if (keyCode === 190 && rawvalue === '') prevent = true;
-				if (keyCode === 190 && rawvalue[rawvalue.length - 1] === '.') prevent = true;
+				if ((keyCode === 190 || keyCode === 110) && option.format !== 'DD.MM.YYYY') prevent = true;
+				if ((keyCode === 190 || keyCode === 110) && rawvalue === '') prevent = true;
+				if ((keyCode === 190 || keyCode === 110) && rawvalue[rawvalue.length - 1] === '.') prevent = true;
 
 
 				// neu nhu go vao chu A, ma khong kem theo command/control thi thoi
