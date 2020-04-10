@@ -31,15 +31,15 @@ zjs.require('ui.button', function(){
 	});
 	
 	// trigger
-	//ui.button.file.change
-	//ui.button.file.maxnumberoffile
-	//ui.button.file.maxfilesize
-	//ui.button.file.wrongfileext
-	//ui.button.file.upload.begin
-	//ui.button.file.upload.loading
-	//ui.button.file.upload.complete
-	//ui.button.file.upload.abort
-	//ui.button.file.getcontent
+	//ui:button:file:change
+	//ui:button:file:maxnumberoffile
+	//ui:button:file:maxfilesize
+	//ui:button:file:wrongfileext
+	//ui:button:file:upload:begin
+	//ui:button:file:upload:loading
+	//ui:button:file:upload:complete
+	//ui:button:file:upload:abort
+	//ui:button:file:getcontent
 	
 	
 	// template
@@ -109,14 +109,26 @@ zjs.require('ui.button', function(){
 		// truoc tien la stop lai hook keo lai bi loi~ nua
 		var bakHookStatus = zjs.enablehook();
 		zjs.enablehook(false);
-		
+
+		// fix option
+		// neu nhu khong co truyen autouploadUrl thi lam sao ma upload day???
+		if(option.autouploadUrl == '')option.autoupload = '';
+		// test xem coi browser co ho tro upload qua ajax hay khong
+		// voi truong hop la user phai chon option
+		// neu nhu khong ho tro thi chuyen ve thanh form upload
+		if(option.autoupload == 'ajax' && !isSupportAjaxUpload)option.autoupload = 'form';
+
+		// fix bool option
+		option.uploadMultipleFilesAtOneTime = !!option.uploadMultipleFilesAtOneTime;
+
+		// init input/button
 		// ho tro ca 2 cach init, init tu 1 <a> hoac tu 1 <input file>
 		// nen phai kiem tra truoc cho chac an
 		var basedon = (zElement.is('input') ? 'input':'a');
 		// neu nhu based on <input> ma input nay khong phai la file
 		// thi thoi bo tay luon!
 		if(basedon=='input' && !zElement.is('[type=file]'))return;
-		
+
 		// neu nhu based on <a> thi phai tao ra input
 		if(basedon=='a'){
 			var zButtonEl = zjs(element),
@@ -127,6 +139,11 @@ zjs.require('ui.button', function(){
 			var zInputEl = zjs(element),
 				zButtonEl = zjs('<a>').html(option.text).insertBefore(zInputEl);
 		};
+		// luu lai 2 cai nay vao zElement de sau nay dung lai ma khong can suy nghi nhieu
+		zElement.setData(buttonelkey, zButtonEl);
+		zElement.setData(inputelkey, zInputEl);
+		// save nguoc lai zElement vao input luon de truy xuat nguoc
+		//zInputEl.setData(zelkey, zElement);
 		// Disable keyboard access for inputEl
 		if(window.attachEvent)zInputEl.attr('tabIndex', -1);
 		// xem coi option co multiple khong de fix input cho chuan
@@ -139,20 +156,23 @@ zjs.require('ui.button', function(){
 		if(option.name=='' && zInputEl.getAttr('name','')=='')zInputEl.attr('name',inputdefaultname);
 		if(option.name!='' && zInputEl.getAttr('name','')=='')zInputEl.attr('name',option.name);
 		// fix name trong truong hop multiple
-		if(option.multiple && zInputEl.attr('name') && !zInputEl.attr('name').test(/\[\]$/))zInputEl.attr('name',zInputEl.attr('name')+'[]');
+		// nhung ma neu nhu upload bang ajax separate thi cung khong can fix name
+		// chi fix name neu nhu su dung form, hoac su dung multiple file at single ajax call
+		if(option.autoupload == 'form' || option.uploadMultipleFilesAtOneTime){
+			if(option.multiple && zInputEl.attr('name') && !zInputEl.attr('name').test(/\[\]$/))zInputEl.attr('name',zInputEl.attr('name')+'[]');
+		}
+
 		// save lai name vo option
 		option.name = zInputEl.attr('name');
-		// luu lai 2 cai nay vao zElement de sau nay dung lai ma khong can suy nghi nhieu
-		zElement.setData(buttonelkey, zButtonEl);
-		zElement.setData(inputelkey, zInputEl);
-		// save nguoc lai zElement vao input luon de truy xuat nguoc
-		//zInputEl.setData(zelkey, zElement);
-		
+		// neu nhu su dung ajax, va cai nay dang based tren 1 cai the a
+		// tuc la name cua input nay ton tai cung khong quan trong
+		// vay thi remove thoi
+		if(option.autoupload == 'ajax' && basedon=='a')zInputEl.removeAttr('name');
+
 		// fix option drop text
 		if(option.dropText == '')option.dropText = 'Drop here to upload';
-		
+
 		// tiep theo moi lam nhung cong viec khoi tao
-		
 		// dau tien phai tao ra 1 cai button cho no cai da
 		zButtonEl.makeButton().addClass(buttonfileclass).style({position:'relative',overflow:'hidden',direction:'ltr'});
 		// sau do se move input vao ben trong button luon
@@ -166,18 +186,9 @@ zjs.require('ui.button', function(){
 				.on('mouseup',function(){zButtonEl.removeClass(activeclass)});
 		
 		// - - - - -
-		// fix option
-		// neu nhu khong co truyen autouploadUrl thi lam sao ma upload day???
-		if(option.autouploadUrl == '')option.autoupload = '';
-		// test xem coi browser co ho tro upload qua ajax hay khong
-		// voi truong hop la user phai chon option
-		// neu nhu khong ho tro thi chuyen ve thanh form upload
-		if(option.autoupload == 'ajax' && !isSupportAjaxUpload)option.autoupload = 'form';
-		
+
 		// bind event nhanh 1 phat roi moi save option sau
 		if(option.autoupload == 'ajax' && isSupportAjaxUpload){
-			// fix option
-			option.uploadMultipleFilesAtOneTime = !!option.uploadMultipleFilesAtOneTime;
 			// add class cho hop ly
 			zButtonEl.addClass(supportdragdrop).prepend('<span class="'+buttondroptextclass+'">'+option.dropText+'</span>');
 			zInputEl.on('dragenter', function(event){if(zButtonEl.hasClass(disabledclass))return;zButtonEl.addClass(button_ready_to_drop_class)});
@@ -243,11 +254,11 @@ zjs.require('ui.button', function(){
 			};
 			
 			// trigger event
-			try{zElement.trigger('ui.button.file.change', {files:files});}catch(err){zjs.log('your handler for event <b>ui.button.file.change</b> has error! (see console log)');console.log(err)};
+			try{zElement.trigger('ui:button:file:change', {files:files});}catch(err){zjs.log('your handler for event <b>ui:button:file:change</b> has error! (see console log)');console.log(err)};
 			
 			// xem coi co set count limit hay khong
 			if(option.maxNumberOfFile > 0 && files.length > option.maxNumberOfFile){
-				try{zElement.trigger('ui.button.file.maxnumberoffile', {files:files});}catch(err){zjs.log('your handler for event <b>ui.button.file.maxnumberoffile</b> has error! (see console log)');console.log(err)};
+				try{zElement.trigger('ui:button:file:maxnumberoffile', {files:files});}catch(err){zjs.log('your handler for event <b>ui:button:file:maxnumberoffile</b> has error! (see console log)');console.log(err)};
 				return;
 			};
 			
@@ -267,7 +278,7 @@ zjs.require('ui.button', function(){
 			};
 			
 			if(wrongExtFiles.length > 0){
-				try{zElement.trigger('ui.button.file.wrongfileext', {files:wrongExtFiles});}catch(err){zjs.log('your handler for event <b>ui.button.file.wrongfileext</b> has error! (see console log)');console.log(err)};
+				try{zElement.trigger('ui:button:file:wrongfileext', {files:wrongExtFiles});}catch(err){zjs.log('your handler for event <b>ui:button:file:wrongfileext</b> has error! (see console log)');console.log(err)};
 				return;
 			};
 			
@@ -285,7 +296,7 @@ zjs.require('ui.button', function(){
 				
 				// chi can co 1 file vuot qua gioi han la se thuc hien triger va khong cho upload lien
 				if(outOfLimitFiles.length > 0){
-					try{zElement.trigger('ui.button.file.maxfilesize', {files:outOfLimitFiles});}catch(err){zjs.log('your handler for event <b>ui.button.file.maxfilesize</b> has error! (see console log)');console.log(err)};
+					try{zElement.trigger('ui:button:file:maxfilesize', {files:outOfLimitFiles});}catch(err){zjs.log('your handler for event <b>ui:button:file:maxfilesize</b> has error! (see console log)');console.log(err)};
 					return;
 				};
 			};
@@ -306,10 +317,10 @@ zjs.require('ui.button', function(){
 				    	if(option.readEXIF){
 				    		zjs.require('exif', function(){
 				    			triggerData.exif = zjs.readEXIFFromBase64(e.target.result);
-					    		zElement.trigger('ui.button.file.getcontent', triggerData);
+					    		zElement.trigger('ui:button:file:getcontent', triggerData);
 					    	});
 				    	}else{
-				    		zElement.trigger('ui.button.file.getcontent', triggerData);
+				    		zElement.trigger('ui:button:file:getcontent', triggerData);
 				    	}
 				    };
 				    reader.readAsDataURL(file);					
@@ -327,7 +338,7 @@ zjs.require('ui.button', function(){
 			// xem coi co auto upload khong
 			if(option.autoupload == 'form'){
 				// upload bang form thi se khong tinh toan duoc %
-				try{zElement.trigger('ui.button.file.upload.begin', {files:files});}catch(err){zjs.log('your handler for event <b>ui.button.file.upload.begin</b> has error! (see console log)');console.log(err)};
+				try{zElement.trigger('ui:button:file:upload:begin', {files:files});}catch(err){zjs.log('your handler for event <b>ui:button:file:upload:begin</b> has error! (see console log)');console.log(err)};
 				
 				// add class for button
 				zButtonEl.addClass(loadingclass, disabledclass);
@@ -339,7 +350,7 @@ zjs.require('ui.button', function(){
 				};
 				
 				// change xong roi moi trigger
-				try{zElement.trigger('ui.button.file.upload.loading', {files:files, percent:0});}catch(err){zjs.log('your handler for event <b>ui.button.file.upload.loading</b> has error! (see console log)');console.log(err)};
+				try{zElement.trigger('ui:button:file:upload:loading', {files:files, percent:0});}catch(err){zjs.log('your handler for event <b>ui:button:file:upload:loading</b> has error! (see console log)');console.log(err)};
 				
 				// start upload
 				uploadFileViaForm(el, option.autouploadUrl, option.returntype, option.data, option, 
@@ -352,8 +363,8 @@ zjs.require('ui.button', function(){
 						if(option.uploadingText != '')zButtonLabelEl.html(option.uploadingText.format({percent:100}));
 						
 						// change xong roi moi trigger
-						try{zElement.trigger('ui.button.file.upload.loading', {files:files, percent:100});}catch(err){zjs.log('your handler for event <b>ui.button.file.upload.loading</b> has error! (see console log)');console.log(err)};
-						try{zElement.trigger('ui.button.file.upload.complete', {files:files, response:response});}catch(err){zjs.log('your handler for event <b>ui.button.file.upload.complete</b> has error! (see console log)');console.log(err)};
+						try{zElement.trigger('ui:button:file:upload:loading', {files:files, percent:100});}catch(err){zjs.log('your handler for event <b>ui:button:file:upload:loading</b> has error! (see console log)');console.log(err)};
+						try{zElement.trigger('ui:button:file:upload:complete', {files:files, response:response});}catch(err){zjs.log('your handler for event <b>ui:button:file:upload:complete</b> has error! (see console log)');console.log(err)};
 						
 						// remove class for button
 						zButtonEl.removeClass(loadingclass, loadingwithtextclass, disabledclass, hoverclass);
@@ -382,14 +393,14 @@ zjs.require('ui.button', function(){
 			// va day la truong hop upload nhieu file, nhung chi support up 1 lan duy nhat ma thoi
 			if(option.autoupload == 'ajax' && option.uploadMultipleFilesAtOneTime){
 				// upload bang ajax thi se tinh toan duoc % ohyeah
-				try{zElement.trigger('ui.button.file.upload.begin', {files:files});}catch(err){zjs.log('your handler for event <b>ui.button.file.upload.begin</b> has error! (see console log)');console.log(err)};
+				try{zElement.trigger('ui:button:file:upload:begin', {files:files});}catch(err){zjs.log('your handler for event <b>ui:button:file:upload:begin</b> has error! (see console log)');console.log(err)};
 				
 				// add class for button
 				zButtonEl.addClass(loadingclass).addClass(disabledclass);
 				var _backupLabelText = zButtonLabelEl.getInnerHTML();
 				if(option.uploadingText != '')zButtonEl.addClass(loadingwithtextclass);
 					
-				try{zElement.trigger('ui.button.file.upload.loading', {files:files, percent:0});}catch(err){zjs.log('your handler for event <b>ui.button.file.upload.loading</b> has error! (see console log)');console.log(err)};
+				try{zElement.trigger('ui:button:file:upload:loading', {files:files, percent:0});}catch(err){zjs.log('your handler for event <b>ui:button:file:upload:loading</b> has error! (see console log)');console.log(err)};
 				
 				uploadFileViaAjax(el, option.autouploadUrl, option.returntype, option.data, option, 
 					// onprogress
@@ -400,13 +411,13 @@ zjs.require('ui.button', function(){
 						if(option.uploadingText != '')zButtonLabelEl.html(option.uploadingText.format({percent:percent}));
 						
 						// change xong roi moi trigger
-						try{zElement.trigger('ui.button.file.upload.loading', {files:files, percent:percent});}catch(err){zjs.log('your handler for event <b>ui.button.file.upload.loading</b> has error! (see console log)');console.log(err)};
+						try{zElement.trigger('ui:button:file:upload:loading', {files:files, percent:percent});}catch(err){zjs.log('your handler for event <b>ui:button:file:upload:loading</b> has error! (see console log)');console.log(err)};
 					},
 					// onloaded
 					function(e, response){
 						// khi up xong thi tat nhien % up se la 100%
 						for(var i=0;i<files.length;i++)files[i].upsize=files[i].size;
-						try{zElement.trigger('ui.button.file.upload.complete', {files:files, response:response});}catch(err){zjs.log('your handler for event <b>ui.button.file.upload.complete</b> has error! (see console log)');console.log(err)};
+						try{zElement.trigger('ui:button:file:upload:complete', {files:files, response:response});}catch(err){zjs.log('your handler for event <b>ui:button:file:upload:complete</b> has error! (see console log)');console.log(err)};
 						
 						// remove button class
 						zButtonEl.removeClass(loadingclass, loadingwithtextclass, disabledclass, hoverclass);
@@ -438,36 +449,45 @@ zjs.require('ui.button', function(){
 					function(e, id, fileData){
 						// trigger thoi chu lam gi dau
 						try{
-							zElement.trigger('ui.button.file.upload.begin', {id:id, file:fileData});
+							zElement.trigger('ui:button:file:upload:begin', {id:id, file:fileData});
 						}catch(err){
-							zjs.log('your handler for event <b>ui.button.file.upload.begin</b> has error! (see console log)');console.log(err)
+							zjs.log('your handler for event <b>ui:button:file:upload:begin</b> has error! (see console log)');console.log(err)
 						};
 					}, 
 					// OnProgress
 					function(e, id, fileData, percent){
 						// trigger thoi chu lam gi dau
 						try{
-							zElement.trigger('ui.button.file.upload.loading', {id:id, file:fileData, percent:percent});
+							zElement.trigger('ui:button:file:upload:loading', {id:id, file:fileData, percent:percent});
 						}catch(err){
-							zjs.log('your handler for event <b>ui.button.file.upload.loading</b> has error! (see console log)');console.log(err)
+							zjs.log('your handler for event <b>ui:button:file:upload:loading</b> has error! (see console log)');console.log(err)
 						};
 					},
 					// OnLoaded
 					function(e, id, fileData, response){
 						// trigger thoi chu lam gi dau
 						try{
-							zElement.trigger('ui.button.file.upload.complete', {id:id, file:fileData, response:response});
+							zElement.trigger('ui:button:file:upload:complete', {id:id, file:fileData, response:response});
 						}catch(err){
-							zjs.log('your handler for event <b>ui.button.file.upload.complete</b> has error! (see console log)');console.log(err)
+							zjs.log('your handler for event <b>ui:button:file:upload:complete</b> has error! (see console log)');console.log(err)
 						};
 					},
 					// OnAbort
 					function(e, id, fileData){
 						// trigger thoi chu lam gi dau
 						try{
-							zElement.trigger('ui.button.file.upload.abort', {id:id, file:fileData});
+							zElement.trigger('ui:button:file:upload:abort', {id:id, file:fileData});
 						}catch(err){
-							zjs.log('your handler for event <b>ui.button.file.upload.abort</b> has error! (see console log)');console.log(err)
+							zjs.log('your handler for event <b>ui:button:file:upload:abort</b> has error! (see console log)');console.log(err)
+						};
+					},
+					// onError
+					function(e, id, fileData){
+						// trigger thoi chu lam gi dau
+						try{
+							zElement.trigger('ui:button:file:upload:error', {e:e, id:id, file:fileData});
+						}catch(err){
+							zjs.log('your handler for event <b>ui:button:file:upload:error</b> has error! (see console log)');console.log(err)
 						};
 					}
 				);
@@ -561,13 +581,13 @@ zjs.require('ui.button', function(){
 				try{if(response!='')response = response.decodeEntities();}catch(err){};
 				if(!response)response = '';
 				
-				//console.log('ui.button.file.upload response (raw)');
+				//console.log('ui:button:file:upload response (raw)');
 				//console.log(response);
 					
 				// fix cai error them vao <pre> vo van cua chrome
 				if(returntype == 'json')response = response.jsonDecode();
 				
-				//console.log('ui.button.file.upload response (json)');
+				//console.log('ui:button:file:upload response (json)');
 				//console.log(response);
 				
 				// run callback
@@ -668,7 +688,7 @@ zjs.require('ui.button', function(){
 		return true;
 	},
 	
-	uploadFileViaAjaxSeparate = function(el, url, returntype, data, option, element, callbackOnBegin, callbackOnProgress, callbackOnLoaded, callbackOnAbort){
+	uploadFileViaAjaxSeparate = function(el, url, returntype, data, option, element, callbackOnBegin, callbackOnProgress, callbackOnLoaded, callbackOnAbort, callbackOnError){
 		// khong support thi bien
 		if(!isSupportAjaxUpload)return false;
 		
@@ -700,7 +720,9 @@ zjs.require('ui.button', function(){
 			if(!zjs.isArray(XHRS))XHRS = [];
 			XHRS[id] = new XMLHttpRequest();
 			
-			XHRS[id].onerror = function(e){};
+			XHRS[id].onerror = function(e){
+				callbackOnError(e, id, fileData);
+			};
 			XHRS[id].onreadystatechange = function(){};
 			XHRS[id].onload = function(e) {
 				var result = '';

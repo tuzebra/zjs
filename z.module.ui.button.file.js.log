@@ -20,3 +20,6 @@
 
 27/10/2016
 		+ add option "readEXIF"
+
+09/04/2020
+		+ rename all even to use : instead of .

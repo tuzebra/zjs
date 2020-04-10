@@ -10,45 +10,45 @@
 		zjs.onready('ui.button.file', function(){
 		
 			// handler on file change
-			zjs('.zbuttonfile').on('ui.button.file.change', function(event){
-				console.log('buttonfile.change', event.data);
+			zjs('.zbuttonfile').on('ui:button:file:change', function(event){
+				console.log('buttonfile:change', event.data);
 			});
 			
 			// handerl on select file with wrong file-extension
-			zjs('.zbuttonfile').on('ui.button.file.wrongfileext', function(event){
-				console.log('buttonfile.wrongfileext', event.data);
+			zjs('.zbuttonfile').on('ui:button:file:wrongfileext', function(event){
+				console.log('buttonfile:wrongfileext', event.data);
 				alert('Your file extension is wrong');
 			});
 			
 			// handler on select file out of maximum number of file
-			zjs('.zbuttonfile').on('ui.button.file.maxnumberoffile', function(event){
-				console.log('buttonfile.maxnumberoffile', event.data);
+			zjs('.zbuttonfile').on('ui:button:file:maxnumberoffile', function(event){
+				console.log('buttonfile:maxnumberoffile', event.data);
 				alert('Out of maximum number of file (10 files)');
 			});
 			
 			// handler on select file out of maximum file size
-			zjs('.zbuttonfile').on('ui.button.file.maxfilesize', function(event){
-				console.log('buttonfile.maxfilesize', event.data);
+			zjs('.zbuttonfile').on('ui:button:file:maxfilesize', function(event){
+				console.log('buttonfile:maxfilesize', event.data);
 				alert('Out of maximum file size (10MB)');
 			});
 			
 			// handler on file when uploading
-			zjs('.zbuttonfile').on('ui.button.file.upload.loading', function(event){
-				console.log('buttonfile.upload.loading: percent', event.data.percent);
+			zjs('.zbuttonfile').on('ui:button:file:upload:loading', function(event){
+				console.log('buttonfile:upload:loading: percent', event.data.percent);
 				//console.log('- size:'+event.data.files[0].size+' -> upsize:'+event.data.files[0].upsize);
 			});
 			
 			// handler on file upload complete
-			zjs('.zbuttonfile').on('ui.button.file.upload.complete', function(event){
-				console.log('buttonfile.upload.complete', event.data);
+			zjs('.zbuttonfile').on('ui:button:file:upload:complete', function(event){
+				console.log('buttonfile:upload:complete', event.data);
 				
 				// show the file's details
 				if(event.data.response.successfiles && event.data.response.successfiles.length > 0)
-					zjs('.log-wrap').append('<div>upload.complete: response: file: '+event.data.response.successfiles[0].name+' (size:'+event.data.response.successfiles[0].size+')</div>');
+					zjs('.log-wrap').append('<div>upload:complete: response: file: '+event.data.response.successfiles[0].name+' (size:'+event.data.response.successfiles[0].size+')</div>');
 				
 				// show the response message from server
 				if(event.data.response.message)
-					zjs('.log-wrap').append('<div>upload.complete: response: message: '+event.data.response.message+'</div>');
+					zjs('.log-wrap').append('<div>upload:complete: response: message: '+event.data.response.message+'</div>');
 				
 			});
 			

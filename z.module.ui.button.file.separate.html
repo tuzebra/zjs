@@ -10,58 +10,58 @@
 		zjs.onready('ui.button.file', function(){
 		
 			// handler on file change
-			zjs('#main-upload-button').on('ui.button.file.change', function(event){
-				console.log('buttonfile.change', event.data);
+			zjs('#main-upload-button').on('ui:button:file:change', function(event){
+				console.log('buttonfile:change', event.data);
 			});
 			
 			// handerl on select file with wrong file-extension
-			zjs('#main-upload-button').on('ui.button.file.wrongfileext', function(event){
-				console.log('buttonfile.wrongfileext', event.data);
+			zjs('#main-upload-button').on('ui:button:file:wrongfileext', function(event){
+				console.log('buttonfile:wrongfileext', event.data);
 				alert('Your file extension is wrong');
 			});
 			
 			// handler on select file out of maximum number of file
-			zjs('#main-upload-button').on('ui.button.file.maxnumberoffile', function(event){
-				console.log('buttonfile.maxnumberoffile', event.data);
+			zjs('#main-upload-button').on('ui:button:file:maxnumberoffile', function(event){
+				console.log('buttonfile:maxnumberoffile', event.data);
 				alert('Out of maximum number of file (10 files)');
 			});
 			
 			// handler on select file out of maximum file size
-			zjs('#main-upload-button').on('ui.button.file.maxfilesize', function(event){
-				console.log('buttonfile.maxfilesize', event.data);
+			zjs('#main-upload-button').on('ui:button:file:maxfilesize', function(event){
+				console.log('buttonfile:maxfilesize', event.data);
 				alert('Out of maximum file size (10MB)');
 			});
 			
 			// handler on file when begin
-			zjs('#main-upload-button').on('ui.button.file.upload.begin', function(event){
+			zjs('#main-upload-button').on('ui:button:file:upload:begin', function(event){
 				console.log('ui.button.file.upload.begin', event.data);
 				// create new element to tracking what's going on.
 				zjs('.files-wrap').append('<p data-uploadid="'+event.data.id+'">'+event.data.file.name+' <b class="percent"></b>%  <button class="abort">abort</button></p>');
 			});
 			
 			// handler on file when uploading
-			zjs('#main-upload-button').on('ui.button.file.upload.loading', function(event){
-				console.log('buttonfile.upload.loading', event.data);
+			zjs('#main-upload-button').on('ui:button:file:upload:loading', function(event){
+				console.log('buttonfile:upload:loading', event.data);
 				// update the tracking
 				zjs('[data-uploadid="'+event.data.id+'"] .percent').html(event.data.percent);
 			});
 			
 			// handler on file upload complete
-			zjs('#main-upload-button').on('ui.button.file.upload.complete', function(event){
-				console.log('buttonfile.upload.complete', event.data);
+			zjs('#main-upload-button').on('ui:button:file:upload:complete', function(event){
+				console.log('buttonfile:upload:complete', event.data);
 				
 				// remove the abort button
 				zjs('[data-uploadid="'+event.data.id+'"] .abort').remove();
 				
 				// show the response message from server
 				if(event.data.response.message)
-					zjs('.log-wrap').append('<div>upload.complete: response: message: '+event.data.response.message+'</div>');
+					zjs('.log-wrap').append('<div>upload:complete: response: message: '+event.data.response.message+'</div>');
 			});
 			
 			// handler on file upload abort
-			zjs('#main-upload-button').on('ui.button.file.upload.abort', function(event){
-				console.log('ui.button.file.upload.abort', event.data);
-				zjs('.log-wrap').append('<div>upload.abort: '+event.data.id+'</div>');
+			zjs('#main-upload-button').on('ui:button:file:upload:abort', function(event){
+				console.log('ui:button:file:upload:abort', event.data);
+				zjs('.log-wrap').append('<div>upload:abort: '+event.data.id+'</div>');
 			});
 			
 			
