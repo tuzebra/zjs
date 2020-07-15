@@ -684,6 +684,7 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 		
 		onkeyupdownhandler = function(event, keycode){
 			event.preventDefault();
+			event.stopPropagation();
 			if(!_suggestionIsOn)return;
 
 			// turn off current highlight

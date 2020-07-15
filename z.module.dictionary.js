@@ -311,7 +311,7 @@
 		return returnIndexs;
 	};
 	
-	zDictionary.prototype.getDataFromDataSource = function(rawquery, callback){
+	zDictionary.prototype.getDataFromDataSource = debounce(function(rawquery, callback){
 		var self = this;
 		
 		if(self.dataSourceUrlIsLoaded){
@@ -374,7 +374,7 @@
 			onError: false,
 			debug: false
 		});
-	};
+	}, 650);
 	
 	zDictionary.prototype.asyncGetItemById = function(id, callback){
 	
@@ -436,7 +436,7 @@
 		});
 	};
 	
-	zDictionary.prototype.asyncSearch = debounce(function(rawquery, callback){
+	zDictionary.prototype.asyncSearch = function(rawquery, callback){
 		
 		this.lastRawquery = rawquery;
 		
@@ -459,7 +459,7 @@
 				callback(result);
 			};
 		});
-	}, 800);
+	};
 	// end class
 
 	// helper function
