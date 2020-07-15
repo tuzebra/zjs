@@ -1,6 +1,5 @@
 // extend module Auto suggestion cho zjs
-zjs.require('dictionary, scrollbar', function(){
-"use strict";
+zjs.require('dictionary, scrollbar', function(){"use strict";
 	
 	var optionkey = 'zjsmoduleautosuggestionoption',
 		wrapelkey = 'zmoduleautosuggestionwrapel',
@@ -35,7 +34,9 @@ zjs.require('dictionary, scrollbar', function(){
 			source: [],
 			sourceUrl: '',
 			initSourceUrl: '',
+			sourceUrlValueSelector: function(values){return values},
 			sourceDataStructure: '',
+			sourceDataSelector: function(data, query){return data},
 			cacheResponse: true,
 			useSuggestedValueWhenEnter: true,
 			generateTopItemText: null,
@@ -58,6 +59,8 @@ zjs.require('dictionary, scrollbar', function(){
 	//ui:autosuggestion:blur
 	//ui:autosuggestion:beforesearch
 	//ui:autosuggestion:searchresult
+	//ui:autosuggestion:startasyncsearch
+	//ui:autosuggestion:endasyncsearch
 	
 	// template
 	var zautosuggestionClass = 'zui-autosuggestion-wrap',
@@ -467,8 +470,8 @@ zjs.require('dictionary, scrollbar', function(){
 
 		// Ho tro show placeholder nhu 1 cai label
 		if(option.labelPlaceholder && _defaultPlaceholder !== ''){
-		    zjs('<span>').addClass('placeholder').html(_defaultPlaceholder).insertAfter(zWrapperInput);
-		    zWrapperInput.addClass('label-placeholder');
+				zjs('<span>').addClass('placeholder').html(_defaultPlaceholder).insertAfter(zWrapperInput);
+				zWrapperInput.addClass('label-placeholder');
 		}
 
 		setPlaceholderText(zPlaceholder, placeholderText());
@@ -489,9 +492,17 @@ zjs.require('dictionary, scrollbar', function(){
 		// - - - -
 		// index data source to search
 		var dictionary = new zjs.dictionary(option.source, searchpropertyTemp);
-		
+
+		dictionary.setOnStartEndLoading(
+			function(){zOriginalInput.trigger('ui:autosuggestion:startasyncsearch')},
+			function(){zOriginalInput.trigger('ui:autosuggestion:endasyncsearch')}
+		)
+
 		if(!option.cacheResponse){
 			dictionary.setCacheResponse(false);
+		}
+		if(typeof option.sourceUrlValueSelector === 'function'){
+			dictionary.setDataSourceUrlValueSelector(option.sourceUrlValueSelector);
 		}
 		if(option.sourceUrl != ''){
 			dictionary.setDataSourceUrl(option.sourceUrl);
@@ -506,13 +517,16 @@ zjs.require('dictionary, scrollbar', function(){
 		if(option.sourceDataStructure != ''){
 			dictionary.setDataSourceDataStructure(option.sourceDataStructure);
 		}
+		if(typeof option.sourceDataSelector === 'function'){
+			dictionary.setDataSourceDataSelector(option.sourceDataSelector);
+		}
 		if(option.limit > 0){
 			dictionary.setDefaultSearchResultLimit(option.limit);
 		}
 		if(option.searchMatchStartWith){
 			dictionary.setSearchMatchStartWith(true);
 		}
-		
+
 		zOriginalInput.setData(dictionarykey, dictionary);
 		
 
@@ -1098,7 +1112,7 @@ zjs.require('dictionary, scrollbar', function(){
 			// start asynchronies search
 			zOriginalInput.trigger('ui:autosuggestion:beforesearch', {'value': _rawValueSearch});
 			zOriginalInput.getData(dictionarykey).asyncSearch(_rawValueSearch, function(result){
-				
+
 				zOriginalInput.trigger('ui:autosuggestion:searchresult', {'value': _rawValueSearch, result: result});
 
 				// neu nhu khong tim ra ket qua, 
@@ -1321,12 +1335,12 @@ zjs.require('dictionary, scrollbar', function(){
 		// ham giup set cai flag on/off
 		var turnOnOff = function(onOrOff){
 			onOrOff = onOrOff || false;
-      _suggestionIsOn = onOrOff;
-      
-      if(!_suggestionIsOn){
-        // hide cai place holder truoc cho chac
-        setPlaceholderText(zPlaceholder, '');
-      }
+			_suggestionIsOn = onOrOff;
+			
+			if(!_suggestionIsOn){
+				// hide cai place holder truoc cho chac
+				setPlaceholderText(zPlaceholder, '');
+			}
 		};
 		// save function nay luon
 		zOriginalInput.setData(functurnonoffkey, turnOnOff);
@@ -1818,7 +1832,7 @@ zjs.require('dictionary, scrollbar', function(){
 		if(hidetext && text){
 			// text = text.replace(hidetext, '<span class="_hide">'+hidetext+'</span>');
 			_setedtext = '<span class="_hide">' + text.substr(0, hidetext.length) + '</span>'
-				 + text.substr(hidetext.length);
+					+ text.substr(hidetext.length);
 
 			// neu nhu cai hidetext no < nguyen cai doan text, thi show them cai mui ten cho no vui
 			if(text.length > hidetext.length && pelm.getData('suggestIconRightChoose')){

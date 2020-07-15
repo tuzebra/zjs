@@ -36,18 +36,24 @@
 		// va khi can thi dictionary se get more data (via ajax) 
 		this.cacheResponse = true;
 		this.usedCacheDataSource = false;
-		this.dataSourceUrl = '';
+		this.dataSourceUrl = null;
+		this.sourceUrlValueSelector = null;
 		this.dataSourceDataStructure = '';
+		this.dataSourceDataSelector = '';
 		this.defaultSearchProperty = searchproperty || 'text';
 		this.lastRawquery = '';
 
 		// limit
 		this.searchResultLimit = 0;
-
 		this.searchMatchStartWith = false;
-
 		this.dataSourceUrlIsLoaded = false;
-		
+
+		// neu nhu load async lien tuc
+		// thi bien nay se giup count total nhung thang xhr request dang load
+		this.countXhrRequesting = 0;
+		this.onStartXhrRequesting = null;
+		this.onEndXhrRequesting = null;
+
 		return this;
 	};
 
@@ -70,11 +76,22 @@
 	zDictionary.prototype.setDataSourceDataStructure = function(structure){
 		this.dataSourceDataStructure = structure;
 	};
+	zDictionary.prototype.setDataSourceDataSelector = function(dataSelector){
+		this.dataSourceDataSelector = dataSelector;
+	};
+
+	zDictionary.prototype.setDataSourceUrlValueSelector = function(urlValueSelector){
+		this.sourceUrlValueSelector = urlValueSelector;
+	};
+	zDictionary.prototype.setOnStartEndLoading = function(onStart, onEnd){
+		this.onStartXhrRequesting = onStart;
+		this.onEndXhrRequesting = onEnd;
+	};
 	
 	zDictionary.prototype.addIndex = function(raw, searchproperty){
 		
 		// khong lam gi het
-		if(typeof raw == 'undefined' || typeof raw == 'function')return this;
+		if(typeof raw == 'undefined' || typeof raw == 'function' || raw == null)return this;
 		
 		// - -
 		// de quy, trong truong hop truyen vao array
@@ -194,13 +211,6 @@
 	};
 
 	zDictionary.prototype.search = function(rawquery){
-		
-		// xem coi neu nhu co data source thi se uu tien get tren data source
-		// @update:
-		// khong can lam cho nay, khi muon search bang data source url
-		// thi phai su dung asyn search
-		// if(this.dataSourceUrl != '')
-			// this.getDataFromDataSource(rawquery, false);
 	
 		// dau tien la xoa dau Tieng Viet trong query
 		var query = rawquery.removeVietnameseCharacter().toLowerCase();
@@ -318,19 +328,28 @@
 			_srq = _srq.toLowerCase();
 
 		var _queryData = {f:'text',q:_srq};
-		if(this.searchResultLimit > 0)_queryData.limit = this.searchResultLimit;
+		if(self.searchResultLimit > 0)_queryData.limit = self.searchResultLimit;
+
+		if(typeof self.sourceUrlValueSelector === 'function')
+			_queryData = self.sourceUrlValueSelector(_queryData);
+
+		self.countXhrRequesting++;
+		if(self.countXhrRequesting==1 && typeof self.onStartXhrRequesting == 'function')self.onStartXhrRequesting();
 
 		zjs.ajax({
-			url:this.dataSourceUrl,
+			url: typeof self.dataSourceUrl === 'function' ? self.dataSourceUrl(_queryData) : self.dataSourceUrl,
 			data: _queryData,
 			type: 'json', 
 			method: 'get', 
-			cache: this.cacheResponse,
-			cacheResponse: this.cacheResponse,
+			cache: self.cacheResponse,
+			cacheResponse: self.cacheResponse,
 			onBegin: false,
 			onLoading: false,
+			onResponse: function(){
+				self.countXhrRequesting--;
+				if(!self.countXhrRequesting && typeof self.onEndXhrRequesting == 'function')self.onEndXhrRequesting();
+			},
 			onComplete: function(rawdata){
-
 				// >>> test
 				// console.log('json: ', data)
 				// fix raw data to usable data
@@ -343,7 +362,7 @@
 						}
 					}
 				}
-				data = rawdata;
+				data = (typeof self.dataSourceDataSelector === 'function') ? self.dataSourceDataSelector(rawdata, _queryData) : rawdata;
 
 				// add vao index thoi
 				self.addIndex(data, self.defaultSearchProperty);
@@ -368,13 +387,17 @@
 		};
 		
 		// con neu khong co thi moi phai di get tu data source
-		if(this.dataSourceUrl == '')
+		if(!this.dataSourceUrl)
 			return;
 		
 		var self = this;
+		var _queryData = {f:'id',id:id};
+		if(typeof this.sourceUrlValueSelector === 'function')
+			_queryData = this.sourceUrlValueSelector(_queryData);
+
 		zjs.ajax({
-			url:this.dataSourceUrl,
-			data: {f:'id',id:id},
+			url:typeof this.dataSourceUrl === 'function' ? this.dataSourceUrl(_queryData) : this.dataSourceUrl,
+			data: _queryData,
 			type: 'json', 
 			method: 'get', 
 			cache: false,
@@ -393,7 +416,7 @@
 						}
 					}
 				}
-				data = rawdata;
+				data = (typeof self.dataSourceDataSelector === 'function') ? self.dataSourceDataSelector(rawdata, _queryData) : rawdata;
 				
 				// add vao index thoi
 				self.addIndex(data, self.defaultSearchProperty);
@@ -413,7 +436,7 @@
 		});
 	};
 	
-	zDictionary.prototype.asyncSearch = function(rawquery, callback){
+	zDictionary.prototype.asyncSearch = debounce(function(rawquery, callback){
 		
 		this.lastRawquery = rawquery;
 		
@@ -424,7 +447,7 @@
 			callback(result);
 		
 		// kiem tra neu nhu co data source url thi moi can lam tiep
-		if(this.dataSourceUrl == '')return;
+		if(!this.dataSourceUrl)return;
 		
 		var self = this;
 		this.getDataFromDataSource(rawquery, function(){
@@ -436,9 +459,22 @@
 				callback(result);
 			};
 		});
-	};
+	}, 800);
 	// end class
-	
+
+	// helper function
+	function debounce(func, wait) {
+		var timeout;
+		return function() {
+			var context = this, args = arguments;
+			clearTimeout(timeout);
+			timeout = setTimeout(function() {
+				timeout = null;
+				func.apply(context, args);
+			}, wait);
+		};
+	}
+
 	// extend core cai dictionary
 	zjs.extendCore({
 		dictionary: zDictionary

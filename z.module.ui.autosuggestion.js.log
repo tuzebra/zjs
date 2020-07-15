@@ -57,3 +57,7 @@
 
 26/04/2019
 		+ add option "generateTopItemText" to help to create a custom suggestion item appear in the top of the suggestion list
+
+16/07/2020
+		+ add option: "sourceUrlValueSelector", "sourceDataSelector"
+		+ add events: "ui:autosuggestion:startasyncsearch", "ui:autosuggestion:endasyncsearch"
