@@ -7,7 +7,8 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 		newinputkey = 'zjsmoduleautosuggestionnewinput',
 		dictionarykey = 'zjsmoduleautosuggestiondictionary',
 		keytypehandlerkey = 'zjsmoduleautosuggestionkeytype',
-		functurnonoffkey = 'zjsmoduleautosuggestionfuncturnonoffkey';
+		functurnonoffkey = 'zjsmoduleautosuggestionfuncturnonoffkey',
+		isstillloading = 'zjsmoduleautosuggestionisstillloadingkey';
 	
 	// extend core option cho de dieu chinh
 	zjs.extendCore({
@@ -21,6 +22,7 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 			panelmaxheight: 200,
 			multiline: true,
 			multichoice: false,
+			forceSelectFromList: false,
 			create: false,
 			delimiter: ',',
 			mentionmode: false,
@@ -39,16 +41,16 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 			sourceDataSelector: function(data, query){return data},
 			cacheResponse: true,
 			useSuggestedValueWhenEnter: true,
-			generateTopItemText: null,
+			generateTopItem: null,
 			itemtemplate: '<div class="item">${text}</div>',
 			itemLinkFormat: '',
 			itemhighlightclass: 'highlight',
 			defaultPanelHeight: 0,
 			selectLikeInput: false,
 			defaultSuggestionMoreText: '',
-			suggestIconRightChoose:  ' <b>&rarr;</b> press Right to choose', // →
-			suggestIconEnterChoose:  ' <sub><b>&crarr;</b></sub> press Return to choose', // ↵
-			suggestIconEnterCreate:  ' <sub><b>&crarr;</b></sub> press Return to add this keyword', // ↵
+			suggestIconRightChoose:  ' <code class="icon-right"><b>&rarr;</b></code> press Right to choose', // →
+			suggestIconEnterChoose:  ' <code class="icon-enter"><b>&crarr;</b></code> press Enter to choose', // ↵
+			suggestIconEnterCreate:  ' <code class="icon-enter"><b>&crarr;</b></code> press Enter to add this keyword', // ↵
 		}
 	});
 	
@@ -494,8 +496,8 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 		var dictionary = new zjs.dictionary(option.source, searchpropertyTemp);
 
 		dictionary.setOnStartEndLoading(
-			function(){zOriginalInput.trigger('ui:autosuggestion:startasyncsearch')},
-			function(){zOriginalInput.trigger('ui:autosuggestion:endasyncsearch')}
+			function(){zOriginalInput.setData(isstillloading, true);zOriginalInput.trigger('ui:autosuggestion:startasyncsearch')},
+			function(){zOriginalInput.setData(isstillloading, false);zOriginalInput.trigger('ui:autosuggestion:endasyncsearch')}
 		)
 
 		if(!option.cacheResponse){
@@ -558,11 +560,14 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 		var _suggestionIsOn = true;
 
 		var blurhandler = function(){
+			// @@@@@@@
+			// console.log('blurhandler');
+			// console.log('value', zOriginalInput.getValue());
 
 			// neu nhu autosuggestion nay la 1 cai select
 			// thi bat buoc phai set duoc data, neu khong set duoc data thi se reset
 			if(IS_SELECT_BASE){
-
+				// console.log('IS_SELECT_BASE');
 				if(zOriginalInput.getValue() === ''){
 
 					// reset type value luon 
@@ -596,9 +601,10 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 			// up/down
 			if(keycode==38||keycode==40){if(eventname=='keydown')onkeyupdownhandler(event, keycode);return;};
 			// left
-			if(keycode==37){return;}
+			if(keycode==37){event.stopPropagation();return;}
 			// right / tab
 			if(keycode==39||keycode==9){
+				event.stopPropagation();
 				if(eventname=='keydown')onkeyrighthandler();
 				// neu nhu an tab thi se goi su kien blur luon
 				if(keycode==9){
@@ -1112,9 +1118,27 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 
 			// start asynchronies search
 			zOriginalInput.trigger('ui:autosuggestion:beforesearch', {'value': _rawValueSearch});
-			zOriginalInput.getData(dictionarykey).asyncSearch(_rawValueSearch, function(result){
+			zOriginalInput.getData(dictionarykey).asyncSearch(_rawValueSearch, function(result, fromServer){
 
-				zOriginalInput.trigger('ui:autosuggestion:searchresult', {'value': _rawValueSearch, result: result});
+				//@@@@@
+				// console.log('seach load xong', _rawValueSearch, result);
+
+				// neu nhu khong con focus vao input nua thi thoi ko can phai show
+				if(!zInput.is(':focus')){
+					zOriginalInput.trigger('ui:autosuggestion:searchresult', {'value': _rawValueSearch, result: result, focused: false});
+					return;
+				}
+
+				zOriginalInput.trigger('ui:autosuggestion:searchresult', {'value': _rawValueSearch, result: result, focused: true});
+
+				// create top item
+				if(zjs.isFunction(option.generateTopItem)){
+					var topItem = option.generateTopItem(rawvalue, result, fromServer, zOriginalInput.getData(isstillloading));
+					if(topItem){
+						topItem._isGeneratedTopItem = true;
+						result = [topItem].concat(result);
+					}
+				}
 
 				// neu nhu khong tim ra ket qua, 
 				// hoac nhieu khi search ajax tuc la da type xong tu khoa ra token
@@ -1134,6 +1158,7 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 				if(result.length===0){
 
 					// support show ra suggest create luon
+					//@@@@@@@@@@@
 					if(typevalue === _rawValueSearch && option.create && option.suggestIconEnterCreate)
 						setPlaceholderText(zPlaceholder, typevalue, typevalue, /*isSuggestCreate = */ true);
 
@@ -1151,20 +1176,6 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 			
 				// count 
 				var allItemHeight = 0;
-
-				// create top item 
-				if(zjs.isFunction(option.generateTopItemText)){
-					var topItemText = option.generateTopItemText(rawvalue);
-					if(topItemText){
-						result = [{
-							text: topItemText,
-							[option.searchproperty]: topItemText,
-							[option.usedproperty]: topItemText,
-							_isGeneratedTopItem: true,
-						}].concat(result);
-						currentResultLength++;
-					}
-				}
 			
 				// add to here
 				zjs.eachItem(result, function(item, i){
@@ -1429,7 +1440,6 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 			_fakeFocus = false;
 		}).on('blur', function(){
 			zWrapperEl.removeClass(zautosuggestionFocusClass);
-
 			// support <select> element
 			if(selectSourceEl){
 				if(zInput.getValue().trim() === ''){

@@ -5,13 +5,12 @@
 // * (c) 2009-2017 Zebra <tuzebra@gmail.com>
 /////////////////////////////////////////////////////////////////////////////////
 
-;(function(window, undefined){
-"use strict";
+;(function(window, undefined){"use strict";
 
-// check zjs loaded!
-if('zjs' in window)return;
+	// check zjs loaded!
+	if('zjs' in window)return;
 
-var version = '1.1',
+	var version = '1.1',
 	
 	// private static function
 	
@@ -40,7 +39,7 @@ var version = '1.1',
 	//},
 	isArray = Array.isArray || function (o){
 		return Object.prototype.toString.call(o) === '[object Array]';
-    },
+		},
 	
 	isDate = function(o){
 		return toString.call(o) === '[object Date]';
@@ -56,22 +55,22 @@ var version = '1.1',
 	
 	/* Determine if a variable is a nodeList. Copyright Martin Bohm. MIT License: https://gist.github.com/Tomalak/818a78a226a0738eaade */
 	isNodeList = function isNodeList(nodes){
-        var stringRepresentation = Object.prototype.toString.call(nodes);
-     
-        return typeof nodes === 'object' &&
-            /^\[object (HTMLCollection|NodeList|Object)\]$/.test(stringRepresentation) &&
-            nodes.length !== undefined &&
-            (nodes.length === 0 || (typeof nodes[0] === 'object' && nodes[0].nodeType > 0));
-    },
+				var stringRepresentation = Object.prototype.toString.call(nodes);
+			
+				return typeof nodes === 'object' &&
+						/^\[object (HTMLCollection|NodeList|Object)\]$/.test(stringRepresentation) &&
+						nodes.length !== undefined &&
+						(nodes.length === 0 || (typeof nodes[0] === 'object' && nodes[0].nodeType > 0));
+		},
 	
 	//isFunction = function(o){
 	//	return typeof o == 'function';
 	//},
 	isFunction = function(o){
 		return Object.prototype.toString.call(o) === '[object Function]';
-    },
-    
-    isRegExp = function(o){
+		},
+		
+		isRegExp = function(o){
 		return Object.prototype.toString.call(o) === '[object RegExp]';
 	},
 	
@@ -303,14 +302,14 @@ var version = '1.1',
 	supportTranslate3dTest = function(){
 		var div = document.createElement('div');
 		// add it to the body to get the computed style.
-	    document.body.insertBefore(div, null);
-	    var has3d = false;
-	    if('transform' in stylePropertyNames){
+			document.body.insertBefore(div, null);
+			var has3d = false;
+			if('transform' in stylePropertyNames){
 			div.style[stylePropertyNames.transform.name] = 'translate3d(1px,1px,1px)';
-            has3d = window.getComputedStyle(div).getPropertyValue(stylePropertyNames.transform.prefix+'transform');
-        };
-        document.body.removeChild(div);
-        return (has3d !== undefined && has3d.length > 0 && has3d !== 'none');
+						has3d = window.getComputedStyle(div).getPropertyValue(stylePropertyNames.transform.prefix+'transform');
+				};
+				document.body.removeChild(div);
+				return (has3d !== undefined && has3d.length > 0 && has3d !== 'none');
 	},
 	// will test late, on dom ready
 	supportTranslate3d = false,
@@ -400,7 +399,7 @@ var version = '1.1',
 	
 	// RAF polyfill
 	// Gist: https://gist.github.com/julianshapiro/9497513
-    requestAnimationFrame = window.requestAnimationFrame || (function(){
+		requestAnimationFrame = window.requestAnimationFrame || (function(){
 		"use strict";
 
 		var timeLast = 0;
@@ -779,7 +778,7 @@ var version = '1.1',
 			};
 			
 			return this;
-			 
+				
 		},
 		
 		isZjs = function(o){
@@ -1047,7 +1046,8 @@ var version = '1.1',
 					if(option.debug && console)console.log('[zjs ajax] use from cache: ' + url);
 					var result = cacheResponseStorage[url];
 					if(option.dataType.toLowerCase() == 'json')result = result.jsonDecode();
-			        if(typeof option.onComplete == 'function')option.onComplete(result);
+					if(typeof option.onResponse == 'function')option.onResponse(result, false);
+					if(typeof option.onComplete == 'function')option.onComplete(result, false);
 				}
 
 				// jsonp
@@ -1099,25 +1099,25 @@ var version = '1.1',
 				){
 					if(option.debug && console)console.log('[zjs ajax] resolveLocalFileSystemURL start: ', url);
 					resolveLocalFileSystemURL(url, function (fileEntry) {
-					    // console.log('[zjs ajax] url: ' + url);
-					    if(option.debug && console)console.log('[zjs ajax] resolveLocalFileSystemURL recieve: ' + fileEntry.name);
-					    fileEntry.file(function (file) {
-						    var reader = new FileReader();
-						    reader.onloadend = function() {
-						        var result = this.result;
-						        if(option.cacheResponse){
-						        	cacheResponseStorage[url] = result;
-						        }
-						        if(option.dataType.toLowerCase() == 'json')result = result.jsonDecode();
-						        if(typeof option.onComplete == 'function')option.onComplete(result);
-						    };
-						    reader.readAsText(file);
+							// console.log('[zjs ajax] url: ' + url);
+							if(option.debug && console)console.log('[zjs ajax] resolveLocalFileSystemURL recieve: ' + fileEntry.name);
+							fileEntry.file(function (file) {
+								var reader = new FileReader();
+								reader.onloadend = function() {
+										var result = this.result;
+										if(option.cacheResponse){
+											cacheResponseStorage[url] = result;
+										}
+										if(option.dataType.toLowerCase() == 'json')result = result.jsonDecode();
+										if(typeof option.onComplete == 'function')option.onComplete(result);
+								};
+								reader.readAsText(file);
 						}, 
 						function(err){
 							if(option.debug && console)console.log('[zjs ajax] onErrorReadFile: ', JSON.stringify(err));
 							if(typeof option.onError == 'function')option.onError();
 						});
-					    
+							
 					}, function(err){
 						if(option.debug && console)console.log('[zjs ajax] onErrorReadFolder: ', JSON.stringify(err));
 						if(typeof option.onError == 'function')option.onError();
@@ -1154,23 +1154,25 @@ var version = '1.1',
 						};
 						if(xhr.readyState == 4){
 							var result = '';
+							var resultForCache = '';
 							if(option.debug && console)console.log('response: ' + xhr.responseText);
-							if(xhr.responseText)result = xhr.responseText.replace(/[\n\r]/g,'');
-							if(option.cacheResponse){
-					        	cacheResponseStorage[url] = result;
-					        }
+							if(xhr.responseText)result = resultForCache = xhr.responseText.replace(/[\n\r]/g,'');
 							if(option.dataType.toLowerCase() == 'json')result = result.jsonDecode();
+							// onResponse
+							if(typeof option.onResponse == 'function')option.onResponse(result, true);
+								zjs.trigger('ajax.response', result);
 							//if(xhr.status == 200){
 							if(xhr.status >= 200 && xhr.status < 300 || xhr.status === 304 || xhr.status === 0){
-								if(typeof option.onComplete == 'function')option.onComplete(result);
+								// only save cache if response success
+								if(option.cacheResponse){
+									cacheResponseStorage[url] = resultForCache;
+								}
+								if(typeof option.onComplete == 'function')option.onComplete(result, true);
 								zjs.trigger('ajax.complete', result);
 							}else{
-								if(typeof option.onError == 'function')option.onError(result);
+								if(typeof option.onError == 'function')option.onError(result, true);
 								zjs.trigger('ajax.error', result);
 							}
-							// onResponse
-							if(typeof option.onResponse == 'function')option.onResponse(result);
-							zjs.trigger('ajax.response', result);
 						}
 					};
 				
@@ -1675,10 +1677,10 @@ extend(String.prototype, {
 	toString: function(){
 		return this;
 	},
-  	decode: function(){
+		decode: function(){
 		return decodeURIComponent(this);
 	},
-  	encode: function(){
+		encode: function(){
 		return encodeURIComponent(this);
 	},
 	stripTags: function(){
@@ -1928,20 +1930,20 @@ extend(String.prototype, {
 	
 	/**
 	* https://github.com/resrcit/resrc.js/blob/master/src/resrc.js
-    * Split any well-formed URI into its parts.
-    * Hat Tip to Steven Levithan <stevenlevithan.com> (MIT License)
-    * @property authority
-    * @property query
-    * @property directory
-    * @param str
-    * @returns {object}
-    */
+		* Split any well-formed URI into its parts.
+		* Hat Tip to Steven Levithan <stevenlevithan.com> (MIT License)
+		* @property authority
+		* @property query
+		* @property directory
+		* @param str
+		* @returns {object}
+		*/
 	parseUri: function(){
 		var o = {
 			key: ["source", "protocol", "authority", 
-		 		"userInfo", "user", "password", 
-		 		"host", "port", "relative", 
-		 		"path", "directory", "file", "query", "anchor"],
+					"userInfo", "user", "password", 
+					"host", "port", "relative", 
+					"path", "directory", "file", "query", "anchor"],
 			q: {
 				name : "queryKey",
 				parser : /(?:^|&)([^&=]*)=?([^&]*)/g
@@ -1955,7 +1957,7 @@ extend(String.prototype, {
 		var uri = {};
 		var i = 14;
 		while (i--){
-		 uri[o.key[i]] = m[i] || "";
+			uri[o.key[i]] = m[i] || "";
 		};
 		uri[o.q.name] = {};
 		uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
@@ -1972,8 +1974,8 @@ extend(String.prototype, {
 	
 	/**
 	* http://stackoverflow.com/questions/5796718/html-entity-decode
-    * HTML Entity Decode
-    */
+		* HTML Entity Decode
+		*/
 	decodeEntities: (function() {
 		// this prevents any overhead from creating the object each time
 		var element = document.createElement('div');
@@ -2047,14 +2049,14 @@ extend(Array.prototype, {
 		return res;
 	},
 	unique: function() {
-	    var a = this.concat();
-	    for(var i=0; i<a.length; ++i) {
-	        for(var j=i+1; j<a.length; ++j) {
-	            if(a[i] === a[j])
-	                a.splice(j--, 1);
-	        }
-	    }
-	    return a;
+			var a = this.concat();
+			for(var i=0; i<a.length; ++i) {
+					for(var j=i+1; j<a.length; ++j) {
+							if(a[i] === a[j])
+									a.splice(j--, 1);
+					}
+			}
+			return a;
 	}
 },false, true);
 extend(Function.prototype, {
@@ -2065,8 +2067,8 @@ extend(Function.prototype, {
 		};
 	},
 	delay: function(){
-	 	var f = this, args = makeArray(arguments), t = args.shift();
-	 	return window.setTimeout(function(){return f.apply(f,args)},t);
+			var f = this, args = makeArray(arguments), t = args.shift();
+			return window.setTimeout(function(){return f.apply(f,args)},t);
 	},
 	repeat: function(){
 		var f = this, args = makeArray(arguments), t = args.shift();
@@ -2548,7 +2550,7 @@ zjs.extendMethod({
 				// 	};
 				// }else{
 					callback = function (event) {
-					  return zjs(elem).trigger(type, event);
+						return zjs(elem).trigger(type, event);
 					};
 				// }
 
@@ -4362,21 +4364,21 @@ zjs.extendMethod({
 	setFormData: function(data){
 		return this.eachElement(function(formEl){
 			for (var key in data) {
-	            if (data.hasOwnProperty(key)) {
-	                var zInputEl = zjs(formEl).find('[name="' + key + '"]');
+							if (data.hasOwnProperty(key)) {
+									var zInputEl = zjs(formEl).find('[name="' + key + '"]');
 
-	                switch(zInputEl.getAttr('type', '')){
-	                	case 'radio':
-	                	case 'checkbox':
-	                		zInputEl.check(data[key]);
-	                		break;
+									switch(zInputEl.getAttr('type', '')){
+										case 'radio':
+										case 'checkbox':
+											zInputEl.check(data[key]);
+											break;
 
-	                	default:
-	                		zInputEl.setValue(data[key]);
-	                }
+										default:
+											zInputEl.setValue(data[key]);
+									}
 
-	            }
-	        }
+							}
+					}
 		});
 	},
 
@@ -4858,8 +4860,8 @@ zjs.extendMethod({
 			// adds the current touch contact for IE gesture recognition
 			if(gesture && _isPointerType)gesture.addPointer(e.getOriginal().pointerId);
 		});
-      	
-      	// on touch move
+				
+				// on touch move
 		zjs(document).on('touchmove, MSPointerMove, pointermove', function(e){
 			
 			// neu nhu ma day la pointer event (khong phai touch event)
@@ -4899,10 +4901,10 @@ zjs.extendMethod({
 			
 			// neu nhu ma day la pointer event (khong phai touch event)
 			// va no khong phai la primary touch thi thoi cho out
-    	    if((_isPointerType = isPointerEventType(e.getOriginal(), 'up')) && !isPrimaryTouch(e.getOriginal()))
-    	    	return;
-        	
-        	// cho den en luon roi thi thoi, cancel cai thang longtap luon
+					if((_isPointerType = isPointerEventType(e.getOriginal(), 'up')) && !isPrimaryTouch(e.getOriginal()))
+						return;
+					
+					// cho den en luon roi thi thoi, cancel cai thang longtap luon
 			cancelLongTap();
 
 			// fire event: swipe
@@ -4974,7 +4976,7 @@ zjs.extendMethod({
 			// reset het delta la xong
 			deltaX = deltaY = 0;
 		});
-      
+			
 		// when the browser window loses focus,
 		// for example when a modal dialog is shown,
 		// cancel all ongoing events

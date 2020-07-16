@@ -1,6 +1,5 @@
 // MODULE FORM VALIDATION
-;(function(zjs){
-"use strict";
+;(function(zjs){"use strict";
 	
 	var optionkey = 'zjsmoduleformvalidationoption',
 		tipelkey = 'zjsmoduleformvalidationtipel',
@@ -409,7 +408,7 @@
 	
 	
 	// ham nay giup xu ly khi submit
-	var formCheck = function(element, event, workInSilent){
+	var formCheck = function(element, event, workInSilent, container){
 		
 		workInSilent = workInSilent || false;
 
@@ -431,17 +430,25 @@
 		
 		//var inputsQuery = 'input[type=text], input[type=email], textarea, .radiogroup';	
 		//zForm.find('input,textarea').eachElement(function(element){
-		zForm.find('input,textarea,select,.'+option.checkboxClass+',.'+option.radiogroupClass+',.'+option.dategroupClass+',.'+option.customInputClass).eachElement(function(inputelm){
+		var zContainer = typeof container === 'string'
+			? zForm.find(container)
+			: container
+			? zjs(container)
+			: zForm;
+		zContainer.find('input,textarea,select,.'+option.checkboxClass+',.'+option.radiogroupClass+',.'+option.dategroupClass+',.'+option.customInputClass).eachElement(function(inputelm){
 			var zInput = zjs(inputelm);
 			
 			//console.log('before', inputelm);
 			// >>>>>>
 			
 			// neu nhu khong phai la input can thiet,
-			// khong phai la autosuggestion 
+			// khong phai la autosuggestion
+			// khong phai la 1 cai custom validation-type
 			// => thi thoi khong check nua
-			if(!zInput.is(inputsQuery+', .'+option.customInputClass) && 
-				!zInput.getData(autosuggestionwrapelkey, false)
+			if(
+				!zInput.is(inputsQuery+', .'+option.customInputClass) && 
+				!zInput.getData(autosuggestionwrapelkey, false) &&
+				!customTestMethodTypes.find(function(customType){return zInput.is('[data-'+customType+']')})
 			)return;
 
 			// neu nhu cai input nay nam ben trong 1 cai dategroup thi cung khong check no rieng le
@@ -1042,16 +1049,16 @@
 		formValidationReset: function(){
 			return this.eachElement(function(element){formErrorReset(element)});
 		},
-		formValidationCheck: function(workInSilent){
+		formValidationCheck: function(workInSilent, container){
 			// ket qua cuoi cung
 			var result = false;
 			this.eachElement(function(element){
-				result = formCheck(element, false, workInSilent);
+				result = formCheck(element, false, workInSilent, container);
 			});
 			return result;
 		},
-		formValidationCheckInSilent: function(){
-			return this.formValidationCheck(true);
+		formValidationCheckInSilent: function(container){
+			return this.formValidationCheck(true, container);
 		},
 		/**
 		 * [formValidationAddTestType description]

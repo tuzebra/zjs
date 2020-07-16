@@ -345,11 +345,10 @@
 			cacheResponse: self.cacheResponse,
 			onBegin: false,
 			onLoading: false,
-			onResponse: function(){
+			onResponse: function(rawdata, fromServer){
 				self.countXhrRequesting--;
 				if(!self.countXhrRequesting && typeof self.onEndXhrRequesting == 'function')self.onEndXhrRequesting();
-			},
-			onComplete: function(rawdata){
+
 				// >>> test
 				// console.log('json: ', data)
 				// fix raw data to usable data
@@ -358,7 +357,9 @@
 					var st = self.dataSourceDataStructure.split('.');
 					if(st.length > 1 && st[0] == ''){
 						for(var si=1;si<st.length;si++){
-							rawdata = rawdata[st[si]];
+							if(rawdata[st[si]]){
+								rawdata = rawdata[st[si]];
+							}
 						}
 					}
 				}
@@ -444,7 +445,7 @@
 		var result = this.search(rawquery);
 		// va goi callback ngay
 		if(zjs.isFunction(callback))
-			callback(result);
+			callback(result, false);
 		
 		// kiem tra neu nhu co data source url thi moi can lam tiep
 		if(!this.dataSourceUrl)return;
@@ -456,7 +457,7 @@
 			var result = self.search(rawquery);
 			// va goi callback ngay
 			if(zjs.isFunction(callback) && rawquery == self.lastRawquery){
-				callback(result);
+				callback(result, true);
 			};
 		});
 	};
