@@ -3,7 +3,9 @@ zjs.require('scrollbar, ui, ui.button', function () {
 	"use strict";
 
 	var optionkey = 'zmoduleuiselectboxoption',
-		wrapelkey = 'zmoduleuiselectboxwrapel';
+		wrapelkey = 'zmoduleuiselectboxwrapel',
+		panelwrapelkey = 'zmoduleuiselectboxpanelel',
+		selectboxkey = 'zmoduleuiselectboxel';
 
 	// extend core mot so option
 	zjs.extendCore({
@@ -12,12 +14,16 @@ zjs.require('scrollbar, ui, ui.button', function () {
 			customCssClass: '',
 			panelmaxheight: 250,
 			itemtemplate: '${text}',
+			panelAppendedToBody: false,
 		}
 	});
 
 	// trigger
+	//ui:selectbox:blur
 	//ui:selectbox:change
 	//ui:selectbox:clickchange
+	//ui:selectbox:showselections
+	//ui:selectbox:hideselections
 
 	// template
 	var selectboxclass = 'zui-selectbox',
@@ -123,12 +129,17 @@ zjs.require('scrollbar, ui, ui.button', function () {
 		// gio moi insert vao thoi
 		zSelectboxWrapEl.insertAfter(zSelectboxEl);
 
-		// PANEL 
-		// - - - 
+		// PANEL
+		// - - -
 
 		// get ra thang panel de append cac option cho no
 		var zSelectboxPanelWrapEl = zSelectboxWrapEl.find('.' + selectboxpanelwrapclass),
 			zSelectboxPanelEl = zSelectboxWrapEl.find('.' + selectboxpanelclass);
+
+		// luu thang selectbox vao wrap luon
+		zSelectboxPanelWrapEl.setData(selectboxkey, zSelectboxEl);
+		// va nguoc lai
+		zSelectboxEl.setData(panelwrapelkey, zSelectboxPanelWrapEl);
 
 		// bay gio se tien hanh di get ra toan bo value cua cai selectbox
 		var countTotalItem = 0,
@@ -232,7 +243,7 @@ zjs.require('scrollbar, ui, ui.button', function () {
 
 		// bind event click cho tung thang item
 		// bind theo kieu live de sau nay co gi append item vao them duoc
-		zSelectboxPanelEl.on('click', '.' + selectboxitemclass, function (event) {
+		zSelectboxPanelWrapEl.on('click', '.' + selectboxitemclass, function (event) {
 			var zSelectboxItemEl = zjs(this);
 
 			// neu nhu thang nay dang disable thi thoi
@@ -273,13 +284,19 @@ zjs.require('scrollbar, ui, ui.button', function () {
 			var actived = zSelectboxButtonEl.hasClass(zbuttonactiveclass);
 			// check xem cac zselectbox khac hide active stage
 			zjs('.' + contextualbuttonclass).removeClass(zbuttonactiveclass);
-			zjs('.' + contextualpanelwrapclass).addClass(contextualpanelwraphideclass);
+			zjs('.' + contextualpanelwrapclass).addClass(contextualpanelwraphideclass).eachElement(function(el){
+				if(el != zSelectboxPanelWrapEl.item(0,1)){
+					var _otherSelectboxEl = zjs(el).getData(selectboxkey);
+					if(_otherSelectboxEl)_otherSelectboxEl.trigger('ui:selectbox:hideselections');
+				}
+			});
 			// gio moi active cai cua minh
 			// neu nhu ma chua co active thi moi active
 			// co roi thi thoi (se hide luon, vi o tren la vua hide all luon)
 			if (actived) return;
 			zSelectboxButtonEl.addClass(zbuttonactiveclass);
 			zSelectboxPanelWrapEl.removeClass(contextualpanelwraphideclass);
+			zSelectboxEl.trigger('ui:selectbox:showselections');
 		});
 
 
@@ -295,6 +312,30 @@ zjs.require('scrollbar, ui, ui.button', function () {
 		}
 
 		zSelectboxEl.setData('setValueCustomMethod', 'selectboxSelectValue');
+
+		if(option.panelAppendedToBody){
+			zSelectboxEl.on('ui:selectbox:showselections', function () {
+				//try to get position related to body
+				if(zSelectboxPanelWrapEl.item(0,1).getBoundingClientRect){
+					(function(){
+						var rect = zSelectboxPanelWrapEl.item(0,1).getBoundingClientRect();
+						zSelectboxPanelWrapEl.appendTo(document.body).addClass('zui-contextual-panel-body-portal').setStyle({
+							position: 'absolute',
+							top: rect.top,
+							left: rect.left,
+							width: rect.width
+						});
+					}).delay(100);
+				}
+			})
+			zSelectboxEl.on('ui:selectbox:hideselections', function () {
+				(function(){
+					if(zSelectboxPanelWrapEl.hasClass('zui-contextual-panel-body-portal')){
+						zSelectboxPanelWrapEl.removeClass('zui-contextual-panel-body-portal').setAttr('style','').appendTo(zSelectboxWrapEl);
+					}
+				}).delay(100);
+			});
+		}
 	};
 
 	// bind event cho document luon
@@ -305,14 +346,14 @@ zjs.require('scrollbar, ui, ui.button', function () {
 			if (!zSelectboxWrapEl) return;
 
 			var buttonEl = zSelectboxWrapEl.find('.' + selectboxbuttonclass),
-				panelEl = zSelectboxWrapEl.find('.' + selectboxpanelwrapclass);
+				panelEl = zjs(selectEl).getData(panelwrapelkey);
 
 			var isOpen = buttonEl.hasClass(zbuttonactiveclass);
 			if (isOpen) {
 				buttonEl.removeClass(zbuttonactiveclass);
 				panelEl.addClass(contextualpanelwraphideclass);
-
 				zjs(selectEl).trigger('ui:selectbox:blur');
+				zjs(selectEl).trigger('ui:selectbox:hideselections');
 			}
 		});
 	});
@@ -327,7 +368,7 @@ zjs.require('scrollbar, ui, ui.button', function () {
 
 
 		//
-		var zSelectboxPanelEl = zSelectboxWrapEl.find('.' + selectboxpanelclass),
+		var zSelectboxPanelEl = zSelectboxEl.getData(panelwrapelkey).find('.' + selectboxpanelclass),
 			zSelectboxButtonEl = zSelectboxWrapEl.find('.' + selectboxbuttonclass),
 			zSelectboxButtonLabelEl = zSelectboxButtonEl.find('.' + zbuttonlabelclass);
 		if (!zSelectboxButtonLabelEl.count())

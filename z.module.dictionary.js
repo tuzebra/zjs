@@ -357,7 +357,7 @@
 					var st = self.dataSourceDataStructure.split('.');
 					if(st.length > 1 && st[0] == ''){
 						for(var si=1;si<st.length;si++){
-							if(rawdata[st[si]]){
+							if(rawdata && (typeof rawdata === 'object') && rawdata[st[si]]){
 								rawdata = rawdata[st[si]];
 							}
 						}

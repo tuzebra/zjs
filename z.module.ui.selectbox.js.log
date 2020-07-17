@@ -26,3 +26,6 @@
 
 21/06/2018
 		+ better handler placeholder
+
+18/07/2020
+		+ add option "panelAppendedToBody"
