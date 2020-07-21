@@ -41,7 +41,7 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 			sourceDataSelector: function(data, query){return data},
 			cacheResponse: true,
 			useSuggestedValueWhenEnter: true,
-			generateTopItem: null,
+			generateAdditionalItems: null,
 			itemtemplate: '<div class="item">${text}</div>',
 			itemLinkFormat: '',
 			itemhighlightclass: 'highlight',
@@ -560,9 +560,6 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 		var _suggestionIsOn = true;
 
 		var blurhandler = function(){
-			// @@@@@@@
-			// console.log('blurhandler');
-			// console.log('value', zOriginalInput.getValue());
 
 			// neu nhu autosuggestion nay la 1 cai select
 			// thi bat buoc phai set duoc data, neu khong set duoc data thi se reset
@@ -1120,9 +1117,6 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 			zOriginalInput.trigger('ui:autosuggestion:beforesearch', {'value': _rawValueSearch});
 			zOriginalInput.getData(dictionarykey).asyncSearch(_rawValueSearch, function(result, fromServer){
 
-				//@@@@@
-				// console.log('seach load xong', _rawValueSearch, result);
-
 				// neu nhu khong con focus vao input nua thi thoi ko can phai show
 				if(!zInput.is(':focus')){
 					zOriginalInput.trigger('ui:autosuggestion:searchresult', {'value': _rawValueSearch, result: result, focused: false});
@@ -1132,12 +1126,8 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 				zOriginalInput.trigger('ui:autosuggestion:searchresult', {'value': _rawValueSearch, result: result, focused: true});
 
 				// create top item
-				if(zjs.isFunction(option.generateTopItem)){
-					var topItem = option.generateTopItem(rawvalue, result, fromServer, zOriginalInput.getData(isstillloading));
-					if(topItem){
-						topItem._isGeneratedTopItem = true;
-						result = [topItem].concat(result);
-					}
+				if(zjs.isFunction(option.generateAdditionalItems)){
+					result = option.generateAdditionalItems(rawvalue, result, fromServer, zOriginalInput.getData(isstillloading));
 				}
 
 				// neu nhu khong tim ra ket qua, 
@@ -1458,7 +1448,6 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 		// END Forward
 		
 		var showDefaultSelectListItems = function(){
-			// console.log('showDefaultSelectListItems');
 
 			// @update: thay vi search, thi se show ra list default item cho le
 			// var result = zOriginalInput.getData(dictionarykey).search('');
@@ -1477,11 +1466,10 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 			// clean all item
 			zPanelcontent.setInnerHTML('');
 	
-			// count 
+			// count
 			var allItemHeight = 0;
 			
 			zjs.eachItem(result, function(item, i){
-		
 				// tao ra 1 itemwrap moi
 				// var zItemwrap = zjs(__htmlitemtpl).appendTo(zPanelcontent);
 				// save item data vao luon
@@ -1757,26 +1745,16 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 
 	// ham giup add index vao trong suggestion
 	autosuggestionAddindex = function(element, raw){
-		
-		// >>> test
-		//console.log('autosuggestionAddindex: ', element, raw);
-		
 		var zOriginalInput = zjs(element),
 			dictionary = zOriginalInput.getData(dictionarykey),
 			option = zOriginalInput.getData(optionkey);
-			
+
 		// neu nhu khong co dictionary thi 
 		// chung to day khong phai la mot autosuggestion
 		if(!dictionary)return;
-		
-		// >>> test
-		//console.log('dictionary ', dictionary);
-		
+
 		// set
 		dictionary.addIndex(raw, option.searchproperty);
-		
-		// >>> test
-		//console.log('ok');
 	},
 	
 	// ham giup remove index
@@ -1933,7 +1911,14 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 					if(surehuh)zWrapperEl.addClass('disabled');else zWrapperEl.removeClass('disabled');
 				}catch(er){};
 			});
-		}
+		},
+		autosuggestionSetItemFilter: function(func){
+			return this.eachElement(function(element){
+				// xem coi day co phai la 1 autosuggest input hay khong
+				var dictionary = zjs(element).getData(dictionarykey);
+				if(dictionary)dictionary.setItemFilterFunction(func);
+			});
+		} 
 		
 	});
 	

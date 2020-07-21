@@ -54,6 +54,8 @@
 		this.onStartXhrRequesting = null;
 		this.onEndXhrRequesting = null;
 
+		this.itemFilterFunction = null;
+
 		return this;
 	};
 
@@ -86,6 +88,9 @@
 	zDictionary.prototype.setOnStartEndLoading = function(onStart, onEnd){
 		this.onStartXhrRequesting = onStart;
 		this.onEndXhrRequesting = onEnd;
+	};
+	zDictionary.prototype.setItemFilterFunction = function(func){
+		this.itemFilterFunction = func;
 	};
 	
 	zDictionary.prototype.addIndex = function(raw, searchproperty){
@@ -203,11 +208,8 @@
 	
 	zDictionary.prototype.getItemsLimit = function(limit){
 		limit = limit || this.searchResultLimit;
-
-		// neu nhu limit = 0, thi return toan bo
-		if(limit<=0)return this.datas;
-
-		return this.datas.slice(0, limit);
+		var data = limit<=0 ? this.datas.slice() : this.datas.slice(0, limit);
+		return (typeof this.itemFilterFunction === 'function') ? data.filter(this.itemFilterFunction) : data;
 	};
 
 	zDictionary.prototype.search = function(rawquery){
@@ -306,9 +308,9 @@
 				}
 			}
 		}
-		
-		// done!
-		return returnIndexs;
+
+		// filter before return
+		return (typeof this.itemFilterFunction === 'function') ? returnIndexs.filter(this.itemFilterFunction) : returnIndexs;
 	};
 	
 	zDictionary.prototype.getDataFromDataSource = debounce(function(rawquery, callback){
