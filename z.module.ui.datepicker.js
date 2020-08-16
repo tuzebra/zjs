@@ -769,18 +769,17 @@ zjs.require('ui, ui.button, moment', function () {
 						zDatepickerInputEl.setValue(userRawInput);
 					}
 				}
-				// "12.09." => "12.09."
 				// "12.099" => "12.09.9"
 				// "12.029" => "12.02.9"
 				// "12.13." => "12.01.3"
 				// "12.012" => "12.01.2"
 				// "12.101" => "12.10.1"
-				if (userRawInput.length === 6 && userRawInput.indexOf('.') === 2) {
+				if (userRawInput.length === 6 && userRawInput.indexOf('.') === 2 && !isDotEnd) {
 					var _userRawInputArr = userRawInput.split('.');
 					var _testMonth = parseInt(_userRawInputArr[1]);
 					if(!isNaN(_testMonth)){
-						if(_testMonth <= 9)userRawInput = _userRawInputArr[0] + '.0' + _testMonth + '.';
-						else if(_testMonth >= 12 && _testMonth <= 99)userRawInput = _userRawInputArr[0] + '.0' + substr(_testMonth+'', 0) + '.' + substr(_testMonth+'', 1);
+						if(_testMonth <= 9){userRawInput = _userRawInputArr[0] + '.0' + _testMonth + '.';isDotEnd = true;}
+						else if(_testMonth >= 13 && _testMonth <= 99)userRawInput = _userRawInputArr[0] + '.0' + substr(_testMonth+'', 0) + '.' + substr(_testMonth+'', 1);
 						else if(_testMonth >= 100 && _testMonth <= 129)userRawInput = _userRawInputArr[0] + '.' + substr(_testMonth+'', 0, 2) + '.' + substr(_testMonth+'', 2);
 						else if(_testMonth >= 130)userRawInput = _userRawInputArr[0] + '.0' + substr(_testMonth+'', 0) + '.' + substr(_testMonth+'', 1, 2);
 						zDatepickerInputEl.setValue(userRawInput);
