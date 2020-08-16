@@ -90,7 +90,7 @@ zjs.require('ui, ui.button, moment', function () {
 			calendarChangeMonthYear: true, // allow to chage the month & year
 			calendarYearFieldUseInput: false,
 
-			// don't need to show panel
+			// default is need to show panel to select date
 			panel: true
 		}
 	});
@@ -337,6 +337,7 @@ zjs.require('ui, ui.button, moment', function () {
 			zDatepickerTimePanelEl = zDatepickerWrapEl.find('.' + datepickertimepanelclass);
 
 		if (option.full) zDatepickerPanelWrapEl.addClass(datepickerpanelwrapfullclass);
+		if (!option.panel)zDatepickerPanelWrapEl.remove();
 
 		// neu nhu khong cho timepicker
 		// thi remove luon cho nhe nguoi
@@ -347,7 +348,7 @@ zjs.require('ui, ui.button, moment', function () {
 		} else if (!('makeUiSlider' in zDatepickerTimePanelEl)) {
 			// console.warn('dont have ui slider');
 			zDatepickerTimePanelEl.remove();
-		} else {
+		} else if (option.panel) {
 			// stop event lai de khong hide di cai panel khi click vao cai panel
 			zDatepickerPanelWrapEl.on('click', function (event) {
 				event.preventDefault();
@@ -483,7 +484,7 @@ zjs.require('ui, ui.button, moment', function () {
 
 		if (!option.calendarChangeMonthYear) {
 			zDatepickerNavMonthWrap.remove();
-		} else {
+		} else if (option.panel) {
 			var _moment = moment();
 			_moment.locale(option.language);
 			var _html = '<select class="zui-calendar-input-month">';
@@ -622,16 +623,34 @@ zjs.require('ui, ui.button, moment', function () {
 			zDatepickerButtonEl = false,
 			zWrapperInput = false;
 
+		var zDatepickerInputElReal = false;
+
 		var zStrictInputBehide = false;
+
+		var substr = function(str, start, length){
+			start = start || 0;
+			length = length || 1;
+			if(length === 1)return str[start];
+			if(length === 2)return str[start]+str[start+1];
+			if(length === 3)return str[start]+str[start+1]+str[start+2];
+			if(length === 4)return str[start]+str[start+1]+str[start+2]+str[start+3];
+			if(length === 5)return str[start]+str[start+1]+str[start+2]+str[start+3]+str[start+4];
+			if(length === 6)return str[start]+str[start+1]+str[start+2]+str[start+3]+str[start+4]+str[start+5];
+			return str.substr(start, length);
+		}
+		var substrLast = function(str){
+			// return str.substr(str.length - 1);
+			return str[str.length - 1];
+		}
 
 		// ham chiu trach nhiem format input behide
 		var formatInputBehide = function (rawvalueBefore, keyCode) {
 			if (!option.strictInput) return;
-
 			rawvalueBefore = rawvalueBefore || null;
 			keyCode = keyCode || 0;
 
-			var userRawInput = zDatepickerInputEl.getValue().trim();
+			// var userRawInput = zDatepickerInputEl.getValue().trim();
+			var userRawInput = zDatepickerInputElReal.value.trim();
 			var isAdd = (rawvalueBefore === null || userRawInput.length > rawvalueBefore.length);
 
 			var _tpl = '';
@@ -660,20 +679,19 @@ zjs.require('ui, ui.button, moment', function () {
 					zDatepickerInputEl.setValue(userRawInput);
 				}
 
-				var isDotEnd = userRawInput.substr(userRawInput.length - 1) === '.';
+				var isDotEnd = substrLast(userRawInput) === '.';
 				var isFullDot = userRawInput.split('.').length >= 3;
 
 				if (rawvalueBefore !== null && rawvalueBefore !== '' &&
 					!isFullDot &&
-					rawvalueBefore.substr(rawvalueBefore.length - 1) !== '.'
+					substrLast(rawvalueBefore) !== '.'
 				) {
 					if (keyCode === 191 || keyCode === 111 /* / */ ||
 					  keyCode === 190 || keyCode === 110 /* . */ ||
 						keyCode === 39 /* -> */
 					) {
-						userRawInput = userRawInput + '.';
+						if(!isDotEnd)userRawInput = userRawInput + '.';
 						isDotEnd = isAdd = true;
-						zDatepickerInputEl.setValue(userRawInput);
 					}
 				}
 
@@ -707,7 +725,7 @@ zjs.require('ui, ui.button, moment', function () {
 
 				if (userRawInput.length === 3 && userRawInput.indexOf('.') < 1) {
 					// vay la can phai fix roi
-					userRawInput = userRawInput.substr(0, 2) + '.' + userRawInput.substr(2);
+					userRawInput = substr(userRawInput, 0, 2) + '.' + substr(userRawInput, 2);
 					zDatepickerInputEl.setValue(userRawInput);
 				}
 				// "12.2" => "12.02."
@@ -724,13 +742,13 @@ zjs.require('ui, ui.button, moment', function () {
 					var _userRawInputArr = userRawInput.split('.');
 					var _testMonth = parseInt(_userRawInputArr[1]);
 					if (!isNaN(_testMonth) && _testMonth > 12) {
-						userRawInput = _userRawInputArr[0] + '.' + _userRawInputArr[1].substr(0, 1) + '.' + _userRawInputArr[1].substr(1);
+						userRawInput = _userRawInputArr[0] + '.' + substr(_userRawInputArr[1], 0) + '.' + substr(_userRawInputArr[1], 1);
 						zDatepickerInputEl.setValue(userRawInput);
 					}
 				}
 				// "01.1." => "01.01."
 				if (userRawInput.length === 5 && userRawInput.indexOf('.') === 2 && isAdd && isDotEnd) {
-					userRawInput = userRawInput.substr(0, 2) + '.0' + userRawInput.substr(3);
+					userRawInput = substr(userRawInput, 0, 2) + '.0' + substr(userRawInput, 3);
 					zDatepickerInputEl.setValue(userRawInput);
 				}
 				// "11.09" => "11.09."
@@ -743,7 +761,7 @@ zjs.require('ui, ui.button, moment', function () {
 					var _testMonth = parseInt(_userRawInputArr[1]);
 					if (!isNaN(_testMonth)) {
 						if (_testMonth >= 13) {
-							userRawInput = _userRawInputArr[0] + '.0' + _userRawInputArr[1].substr(0, 1) + '.' + _userRawInputArr[1].substr(1);
+							userRawInput = _userRawInputArr[0] + '.0' + substr(_userRawInputArr[1], 0) + '.' + substr(_userRawInputArr[1], 1);
 						} else {
 							userRawInput = _userRawInputArr[0] + '.' + _userRawInputArr[1] + '.';
 							isDotEnd = true;
@@ -751,18 +769,26 @@ zjs.require('ui, ui.button, moment', function () {
 						zDatepickerInputEl.setValue(userRawInput);
 					}
 				}
+				// "12.09." => "12.09."
+				// "12.099" => "12.09.9"
+				// "12.029" => "12.02.9"
+				// "12.13." => "12.01.3"
+				// "12.012" => "12.01.2"
 				// "12.101" => "12.10.1"
 				if (userRawInput.length === 6 && userRawInput.indexOf('.') === 2) {
 					var _userRawInputArr = userRawInput.split('.');
 					var _testMonth = parseInt(_userRawInputArr[1]);
-					if (!isNaN(_testMonth) && _testMonth >= 100) {
-						userRawInput = _userRawInputArr[0] + '.' + _userRawInputArr[1].substr(0, 2) + '.' + _userRawInputArr[1].substr(2);
+					if(!isNaN(_testMonth)){
+						if(_testMonth <= 9)userRawInput = _userRawInputArr[0] + '.0' + _testMonth + '.';
+						else if(_testMonth >= 12 && _testMonth <= 99)userRawInput = _userRawInputArr[0] + '.0' + substr(_testMonth+'', 0) + '.' + substr(_testMonth+'', 1);
+						else if(_testMonth >= 100 && _testMonth <= 129)userRawInput = _userRawInputArr[0] + '.' + substr(_testMonth+'', 0, 2) + '.' + substr(_testMonth+'', 2);
+						else if(_testMonth >= 130)userRawInput = _userRawInputArr[0] + '.0' + substr(_testMonth+'', 0) + '.' + substr(_testMonth+'', 1, 2);
 						zDatepickerInputEl.setValue(userRawInput);
 					}
 				}
 				// "01.011" => "01.01.1"
 				if (userRawInput.length === 6 && userRawInput.indexOf('.') === 2 && isAdd && !isDotEnd) {
-					userRawInput = userRawInput.substr(0, 5) + '.' + userRawInput.substr(5);
+					userRawInput = substr(userRawInput, 0, 5) + '.' + substr(userRawInput, 5);
 					zDatepickerInputEl.setValue(userRawInput);
 				}
 				// "01.01.75" => "01.01.1975"
@@ -770,10 +796,10 @@ zjs.require('ui, ui.button, moment', function () {
 					var _userRawInputArr = userRawInput.split('.');
 					if (_userRawInputArr[2] && !isNaN(parseInt(_userRawInputArr[2]))) {
 						if (parseInt(_userRawInputArr[2]) <= 9) {
-							userRawInput = userRawInput.substr(0, 5) + '.20' + userRawInput.substr(6);
+							userRawInput = substr(userRawInput, 0, 5) + '.20' + substr(userRawInput, 6, 2);
 							zDatepickerInputEl.setValue(userRawInput);
 						} else if (parseInt(_userRawInputArr[2]) >= 30) {
-							userRawInput = userRawInput.substr(0, 5) + '.19' + userRawInput.substr(6);
+							userRawInput = substr(userRawInput, 0, 5) + '.19' + substr(userRawInput, 6, 2);
 							zDatepickerInputEl.setValue(userRawInput);
 						}
 					}
@@ -825,6 +851,7 @@ zjs.require('ui, ui.button, moment', function () {
 
 			//var
 			zDatepickerInputEl = zDatepickerWrapEl.find('.' + datepickerinputclass);
+			zDatepickerInputElReal = zDatepickerInputEl.item(0, 1);
 
 			// set placeholder & default value
 			if ((value != '' || placeholder == '')) {
@@ -861,7 +888,7 @@ zjs.require('ui, ui.button, moment', function () {
 				formatInputBehide();
 			}
 
-			// set 
+			// set
 
 			// auto redirect focus luon
 			zDatepickerEl.on('focus', function () {
@@ -946,7 +973,7 @@ zjs.require('ui, ui.button, moment', function () {
 				/* dau . */
 				if ((keyCode === 190 || keyCode === 110) && option.format !== 'DD.MM.YYYY') prevent = true;
 				if ((keyCode === 190 || keyCode === 110) && rawvalue === '') prevent = true;
-				if ((keyCode === 190 || keyCode === 110) && rawvalue[rawvalue.length - 1] === '.') prevent = true;
+				if ((keyCode === 190 || keyCode === 110) && substrLast(rawvalue) === '.') prevent = true;
 
 
 				// neu nhu go vao chu A, ma khong kem theo command/control thi thoi
@@ -955,7 +982,7 @@ zjs.require('ui, ui.button, moment', function () {
 				if (option.strictInput) {
 					(function () {
 						formatInputBehide(rawvalue, keyCode);
-					}).delay(40);
+					}).delay(30);
 				}
 
 				if (prevent) {
@@ -965,11 +992,10 @@ zjs.require('ui, ui.button, moment', function () {
 			});
 
 			zDatepickerInputEl
-				// .on('keydown', function(event){
-				// 	formatInputBehide();
-				// })
 				.on('keyup', function (event) {
 					event.preventDefault();
+
+					if(option.strictInput && !option.panel)return;
 
 					var self = zjs(this);
 					tempInputingValue = self.getValue('');
@@ -982,6 +1008,7 @@ zjs.require('ui, ui.button, moment', function () {
 					// bay gio thi co gang di phan tich coi co ra duoc cai value gi khong? base on option.format
 					var rightValueHuh = moment(tempInputingValue, option.format);
 					if (!rightValueHuh.isValid()) return;
+
 
 					// ok, neu nhu ma dung doi, thi se set lai calendar time, va selected time luon
 					var calendardatetime = zDatepickerEl.getData(calendardatetimekey),
@@ -1101,7 +1128,9 @@ zjs.require('ui, ui.button, moment', function () {
 					//zjs(document).trigger('click');
 					//console.log('zDatepickerPanelEl.addClass(contextualpanelwraphideclass);');
 					//console.log('zDatepickerPanelEl', zDatepickerPanelEl.item(0, self));
-					zDatepickerPanelWrapEl.addClass(contextualpanelwraphideclass);
+					if(option.panel){
+						zDatepickerPanelWrapEl.addClass(contextualpanelwraphideclass);
+					}
 
 					self.removeClass('isfocus');
 					zDatepickerWrapEl.removeClass('focus');

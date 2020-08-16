@@ -51,6 +51,8 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 			suggestIconRightChoose:  ' <code class="icon-right"><b>&rarr;</b></code> press Right to choose', // →
 			suggestIconEnterChoose:  ' <code class="icon-enter"><b>&crarr;</b></code> press Enter to choose', // ↵
 			suggestIconEnterCreate:  ' <code class="icon-enter"><b>&crarr;</b></code> press Enter to add this keyword', // ↵
+			// options for scrollbar
+			panelScrollline: 300,
 		}
 	});
 	
@@ -433,7 +435,14 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 		// set height panel
 		zPanel.height(option.panelmaxheight);
 		// make scrollbar xong moi hide
-		zPanelscroll.makeScrollbar({bounce:false,usecss:false,usekey:false,customCssClass:'zui-autosuggestion-panel',autoUseDefaultWithMobile:true});
+		zPanelscroll.makeScrollbar({
+			bounce:false,
+			usecss:false,
+			usekey:false,
+			customCssClass:'zui-autosuggestion-panel',
+			autoUseDefaultWithMobile:true,
+			scrollline: option.panelScrollline
+		});
 		zPanel.addClass('zui-panel-hide');
 		
 		// function giup thay doi height cua panel
