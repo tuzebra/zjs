@@ -2425,7 +2425,8 @@ zjs.extendMethod({
 		return defaultStr;
 	},
 	getInnerText: function(){
-		return this.getInnerHTML().stripTags();
+		var elm = this.item(0, true);
+		return elm ? elm.innerText : null;
 	},
 	getPlainText: function(){
 		var content = this.getInnerHTML()
@@ -4347,6 +4348,9 @@ zjs.extendMethod({
 				value = inputEl.codeEditorGetValue();
 			};
 			
+			// neu input co 1 data dac biet, thi su dung
+			var specialValue = inputEl.getData('special-get-form-data-value', null);
+			if(specialValue !== null)value = specialValue;
 			
 			// them vao binh thuong
 			assignData(name, value);
