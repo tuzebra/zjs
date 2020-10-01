@@ -1385,7 +1385,9 @@ zjs.require('ui, ui.button, moment', function () {
 			};
 
 			return zCalendarWrapEl;
-		};
+    };
+
+    zDatepickerEl.setData('drawCalendar', drawCalendar);
 
 
 
@@ -1432,14 +1434,26 @@ zjs.require('ui, ui.button, moment', function () {
 
 		// set lai 3 cai ui slider time
 		var zDatepickerTimePanelEl = zDatepickerWrapEl.find('.' + datepickertimepanelclass);
-		zDatepickerTimePanelEl.find('.hour > input').sliderSetValue(selectdatetime.hour());
-		zDatepickerTimePanelEl.find('.minute > input').sliderSetValue(selectdatetime.minute());
-		zDatepickerTimePanelEl.find('.second > input').sliderSetValue(selectdatetime.second());
+		if(zDatepickerTimePanelEl.count() && zjs.moduleUiSliderOption){
+			zDatepickerTimePanelEl.find('.hour > input').sliderSetValue(selectdatetime.hour());
+			zDatepickerTimePanelEl.find('.minute > input').sliderSetValue(selectdatetime.minute());
+			zDatepickerTimePanelEl.find('.second > input').sliderSetValue(selectdatetime.second());
+		}
 
 		// draw lai cai calendar
 		var zDatepickerPanelEl = zDatepickerWrapEl.find('.' + datepickerpanelclass);
-		zDatepickerPanelEl.find('.' + calendarwrapclass).remove();
-		zDatepickerPanelEl.append(drawCalendar(selectdatetime, selectdatetime, option));
+		if(zDatepickerPanelEl.count()){
+			zDatepickerPanelEl.find('.' + calendarwrapclass).remove();
+			var drawCalendar = zDatepickerEl.getData('drawCalendar');
+			zDatepickerPanelEl.append(drawCalendar(selectdatetime, selectdatetime, option));
+		}
+
+		// render ra voi strick mode
+		var zDatepickerInputEl = zDatepickerWrapEl.find('.' + datepickerinputclass);
+		if(zDatepickerInputEl.count() && option.strictInput){
+			zDatepickerInputEl.setValue(selectdatetime.format(option.format));
+			zDatepickerWrapEl.addClass('has-value');
+		}
 
 		// sau do trigger event la xong!
 		var valueForOrgInput = selectdatetime.format(option.time ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD');
