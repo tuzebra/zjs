@@ -52,7 +52,7 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 			suggestIconEnterChoose:  ' <code class="icon-enter"><b>&crarr;</b></code> press Enter to choose', // ↵
 			suggestIconEnterCreate:  ' <code class="icon-enter"><b>&crarr;</b></code> press Enter to add this keyword', // ↵
 			// options for scrollbar
-			panelScrollline: 300,
+			panelScrollline: 160,
 		}
 	});
 	

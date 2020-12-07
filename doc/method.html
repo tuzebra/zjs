@@ -1,0 +1,1083 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Method - zjs developer documentation</title>
+
+<link rel="stylesheet" type="text/css" media="all" href="style.css">
+<body>
+
+<div id="header">
+	<div class="branding">
+		<h1 class="page-title">ZJS Developer Documentation</h1>
+		<div class="breadcrumb">
+			<a href="index.html">Home</a> &nbsp;›&nbsp;
+			Method
+		</div>
+	</div>
+</div>
+
+
+<!-- START CONTENT -->
+<div id="content">
+	
+	
+	<h1>zjsDOMObject method</h1>
+	
+	<h2>Một số quy ước</h2>
+	<ul>
+		<li>
+			<p>Trong tài liệu này quy ước <code>zjs::</code> được hiểu như là một thể hiện của <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code></p>
+			<p>Tức là với cách viết <code>zjs::<a href="#html">html</a>()</code> thì <code><a href="#html">html</a></code> sẽ được hiểu là một method của <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code>, và để sử dụng được method <code>html</code> thì ta phải tạo ra một thể hiện của <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code></p>
+			<pre>// tạo ra một thể hiện của zjsDOMObject
+var a = zjs('<a href="http://en.wikipedia.org/wiki/CSS_selector#Syntax" target="_blank">css query string</a>');
+// sử dụng method html
+a.<a href="#html">html</a>('bla bla');</pre>
+		</li>
+		<li>
+			<p>Các method hầu hết là return về lại chính <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code> để có thể gọi liên tiếp theo kiểu như sau:</p>
+			<pre>zjs('<a href="http://en.wikipedia.org/wiki/CSS_selector#Syntax" target="_blank">css query string</a>').<a href="#html">html</a>('bla bla').<a href="#style">style</a>('color', 'red');</pre>
+		</li>
+		<li>
+			<p>Nếu trong tài liệu không đề cập đến return thì sẽ ngầm hiểu là method return về lại chính <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code></p>
+		</li>
+		<li>
+			<p>Nếu method return về một kiểu dữ liệu khác, thì kiểu dữ liệu đó sẽ được đặt trước cú pháp của method, chẳng hạn như:<p>
+			<p><code><i>string</i> zjs::<a href="#getValue">getValue</a>()</code> ta hiểu là method này sẽ return về một string</p>
+		</li>
+		<li>
+			<p>Nếu một method có nhiều cách sử dụng khác nhau, thì sẽ có nhiều cách truyền parameter khác nhau, trong tài liệu sẽ phân ra trình bày nhiều hơn 1 cú pháp cho method đó, nhằm dễ theo dõi.</p>
+			<p>Ví dụ với method <code><a href="#attr">attr</a></code> có 2 cách sử dụng khác nhau:</p>
+			<p><code><i>string</i> zjs::<a href="#attr">attr</a>(<i>string</i> name)</code> get attribute của element và return về một string</p>
+			<p><code>zjs::<a href="#attr">attr</a>(<i>string</i> name, <i>string</i> value)</code> set attribute cho element và return về lại <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code></p>
+		</li>
+		<li>
+			<p>Các method ngoài mục <i>cú pháp</i> còn có thể có thêm mục <i>hook</i> trình bày về những hook mà method đó có</p>
+		</li>
+	</ul>
+	
+
+	<div class="line"></div>
+
+	<p>Dưới đây là danh sách đầy đủ các method thao tác với element mà zjs hỗ trợ.</p>
+
+	<div class="clearfix">
+	<ul class="left">
+		<li><a href="#each">each()</a></li>
+		<li><a href="#count">count()</a></li>
+		<li><a href="#is">is()</a></li>
+		<li><a href="#isTheSame">isTheSame()</a></li>
+		<li><a href="#tagName">tagName()</a></li>
+		<li><a href="#filter">filter()</a></li>
+		<li><a href="#find">find()</a></li>
+		<li><a href="#findUp">findUp()</a></li>
+		<li><a href="#siblings">siblings()</a></li>
+		<li><a href="#parent">parent()</a></li>
+		<li><a href="#child">child()</a></li>
+		<li><a href="#next">next()</a></li>
+		<li><a href="#prev">prev()</a></li>
+		<li><a href="#item">item()</a></li>
+		<li><a href="#clone">clone()</a></li>
+		<li><a href="#html">html()</a></li>
+		<li><a href="#getInnerText">getInnerText()</a></li>
+		<li><a href="#getPlainText">getPlainText()</a></li>
+	</ul>	
+	<ul class="left">
+		<li><a href="#isChecked">isChecked()</a></li>
+		<li><a href="#selected">selected()</a></li>
+		<li><a href="#on">on()</a></li>
+		<li><a href="#trigger">trigger()</a></li>
+		<li><a href="#distractAllEventTo">distractAllEventTo()</a></li>
+		<li><a href="#removeAllDistractEvent">removeAllDistractEvent()</a></li>
+		<li><a href="#live">live()</a></li>
+		<li><a href="#click">click()</a></li>
+		<li><a href="#hover">hover()</a></li>
+		<li><a href="#longHover">longHover()</a></li>
+		<li><a href="#clickout">clickout()</a></li>
+		<li><a href="#mouseWheel">mouseWheel()</a></li>
+		<li><a href="#drag">drag()</a></li>
+		<li><a href="#remove">remove()</a></li>
+		<li><a href="#attr">attr()</a></li>
+		<li><a href="#getAttr">getAttr()</a></li>
+		<li><a href="#setAttr">setAttr()</a></li>
+		<li><a href="#removeAttr">removeAttr()</a></li>
+	</ul>
+	<ul class="left">
+		<li><a href="#getValue">getValue()</a></li>
+		<li><a href="#setValue">setValue()</a></li>
+		<li><a href="#getCss">getCss()</a></li>
+		<li><a href="#style">style()</a></li>
+		<li><a href="#getStyle">getStyle()</a></li>
+		<li><a href="#setStyle">setStyle()</a></li>
+		<li><a href="#copyStyleFrom">copyStyleFrom()</a></li>
+		<li><a href="#top">top()</a></li>
+		<li><a href="#bottom">bottom()</a></li>
+		<li><a href="#left">left()</a></li>
+		<li><a href="#right">right()</a></li>
+		<li><a href="#height">height()</a></li>
+		<li><a href="#width">width()</a></li>
+		<li><a href="#scrollTop">scrollTop()</a></li>
+		<li><a href="#scrollLeft">scrollLeft()</a></li>
+		<li><a href="#offsetTop">offsetTop()</a></li>
+		<li><a href="#offsetLeft">offsetLeft()</a></li>
+		<li><a href="#getAbsoluteTop">getAbsoluteTop()</a></li>
+		<li><a href="#getAbsoluteBottom">getAbsoluteBottom()</a></li>
+		<li><a href="#getAbsoluteLeft">getAbsoluteLeft()</a></li>
+		<li><a href="#getAbsoluteRight">getAbsoluteRight()</a></li>
+		<li><a href="#rotate">rotate()</a></li>
+		<li><a href="#focus">focus()</a></li>
+	</ul>
+	<ul class="left">
+		<li><a href="#hasClass">hasClass()</a></li>
+		<li><a href="#setClass">setClass()</a></li>
+		<li><a href="#addClass">addClass()</a></li>
+		<li><a href="#removeClass">removeClass()</a></li>
+		<li><a href="#toggleClass">toggleClass()</a></li>
+		<li><a href="#show">show()</a></li>
+		<li><a href="#hide">hide()</a></li>
+		<li><a href="#toggleShowHide">toggleShowHide()</a></li>
+		<li><a href="#fadeIn">fadeIn()</a></li>
+		<li><a href="#fadeOut">fadeOut()</a></li>
+		<li><a href="#removeSlow">removeSlow()</a></li>
+		<li><a href="#append">append()</a></li>
+		<li><a href="#prepend">prepend()</a></li>
+		<li><a href="#appendTo">appendTo()</a></li>
+		<li><a href="#prependTo">prependTo()</a></li>
+	</ul>
+	<ul class="left">
+		<li><a href="#insertTo">insertTo()</a></li>
+		<li><a href="#insertAfter">insertAfter()</a></li>
+		<li><a href="#insertBefor">insertBefor()</a></li>
+		<li><a href="#swapWith">swapWith()</a></li>
+		<li><a href="#getFormData">getFormData()</a></li>
+		<li><a href="#submit">submit()</a></li>
+		<li><a href="#data">data()</a></li>
+		<li><a href="#setData">setData()</a></li>
+		<li><a href="#getData">getData()</a></li>
+		<li><a href="#delData">delData()</a></li>
+		<li><a href="#removeData">removeData()</a></li>
+		<li><a href="#getAllData">getAllData()</a></li>
+	</ul>
+	</div>
+	
+	
+	<!----->
+	<h2 id="each">each</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::each(<i>function</i> handler(<i>element</i> el, <i>int</i> index){})</code></p>
+	
+	<!----->
+	<h2 id="count">count</h2>
+	<p>đếm xem trong <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code> hiện tại đang chứa bao nhiêu element</p>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>int</i> zjs::count()</code></p>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;a&gt;&lt;/a&gt; &lt;a&gt;&lt;/a&gt; &lt;a&gt;&lt;/a&gt; &lt;a&gt;&lt;/a&gt;
+var count = zjs('a').count(); // count = 4</pre>
+		
+	<!----->
+	<h2 id="is">is</h2>
+	<p>kiểm tra tagname của element đầu tiên trong số những element đang chứa trong <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code></p>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>bool</i> zjs::is(<i>string</i> tagname)</code></p>
+	<table><tbody>
+	<tr>
+		<td>tagname</td>
+		<td>string</td>
+		<td>tên của tagname cần kiểm tra</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;a&gt;&lt;/a&gt;
+var isTagnameA = zjs('a').is('a'); // true
+var isTagnameP = zjs('a').is('p'); // false</pre>
+	
+	<!----->
+	<h2 id="isTheSame">isTheSame</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>bool</i> zjs::isTheSame(<i>element</i> el)</code></p>
+	
+	<!----->
+	<h2 id="tagName">tagName</h2>
+	
+	<p><i>cú pháp:</i></p>
+	<p><code><i>string</i> zjs::tagName()</code></p>
+	
+	<!----->
+	<h2 id="filter">filter</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::filter(<i>string</i> selector)</code></p>
+	
+	<!----->
+	<h2 id="find">find</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::find(<i>string</i> selector)</code></p>
+	
+	<!----->
+	<h2 id="findUp">findUp</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::findUp(<i>string</i> selector)</code></p>
+	
+	<!----->
+	<h2 id="siblings">siblings</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::siblings()</code></p>
+	
+	<!----->
+	<h2 id="parent">parent</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::parent(<i>bool</i> parentWithRelativePosition)</code></p>
+	
+	<!----->
+	<h2 id="child">child</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::child()</code></p>
+	
+	<!----->
+	<h2 id="next">next</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::next()</code></p>
+	
+	<!----->
+	<h2 id="prev">prev</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::prev()</code></p>
+	
+	<!----->
+	<h2 id="item">item</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::item(<i>int</i> index)</code></p>
+	<p><code><i>element</i> zjs::item(<i>int</i> index, true)</code></p>
+	
+	<!----->
+	<h2 id="clone">clone</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::clone(<i>bool</i> deep = false)</code></p>
+	
+	<!----->
+	<h2 id="html">html</h2>
+	<p>get innerHTML của element</p>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>string</i> zjs::html()</code></p>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;a&gt;link&lt;/a&gt;
+var html = zjs('a').html(); // html = 'link'</pre>
+	
+	<br/><div class="line"></div>
+	
+	<p>thay đổi innerHTML cho element</p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::html(<i>string</i> htmlString)</code></p>
+	<table><tbody><tr>
+		<td>htmlString</td>
+		<td>string</td>
+		<td>mã html</td>
+	</tr></tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;a&gt;link&lt;/a&gt;
+zjs('a').html('&lt;i&gt;link&lt;/i&gt;'); // &lt;a&gt;&lt;i&gt;link&lt;/i&gt;&lt;/a&gt;</pre>
+
+	<br/><div class="line"></div>
+	
+	<p><b>hook:</b></p>
+	<p><code><i>string</i> htmlString = <a href="hook.html#before_setInnerHTML">before_setInnerHTML</a>(<i>element</i> el, <i>string</i> htmlString)</code></p>
+	<p><code><a href="hook.html#after_setInnerHTML">after_setInnerHTML</a>(<i>element</i> el, <i>string</i> htmlString)</code></p>	
+	
+	
+	<!----->
+	<h2 id="getInnerText">getInnerText</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>string</i> zjs::getInnerText()</code></p>
+	
+	<!----->
+	<h2 id="getPlainText">getPlainText</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>string</i> zjs::getPlainText()</code></p>
+	
+	<!----->
+	<h2 id="isChecked">isChecked</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>bool</i> zjs::isChecked()</code></p>
+	
+	<!----->
+	<h2 id="selected">selected</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::selected(<i>bool</i> selected)</code></p>
+	
+	<!----->
+	<h2 id="on">on</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::on(<i>string</i> eventName, <i>function</i> handler(<i>event</i> e, <i>element</i> el){})</code></p>
+	<p><code>zjs::on(<i>string</i> eventName, <i>string</i> query, <i>function</i> handler(<i>event</i> e, <i>element</i> el){})</code></p>
+	
+	<!----->
+	<h2 id="trigger">trigger</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::trigger(<i>string</i> eventName)</code></p>
+	
+	<!----->
+	<h2 id="distractAllEventTo">distractAllEventTo</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::distractAllEventTo(<i>element</i> element)</code></p>
+	<p><code>zjs::distractAllEventTo(<i>string</i> query)</code></p>
+	
+	<!----->
+	<h2 id="removeAllDistractEvent">removeAllDistractEvent</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::removeAllDistractEvent()</code></p>
+	
+	<!----->
+	<h2 id="live">live</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::live(<i>string</i> eventName, <i>function</i> handler(<i>event</i> e, <i>element</i> el){})</code></p>
+	
+	<!----->
+	<h2 id="click">click</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::click()</code></p>
+	<p><code>zjs::click(<i>function</i> handler(<i>event</i> e, <i>element</i> el){})</code></p>
+	
+	<!----->
+	<h2 id="hover">hover</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::hover(<i>function</i> handlerOnHover(<i>event</i> e, <i>element</i> el){})</code></p>
+	<p><code>zjs::hover(<i>function</i> handlerOnHover(<i>event</i> e, <i>element</i> el){}, 
+	<i>function</i> handlerOnOut(<i>event</i> e, <i>element</i> el){})</code></p>
+	
+	<!----->
+	<h2 id="longHover">longHover</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::longHover(<i>function</i> handlerOnHover, <i>function</i> handlerOnOut, <i>int</i> miliSeconds)</code></p>
+	
+	<!----->
+	<h2 id="clickout">clickout</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::clickout(<i>function</i> handler(<i>event</i> e, <i>element</i> el){})</code></p>
+	
+	<!----->
+	<h2 id="mouseWheel">mouseWheel</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::mouseWheel(<i>function</i> handler(<i>event</i> e, <i>element</i> el){})</code></p>
+	
+	<!----->
+	<h2 id="drag">drag</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::drag(<i>object</i> options)</code></p>
+	
+	<!----->
+	<h2 id="remove">remove</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::remove()</code></p>
+	
+	<br/><div class="line"></div>
+	
+	<p><b>hook:</b></p>
+	<p><code><a href="hook.html#before_removeDOM">before_removeDOM</a>(<i>element</i> el)</code></p>
+	
+	<!----->
+	<h2 id="attr">attr</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>string</i> zjs::attr(<i>string</i> name)</code></p>
+	<p><code>zjs::attr(<i>string</i> name, <i>string</i> value)</code></p>
+	
+	<!----->
+	<h2 id="getAttr">getAttr</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>string</i> zjs::getAttr(<i>string</i> name, <i>string</i> defaultValue = "")</code></p>
+	
+	<!----->
+	<h2 id="setAttr">setAttr</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::setAttr(<i>string</i> name, <i>string</i> value)</code></p>
+	
+	<!----->
+	<h2 id="removeAttr">removeAttr</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::removeAttr(<i>string</i> name)</code></p>
+	
+	<!----->
+	<h2 id="getValue">getValue</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>string</i> zjs::getValue(<i>string</i> defaultValue = "")</code></p>
+	
+	<!----->
+	<h2 id="setValue">setValue</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::setValue(<i>string</i> value)</code></p>
+	
+	<br/><div class="line"></div>
+	
+	<p><b>hook:</b></p>
+	<p><code><a href="hook.html#after_setValue">after_setValue</a>(<i>element</i> el)</code></p>
+	
+	<!----->
+	<h2 id="getCss">getCss</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>string</i> zjs::getCss()</code></p>
+	
+	<!----->
+	<h2 id="style">style</h2>
+
+	<p>Get thông tin style của element</p>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>string</i> zjs::style(<i>string</i> name)</code></p>
+	<table><tbody><tr>
+		<td>name</td>
+		<td>string</td>
+		<td>tên của style muốn lấy thông tin</td>
+	</tr></tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;a style="color:red; margin-left:10px; "&gt;
+var color = zjs('a').style('color'); // color = 'red'
+var marginLeft = zjs('a').style('margin-left'); // marginLeft = '10px'</pre>
+	<p>nếu muốn kết quả trả về là integer thay vì string, sử dụng cú pháp sau:</p>
+	<p><code><i>int</i> zjs::style(<i>string</i> name, true)</code></p>
+	<pre>// &lt;a style="color:red; margin-left:10px; "&gt;
+var marginLeft = zjs('a').style('margin-left', true); // marginLeft = 10</pre>
+	
+	<br/><div class="line"></div>
+
+	<p>Set một style cho element</p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::style(<i>string</i> name, <i>mixed</i> value)</code></p>
+	<table><tbody>
+	<tr>
+		<td>name</td>
+		<td>string</td>
+		<td>tên của style muốn thay đổi</td>
+	</tr>
+	<tr>
+		<td>value</td>
+		<td>string int</td>
+		<td>giá trị (chấp nhận cả string hoặc integer)</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>zjs('a').style('color', 'red');
+zjs('a').style('margin-left', 10);</pre>
+
+	<br/><div class="line"></div>
+
+	<p>Set cùng lúc nhiều style cho element</p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::style(<i>object</i> styles)</code></p>
+	<table><tbody>
+	<tr>
+		<td>styles</td>
+		<td>object</td>
+		<td>tập hợp các giá trị style muốn thay đổi</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>zjs('a').style({
+	color: 'red',
+	margin: 10
+});</pre>
+	
+	<!----->
+	<h2 id="getStyle">getStyle</h2>
+	<p>Get thông tin style của element</p>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>string</i> zjs::getStyle(<i>string</i> name)</code></p>
+	<p><code><i>int</i> zjs::getStyle(<i>string</i> name, true)</code></p>
+	<table><tbody>
+	<tr>
+		<td>name</td>
+		<td>string</td>
+		<td>tên của style muốn lấy thông tin</td>
+	</tr>
+	<tr>
+		<td>return integer ?</td>
+		<td>bool</td>
+		<td>truyền vào là <code>true</code> nếu như muốn giá trị trả về là integer thay vì string</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>var marginLeft = zjs('a').getStyle('margin-left'); // return '10px'
+var marginLeft = zjs('a').getStyle('margin-left', true); // return 10</pre>
+	
+	<!----->
+	<h2 id="setStyle">setStyle</h2>
+	<p>Set một style cho element</p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::setStyle(<i>string</i> name, <i>mixed</i> value)</code></p>
+	<table><tbody>
+	<tr>
+		<td>name</td>
+		<td>string</td>
+		<td>tên của style muốn thay đổi</td>
+	</tr>
+	<tr>
+		<td>value</td>
+		<td>string int</td>
+		<td>giá trị (chấp nhận cả string hoặc integer)</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>zjs('a').setStyle('color', 'red');
+zjs('a').setStyle('margin-left', 10);</pre>
+
+	<br/><div class="line"></div>
+
+	<p>Set nhiều style cùng lúc cho element</p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::setStyle(<i>object</i> styles)</code></p>
+	<table><tbody>
+	<tr>
+		<td>styles</td>
+		<td>object</td>
+		<td>tập hợp các giá trị style muốn thay đổi</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>zjs('a').setStyle({
+	color: 'red',
+	margin: 10
+});</pre>
+	
+	
+	<!----->
+	<h2 id="copyStyleFrom">copyStyleFrom</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::copyStyleFrom(<i>element</i> el)</code></p>
+	
+	<!----->
+	<h2 id="top">top</h2>
+	
+	<p>Get style top của element</p>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>int</i> zjs::top()</code></p>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;div style="top:10px"&gt;
+var top = zjs('div').top(); // top = 10</pre>
+	
+	<br/><div class="line"></div>
+
+	<p>Set style top cho element</p>
+	<i>cú pháp:</i>
+	<p><code>zjs::top(<i>int</i> value)</code></p>
+	<table><tbody>
+	<tr>
+		<td>value</td>
+		<td>int</td>
+		<td>giá trị</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;div style="top:10px"&gt;
+zjs('div').top(20); // &lt;div style="top:20px"&gt;</pre>
+	
+	
+	<!----->
+	<h2 id="left">left</h2>
+	<p>Get hoặc set style left của element, tương tự như <a href="#top">top()</a></p>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>int</i> zjs::left()</code></p>
+	<p><code>zjs::left(<i>int</i> value)</code></p>
+	
+	<!----->
+	<h2 id="height">height</h2>
+	<p>Get hoặc set style height của element, tương tự như <a href="#top">top()</a></p>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>int</i> zjs::height()</code></p>
+	<p><code>zjs::height(<i>int</i> value)</code></p>
+	
+	<!----->
+	<h2 id="width">width</h2>
+	<p>Get hoặc set style width của element, tương tự như <a href="#top">top()</a></p>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>int</i> zjs::width()</code></p>
+	<p><code>zjs::width(<i>int</i> value)</code></p>
+	
+	<!----->
+	<h2 id="scrollTop">scrollTop</h2>
+	<p>Get hoặc set scrollTop của element, tương tự như <a href="#top">top()</a></p>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>int</i> zjs::scrollTop()</code></p>
+	<p><code>zjs::scrollTop(<i>int</i> value)</code></p>
+	
+	<!----->
+	<h2 id="scrollLeft">scrollLeft</h2>
+	<p>Get hoặc set scrollLeft của element, tương tự như <a href="#top">top()</a></p>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>int</i> zjs::scrollLeft()</code></p>
+	<p><code>zjs::scrollLeft(<i>int</i> value)</code></p>
+	
+	<!----->
+	<h2 id="offsetTop">offsetTop</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>int</i> zjs::offsetTop()</code></p>
+	
+	<!----->
+	<h2 id="offsetLeft">offsetLeft</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>int</i> zjs::offsetLeft()</code></p>
+	
+	<!----->
+	<h2 id="getAbsoluteTop">getAbsoluteTop</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>int</i> zjs::getAbsoluteTop()</code></p>
+	
+	<!----->
+	<h2 id="getAbsoluteBottom">getAbsoluteBottom</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>int</i> zjs::getAbsoluteBottom()</code></p>
+	
+	<!----->
+	<h2 id="getAbsoluteLeft">getAbsoluteLeft</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>int</i> zjs::getAbsoluteLeft()</code></p>
+	
+	<!----->
+	<h2 id="getAbsoluteRight">getAbsoluteRight</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>int</i> zjs::getAbsoluteRight()</code></p>
+	
+	<!----->
+	<h2 id="rotate">rotate</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>int</i> zjs::rotate()</code></p>
+	
+	<!----->
+	<h2 id="focus">focus</h2>
+	<p>thực hiện focus vào element (chỉ đối với input hoặc textarea)</p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::focus()</code></p>
+	<p><i>ví dụ:</i></p>
+	<pre>zjs('input').focus();</pre>
+	
+	<!----->
+	<h2 id="hasClass">hasClass</h2>
+	<p>kiểm tra class có tồn tại trên element hay không</p>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>bool</i> zjs::hasClass(<i>string</i> name)</code></p><table><tbody>
+	<tr>
+		<td>name</td>
+		<td>string</td>
+		<td>class cần kiểm tra</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;h1 class="normal red"&gt;
+zjs('h1').hasClass('title'); // false
+zjs('h1').hasClass('normal'); // true</pre>
+	
+	<!----->
+	<h2 id="setClass">setClass</h2>
+	<p>thay thế chuỗi class hiện tại của element (những class đang tồn tại trên element sẽ bị mất)</p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::setClass(<i>string</i> name)</code></p>
+	<table><tbody>
+	<tr>
+		<td>name</td>
+		<td>string</td>
+		<td>chuỗi class của element, có thể chỉ là 1 class, hoặc nhiều class (mỗi class cách nhau khoảng trắng)</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>zjs('div').setClass('header');</pre>
+	<p>toàn bộ những class hiện tại sẽ bị thay đổi:</p>
+	<pre>// &lt;h1 class="normal red"&gt;
+zjs('h1').setClass('title bold uppercase'); // &lt;h1 class="title bold uppercase"&gt;</pre>
+	
+	<!----->
+	<h2 id="addClass">addClass</h2>
+	<p>khác với setClass, addClass không thay đổi những class hiện tại, mà chỉ thêm vào một hoặc nhiều class mới</p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::addClass(<i>string</i> name)</code></p>
+	<table><tbody>
+	<tr>
+		<td>name</td>
+		<td>string</td>
+		<td>tên class, hỗ trợ nhiều tên class cùng lúc (cách nhau khoảng trắng)</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;h1 class="normal red"&gt;
+zjs('h1').addClass('title'); // &lt;h1 class="normal red title"&gt;
+zjs('h1').addClass('bold uppercase'); // &lt;h1 class="normal red title bold uppercase"&gt;</pre>
+	
+	<!----->
+	<h2 id="removeClass">removeClass</h2>
+	<p>gỡ bỏ một hoặc nhiều class của element</p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::removeClass(<i>string</i> name)</code></p>
+	<table><tbody>
+	<tr>
+		<td>name</td>
+		<td>string</td>
+		<td>tên class cần gỡ bỏ, hỗ trợ nhiều tên class cùng lúc (cách nhau khoảng trắng)</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;h1 class="normal red title bold uppercase"&gt;
+zjs('h1').removeClass('title'); // &lt;h1 class="normal red bold uppercase"&gt;
+zjs('h1').removeClass('bold uppercase'); // &lt;h1 class="normal red"&gt;</pre>
+	
+	
+	<!----->
+	<h2 id="toggleClass">toggleClass</h2>
+	<p>chuyển đổi qua lại giữa 1 class</p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::toggleClass(<i>string</i> name)</code></p>
+	<table><tbody>
+	<tr>
+		<td>name</td>
+		<td>string</td>
+		<td>tên class cần chuyển (không hỗ trợ nhiều tên class cùng lúc)</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;h1 class=""&gt;
+zjs('h1').toggleClass('normal'); // &lt;h1 class="normal"&gt;
+zjs('h1').toggleClass('normal'); // &lt;h1 class=""&gt;
+zjs('h1').toggleClass('normal'); // &lt;h1 class="normal"&gt;</pre>
+	
+	<!----->
+	<h2 id="show">show</h2>
+	<p>ẩn đi element, thực chất là thay đổi thuộc tính <code>display</code> thành giá trị <code>"none"</code></p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::show()</code></p>
+	<p><i>ví dụ:</i></p>
+	<pre>zjs('a').show();
+// tương tự như làm thế này:
+zjs('a').style('display', 'none');</pre>
+
+
+	<!----->
+	<h2 id="hide">hide</h2>
+	<p>hiện lên element đang bị ẩn, thực chất là thay đổi thuộc tính <code>display</code> thành giá trị <code>""</code></p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::hide()</code></p>
+	<p><i>ví dụ:</i></p>
+	<pre>zjs('a').hide();
+// tương tự như làm thế này:
+zjs('a').style('display', '');</pre>
+	
+	<!----->
+	<h2 id="toggleShowHide">toggleShowHide</h2>
+	<p>chuyển đổi qua lại giữa việc ẩn và hiện element</p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::toggleShowHide()</code></p>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;a style="display:none"&gt;
+zjs('a').toggleShowHide(); // &lt;a style="display:"&gt;
+zjs('a').toggleShowHide(); // &lt;a style="display:none"&gt;
+zjs('a').toggleShowHide(); // &lt;a style="display:"&gt;</pre>
+
+
+	<!----->
+	<h2 id="fadeIn">fadeIn</h2>
+	<p>thực hiện hiệu ứng hiện lên element từ từ, nếu element đang bị ẩn</p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::fadeIn(<i>object</i> options)</code></p>
+	
+	<!----->
+	<h2 id="fadeOut">fadeOut</h2>
+	<p>thực hiện hiệu ứng ẩn đi element từ từ</p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::fadeOut(<i>object</i> options)</code></p>
+	
+	<!----->
+	<h2 id="removeSlow">removeSlow</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::removeSlow(<i>int</i> miliSeconds)</code></p>
+	
+	<!----->
+	<h2 id="append">append</h2>
+	<p>tạo ra element mới và append vào mọi element đang chứa trong <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code></p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::append(<i>string</i> html)</code></p>
+	<table><tbody>
+	<tr>
+		<td>html</td>
+		<td>string</td>
+		<td>mã html tạo ra element mới</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;p&gt;1&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; 
+zjs('p').append('&lt;a&gt;'); 
+// &lt;p&gt;1&lt;a&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;2&lt;a&gt;&lt;/a&gt;&lt;/p&gt; </pre>
+	<p>hỗ trợ truyền vào cùng lúc nhiều param</p>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;p&gt;1&lt;/p&gt; &lt;p&gt;2&lt;/p&gt;
+zjs('p').append('&lt;a&gt;', '&lt;b&gt;'); 
+// &lt;p&gt;1&lt;a&gt;&lt;/a&gt;&lt;b&gt;&lt;/b&gt;&lt;/p&gt; &lt;p&gt;2&lt;a&gt;&lt;/a&gt;&lt;b&gt;&lt;/b&gt;&lt;/p&gt; </pre>
+	
+	<br/><div class="line"></div>
+	
+	<p>append element đang có sẵn vào element đầu tiên chứa trong <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code></p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::append(<i>element</i> el)</code></p>
+	<table><tbody>
+	<tr>
+		<td>el</td>
+		<td>element</td>
+		<td>element đã tồn tại trong cây DOM</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;p&gt;1&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; &lt;a&gt;3&lt;/a&gt; &lt;a&gt;4&lt;/a&gt;
+// lấy ra element <b>&lt;a&gt;</b> đầu tiên
+var a = zjs('a').<a href="#item">item</a>(0, true);
+// append a vào <b>&lt;p&gt;</b> đầu tiên
+zjs('p').append(a);
+// &lt;p&gt;1&lt;a&gt;3&lt;/a&gt;&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; &lt;a&gt;4&lt;/a&gt; </pre>
+
+	<br/><div class="line"></div>
+	
+	<p>append nhiều element đang có sẵn vào element đầu tiên chứa trong <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code></p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::append(<i>zjsDOMObject</i> zobj)</code></p>
+	<table><tbody>
+	<tr>
+		<td>zobj</td>
+		<td>zjsDOMObject</td>
+		<td>zjsDOMObject chứa những element cần append</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;p&gt;1&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; &lt;a&gt;3&lt;/a&gt; &lt;a&gt;4&lt;/a&gt;
+zjs('p').append(zjs('a'));
+// &lt;p&gt;1&lt;a&gt;3&lt;/a&gt;&lt;a&gt;4&lt;/a&gt;&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; </pre>
+	
+	<br/><div class="line"></div>
+	
+	<p><b>hook:</b></p>
+	<p><code><a href="hook.html#after_insertDOM">after_insertDOM</a>(<i>element</i> el)</code></p>
+	
+	
+	<!----->
+	<h2 id="prepend">prepend</h2>
+	<p>tạo ra element mới và prepend vào mọi element đang chứa trong <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code></p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::prepend(<i>string</i> html)</code></p>
+	<table><tbody>
+	<tr>
+		<td>html</td>
+		<td>string</td>
+		<td>mã html tạo ra element mới</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;p&gt;1&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; 
+zjs('p').prepend('&lt;a&gt;'); 
+// &lt;p&gt;&lt;a&gt;&lt;/a&gt;1&lt;/p&gt; &lt;p&gt;&lt;a&gt;&lt;/a&gt;2&lt;/p&gt; </pre>
+	<p>hỗ trợ truyền vào cùng lúc nhiều param</p>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;p&gt;1&lt;/p&gt; &lt;p&gt;2&lt;/p&gt;
+zjs('p').prepend('&lt;a&gt;', '&lt;b&gt;'); 
+// &lt;p&gt;&lt;b&gt;&lt;/b&gt;&lt;a&gt;&lt;/a&gt;1&lt;/p&gt; &lt;p&gt;&lt;b&gt;&lt;/b&gt;&lt;a&gt;&lt;/a&gt;2&lt;/p&gt; </pre>
+	
+	<br/><div class="line"></div>
+	
+	<p>prepend element đang có sẵn vào element đầu tiên chứa trong <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code></p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::prepend(<i>element</i> el)</code></p>
+	<table><tbody>
+	<tr>
+		<td>el</td>
+		<td>element</td>
+		<td>element đã tồn tại trong cây DOM</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;p&gt;1&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; &lt;a&gt;3&lt;/a&gt; &lt;a&gt;4&lt;/a&gt;
+// lấy ra element <b>&lt;a&gt;</b> đầu tiên
+var a = zjs('a').<a href="#item">item</a>(0, true);
+// prepend a vào <b>&lt;p&gt;</b> đầu tiên
+zjs('p').prepend(a);
+// &lt;p&gt;&lt;a&gt;3&lt;/a&gt;1&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; &lt;a&gt;4&lt;/a&gt; </pre>
+
+	<br/><div class="line"></div>
+	
+	<p>prepend nhiều element đang có sẵn vào element đầu tiên chứa trong <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code></p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::prepend(<i>zjsDOMObject</i> zobj)</code></p>
+	<table><tbody>
+	<tr>
+		<td>zobj</td>
+		<td>zjsDOMObject</td>
+		<td>zjsDOMObject chứa những element cần prepend</td>
+	</tr>
+	</tbody></table>
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;p&gt;1&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; &lt;a&gt;3&lt;/a&gt; &lt;a&gt;4&lt;/a&gt;
+zjs('p').prepend(zjs('a'));
+// &lt;p&gt;&lt;a&gt;4&lt;/a&gt;&lt;a&gt;3&lt;/a&gt;1&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; </pre>
+
+	
+	<br/><div class="line"></div>
+	
+	<p><b>hook:</b></p>
+	<p><code><a href="hook.html#after_insertDOM">after_insertDOM</a>(<i>element</i> el)</code></p>
+	
+	
+	<!----->
+	<h2 id="appendTo">appendTo</h2>
+	<p>append toàn bộ element đang chứa trong <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code> vào một element khác</p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::appendTo(<i>element</i> el)</code></p>
+	<table><tbody>
+	<tr>
+		<td>el</td>
+		<td>element</td>
+		<td>element đích cần append vào</td>
+	</tr>
+	</tbody></table>
+	<p><code>zjs::appendTo(<i>zjsDOMObject</i> zobj)</code></p>
+	<table><tbody>
+	<tr>
+		<td>zobj</td>
+		<td>zjsDOMObject</td>
+		<td>zjsDOMObject chứa element đích cần append vào (chỉ tác dụng trên element đầu tiên)</td>
+	</tr>
+	</tbody></table>
+	
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;p&gt;1&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; &lt;a&gt;3&lt;/a&gt; &lt;a&gt;4&lt;/a&gt;
+// lấy ra element <b>&lt;p&gt;</b> đầu tiên
+var p = zjs('p').<a href="#item">item</a>(0, true);
+zjs('a').appendTo(p);
+// &lt;p&gt;1&lt;a&gt;3&lt;/a&gt;&lt;a&gt;4&lt;/a&gt;&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; </pre>
+	
+	<p>hoặc</p>
+	<pre>// &lt;p&gt;1&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; &lt;a&gt;3&lt;/a&gt; &lt;a&gt;4&lt;/a&gt;
+zjs('a').appendTo(zjs('p'));
+// &lt;p&gt;1&lt;a&gt;3&lt;/a&gt;&lt;a&gt;4&lt;/a&gt;&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; </pre>
+	
+	
+	
+	<br/><div class="line"></div>
+	
+	<p><b>hook:</b></p>
+	<p><code><a href="hook.html#after_insertDOM">after_insertDOM</a>(<i>element</i> el)</code></p>
+	
+	
+	<!----->
+	<h2 id="prependTo">prependTo</h2>
+	<p>prepend toàn bộ element đang chứa trong <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code> vào một element khác</p>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::prependTo(<i>element</i> el)</code></p>
+	<table><tbody>
+	<tr>
+		<td>el</td>
+		<td>element</td>
+		<td>element đích cần prepend vào</td>
+	</tr>
+	</tbody></table>
+	<p><code>zjs::prependTo(<i>zjsDOMObject</i> zobj)</code></p>
+	<table><tbody>
+	<tr>
+		<td>zobj</td>
+		<td>zjsDOMObject</td>
+		<td>zjsDOMObject chứa element đích cần prepend vào (chỉ tác dụng trên element đầu tiên)</td>
+	</tr>
+	</tbody></table>
+	
+	<p><i>ví dụ:</i></p>
+	<pre>// &lt;p&gt;1&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; &lt;a&gt;3&lt;/a&gt; &lt;a&gt;4&lt;/a&gt;
+// lấy ra element <b>&lt;p&gt;</b> đầu tiên
+var p = zjs('p').<a href="#item">item</a>(0, true);
+zjs('a').prependTo(p);
+// &lt;p&gt;&lt;a&gt;4&lt;/a&gt;&lt;a&gt;3&lt;/a&gt;1&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; </pre>
+	
+	<p>hoặc</p>
+	<pre>// &lt;p&gt;1&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; &lt;a&gt;3&lt;/a&gt; &lt;a&gt;4&lt;/a&gt;
+zjs('a').prependTo(zjs('p'));
+// &lt;p&gt;&lt;a&gt;4&lt;/a&gt;&lt;a&gt;3&lt;/a&gt;1&lt;/p&gt; &lt;p&gt;2&lt;/p&gt; </pre>
+	
+	
+	
+	<br/><div class="line"></div>
+	
+	<p><b>hook:</b></p>
+	<p><code><a href="hook.html#after_insertDOM">after_insertDOM</a>(<i>element</i> el)</code></p>
+	
+	<!----->
+	<h2 id="insertTo">insertTo</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::insertTo(<i>element</i> el)</code></p>
+	
+	
+	<br/><div class="line"></div>
+	
+	<p><b>hook:</b></p>
+	<p><code><a href="hook.html#after_insertDOM">after_insertDOM</a>(<i>element</i> el)</code></p>
+	
+	<!----->
+	<h2 id="insertAfter">insertAfter</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::insertAfter(<i>element</i> el)</code></p>
+	
+	
+	<br/><div class="line"></div>
+	
+	<p><b>hook:</b></p>
+	<p><code><a href="hook.html#after_insertDOM">after_insertDOM</a>(<i>element</i> el)</code></p>
+	
+	<!----->
+	<h2 id="insertBefore">insertBefore</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::insertBefore(<i>element</i> el)</code></p>
+	
+	
+	<br/><div class="line"></div>
+	
+	<p><b>hook:</b></p>
+	<p><code><a href="hook.html#after_insertDOM">after_insertDOM</a>(<i>element</i> el)</code></p>
+	
+	<!----->
+	<h2 id="swapWith">swapWith</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::swapWith(<i>element</i> el)</code></p>
+	
+	<!----->
+	<h2 id="getFormData">getFormData</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>object</i> zjs::getFormData()</code></p>
+	
+	<!----->
+	<h2 id="submit">submit</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::submit()</code></p>
+	
+	<!----->
+	<h2 id="data">data</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::data(<i>string</i> name, <i>mixed</i> data)</code></p>
+	<p><code><i>mixed</i> zjs::data(<i>string</i> name)</code></p>
+	
+	<!----->
+	<h2 id="setData">setData</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::setData(<i>string</i> name, <i>mixed</i> data)</code></p>
+	
+	<!----->
+	<h2 id="getData">getData</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code><i>mixed</i> zjs::getData(<i>string</i> name, <i>mixed</i> defaultData = false)</code></p>
+	
+	<!----->
+	<h2 id="delData">delData</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::delData(<i>string</i> name)</code></p>
+	
+	<!----->
+	<h2 id="removeData">removeData</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::removeData()</code></p>
+	
+	<!----->
+	<h2 id="getAllData">getAllData</h2>
+	<p><i>cú pháp:</i></p>
+	<p><code>zjs::getAllData()</code></p>
+	
+	
+	
+</div>
+<!-- END CONTENT -->
+
+<div id="footer"><p><a href="#">Top of Page</a></p></div>
+
+</body>
+</html>

@@ -1,0 +1,572 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Linear Theme - Image slider - zjs developer documentation</title>
+
+<link rel="stylesheet" type="text/css" media="all" href="style.css">
+<body>
+
+<div id="header">
+	<div class="branding">
+		<h1 class="page-title">ZJS Developer Documentation</h1>
+		<div class="breadcrumb">
+			<a href="index.html">Home</a> &nbsp;›&nbsp;
+			<a href="module.html">Module</a> &nbsp;›&nbsp;
+			<a href="module.image.slider.html">Image slider</a> &nbsp;›&nbsp;
+			Linear Theme 
+		</div>
+	</div>
+</div>
+
+
+<!-- START CONTENT -->
+<div id="content">
+	
+	<h1>Linear Theme</h1>
+	<p>Các option khi sử dụng với phương thức <code>zjs::<a href="module.image.slider.html#makeSlider">makeSlider</a>(<i>object</i> option)</code></p>
+	
+	<table>
+		<tr>
+			<td>theme</td>
+			<td>string</td>
+			<td>Tên của theme dùng làm slide, luôn luôn đặt như sau:</br>
+				<pre>theme: 'linear'</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>transition</td>
+			<td>int string</td>
+			<td>Hiệu ứng chuyển giữa các hình, chấp nhận cả kiểu <code>int</code> và <code>string</code>.</br>
+				<i>mặc định:</i>
+				<pre>transition: 0</pre>
+				<i>các giá trị có thể chấp nhận:</i>
+				<table class="childtable">
+					<tr><td><code>0</code> <code>'none'</code></td><td>không sử dụng hiệu ứng</td></tr>
+					<tr><td><code>1</code> <code>'fade'</code></td><td>hiệu ứng fadeIn</td></tr>
+					<tr><td><code>2</code> <code>'horizontal'</code></td><td>hiệu ứng trượt theo chiều ngang</td></tr>
+					<tr><td><code>3</code> <code>'vertical'</code></td><td>hiệu ứng trượt theo chiều dọc</td></tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td>transitionTime</td>
+			<td>int</td>
+			<td>Thời gian (milisecond) chạy hiệu ứng chuyển giữa các hình (nếu như có sử dụng).</br>
+				<i>mặc định:</i>
+				<pre>transitionTime: 1600</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>transitionTimingfunction</td>
+			<td>int</td>
+			<td>Quy định cách chạy của hiệu ứng.</br>
+				<i>mặc định:</i>
+				<pre>transitionTimingfunction: 2</pre>
+				<p class="important">các giá trị này là thiết lập của <code>zjs.timer()</code>, xem <a href="#">tại đây</a>.</p>
+				<p><i>các giá trị có thể chấp nhận:</i></p>
+				<table class="childtable">
+					<tr><td><code>0</code> <code>'linear'</code></td><td></td></tr>
+					<tr><td><code>1</code> <code>'sinoidal'</code></td><td></td></tr>
+					<tr><td><code>2</code> <code>'quadratic'</code></td><td></td></tr>
+					<tr><td><code>3</code> <code>'cubic'</code></td><td></td></tr>
+					<tr><td><code>4</code> <code>'elastic'</code></td><td></td></tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td>border</td>
+			<td>bool</td>
+			<td>Đặt là <code>true</code> nếu muốn xuất hiện đường viền xung quanh slide.</br>
+				<i>mặc định:</i>
+				<pre>border: true</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>preload</td>
+			<td>bool</td>
+			<td>Đặt là <code>true</code> nếu muốn xuất hiện phần trăm (%) load hình trước khi xuất hiện slide.</br>
+				<i>mặc định:</i>
+				<pre>preload: true</pre>
+				<p class="important">tuỳ chọn này yêu cầu phải có module <code>image.loader</code>, xem <a href="#">tại đây</a>.</p>
+			</td>
+		</tr>
+		<tr>
+			<td>autoplay</td>
+			<td>bool</td>
+			<td>Đặt là <code>true</code> nếu như muốn slide tự động chuyển hình.</br>
+				<i>mặc định:</i>
+				<pre>autoplay: true</pre>
+				<p class="important">có thể sử dụng phương thức <code>zjs::<a href="module.image.slider.html#slidePlay">slidePlay</a>()</code> để bật chế độ cho slide tự động chuyển hình.</p>
+			</td>
+		</tr>
+		<tr>
+			<td>autoplayTime</td>
+			<td>int</td>
+			<td>Thời gian (milisecond) chờ giữa 2 hình trước khi chuyển.</br>
+				<i>mặc định:</i>
+				<pre>autoplayTime: 6000</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>playButton</td>
+			<td>bool</td>
+			<td>Đặt là <code>true</code> nếu muốn xuất hiện 2 button play, pause và thanh đếm lùi tới lúc chuyển hình.</br>
+				<i>mặc định:</i>
+				<pre>playButton: false</pre>
+				<p class="important">phương thức liên quan: <code>zjs::<a href="module.image.slider.html#slidePlay">slidePlay</a>()</code>, <code>zjs::<a href="module.image.slider.html#slidePause">slidePause</a>()</code></p>
+			</td>
+		</tr>
+		<tr>
+			<td>navButton</td>
+			<td>bool</td>
+			<td>Đặt là <code>true</code> nếu muốn xuất hiện 2 button next và previous.</br>
+				<i>mặc định:</i>
+				<pre>navButton: true</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>navButtonParentIsRoot</td>
+			<td>bool</td>
+			<td>Đặt là <code>true</code> nếu muốn 2 navigation button (button next, previous) đươc đặt ra bên ngoài (không nằm trong <code>&lt;div class="nav-container"&gt;</code> nữa).</br>
+				<i>mặc định:</i>
+				<pre>navButtonParentIsRoot: false</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>navThumb</td>
+			<td>bool</td>
+			<td>Đặt là <code>true</code> nếu muốn xuất hiện các ảnh thu nhỏ (thumbnail).</br>
+				<i>mặc định:</i>
+				<pre>navThumb: true</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>navDot</td>
+			<td>bool</td>
+			<td>Đặt là <code>true</code> nếu muốn xuất hiện các chấm tròn (tương tự như thumbnail).</br>
+				<i>mặc định:</i>
+				<pre>navDot: true</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>linkTitle</td>
+			<td>bool</td>
+			<td>Đặt là <code>true</code> nếu muốn title của từng slide có thể gắn được link.</br>
+				<i>mặc định:</i>
+				<pre>linkTitle: false</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>linkCover</td>
+			<td>bool</td>
+			<td>Đặt là <code>true</code> nếu muốn từng slide được gắn link (phạm vi click link trong toàn bộ slider).</br>
+				<i>mặc định:</i>
+				<pre>linkCover: false</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>sequent</td>
+			<td>bool</td>
+			<td>Đặt là <code>true</code> nếu muốn các slide được sắp xếp và di chuyển một cách có thứ tự.</br>
+				<i>mặc định:</i>
+				<pre>sequent: true</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>fullWidth</td>
+			<td>bool</td>
+			<td>Đặt là <code>true</code> nếu muốn chiều rộng của slider tự co dãn cho fix với kích thước của element cha (element chứa slider). Tuỳ chọn này thích hợp để làm với những web responsive design.</br>
+				<i>mặc định:</i>
+				<pre>fullWidth: false</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>fullscreenWidth</td>
+			<td>bool</td>
+			<td>Đặt là <code>true</code> nếu muốn chiều rộng của slider tự co dãn cho fix với kích thước màn hình. Tuỳ chọn này thích hợp để làm với những web responsive design.</br>
+				<i>mặc định:</i>
+				<pre>fullscreenWidth: false</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>hoverToSlide</td>
+			<td>bool</td>
+			<td>Đặt là <code>true</code> nếu muốn chỉ cần hover vào thumbnail là sẽ chuyển slide.</br>
+				<i>mặc định:</i>
+				<pre>hoverToSlide: false</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>navThumbTemplate</td>
+			<td>string function</td>
+			<td>Quy định template cho từng hình thumbnail.</br>
+				<i>mặc định:</i>
+				<pre>navThumbTemplate: '&lt;a class="nav-image"&gt;&lt;/a&gt;'</pre></br>
+				cũng có thể dùng function thay cho string:
+				<pre>navThumbTemplate: function(index){
+	return '&lt;a class="nav-image"&gt;&lt;/a&gt;'
+}</pre></br>
+				trong đó <code>index</code> là vị trí của hình thumb hiện tại.
+			</td>
+		</tr>
+		<tr>
+			<td>navDotTemplate</td>
+			<td>string function</td>
+			<td>Quy định template cho từng chấm tròn (tương tự như thumbnail).</br>
+				<i>mặc định:</i>
+				<pre>navDotTemplate: '&lt;a class="nav-dot"&gt;.&lt;/a&gt;'</pre></br>
+				cũng có thể dùng function thay cho string:
+				<pre>navDotTemplate: function(index){
+	return '&lt;a class="nav-dot"&gt;'+index+'&lt;/a&gt;'
+}</pre></br>
+				trong đó <code>index</code> là vị trí của hình thumb hiện tại.
+			</td>
+		</tr>
+		<tr id="customElementsClass">
+			<td>customElementsClass</td>
+			<td>string</td>
+			<td><i>mặc định:</i>
+				<pre>customElementsClass: 'elements'</pre>
+				<p class="important">xem thêm về custom elements và custom transition <a href="#custom">tại đây</a>.</p>
+			</td>
+		</tr>
+		<tr id="customTransitionClass">
+			<td>customTransitionClass</td>
+			<td>string</td>
+			<td><i>mặc định:</i>
+				<pre>customTransitionClass: 'transition'</pre>
+				<p class="important">xem thêm về custom elements và custom transition <a href="#custom">tại đây</a>.</p>
+			</td>
+		</tr>
+		
+		
+		
+		<tr id="usecss">
+			<td>usecss</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>usecss: true</pre>
+			</td>
+		</tr>
+		<tr id="contentSlide">
+			<td>contentSlide</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>contentSlide: false</pre>
+			</td>
+		</tr>
+		<tr id="dragSlide">
+			<td>dragSlide</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>dragSlide: false</pre>
+			</td>
+		</tr>
+		
+		<!-- POPUP -->
+		
+		<tr id="popup">
+			<td>popup</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>popup: false</pre>
+			</td>
+		</tr>
+		<tr id="popupOnly">
+			<td>popupOnly</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>popupOnly: false</pre>
+			</td>
+		</tr>
+		<tr id="popupShowOnClick">
+			<td>popupShowOnClick</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>popupShowOnClick: true</pre>
+			</td>
+		</tr>
+		<tr id="popupHideOnClickOut">
+			<td>popupHideOnClickOut</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>popupHideOnClickOut: false</pre>
+			</td>
+		</tr>
+		<tr id="popupCloseButton">
+			<td>popupCloseButton</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>popupCloseButton: true</pre>
+			</td>
+		</tr>
+		<tr id="popupAnimate">
+			<td>popupAnimate</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>popupAnimate: false</pre>
+			</td>
+		</tr>
+		<tr id="popupAnimateTime">
+			<td>popupAnimateTime</td>
+			<td>int</td>
+			<td><i>mặc định:</i>
+				<pre>popupAnimateTime: 1000</pre>
+			</td>
+		</tr>
+		<tr id="popupAnimateName">
+			<td>popupAnimateName</td>
+			<td>string</td>
+			<td><i>mặc định:</i>
+				<pre>popupAnimateName: 'fadeInDown fadeOutUp'</pre>
+			</td>
+		</tr>
+		
+		<!-- // option for slider inside popup -->
+		
+		<tr id="popupAutoplay">
+			<td>popupAutoplay</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>popupAutoplay: true</pre>
+			</td>
+		</tr>
+		<tr id="popupAutoplayTime">
+			<td>popupAutoplayTime</td>
+			<td>int</td>
+			<td><i>mặc định:</i>
+				<pre>popupAutoplayTime: 6000</pre>
+			</td>
+		</tr>
+		<tr id="popupPlayButton">
+			<td>popupPlayButton</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>popupPlayButton: false</pre>
+			</td>
+		</tr>
+		
+		<tr id="popupNavButton">
+			<td>popupNavButton</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>popupNavButton: true</pre>
+			</td>
+		</tr>
+		
+		<tr id="popupNavButtonParentIsRoot">
+			<td>popupNavButtonParentIsRoot</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>popupNavButtonParentIsRoot: false</pre>
+			</td>
+		</tr><tr id="popupNavThumb">
+			<td>popupNavThumb</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>popupNavThumb: true</pre>
+			</td>
+		</tr>
+			
+		<tr id="popupNavDot">
+			<td>popupNavDot</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>popupNavDot: true</pre>
+			</td>
+		</tr>
+		<tr id="popupLinkTitle">
+			<td>popupLinkTitle</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>popupLinkTitle: false</pre>
+			</td>
+		</tr>
+		<tr id="popupLinkCover">
+			<td>popupLinkCover</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>popupLinkCover: false</pre>
+			</td>
+		</tr>
+		<tr id="popupSequent">
+			<td>popupSequent</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>popupSequent: true</pre>
+			</td>
+		</tr>
+		<tr id="popupFullscreenWidth">
+			<td>popupFullscreenWidth</td>
+			<td>bool</td>
+			<td><i>mặc định:</i>
+				<pre>popupFullscreenWidth: false</pre>
+			</td>
+		</tr>
+		
+		
+	</table>
+	
+	</br>
+	
+	<!----->
+	
+	<h1>DEMO</h1>
+			
+	<h2>Nhúng</h2>
+
+	<p>Require</p>
+	<pre>&lt;script&gt;zjs.require('<b>image.slider.theme.linear</b>', function(){});&lt;/script&gt;</pre>
+	<p><i>zjs sẽ tự động require tất cả các module cần thiết</i></p>
+		
+	<p>Nhúng thủ công</p>
+	<pre>
+&lt;link rel="stylesheet" type="text/css" href="//app.april.com.vn/css/z.module.image.slider.theme.linear.css" /&gt;
+&lt;script type="text/javascript" src="//app.april.com.vn/js/z.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="//app.april.com.vn/js/z.module.image.slider.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="//app.april.com.vn/js/z.module.image.slider.theme.linear.js"&gt;&lt;/script&gt;</pre>
+
+
+	<h2 id="autoinitclass">Khởi tạo nhanh ngay trong code html với default option</h2>
+	<p>chỉ cần đặt class <b>zslider</b> và option dùng theme <b>linear</b> là xong, không cần viết bất kỳ code javascript nào</p>
+	<p><i>html:</i></p>
+	<pre>
+&lt;div class="<b>zslider</b>" data-option="<b>theme:'linear'</b>"&gt;
+    &lt;ul&gt;
+        &lt;li&gt;
+            &lt;h3&gt;title 1&lt;/h3&gt;
+            &lt;img src="thumb1.jpg" largesrc="image1.jpg" /&gt;
+            &lt;p&gt;Description 1&lt;/p&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;h3&gt;title 2&lt;/h3&gt;
+            &lt;img src="thumb2.jpg" largesrc="image2.jpg" /&gt;
+            &lt;p&gt;Description 2&lt;/p&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;</pre>
+
+	<h2>Khởi tạo nhanh ngay trong code html kèm theo các option khác</h2>
+	<p>đặt class <b>zslider</b> cho element, và kèm theo những option khác ngay trong code html</p>
+	<p><i>html:</i></p>
+	<pre>&lt;div class="<b>zslider</b>" data-option="<b>theme:'linear'</b>, transition:'fade', transitionTime:2000, 
+	transitionTimingfunction:'quadratic', autoplayTime:3000"&gt;</pre>
+
+	<h2>Khởi tạo bằng code javascript với các default option</h2>
+	<p><i>html:</i></p>
+	<pre>
+&lt;div id="divdivdiv"&gt;
+    &lt;ul&gt;
+        &lt;li&gt;
+            &lt;h3&gt;title 1&lt;/h3&gt;
+            &lt;img src="thumb1.jpg" largesrc="image1.jpg" /&gt;
+            &lt;p&gt;Description 1&lt;/p&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;h3&gt;title 2&lt;/h3&gt;
+            &lt;img src="thumb2.jpg" largesrc="image2.jpg" /&gt;
+            &lt;p&gt;Description 2&lt;/p&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;</pre>
+
+	<p><i>javascript:</i></p>
+	<pre>zjs('#divdivdiv').<a href="module.image.slider.html#makeSlider">makeSlider</a>();</pre>
+	
+	<h2>Khởi tạo bằng code javascript và tuỳ chỉnh các option</h2>
+	<p><i>javascript:</i></p>
+	<pre>zjs('#divdivdiv').<a href="module.image.slider.html#makeSlider">makeSlider</a>({
+		<b>theme:'linear',</b>
+		transition:'fade',
+		transitionTime:2000,
+		transitionTimingfunction:'quadratic',
+		autoplayTime: 3000
+	});</pre>
+	
+	<h2>Khởi tạo bằng code javascript và các option được set ở cả html và javascript</h2>
+	<p><i>html:</i></p>
+	<pre>&lt;div id="divdivdiv" data-option="<b>theme:'linear'</b>, transition:'fade'"&gt;</pre>
+	<p><i>javascript:</i></p>
+	<pre>zjs('#divdivdiv').<a href="module.image.slider.html#makeSlider">makeSlider</a>({
+		transitionTime:2000,
+		transitionTimingfunction:'quadratic',
+		autoplayTime: 3000
+	});</pre>
+	
+	<h2>Lắng nghe sự kiện khi chuyển sang 1 slide mới</h2>
+	<p><i>javascript:</i></p>
+	<pre>zjs('#divdivdiv').<a href="method.html#on">on</a>(<b>'slider.change'</b>, function(event, element){
+		console.log(<a href="module.image.slider.html#onchange">event.data</a>);
+		console.log(element); // element #divdivdiv
+	});</pre>
+	<p>xem giải thích về sự kiện <code>slider.change</code> và các thuộc tính của <code>event.data</code> tại <a href="module.image.slider.html#onchange">module.image.slider.html#onchange</a></p>
+
+	<h2>Live demo</h2>
+	<p><a href="http://app.april.com.vn/zjs/vers/1.1/z.module.image.slider.theme.linear.html">http://app.april.com.vn/zjs/vers/1.1/z.module.image.slider.theme.linear.html</a></p>
+	<p><a href="http://app.april.com.vn/zjs/vers/1.1/z.module.image.slider.theme.linear.mobile.html">http://app.april.com.vn/zjs/vers/1.1/z.module.image.slider.theme.linear.mobile.html</a></p>
+	
+	
+	<!----->
+	
+	<h1 id="custom">Custom element và custom transition</h1>
+	
+	<h2>Custom element</h2>
+	<p>Mặc định thì khi 1 element được biến thành slider, thì toàn bộ cấu trúc html sẽ được thay đổi. Tuy nhiên nếu bạn vẫn muốn custom một số thành phần trong từng slide, hãy làm như sau:</p>
+	<p><i>html:</i></p>
+	<pre>
+&lt;div class="<b>zslider</b>" data-option="<b>theme:'linear'</b>"&gt;
+    &lt;ul&gt;
+        &lt;li&gt;
+            &lt;h3&gt;title 1&lt;/h3&gt;
+            &lt;img src="thumb1.jpg" largesrc="image1.jpg" /&gt;
+            &lt;p&gt;Description 1&lt;/p&gt;
+            &lt;div class="<b>elements</b>"&gt;
+            	&lt;a&gt;custom&lt;/a&gt;
+            	&lt;p&gt;custom&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;h3&gt;title 2&lt;/h3&gt;
+            &lt;img src="thumb2.jpg" largesrc="image2.jpg" /&gt;
+            &lt;p&gt;Description 2&lt;/p&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;</pre>
+	<p>Theo đoạn mã trên thì trong slide đầu tiên (thẻ <code>li</code> đầu tiên) tất cả những gì đặt bên trong thẻ <code>&lt;div class="<b>elements</b>"&gt;</code> sẽ được giữ lại mà không bị thay đổi một cách tự động. Vậy nên hãy đặt mọi thứ bạn muốn custom vào bên trong thẻ <code>div</code> với class là <code>elements</code> này.</p>
+	<p>Không muốn đặt tên class là <code>elements</code>? bạn có thể tuỳ chọn tên cho class này ở tuỳ chọn <code><a href="#customElementsClass">customElementsClass</a></code></p>
+	
+	<!---->
+	
+	<h2>Custom transition</h2>
+	<p>Bạn muốn những custom elements trong từng slide có những hiệu ứng chuyển động cho đẹp mắt? Hãy sử dụng class <code>transition</code></p>
+	<pre>
+&lt;div class="<b>zslider</b>" data-option="<b>theme:'linear'</b>"&gt;
+    &lt;ul&gt;
+        &lt;li&gt;
+            &lt;h3&gt;title 1&lt;/h3&gt;
+            &lt;img src="thumb1.jpg" largesrc="image1.jpg" /&gt;
+            &lt;p&gt;Description 1&lt;/p&gt;
+            &lt;div class="<b>elements</b>"&gt;
+            	&lt;a class="<b>transition</b>" data-option=""&gt;custom&lt;/a&gt;
+            	&lt;p class="<b>transition</b>" data-option=""&gt;custom&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;h3&gt;title 2&lt;/h3&gt;
+            &lt;img src="thumb2.jpg" largesrc="image2.jpg" /&gt;
+            &lt;p&gt;Description 2&lt;/p&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;</pre>
+	<p>Các hiệu ứng được thực hiện bởi module transition của zjs, nên bạn phải nhúng module này vào trước khi khởi tạo slider.</p>
+	<pre>&lt;script type="text/javascript" src="//app.april.com.vn/js/z.module.transition.js"&gt;&lt;/script&gt;</pre>
+	<p><i>(Nếu như dùng zjs.require thì không cần phải nhúng thủ công module transition này)</i></p>
+	<p>Các thiết lập hiệu ứng bên trong <code>data-option</code> là các thiết lập của module transition, xem tại <a href="module.transition.html">module.transition.html</a></p>
+	<p>Không muốn đặt tên class là <code>transition</code>? bạn có thể tuỳ chọn tên cho class này ở tuỳ chọn <code><a href="#customTransitionClass">customTransitionClass</a></code></p>
+	
+</div>
+<!-- END CONTENT -->
+
+<div id="footer"><p><a href="#">Top of Page</a></p></div>
+
+</body>
+</html>

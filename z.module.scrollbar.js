@@ -30,7 +30,7 @@
 			innerWidth: 0,
 			innerHeight: 0,
 			horizontal: false,
-			scrollline: 300, // so' px trong 1 lan` di chuyen?
+			scrollline: 160, // so' px trong 1 lan` di chuyen?
 			scrolllinetouchpad: 40, // so' px trong 1 lan` di chuyen? neu move = touchpad
 			scrolltime: 800, // thoi` gian thuc. hien. hieu. ung' scroll-smooth
 			usecss: true, // use css3 transition for smooth

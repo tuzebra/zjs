@@ -1,0 +1,212 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Image slider - zjs developer documentation</title>
+
+<link rel="stylesheet" type="text/css" media="all" href="style.css">
+<body>
+
+<div id="header">
+	<div class="branding">
+		<h1 class="page-title">ZJS Developer Documentation</h1>
+		<div class="breadcrumb">
+			<a href="index.html">Home</a> &nbsp;›&nbsp;
+			<a href="module.html">Module</a> &nbsp;›&nbsp;
+			Image slider
+		</div>
+	</div>
+</div>
+
+
+<!-- START CONTENT -->
+<div id="content">
+	
+	<h1>Image slider</h1>
+	<p>Method cho <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code></p>
+	<ul>
+		<li><a href="#makeSlider">makeSlider()</a></li>
+		<li><a href="#slideTo">slideTo()</a></li>
+		<li><a href="#slideNext">slideNext()</a></li>
+		<li><a href="#slidePrev">slidePrev()</a></li>
+		<li><a href="#slidePlay">slidePlay()</a></li>
+		<li><a href="#slidePause">slidePause()</a></li>
+		<li><a href="#slidePopupShow">slidePopupShow()</a></li>
+		<li><a href="#slidePopupHide">slidePopupHide()</a></li> 
+	</ul>
+	<p>Sự kiện</p>
+	<ul>
+		<li><a href="#onready">slider.ready</a></li>
+		<li><a href="#onload">slider.load</a></li>
+		<li><a href="#onchange">slider.change</a></li>
+	</ul>
+	
+	<p>Auto init class: <a href="module.image.slider.theme.linear.html#autoinitclass"><code>zslider</code></a></p>
+	
+	<!----->
+	<h2 id="makeSlider">makeSlider()</h2>
+	<p>Khởi tạo slider</p>
+	<i>cú pháp:</i>
+	<p><code>zjs::makeSlider(<i>object</i> option)</code></p>
+	<p><b>option:</b></p>
+	<table>
+		<tr>
+			<td>theme</td>
+			<td>string</td>
+			<td>Tên của theme dùng làm slide.</br>
+				<i>mặc định:</i>
+				<pre>theme: ''</pre>
+				<p class="important"><strong>lưu ý</strong>: trong module chưa có sẵn bất kỳ một theme nào, nên luôn phải nhúng ít nhất một theme vào để sử dụng.</p>
+			</td>
+		</tr>
+	</table>	
+	
+	<p class="important">ngoài ra mỗi khi sử dụng một theme nào thì sẽ có thêm những option tương ứng của theme đó</p>
+				
+	
+	<!----->
+	
+	<h2 id="slideTo">slideTo()</h2>
+	<p>chuyển tới một hình bất kỳ</p>
+	<i>cú pháp:</i>
+	<p><code>zjs::slideTo(<i>int</i> index)</code></p>
+	<table>
+		<tr>
+			<td>index</td>
+			<td>int</td>
+			<td>vị trí của hình muốn chuyển tới</td>
+		</tr>
+	</table>
+		
+	<!----->
+	
+	<h2 id="slideNext">slideNext()</h2>
+	<p>chuyển tới hình tiếp theo, nếu như đang ở hình cuối cùng sẽ được chuyển tới hình đầu tiên</p>
+	<i>cú pháp:</i>
+	<p><code>zjs::slideNext()</code></p>
+	
+	<!----->
+	
+	<h2 id="slidePrev">slidePrev()</h2>
+	<p>chuyển tới hình trước đó, nếu như đang ở hình đầu tiên sẽ được chuyển tới hình cuối cùng</p>
+	<i>cú pháp:</i>
+	<p><code>zjs::slidePrev()</code></p>
+	
+	<!----->
+	
+	<h2 id="slidePlay">slidePlay()</h2>
+	<p>bật chế độ cho slide tự động chuyển hình</p>
+	<i>cú pháp:</i>
+	<p><code>zjs::slidePlay()</code></p>
+	
+	<!----->
+	
+	<h2 id="slidePause">slidePause()</h2>
+	<p>tắt chế độ cho slide tự động chuyển hình</p>
+	<i>cú pháp:</i>
+	<p><code>zjs::slidePause()</code></p>
+	
+	<!----->
+	
+	<h2 id="onready">slider.ready</h2>
+	<p>Sự kiện được gọi khi slider đã sẵn sàng.</p>
+	
+	<!----->
+	
+	<h2 id="onload">slider.load</h2>
+	<p>Sự kiện được gọi khi slider bắt đầu chạy.</p>
+	
+	<!----->
+	
+	<h2 id="onchange">slider.change</h2>
+	<p>Sự kiện được gọi khi slider chuyển sang một hình mới.</p>
+	<p><code>event.data</code> chứa các thuộc tính sau:</p>
+	<table>
+		<tr>
+			<td>index</td>
+			<td>int</td>
+			<td>vị trí của hình hiện tại</td>
+		</tr>
+		<tr>
+			<td>oldindex</td>
+			<td>int</td>
+			<td>vị trí của hình cũ trước đó</td>
+		</tr>
+		<tr>
+			<td>direction</td>
+			<td>string</td>
+			<td>hướng di chuyển của slider, có 3 trường hợp với thuộc tính này:</br>
+				<table class="childtable">
+					<tr><td><code>'next'</code></td><td>di chuyển theo chiều thuận</td></tr>
+					<tr><td><code>'prev'</code></td><td>di chuyển theo chiều ngược lại</td></tr>
+					<tr><td><code>undefined</code></td><td>không xác định được chiều di chuyển, trường hợp này xảy ra khi user click di chuyển tới một hình bất kỳ nào đó không xác định trước</td></tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td>image</td>
+			<td>string</td>
+			<td>đường dẫn của hình hiện tại</td>
+		</tr>
+		<tr>
+			<td>title</td>
+			<td>string</td>
+			<td>tiêu đề của hình hiện tại</td>
+		</tr>
+		<tr>
+			<td>description</td>
+			<td>string</td>
+			<td>mô tả của hình hiện tại</td>
+		</tr>
+		<tr>
+			<td>link</td>
+			<td>string</td>
+			<td>đường link của hình hiện tại</td>
+		</tr>
+	</table>
+	</br>
+	<p>Ví dụ:</p>
+	<pre>zjs('.slider').<a href="method.html#on">on</a>('<b>slider.change</b>', function(event){
+	console.old(event.data);
+});
+	
+</pre>
+	
+	<!----->
+	
+	<h1>Theme</h1>
+	<p>Một số theme thông dụng:</p>
+	
+	<ul>
+		<li><a href="module.image.slider.theme.linear.html">linear</a></li>
+	</ul>
+	
+	<!----->
+	
+	<h1>Demo</h1>
+	<h2>Nhúng</h2>
+	
+	<p>Require</p>
+	<pre>&lt;script&gt;
+zjs.<a href="static.html#require">require</a>('<b>image.slider</b>', function(){
+	// callback	
+});
+&lt;/script&gt;</pre>
+	<p><i>zjs sẽ tự động require tất cả các module cần thiết</i></p>
+	
+	<p>Nhúng thủ công</p>
+	<pre>
+&lt;script type="text/javascript" src="//app.april.com.vn/js/z.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="//app.april.com.vn/js/z.module.image.slider.js"&gt;&lt;/script&gt;</pre>
+
+	
+	<!----->
+	
+	
+		
+	
+</div>
+<!-- END CONTENT -->
+
+<div id="footer"><p><a href="#">Top of Page</a></p></div>
+
+</body>
+</html>

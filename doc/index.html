@@ -1,0 +1,116 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>zjs developer documentation</title>
+
+<link rel="stylesheet" type="text/css" media="all" href="style.css">
+<body>
+
+<div id="header">
+	<div class="branding">
+		<h1 class="page-title">ZJS Developer Documentation</h1>
+		<div class="breadcrumb">
+			Home &nbsp;&middot;&nbsp; 
+			<a href="method.html">Method</a> &nbsp;&middot;&nbsp; 
+			<a href="static.html">Static Method</a> &nbsp;&middot;&nbsp; 
+			<a href="hook.html">Hook</a> &nbsp;&middot;&nbsp; 
+			<a href="module.html">Module</a> &nbsp;&middot;&nbsp; 
+			<a href="type.html">Data type</a> &nbsp;&middot;&nbsp; 
+			<a href="article.html">Article</a>
+		</div>
+	</div>
+</div>
+
+
+<!-- START CONTENT -->
+<div id="content">
+	
+	<h1>ZJS core</h1>
+	<p>Zjs là một thư viện javascript giúp thao tác với DOM một cách đơn giản, nhanh chóng và hiệu quả.</p>
+	<p>Sau khi nhúng vào trang web, sẽ có 2 đối tượng global tồn tại để sử dụng: <code>zjs</code> và <code>z</code> (z là shortcut của zjs)</p>
+	<p>Có thể dùng <code>zjs</code> theo nhiều cách khác nhau</p>
+	<ul>
+		<li>
+			<p>Dùng để thao tác với DOM bằng cách tạo ra một <code>zjsDOMObject</code></p>
+			<pre>// Tạo ra một zjsDOMObject
+var a = zjs('css query string');</pre>
+		</li>
+		
+		<li>
+			<p>Dùng để bắt sự kiện <code>domready</code> và gọi hàm xử lý</p>
+			<pre>zjs(function(){			
+    // code javascript trong đây 
+    // sẽ được chạy khi domready
+});</pre>
+		</li>
+		
+		<li>
+			<p>Dùng như một static class để gọi các method & property</p>
+			<pre>// Xem thông tin về Browser thông qua property browser
+zjs.<a href="static.html#browser">browser</a>;
+
+// Sử dụng ajax thông qua method ajax
+zjs.<a href="static.html#ajax">ajax</a>();</pre>
+		</li>
+	</ul>
+	
+	<!----->
+	<h2 id="zjsdomobject">zjsDOMObject</h2>
+	<p>Object chứa các method để thao tác với DOM</p>
+	<p>Một <code>zjsDOMObject</code> lưu trữ một hoặc nhiều đối tượng DOM, vì vậy nên có thể thao tác trên nhiều đối tượng DOM cùng lúc</p>
+	<p>Để tạo ra một <code>zjsDOMObject</code></p>
+	<pre>var a = zjs('#test1');             // tạo ra zjsDOMObject chứa 1 element có id là "test1"
+var b = zjs('.test2');             // tạo ra zjsDOMObject chứa những element có class là "test2"
+var c = zjs(window);               // tạo ra zjsDOMObject chứa đối tượng window
+var d = zjs(a);                    // tạo ra zjsDOMObject chứa những element mà a (là một zjsDOMObject) chứa
+var e = zjs([b, c]);               // tạo ra zjsDOMObject chứa những element mà b và c chứa
+var f = zjs(['#test1', '.test2']); // tạo ra zjsDOMObject chứa những element có id là "test1" hoặc có class là "test2"
+var g = zjs('#test1, .test2');     // tạo ra zjsDOMObject chứa những element có id là "test1" hoặc có class là "test2"</pre>
+	<p>Để thao tác với những element chứa trong một <code>zjsDOMObject</code> ta sử dụng các method của <code>zjsDOMObject</code></p>
+	<pre>// tạo ra zjsDOMObject chứa những element có class là "test2"
+var a = zjs('.test2');
+
+// thay đổi nội dung (innerHTML) của toàn bộ những element nào có class là "test2"
+a.<a href="method.html#html">html</a>('nội dung mới...');
+
+// một cách viết code ngắn hơn
+zjs('.test2').<a href="method.html#html">html</a>('nội dung mới...');</pre>
+	<p>Các method của <code>zjsDOMObject</code> thường hỗ trợ việc gọi theo chuỗi liên tục</p>
+	<pre>// thay đổi nội dung (innerHTML), sau đó thay đổi màu chữ
+// của toàn bộ những element nào có class là "test2"
+zjs('.test2').<a href="method.html#html">html</a>('nội dung mới...').<a href="method.html#style">style</a>('color', 'red');</pre>
+
+	<p><a href="method.html">xem danh sách các method của zjsDOMObject -›</a></p>
+	
+	<!----->
+	<h2 id="zjzstaticmethod">Static method & property</h2>
+	<p>Các static method và static property được gọi trực tiếp từ class <code>zjs</code></p>
+	<pre>var browser = zjs.browser; // static property
+zjs.ajax(); // static method</pre>
+	<p><a href="static.html">xem danh sách các static method & property -›</a></p>
+	
+	<h1>Hook</h1>
+	<p>Không cần phải hack code zjs mà vẫn làm được nhiều thứ ;))</p>
+	<p><a href="hook.html">xem danh sách các hook -›</a></p>
+	
+	<h1>Module</h1>
+	<p>Mở rộng thêm nhiều tính năng hữu ích cho thư viện</p>
+	<p><a href="module.html">danh sách -›</a></p>
+	
+	<h1>Data Types</h1>
+	<p>Bổ sung thêm các method cho các kiểu dữ liệu mặc định trong javascript</p>
+	<p><a href="type.html">danh sách -›</a></p>
+	
+	<h1>Article</h1>
+	<ul>
+		<li><p><a href="article.use-hook-and-custom-event.html">Sử dụng hook và custom event trong zjs -›</a></p></li>
+		<li><p><a href="article.build-module.html">Viết module cho zjs -›</a></p></li>
+	</ul>
+	<p><a href="article.html">các bài viết khác -›</a></p>
+	
+</div>
+<!-- END CONTENT -->
+
+<div id="footer"><p><a href="#">Top of Page</a></p></div>
+
+</body>
+</html>

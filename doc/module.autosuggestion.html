@@ -1,0 +1,234 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Auto suggestion - zjs developer documentation</title>
+
+<link rel="stylesheet" type="text/css" media="all" href="style.css">
+<body>
+
+<div id="header">
+	<div class="branding">
+		<h1 class="page-title">ZJS Developer Documentation</h1>
+		<div class="breadcrumb">
+			<a href="index.html">Home</a> &nbsp;›&nbsp;
+			<a href="module.html">Module</a> &nbsp;›&nbsp;
+			Auto suggestion
+		</div>
+	</div>
+</div>
+
+
+<!-- START CONTENT -->
+<div id="content">
+	
+	<h1>Auto suggestion</h1>
+	<p>Cung cấp 3 method cho <code><a href="index.html#zjsdomobject">zjsDOMObject</a></code>, giúp tạo ra một input có chức năng gợi ý từ nhập vào, và quản lý những từ gợi ý này.</p>
+	<ul>
+		<li><a href="#makeAutosuggestion">makeAutosuggestion()</a></li>
+		<li><a href="#autosuggestionAddindex">autosuggestionAddindex()</a></li>
+		<li><a href="#autosuggestionRemoveindex">autosuggestionRemoveindex()</a></li>
+	</ul>
+	<p>Cung cấp 2 sự kiện để tương tác với input sau khi input đã biến thành một "auto suggestion input".</p>
+	<ul>
+		<li><a href="#onhighlight">autosuggestion.highlight</a></li>
+		<li><a href="#onchoice">autosuggestion.choice</a></li>
+	</ul>
+	
+	<!----->
+	<h2 id="makeAutosuggestion">makeAutosuggestion</h2>
+	<p>Khởi tạo một input có chức năng auto suggest</p>
+	<i>cú pháp:</i>
+	<p><code>zjs::makeAutosuggestion(<i>object</i> option)</code></p>
+	<p><b>option:</b></p>
+	<table>
+		<tr>
+			<td>minlength</td>
+			<td>int</td>
+			<td>Độ dài tối thiểu của chuỗi nhập vào để bắt đầu tìm kiếm.</br>
+				<i>mặc định:</i>
+				<pre>minlength: 1</pre>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>customcss</td>
+			<td>bool</td>
+			<td>Set là <code>true</code> nếu muốn sử dụng file css để chỉnh style cho inputbox </br> nếu là <code>false</code> thì style của inputbox sẽ được tự động điều chỉnh.</br>
+				<i>mặc định:</i>
+				<pre>customcss: false</pre>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>panelmaxheight</td>
+			<td>int</td>
+			<td>Chiều cao tối đa của panel chứa các suggest.</br>
+				<i>mặc định:</i>
+				<pre>panelmaxheight: 200</pre>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>source</td>
+			<td>array object string</td>
+			<td>Chứa các giá trị suggest.</br>
+				<i>vd:</i></br>
+				<pre>source:'string 1'</pre>
+				<pre>source:['string 1', 'string 2']</pre>
+				<pre>source:{text:'string 1'}</pre>
+				<pre>source:{text:'string 1', custom:'any', custom2:'any'}</pre>
+				<pre>source:[{text:'string 1'}, {text:'string 2'}]</pre>
+				<pre>source:[{text:'string 1', custom:'any'}, {text:'string 2', custom:'any'}]</pre>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>itemtemplate</td>
+			<td>string function</td>
+			<td>Quy định template cho một mục chọn trong panel suggest.</br>
+				<i>mặc định:</i>
+				<pre>itemtemplate: '&lt;div class="item"&gt;${text}&lt;/div&gt;'</pre></br>
+				trong đó <code>${text}</code> sẽ được replace bằng giá trị <code>text</code> như trên <code>source</code> truyền vào.</br></br>
+				cũng có thể dùng function thay cho string:
+				<pre>itemtemplate: function(data){
+	return '&lt;div class="item"&gt;name:'+data.text+' id:'+data.custom+'&lt;/div&gt;'
+}</pre></br>
+				trong đó <code>data</code> là một object như trên <code>source</code> truyền vào.
+			</td>
+		</tr>
+		
+		<tr>
+			<td>itemhighlightclass</td>
+			<td>string</td>
+			<td>Class của một item trong panel suggest khi được highlight.</br>
+				<i>mặc định:</i>
+				<pre>itemhighlightclass: 'highlight'</pre>
+			</td>
+		</tr>
+	
+	</table>
+	
+	<!----->
+	
+	<h2 id="autosuggestionAddindex">autosuggestionAddindex</h2>
+	<p>thêm vào các giá trị tìm kiếm</p>
+	<i>cú pháp:</i>
+	<p><code>zjs::autosuggestionAddindex(<i>string</i>)</code></p>
+	<p><code>zjs::autosuggestionAddindex(<i>object</i>)</code></p>
+	<p><code>zjs::autosuggestionAddindex(<i>array</i>)</code></p>
+	
+	<i>vd:</i>
+	<pre>zjs('<a href="http://en.wikipedia.org/wiki/CSS_selector#Syntax" target="_blank">cssselector</a>').autosuggestionAddindex('string 1');</pre>
+	<pre>zjs('<a href="http://en.wikipedia.org/wiki/CSS_selector#Syntax" target="_blank">cssselector</a>').autosuggestionAddindex(['string 1', 'string 2']);</pre>
+	<pre>zjs('<a href="http://en.wikipedia.org/wiki/CSS_selector#Syntax" target="_blank">cssselector</a>').autosuggestionAddindex({text:'string 1'});</pre>
+	<pre>zjs('<a href="http://en.wikipedia.org/wiki/CSS_selector#Syntax" target="_blank">cssselector</a>').autosuggestionAddindex({text:'string 1', custom:'any', custom2:'any'});</pre>
+	<pre>zjs('<a href="http://en.wikipedia.org/wiki/CSS_selector#Syntax" target="_blank">cssselector</a>').autosuggestionAddindex([{text:'string 1'}, {text:'string 2'}]);</pre>
+	<pre>zjs('<a href="http://en.wikipedia.org/wiki/CSS_selector#Syntax" target="_blank">cssselector</a>').autosuggestionAddindex([text:'string 1', custom:'any'}, {text:'string 2', custom:'any'}])</pre>
+	
+	<!----->
+	
+	<h2 id="autosuggestionRemoveindex">autosuggestionRemoveindex</h2>
+	<p>loại bỏ các giá trị tìm kiếm</p>
+	<i>cú pháp:</i>
+	<p><code>zjs::autosuggestionRemoveindex(<i>string</i> query, <i>function</i> confirm)</code></p>
+	
+	<i>giải thích:</i>
+	<p>function <code>confirm</code> phải return về <code>true</code> thì mới thực hiện gỡ bỏ các giá trị tìm được trong câu <code>query</code>, và nếu như không được truyền vào thì mặc định sẽ được hiểu là:</p>
+	<pre>confirm = function(data){return true}</pre>
+	
+	<p><i>vd:</i></p>
+	<p>loại bỏ tất cả các giá trị có chứa cụm từ <code>'huy'</code></p>
+	<pre>zjs('<a href="http://en.wikipedia.org/wiki/CSS_selector#Syntax" target="_blank">cssselector</a>').autosuggestionRemoveindex('huy')</pre>
+	
+	<p>loại bỏ tất cả các giá trị có chứa cụm từ <code>'phan dang huy'</code> và có <code>id = 10</code></p>
+	<pre>zjs('<a href="http://en.wikipedia.org/wiki/CSS_selector#Syntax" target="_blank">cssselector</a>').autosuggestionRemoveindex('phan dang huy', function(data){return data.id==10})</pre>
+	
+	<p>loại bỏ tất cả các giá trị có chứa cụm từ <code>'dang huy'</code> và không có <code>id</code></p>
+	<pre>zjs('<a href="http://en.wikipedia.org/wiki/CSS_selector#Syntax" target="_blank">cssselector</a>').autosuggestionRemoveindex('dang huy', function(data){return typeof data.id=='undefined'})</pre>
+	</br>
+	
+	<!----->
+	
+	<h2 id="onhighlight">autosuggestion.highlight</h2>
+	<p>Sự kiện được gọi khi một item trong panel suggest được highlight lên.</p>
+	<p><code>event.data</code> là một object chứa các thông tin ứng với giá trị đang được highlight.</p>
+	
+	<!----->
+	
+	<h2 id="onchoice">autosuggestion.choice</h2>
+	<p>Sự kiện được gọi khi một item trong panel suggest được chọn.</p>
+	<p><code>event.data</code> là một object chứa các thông tin ứng với giá trị đang được chọn.</p>
+	
+	<!----->
+	
+	<h1>Demo</h1>
+			
+	<h2>Nhúng</h2>
+	<pre>
+&lt;link rel="stylesheet" type="text/css" href="//static.april.com.vn/css/z.module.autosuggestion.css" /&gt;
+&lt;script type="text/javascript" src="//static.april.com.vn/js/z.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="//static.april.com.vn/js/z.module.autosuggestion.js"&gt;&lt;/script&gt;</pre>
+	
+	<h2>Khởi tạo nhanh với default option</h2>
+	<p>chỉ cần đặt class <b>zautosuggestion</b> là xong, không cần viết bất kỳ code javascript nào</p>
+	<pre>
+&lt;input type="text" class="<b>zautosuggestion</b>" value="" 
+data-option="source:['Tuan Luong Hoang', 'Khanh Nguyen', 'Khoa Luong', ...]" /&gt;</pre>
+
+	<!-- - - -->
+
+	<h2>Khởi tạo kết hợp giữa html và javascript</h2>
+	<p>khai báo các option trong html và sau đó gọi hàm khởi tạo cùng với khai báo các sự kiện trong code javascript</p>
+	<pre>
+&lt;input type="text" value="" data-option="minlength:1, customcss:true, panelmaxheight:200, 
+                                         source:['Tuan Luong Hoang', 'Khanh Nguyen', 'Khoa Luong', ...]" /&gt;
+
+&lt;script&gt;
+zjs('input').makeAutosuggestion();
+zjs('input').on('autosuggestion.highlight', function(event){console.log('highlight:', event.data)});
+zjs('input').on('autosuggestion.choice', function(event){console.log('choice:', event.data)});
+&lt;/script&gt;</pre>
+	<!-- - - -->
+	
+	<h2>Nâng cao</h2>
+	<p>đặt tất cả mọi thứ bên trong code javascript, đồng thời sử dụng phương thức add và remove index</p>
+	<pre>
+&lt;input type="text" value="" placeholder="type something to search..." /&gt;
+
+&lt;script&gt;
+
+var source = [
+    {id:8371633, text:'Tuan Luong Hoang'},
+    {id:19101998, text:'Khanh Nguyen'},
+    ...
+];		
+			
+zjs('input')
+    // init
+    .makeAutosuggestion({
+        minlength: 1,
+        customcss: true,
+        panelmaxheight: 200,
+        source: source,
+        itemtemplate: '&lt;div class="item"&gt;${text} (&lt;i&gt;${id}&lt;/i&gt;)&lt;/div&gt;',
+        itemhighlightclass: 'highlight'
+    })
+    // add more data
+    .autosuggestionAddindex('phan dang huy')
+    .autosuggestionAddindex({text:'phan dang huy', name:'huy', link:'keke'})
+    .autosuggestionAddindex(['phan dang huy', 'tuzebra'])
+    .autosuggestionAddindex([{text:'phan dang huy', id:1}, {text:'tuzebra', id:2}])
+    // remove data
+    .autosuggestionRemoveindex('phan dang huy', function(data){return typeof data.id == 'undefined'})
+    // listen event
+    .on('autosuggestion.highlight', function(event){console.log('highlight:', event.data)})
+    .on('autosuggestion.choice', function(event){console.log('choice:', event.data)});
+&lt;/script&gt;</pre>
+		
+	
+</div>
+<!-- END CONTENT -->
+
+<div id="footer"><p><a href="#">Top of Page</a></p></div>
+
+</body>
+</html>
