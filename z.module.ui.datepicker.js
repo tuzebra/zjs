@@ -75,6 +75,7 @@ zjs.require('ui, ui.button, moment', function () {
 			button: true,
 			strictInput: false,
 			labelPlaceholder: false,
+      autoPlaceholder: true,
 			language: lang,
 			firstOfWeek: locale[lang].firstOfWeek, // 0: Sunday, ..., 6: Saturday
 			calendarTitleFormat: locale[lang].calendarTitleFormat,
@@ -309,8 +310,10 @@ zjs.require('ui, ui.button, moment', function () {
 		zDatepickerEl.setData(wrapelkey, zDatepickerWrapEl);
 
 		// get ra value hien tai cua input
-		var value = zDatepickerEl.getValue(''),
-			selectdatetime = (value == '' ? moment() : moment(value, 'YYYY-MM-DD HH:mm:ss'));
+		var value = zDatepickerEl.getValue('');
+		var selectdatetime = null;
+		if(value == '' && !option.strictInput)selectdatetime = moment();
+		if(!value)selectdatetime = moment(value, 'YYYY-MM-DD HH:mm:ss');
 
 		// fix lai selectdatetime theo option
 		// boi vi nhieu khi se khong cho chon second, hoac minute, hoac hour
@@ -459,7 +462,7 @@ zjs.require('ui, ui.button, moment', function () {
 		// va dong thoi cung co truyen vao placeholder
 		// o dau thi khong biet, chu trong setvalue thi phai set theo 1 chuan thoi
 		var valueForOrgInput = selectdatetime.format(option.time ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD');
-		if ((value != '' || placeholder == '')) {
+		if (valueForOrgInput && valueForOrgInput.toString() !== 'Invalid date' && (value != '' || placeholder == '')) {
 			// set ca 2 attribute va value luon 
 			// (trong truong hop form chua input nay duoc move di dau do
 			// thi browser se tu lay attribute value de ma set lai value 
@@ -854,13 +857,17 @@ zjs.require('ui, ui.button, moment', function () {
 
 			// set placeholder & default value
 			if ((value != '' || placeholder == '')) {
-				// gi thi gi chu cung can phai kiem tra co bi disabledDate hay khong?
-				if (!option.disabledDate || !option.disabledDate(selectdatetime.format('YYYY-MM-DD')))
-					zDatepickerInputEl.setValue(selectdatetime.format(option.format));
+				if(selectdatetime && selectdatetime.toString() !== 'Invalid date'){
+					// gi thi gi chu cung can phai kiem tra co bi disabledDate hay khong?
+					if (!option.disabledDate || !option.disabledDate(selectdatetime.format('YYYY-MM-DD')))
+						zDatepickerInputEl.setValue(selectdatetime.format(option.format));
+				}
 			};
 			var orgPlaceholder = placeholder;
-			if (orgPlaceholder == '')
-				orgPlaceholder = option.format;
+			if (orgPlaceholder == ''){
+				if(option.autoPlaceholder)
+					orgPlaceholder = option.format;
+			}
 
 			// Ho tro show placeholder nhu 1 cai label
 			if (option.labelPlaceholder && orgPlaceholder !== '') {
@@ -1058,10 +1065,11 @@ zjs.require('ui, ui.button, moment', function () {
 					}
 
 					// vay la thay doi selectdatetime luon
+					var rightValueHuh;
 					//var selectdatetime = zDatepickerEl.getData(selectdatetimekey);
 					if (tempInputingValue != '') {
 						// bay gio thi co gang di phan tich coi co ra duoc cai value gi khong? base on option.format
-						var rightValueHuh = moment(tempInputingValue, option.format);
+						rightValueHuh = moment(tempInputingValue, option.format);
 						if (!rightValueHuh.isValid())
 							tempInputingValue = '';
 						if (tempInputingValue != '' && option.disabledDate && option.disabledDate(rightValueHuh.format('YYYY-MM-DD')))
@@ -1075,6 +1083,10 @@ zjs.require('ui, ui.button, moment', function () {
 						// nen la se thoi
 						var calendardatetime = zDatepickerEl.getData(calendardatetimekey),
 							selectdatetime = zDatepickerEl.getData(selectdatetimekey);
+
+						if(rightValueHuh && (!selectdatetime || selectdatetime.toString() === 'Invalid date')){
+							selectdatetime = moment(rightValueHuh);
+						}
 
 						selectdatetime.year(rightValueHuh.year()).month(rightValueHuh.month()).date(rightValueHuh.date());
 						calendardatetime.year(rightValueHuh.year()).month(rightValueHuh.month()).date(rightValueHuh.date());
@@ -1152,8 +1164,10 @@ zjs.require('ui, ui.button, moment', function () {
 			// nhung neu nhu khong co default value
 			// ma lai co placeholder, thi se show ra placeholder
 			var orgPlaceholder = placeholder;
-			if (orgPlaceholder == '')
-				orgPlaceholder = option.format;
+			if (orgPlaceholder == ''){
+				if(option.autoPlaceholder)
+					orgPlaceholder = option.format;
+			}
 			// gi thi gi chu cung can phai kiem tra co bi disabledDate hay khong?
 			zDatepickerButtonEl.find('.' + zbuttonlabelclass).setInnerHTML((!option.disabledDate || !option.disabledDate(selectdatetime.format('YYYY-MM-DD'))) ? selectdatetime.format(option.format) : orgPlaceholder);
 
@@ -1419,6 +1433,16 @@ zjs.require('ui, ui.button, moment', function () {
 		if (!zDatepickerWrapEl) return;
 
 		var option = zDatepickerEl.getData(optionkey);
+    var zDatepickerInputEl = zDatepickerWrapEl.find('.' + datepickerinputclass);
+    value = value.trim();
+    if(!value){
+      // render ra voi strick mode
+      if(zDatepickerInputEl.count() && option.strictInput){
+        zDatepickerInputEl.setValue('');
+        zDatepickerWrapEl.removeClass('has-value');
+      }
+      return;
+    }
 
 		// bay gio se format cai value set vao cho dung chuan
 		// get ra current datetime
@@ -1449,7 +1473,6 @@ zjs.require('ui, ui.button, moment', function () {
 		}
 
 		// render ra voi strick mode
-		var zDatepickerInputEl = zDatepickerWrapEl.find('.' + datepickerinputclass);
 		if(zDatepickerInputEl.count() && option.strictInput){
 			zDatepickerInputEl.setValue(selectdatetime.format(option.format));
 			zDatepickerWrapEl.addClass('has-value');

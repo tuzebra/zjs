@@ -2215,8 +2215,15 @@ zjs.extendMethod({
 	is: function(selector){
 		var matchall = true;
 		this.eachElement(function(el){
-			if(!Sizzle.matchesSelector(el, selector))
+			var matched = false;
+			try{
+				matched = Sizzle.matchesSelector(el, selector);
+			}catch(error){
+				matched = false;
+			}
+			if(!matched){
 				return (matchall = false);
+			}
 		});
 		return matchall;
 	},
