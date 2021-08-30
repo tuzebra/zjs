@@ -313,7 +313,9 @@ zjs.require('ui, ui.button, moment', function () {
 		var value = zDatepickerEl.getValue('');
 		var selectdatetime = null;
 		if(value == '' && !option.strictInput)selectdatetime = moment();
-		if(!value)selectdatetime = moment(value, 'YYYY-MM-DD HH:mm:ss');
+		if(value){
+      selectdatetime = moment(value, 'YYYY-MM-DD HH:mm:ss');
+    }
 
 		// fix lai selectdatetime theo option
 		// boi vi nhieu khi se khong cho chon second, hoac minute, hoac hour
@@ -327,7 +329,8 @@ zjs.require('ui, ui.button, moment', function () {
 		var placeholder = _defaultPlaceholder;
 
 		// set lang cho chuan coi
-		selectdatetime.locale(option.language);
+		if(selectdatetime)
+			selectdatetime.locale(option.language);
 
 
 
@@ -461,7 +464,7 @@ zjs.require('ui, ui.button, moment', function () {
 		// neu nhu cai input truyen vao mac dinh la empty
 		// va dong thoi cung co truyen vao placeholder
 		// o dau thi khong biet, chu trong setvalue thi phai set theo 1 chuan thoi
-		var valueForOrgInput = selectdatetime.format(option.time ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD');
+		var valueForOrgInput = !selectdatetime ? '' : selectdatetime.format(option.time ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD');
 		if (valueForOrgInput && valueForOrgInput.toString() !== 'Invalid date' && (value != '' || placeholder == '')) {
 			// set ca 2 attribute va value luon 
 			// (trong truong hop form chua input nay duoc move di dau do
@@ -1284,6 +1287,7 @@ zjs.require('ui, ui.button, moment', function () {
 
 			// create header of table
 			var zCalendarWrapEl = zjs('<div>').addClass(calendarwrapclass);
+      if(!date)return zCalendarWrapEl;
 
 			// append month name
 			zjs(calendarrowmonthhtml).setInnerHTML(date.format(option.calendarTitleFormat)).appendTo(zCalendarWrapEl);
