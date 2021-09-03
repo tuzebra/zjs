@@ -6,8 +6,8 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 		wrapinputelkey = 'zmoduleautosuggestionwrapinputel',
 		newinputkey = 'zjsmoduleautosuggestionnewinput',
 		dictionarykey = 'zjsmoduleautosuggestiondictionary',
-		keytypehandlerkey = 'zjsmoduleautosuggestionkeytype',
 		functurnonoffkey = 'zjsmoduleautosuggestionfuncturnonoffkey',
+		funcsetvaluekey = 'zjsmoduleautosuggestionfuncsetvaluekey',
 		isstillloading = 'zjsmoduleautosuggestionisstillloadingkey';
 	
 	// extend core option cho de dieu chinh
@@ -17,7 +17,8 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 			minheight: 18,
 			customcss: true,
 			labelPlaceholder: false,
-			focusshowsuggestion: false,
+			focusshowsuggestion: null,
+			showSuggestionIfNoResult: null,
 			autofocus: false,
 			panelmaxheight: 200,
 			multiline: true,
@@ -58,6 +59,7 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 	
 	// trigger
 	//ui:autosuggestion:highlight
+	//ui:autosuggestion:change
 	//ui:autosuggestion:choice
 	//ui:autosuggestion:input
 	//ui:autosuggestion:blur
@@ -125,6 +127,7 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 
 		var IS_ENABLE_AUTOSUGGESTION = true;
 		var IS_SELECT_BASE = false;
+		var IS_SELECT_BEHAVIOR = false; // in case this isn't a select, but behavior like select
 
 		// - - - 
 		// neu ma chua co thi se lam binh thuong
@@ -184,6 +187,7 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 			if(selectSourceEl.count()>0){
 
 				IS_SELECT_BASE = zOriginalInput.is('select');
+				if(IS_SELECT_BASE)IS_SELECT_BEHAVIOR = true;
 				
 				// fix option luon
 				option.multichoice = false;
@@ -251,10 +255,18 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 			}
 		}
 
+		// decide is this case is IS_SELECT_BEHAVIOR
+		if(!IS_SELECT_BEHAVIOR){
+			if(option.forceSelectFromList && option.usedproperty === 'id.text'){
+				IS_SELECT_BEHAVIOR = true;
+			}
+		}
+
 		// fix option khi original input la select
 		// va khong co set option select like input
 		// thi vay thi can phai show ra suggestion nhu la 1 cai select that
-		if(IS_SELECT_BASE && !option.selectLikeInput){
+		// but if user force setting focusshowsuggestion = false, then don't care
+		if(option.focusshowsuggestion === null && (IS_SELECT_BASE || IS_SELECT_BEHAVIOR) && !option.selectLikeInput){
 			option.focusshowsuggestion = true;
 		}
 		
@@ -570,13 +582,15 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 
 		var blurhandler = function(){
 
+			var eventData = null;
+
 			// neu nhu autosuggestion nay la 1 cai select
 			// thi bat buoc phai set duoc data, neu khong set duoc data thi se reset
-			if(IS_SELECT_BASE){
+			if(IS_SELECT_BASE || IS_SELECT_BEHAVIOR){
 				// console.log('IS_SELECT_BASE');
 				if(zOriginalInput.getValue() === ''){
 
-					// reset type value luon 
+					// reset type value luon
 					typevalue = '';
 
 					// zOriginalInput.addClass('empty');
@@ -585,16 +599,22 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 					zInput.setValue('', true);
 					// zWrapperInput.removeClass('has-value');
 					zWrapperEl.removeClass('has-value');
+
 				}
 				else{
 					zWrapperEl.addClass('has-value');
 				}
+
+				eventData = {id: zOriginalInput.getValue(), text: null};
 			}
 
 			// hide panel
 			zPanel.addClass('zui-panel-hide');
-			
+
 			zOriginalInput.trigger('ui:autosuggestion:blur');
+			if(eventData){
+				zOriginalInput.trigger('ui:autosuggestion:change', eventData);
+			}
 		};
 		
 		// handler onkey make change
@@ -808,7 +828,9 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 			// trigger event
 			//zOriginalInput.trigger('ui:autosuggestion:highlight', zItemwrapData);
 			// trigger event
-			zOriginalInput.trigger('ui:autosuggestion:choice', zItemwrapData);
+			const eventData = Object.assign({}, {_byRightKey: true}, zItemwrapData);
+			zOriginalInput.trigger('ui:autosuggestion:choice', eventData);
+			zOriginalInput.trigger('ui:autosuggestion:change', eventData);
 		},
 		
 		onkeyeschandler = function(){
@@ -854,7 +876,7 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 
 			if(!_suggestionIsOn)return;
 
-			// defailt
+			// default
 			var zItemwrapData = {text:typevalue};
 			var _highlightItemEl = null;
 			
@@ -968,7 +990,9 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 			}
 			
 			// trigger event
-			zOriginalInput.trigger('ui:autosuggestion:choice', Object.assign({}, {_byEnter: true, _element: _highlightItemEl.item(0, 1)}, zItemwrapData));
+			const eventData = Object.assign({}, {_byEnter: true, _element: _highlightItemEl.item(0, 1)}, zItemwrapData);
+			zOriginalInput.trigger('ui:autosuggestion:choice', eventData);
+			zOriginalInput.trigger('ui:autosuggestion:change', eventData);
 
 			// handler link
 			if(option.itemLinkFormat != '' && _highlightItemEl){
@@ -1047,7 +1071,7 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 
 
 				// cho nay xu ly dac biet 1 xiu cho truong hop select
-				if(rawvalue=='' && IS_SELECT_BASE){
+				if(rawvalue=='' && (IS_SELECT_BASE || IS_SELECT_BEHAVIOR)){
 					showDefaultSelectListItems();
 					return;
 				}
@@ -1156,6 +1180,11 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 				}
 				if(result.length===0){
 
+					// show the default list if need
+					if(option.showSuggestionIfNoResult){
+						showDefaultSelectListItems();
+					}
+
 					// support show ra suggest create luon
 					//@@@@@@@@@@@
 					if(typevalue === _rawValueSearch && option.create && option.suggestIconEnterCreate)
@@ -1247,9 +1276,6 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 		// ------------------------
 		
 		
-		// save function nay luon
-		zOriginalInput.setData(keytypehandlerkey, onkeytypehandler);
-		
 		// HANDLER EVENT CHO MAY CAI HIGHLIGHT ITEM
 		// --------------
 		var onmousehoveritemhandler = function(event){
@@ -1264,7 +1290,6 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 		selectItemHandler = function(zItemwrapData, zItemwrap){
 
 			zItemwrap = zItemwrap || false;
-
 
 
 			// xem coi neu nhu khong search ra item nao thi thoi
@@ -1313,7 +1338,9 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 				zInput.focus();
 
 				// trigger event
-				zOriginalInput.trigger('ui:autosuggestion:choice', zItemwrapData);
+				const eventData = Object.assign({}, {_byClick: true}, zItemwrapData);
+				zOriginalInput.trigger('ui:autosuggestion:choice', eventData);
+				zOriginalInput.trigger('ui:autosuggestion:change', eventData);
 			}
 			else{
 				// console.log('selectItemHandler silent');
@@ -1407,16 +1434,28 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 		});
 
 
-		// khi cai original input/select no change data, thi se set lai data cho thang fake nay
-		// zOriginalInput.on('change', function(){
-			//if(!_fakeFocus)zInput.focus();
-		// });
-		zOriginalInput.on('_hardSelectValue', function(event){
-			// try to get value base on ID
-			var zItemwrapData = dictionary.getItemById(this.getValue());
-			// get
-			selectItemHandler(zItemwrapData, false);
-		});	
+		// ham giup set value cho original input
+		var setValue = function(value = '', autosearch){
+			// set value cho original input truoc
+			zOriginalInput.setValue(value, true);
+
+			if(IS_SELECT_BASE || IS_SELECT_BEHAVIOR){
+				// try to get value base on ID
+				var zItemwrapData = dictionary.getItemById(value);
+				if (zItemwrapData) {
+					selectItemHandler(zItemwrapData, false);
+				}
+				else{
+					zInput.setValue('', true)
+				}
+			}
+			else{
+				zInput.setValue(value, true)
+				onkeytypehandler(autosearch);
+			}
+		};
+		// save function nay luon
+		zOriginalInput.setData(funcsetvaluekey, setValue);
 
 
 
@@ -1523,7 +1562,7 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 				// Update: nhung neu day la 1 cai select
 				// thi user expect la se phai show ra cai list de user chon
 				// nen can phai luon luon show neu la select
-				if(!IS_SELECT_BASE && typevalue != '')
+				if(!IS_SELECT_BASE && !IS_SELECT_BEHAVIOR && typevalue != '')
 					return;
 				
 				// xem coi la click vao cai thang nao trong day?
@@ -1543,14 +1582,12 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 				}
 				
 				if(option.defaultPanelHeight > 0){
-					showDefaultSelectListItems(option.defaultPanelHeight);
+					showDefaultSelectListItems();
 				}else{
 					// tot nhat la phai delay 1 chut
 					(function(){
 						//console.log('focus');
-						
 						showDefaultSelectListItems();
-						
 					}).delay(100);
 				}
 			});
@@ -1886,21 +1923,10 @@ zjs.require('dictionary, scrollbar', function(){"use strict";
 			autosearch = autosearch || false;
 			return this.eachElement(function(element){
 				// xem coi day co phai la 1 autosuggest input hay khong
-				var inputEl = zjs(element).getData(newinputkey);
-				if(inputEl){
+				var setValueFn = zjs(element).getData(funcsetvaluekey);
+				if(setValueFn){
 					try{
-
-						// set value cho original input truoc
-						zjs(element).setValue(val, true);
-
-						if(zjs(element).tagName() === 'SELECT'){
-							zjs(element).trigger('_hardSelectValue');
-						}
-						else{
-							inputEl.value = val;
-							zjs(element).getData(keytypehandlerkey)(autosearch);
-						}
-
+						setValueFn(val, autosearch);
 					}catch(er){};
 				}
 				// fallback to default input
