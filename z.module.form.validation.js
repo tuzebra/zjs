@@ -625,6 +625,8 @@
 			var ckeInstance = zInput.getData(ckeditorinstancekey, false);
 			if(ckeInstance)zjs(ckeInstance.container.$).removeClass(option.errorClass).addClass(option.successClass);
 			
+			// also fire an event
+			zInput.trigger('form:validation:success', {type: test.type});
 			return;
 		};
 
