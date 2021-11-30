@@ -470,10 +470,14 @@ zjs.require('ui', function(){
 		// nhung neu nhu ma append to body
 		// thi se get ra top, va left theo relative
 		if(option.appendToBody){
-			eleft = zHovercardEl.getAbsoluteLeft();
-			eright = zHovercardEl.getAbsoluteRight();
-			etop = zHovercardEl.getAbsoluteTop();
-			ebottom = zHovercardEl.getAbsoluteBottom();
+			var rect = zHovercardEl.item(0, true).getBoundingClientRect();
+			var bodyRect = document.body.getBoundingClientRect();
+			if(rect && bodyRect){
+				etop = rect.top - bodyRect.top;
+				eleft = rect.left - bodyRect.left;
+				eright = bodyRect.width + bodyRect.left - rect.left - rect.width;
+				ebottom = bodyRect.height + bodyRect.top - rect.top - rect.height;
+			}
 			
 			// kiem tra xem coi position get duoc co base tren 1 cai fixed element hay khong
 			var elem = element,
@@ -499,11 +503,11 @@ zjs.require('ui', function(){
 				// vertical
 				if(vertical == 'top'){
 					var bodyHeight = zjs(document.body).height();
-					if(bodyHeight - ebottom - eheight - pheight < (positionFixed ? 0 : document.body.scrollTop))vertical = 'bottom';
+					if(bodyHeight - ebottom - eheight - pheight < (positionFixed ? 0 : (document.body.scrollTop || document.documentElement.scrollTop))){vertical = 'bottom';}
 				}
 				if(vertical == 'bottom'){
 					var windowInnerHeight = zWindowEl.height();
-					if(etop + eheight + pheight > (positionFixed ? 0 : document.body.scrollTop) + windowInnerHeight)vertical = 'top';
+					if(etop + eheight + pheight > (positionFixed ? 0 : (document.body.scrollTop || document.documentElement.scrollTop)) + windowInnerHeight)vertical = 'top';
 				}
 
 				// horizontal
