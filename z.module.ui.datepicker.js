@@ -649,6 +649,14 @@ zjs.require('ui, ui.button, moment', function () {
 			return str[str.length - 1];
 		}
 
+		var triggerEmptyValue = function(){
+			zDatepickerEl.setAttr('value', '').setValue('');
+			// run trigger
+			zDatepickerEl.trigger('ui:datepicker:change', {
+				value: ''
+			});
+		}
+
 		// ham chiu trach nhiem format input behide
 		var formatInputBehide = function (rawvalueBefore, keyCode) {
 			if (!option.strictInput) return;
@@ -841,7 +849,7 @@ zjs.require('ui, ui.button, moment', function () {
 			zStrictInputBehide.find('span').removeClass('active');
 			if (currentActiveComp !== null) zStrictInputBehide.find('.z' + currentActiveComp).addClass('active');
 
-			return '';
+			return userRawInput;
 		};
 
 		// neu nhu ma su dung button thay cho input text thi make button
@@ -990,13 +998,18 @@ zjs.require('ui, ui.button, moment', function () {
 
 				if (option.strictInput) {
 					(function () {
-						formatInputBehide(rawvalue, keyCode);
+						var fixedInputValue = formatInputBehide(rawvalue, keyCode);
+						if(fixedInputValue.length < option.format.length){
+							triggerEmptyValue();
+						}
+						else{
+							zDatepickerInputEl.trigger('blur');
+						}
 					}).delay(30);
 				}
 
 				if (prevent) {
 					event.preventDefault();
-					return;
 				}
 			});
 
@@ -1012,11 +1025,11 @@ zjs.require('ui, ui.button, moment', function () {
 						tempInputingValue = tempInputingValue.trim();
 
 
-					if (tempInputingValue == '') return;
+					if (tempInputingValue == '') return triggerEmptyValue();
 
 					// bay gio thi co gang di phan tich coi co ra duoc cai value gi khong? base on option.format
 					var rightValueHuh = moment(tempInputingValue, option.format);
-					if (!rightValueHuh.isValid()) return;
+					if (!rightValueHuh.isValid()) return triggerEmptyValue();
 
 
 					// ok, neu nhu ma dung doi, thi se set lai calendar time, va selected time luon
@@ -1445,6 +1458,11 @@ zjs.require('ui, ui.button, moment', function () {
         zDatepickerInputEl.setValue('');
         zDatepickerWrapEl.removeClass('has-value');
       }
+			// run trigger
+			zDatepickerEl.trigger('ui:datepicker:change', {
+				value: '',
+				via: 'api'
+			});
       return;
     }
 
